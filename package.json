@@ -24,7 +24,6 @@
   "bugs": {
     "url": "https://github.com/helinjiang/matman/issues"
   },
-  "homepage": "https://github.com/helinjiang/matman#readme",
   "dependencies": {
     "express": "^4.15.2",
     "react": "^15.5.4",
