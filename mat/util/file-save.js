@@ -1,5 +1,7 @@
-var Promise = require('bluebird');
-var fse = Promise.promisifyAll(require('fs-extra'));
+import fseExtra from 'fs-extra';
+import Promise from 'bluebird';
+
+const fse = Promise.promisifyAll(fseExtra);
 
 /**
  * 将json对象保存为json文件。
@@ -8,18 +10,14 @@ var fse = Promise.promisifyAll(require('fs-extra'));
  * @param {String} savePath 保存路径
  * @return {Promise}
  */
-function saveJson(jsonObj, savePath) {
-    return new Promise(function (resolve, reject) {
+export function saveJson(jsonObj, savePath) {
+    return new Promise((resolve, reject) => {
         fse.outputJsonAsync(savePath, jsonObj)
-            .then(function () {
+            .then(() => {
                 resolve(jsonObj);
             })
-            .catch(function (err) {
+            .catch((err) => {
                 reject(err);
             });
     });
 }
-
-module.exports = {
-    saveJson: saveJson
-};
