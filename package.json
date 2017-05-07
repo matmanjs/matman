@@ -10,7 +10,7 @@
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
     "server": "node server/app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,8 @@
     "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.3.0",
     "node-sass": "^4.5.2",
     "npm-run-all": "^4.0.2",
     "react-scripts": "0.9.5"
