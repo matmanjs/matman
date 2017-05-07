@@ -1,49 +1,59 @@
 import path from 'path';
 import fse from 'fs-extra';
 import { expect } from 'chai';
+
+import requireFile from '../../mat/util/require-file';
 import { saveJson } from '../../mat/util/file-save';
 
-const BASE_PATH_TMP = './test/tmp';
-const BASE_PATH_EXPECTED = './test/data/expected';
-const BASE_PATH_SRC = '../data/fixtures';
-const FOLDER_NAME = 'util-file-save';
-const FILE_SUFFIX = '.json';
+// 测试目标
+const TEST_TARGET = 'util/file-save.js';
 
-describe('util/file-save.js saveJson()', () => {
-    const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'file.js');
-    const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + FILE_SUFFIX;
+const BASE_PATH_SRC = path.join(__dirname, '../data/fixtures', path.dirname(TEST_TARGET));
+const BASE_PATH_TMP = path.join(__dirname, '../tmp', path.dirname(TEST_TARGET));
+const BASE_PATH_EXPECTED = path.join(__dirname, '../data/expected', path.dirname(TEST_TARGET));
 
+// 以测试文件名为目录，将测试用的素材存储其中
+const FOLDER_NAME = path.basename(TEST_TARGET, '.js');
+
+// 保存的文件名后缀
+const SAVE_FILE_SUFFIX = '.json';
+
+describe('util/file-save.js', () => {
     const TMP_SAVE_FOLDER = path.join(BASE_PATH_TMP, FOLDER_NAME);
-    const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
-    const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
 
-    before((done) => {
-        // 删除临时文件目录
+    before(() => {
         fse.removeSync(TMP_SAVE_FOLDER);
-
-        saveJson(require(SRC_FILE), TMP_SAVE_FILE)
-            .then(() => {
-                done();
-            })
-            .catch((err) => {
-                // console.error('err', err);
-                done();
-            });
     });
 
     after(() => {
         fse.removeSync(TMP_SAVE_FOLDER);
     });
 
-    it('Save json object to .json file success!', (done) => {
-        // 保存的文件内容
-        const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
+    describe('saveJson()', () => {
+        const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'file.js');
+        const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
 
-        // 预期的文件内容
-        const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
+        const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
+        const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
 
-        expect(newSavedFile).to.equal(expectedFile);
+        before((done) => {
+            saveJson(requireFile(SRC_FILE), TMP_SAVE_FILE)
+                .then(() => {
+                    done();
+                })
+                .catch((err) => {
+                    // console.error('err', err);
+                    done();
+                });
+        });
 
-        done();
+        it('Save json object to .json file success!', (done) => {
+            const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
+            const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
+
+            expect(newSavedFile).to.equal(expectedFile);
+
+            done();
+        });
     });
 });
