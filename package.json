@@ -34,7 +34,8 @@
     "lodash": "^4.17.4",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-router-dom": "^4.1.1"
+    "react-router-dom": "^4.1.1",
+    "superagent": "^3.5.2"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

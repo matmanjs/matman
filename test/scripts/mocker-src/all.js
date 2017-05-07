@@ -61,5 +61,36 @@ describe(TEST_TARGET, () => {
         });
     });
 
-});
+    // 测试 using-superagent.js
+    describe('mocker from ajax by using superagent', () => {
+        const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'using-superagent.js');
+        const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
+        const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
+
+        let jsonObj;
+
+        before((done) => {
+            saveJson(requireFile(SRC_FILE), TMP_SAVE_FILE)
+                .then(() => {
+                    jsonObj = fse.readJsonSync(TMP_SAVE_FILE);
+                    done();
+                })
+                .catch((err) => {
+                    // console.error('err', err);
+                    done();
+                });
+        });
+
+        it('Is object!', () => {
+            expect(jsonObj).to.be.an('object');
+        });
+
+        // it('Have keys: name/email/uid', () => {
+        //     // 注意这里的比较是属性必须一一对应，不能少一个也不能一个
+        //     expect(jsonObj).to.have.all.keys(['name', 'email', 'uid']);
+        // });
+    });
+
+})
+;
 
