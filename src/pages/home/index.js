@@ -1,7 +1,9 @@
 import React from 'react';
 
+import './index.css';
+
 const Home = () => (
-    <div>
+    <div className="home">
         <h2>Home</h2>
     </div>
 );
