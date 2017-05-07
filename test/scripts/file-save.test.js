@@ -1,13 +1,25 @@
+import path from 'path';
 import fse from 'fs-extra';
 import { expect } from 'chai';
 import { saveJson } from '../../mat/util/file-save';
 
+const BASE_PATH_TMP = './test/tmp';
+const BASE_PATH_EXPECTED = './test/data/expected';
+const BASE_PATH_SRC = '../data/fixtures';
+const FOLDER_NAME = 'util-file-save';
+
 describe('util/file-save.js saveJson()', () => {
+    const TMP_SAVE_FOLDER = path.join(BASE_PATH_TMP, FOLDER_NAME);
+    const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, 'file.json');
+
+    const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, 'file.json');
+    const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'file.js');
+
     before((done) => {
         // 删除临时文件目录
-        fse.removeSync('./test/tmp/util-file-save');
+        fse.removeSync(TMP_SAVE_FOLDER);
 
-        saveJson(require('../data/fixtures/util-file-save/file.js'), './test/tmp/util-file-save/file.json')
+        saveJson(require(SRC_FILE), TMP_SAVE_FILE)
             .then(() => {
                 done();
             })
@@ -18,15 +30,15 @@ describe('util/file-save.js saveJson()', () => {
     });
 
     after(() => {
-        fse.removeSync('./test/tmp/util-file-save');
+        fse.removeSync(TMP_SAVE_FOLDER);
     });
 
     it('Save json object to .json file success!', (done) => {
         // 保存的文件内容
-        const newSavedFile = fse.readFileSync('./test/tmp/util-file-save/file.json', 'utf8');
+        const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
 
         // 预期的文件内容
-        const expectedFile = fse.readFileSync('./test/data/expected/util-file-save/file.json', 'utf8');
+        const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
 
         expect(newSavedFile).to.equal(expectedFile);
 
