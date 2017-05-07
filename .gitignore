@@ -39,7 +39,7 @@ jspm_packages
 .idea
 
 # please use .scss instead
-./src/*.css
+/src/**/*.css
 
 # production
 /build
