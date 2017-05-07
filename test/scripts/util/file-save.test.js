@@ -2,15 +2,18 @@ import path from 'path';
 import fse from 'fs-extra';
 import { expect } from 'chai';
 
-import requireFile from '../../mat/util/require-file';
-import { saveJson } from '../../mat/util/file-save';
+import requireFile from '../../../mat/util/require-file';
+import { saveJson } from '../../../mat/util/file-save';
 
 // 测试目标
 const TEST_TARGET = 'util/file-save.js';
 
-const BASE_PATH_SRC = path.join(__dirname, '../data/fixtures', path.dirname(TEST_TARGET));
-const BASE_PATH_TMP = path.join(__dirname, '../tmp', path.dirname(TEST_TARGET));
-const BASE_PATH_EXPECTED = path.join(__dirname, '../data/expected', path.dirname(TEST_TARGET));
+const ROOT_PROJECT = path.join(__dirname, '../../../');
+const ROOT_TEST = path.join(ROOT_PROJECT, './test');
+
+const BASE_PATH_SRC = path.join(ROOT_TEST, './data/fixtures', path.dirname(TEST_TARGET));
+const BASE_PATH_TMP = path.join(ROOT_TEST, './tmp', path.dirname(TEST_TARGET));
+const BASE_PATH_EXPECTED = path.join(ROOT_TEST, './data/expected', path.dirname(TEST_TARGET));
 
 // 以测试文件名为目录，将测试用的素材存储其中
 const FOLDER_NAME = path.basename(TEST_TARGET, '.js');
