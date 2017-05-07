@@ -16,7 +16,7 @@ const BASE_PATH_TMP = path.join(ROOT_TEST, './tmp', path.dirname(TEST_TARGET));
 // 以测试文件名为目录，将测试用的素材存储其中
 const FOLDER_NAME = path.basename(TEST_TARGET, '.js');
 
-describe('require-file.js', () => {
+describe(TEST_TARGET, () => {
     const TMP_SAVE_FOLDER = path.join(BASE_PATH_TMP, FOLDER_NAME);
 
     before(() => {

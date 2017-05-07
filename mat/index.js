@@ -1,15 +1,6 @@
-// var fileSave = require('./util/file-save');
+// import jsonData from './test/purejson';
 //
-// function test() {
-//     var testOutput = require('./test/purejson');
-//
-//     fileSave.saveJson(testOutput, './test/output/purejson.json')
-//         .then(function (result) {
-//             console.log('success', result);
-//         })
-//         .catch(function (err) {
-//             console.error('err', err);
-//         });
-// }
-//
-// test();
+// console.log(jsonData);
+
+
+console.log(__dirname);

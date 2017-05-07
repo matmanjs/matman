@@ -20,7 +20,7 @@ const FOLDER_NAME = path.basename(TEST_TARGET, '.js');
 // 保存的文件名后缀
 const SAVE_FILE_SUFFIX = '.json';
 
-describe('mocker-src', () => {
+describe(TEST_TARGET, () => {
     const TMP_SAVE_FOLDER = path.join(BASE_PATH_TMP, FOLDER_NAME);
 
     before(() => {
@@ -28,7 +28,7 @@ describe('mocker-src', () => {
     });
 
     after(() => {
-        // fse.removeSync(TMP_SAVE_FOLDER);
+        fse.removeSync(TMP_SAVE_FOLDER);
     });
 
     // 测试 using-faker.js
@@ -43,11 +43,6 @@ describe('mocker-src', () => {
             saveJson(requireFile(SRC_FILE), TMP_SAVE_FILE)
                 .then(() => {
                     jsonObj = fse.readJsonSync(TMP_SAVE_FILE);
-
-                    // if(jsonObj.default){
-                    //
-                    // }
-
                     done();
                 })
                 .catch((err) => {
@@ -60,12 +55,8 @@ describe('mocker-src', () => {
             expect(jsonObj).to.be.an('object');
         });
 
-        // it('Has three properties!', () => {
-        //     expect(Object.keys(jsonObj)).to.have.lengthOf(3);
-        // });
-
         it('Have keys: name/email/uid', () => {
-            console.log(jsonObj, Object.keys(jsonObj))
+            // 注意这里的比较是属性必须一一对应，不能少一个也不能一个
             expect(jsonObj).to.have.all.keys(['name', 'email', 'uid']);
         });
     });

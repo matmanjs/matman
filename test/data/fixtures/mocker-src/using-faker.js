@@ -7,6 +7,4 @@ const data = {
     uid: faker.random.number()
 };
 
-// 导出
 export default data;
-// module.exports = data;

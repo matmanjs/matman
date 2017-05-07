@@ -21,7 +21,7 @@ const FOLDER_NAME = path.basename(TEST_TARGET, '.js');
 // 保存的文件名后缀
 const SAVE_FILE_SUFFIX = '.json';
 
-describe('util/file-save.js', () => {
+describe(TEST_TARGET, () => {
     const TMP_SAVE_FOLDER = path.join(BASE_PATH_TMP, FOLDER_NAME);
 
     before(() => {
