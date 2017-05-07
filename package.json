@@ -9,6 +9,7 @@
    "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
+    "server": "node server/app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
