@@ -10,9 +10,9 @@ const fse = Promise.promisifyAll(fseExtra);
  * @param {String} savePath 保存路径
  * @return {Promise}
  */
-export function saveJson(saveTarget, savePath) {
+export default function save(saveTarget, savePath) {
     return new Promise((resolve, reject) => {
-        getSaveObj(saveTarget)
+        getMockerJsonResult(saveTarget)
             .then((data) => {
                 fse.outputJsonAsync(savePath, data)
                     .then(() => {
@@ -34,7 +34,7 @@ export function saveJson(saveTarget, savePath) {
  * @param {Object | Function | Promise} saveTarget 要保存的对象
  * @return {Promise}
  */
-function getSaveObj(saveTarget) {
+export function getMockerJsonResult(saveTarget) {
     return new Promise((resolve, reject) => {
         if (typeof saveTarget === 'function') {
             // 如果传入的是方法，则执行方法

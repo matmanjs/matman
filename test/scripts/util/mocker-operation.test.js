@@ -3,10 +3,10 @@ import fse from 'fs-extra';
 import { expect } from 'chai';
 
 import requireFile from '../../../mat/util/require-file';
-import { saveJson } from '../../../mat/util/file-save';
+import saveMockerResult from '../../../mat/util/mocker-operation';
 
 // 测试目标
-const TEST_TARGET = 'util/file-save.js';
+const TEST_TARGET = 'util/mocker-operation.js';
 
 const ROOT_PROJECT = path.join(__dirname, '../../../');
 const ROOT_TEST = path.join(ROOT_PROJECT, './test');
@@ -32,7 +32,7 @@ describe(TEST_TARGET, () => {
         fse.removeSync(TMP_SAVE_FOLDER);
     });
 
-    describe('saveJson()', () => {
+    describe('save()', () => {
         const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'file.js');
         const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
 
@@ -40,7 +40,7 @@ describe(TEST_TARGET, () => {
         const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
 
         before((done) => {
-            saveJson(requireFile(SRC_FILE), TMP_SAVE_FILE)
+            saveMockerResult(requireFile(SRC_FILE), TMP_SAVE_FILE)
                 .then(() => {
                     done();
                 })

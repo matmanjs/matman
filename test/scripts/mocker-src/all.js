@@ -3,7 +3,7 @@ import fse from 'fs-extra';
 import { expect } from 'chai';
 
 import requireFile from '../../../mat/util/require-file';
-import { saveJson } from '../../../mat/util/file-save';
+import saveMockerResult from '../../../mat/util/mocker-operation';
 
 // 测试目标
 const TEST_TARGET = 'mocker-src';
@@ -40,7 +40,7 @@ describe(TEST_TARGET, () => {
         let jsonObj;
 
         before((done) => {
-            saveJson(requireFile(SRC_FILE), TMP_SAVE_FILE)
+            saveMockerResult(requireFile(SRC_FILE), TMP_SAVE_FILE)
                 .then(() => {
                     jsonObj = fse.readJsonSync(TMP_SAVE_FILE);
                     done();
@@ -70,7 +70,7 @@ describe(TEST_TARGET, () => {
         let jsonObj;
 
         before((done) => {
-            saveJson(requireFile(SRC_FILE), TMP_SAVE_FILE)
+            saveMockerResult(requireFile(SRC_FILE), TMP_SAVE_FILE)
                 .then(() => {
                     jsonObj = fse.readJsonSync(TMP_SAVE_FILE);
                     done();
