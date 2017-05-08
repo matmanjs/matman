@@ -10,6 +10,7 @@
     "start": "npm-run-all -p watch-css start-js",
     "build": "npm run build-css && react-scripts build",
     "server": "node ./server/bin/www",
+    "server-babel": "babel-node ./server/bin/www",
     "mat": "babel-node ./mat/index.js",
     "test": "mocha --compilers js:babel-core/register"
   },
