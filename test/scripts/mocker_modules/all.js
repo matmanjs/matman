@@ -6,7 +6,7 @@ import requireMockerModule from '../../../mat/util/require-mocker-module';
 import saveMockerResult from '../../../mat/util/mocker-operation';
 
 // 测试目标
-const TEST_TARGET = 'mocker-src';
+const TEST_TARGET = 'mocker_modules';
 
 const ROOT_PROJECT = path.join(__dirname, '../../../');
 const ROOT_TEST = path.join(ROOT_PROJECT, './test');
