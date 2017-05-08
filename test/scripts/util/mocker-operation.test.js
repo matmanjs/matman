@@ -2,7 +2,7 @@ import path from 'path';
 import fse from 'fs-extra';
 import { expect } from 'chai';
 
-import requireFile from '../../../mat/util/require-file';
+import requireMockerModule from '../../../mat/util/require-mocker-module';
 import saveMockerResult from '../../../mat/util/mocker-operation';
 
 // 测试目标
@@ -40,7 +40,7 @@ describe(TEST_TARGET, () => {
         const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
 
         before((done) => {
-            saveMockerResult(requireFile(SRC_FILE), TMP_SAVE_FILE)
+            saveMockerResult(requireMockerModule(SRC_FILE), TMP_SAVE_FILE)
                 .then(() => {
                     done();
                 })

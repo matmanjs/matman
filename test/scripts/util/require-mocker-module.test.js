@@ -2,10 +2,10 @@ import path from 'path';
 import fse from 'fs-extra';
 import { expect } from 'chai';
 
-import requireFile from '../../../mat/util/require-file';
+import requireMockerModule from '../../../mat/util/require-mocker-module';
 
 // 测试目标
-const TEST_TARGET = 'util/require-file.js';
+const TEST_TARGET = 'util/require-mocker-module.js';
 
 const ROOT_PROJECT = path.join(__dirname, '../../../');
 const ROOT_TEST = path.join(ROOT_PROJECT, './test');
@@ -28,14 +28,14 @@ describe(TEST_TARGET, () => {
     });
 
     it('require test module.exports', () => {
-        const jsonObj = requireFile(path.join(BASE_PATH_SRC, FOLDER_NAME, 'module-exports.js'));
+        const jsonObj = requireMockerModule(path.join(BASE_PATH_SRC, FOLDER_NAME, 'module-exports.js'));
 
         expect(jsonObj).to.be.an('object')
             .to.have.all.keys(['name', 'age']);
     });
 
     it('require test export default', () => {
-        const jsonObj = requireFile(path.join(BASE_PATH_SRC, FOLDER_NAME, 'export-default.js'));
+        const jsonObj = requireMockerModule(path.join(BASE_PATH_SRC, FOLDER_NAME, 'export-default.js'));
 
         expect(jsonObj).to.be.an('object')
             .to.have.all.keys(['name', 'age']);
