@@ -1,5 +1,5 @@
 var json = {
-    name: 'matman',
+    name: 'return-plain-object',
     age: 16
 };
 

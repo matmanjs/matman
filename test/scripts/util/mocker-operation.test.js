@@ -33,30 +33,69 @@ describe(TEST_TARGET, () => {
     });
 
     describe('save()', () => {
-        const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'file.js');
-        const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
 
-        const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
-        const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
+        it('return plain object', () => {
+            const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'return-plain-object.js');
+            const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
 
-        before((done) => {
-            saveMockerResult(requireMockerModule(SRC_FILE), TMP_SAVE_FILE)
+            const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
+            const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
+
+            return saveMockerResult(requireMockerModule(SRC_FILE), TMP_SAVE_FILE)
                 .then(() => {
-                    done();
-                })
-                .catch((err) => {
-                    // console.error('err', err);
-                    done();
+                    const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
+                    const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
+
+                    expect(newSavedFile).to.equal(expectedFile);
                 });
         });
 
-        it('Save json object to .json file success!', (done) => {
-            const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
-            const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
+        it('return function-pure', () => {
+            const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'return-function-pure.js');
+            const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
 
-            expect(newSavedFile).to.equal(expectedFile);
+            const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
+            const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
 
-            done();
+            return saveMockerResult(requireMockerModule(SRC_FILE), TMP_SAVE_FILE)
+                .then(() => {
+                    const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
+                    const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
+
+                    expect(newSavedFile).to.equal(expectedFile);
+                });
+        });
+
+        it('return function-promise', () => {
+            const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'return-function-promise.js');
+            const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
+
+            const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
+            const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
+
+            return saveMockerResult(requireMockerModule(SRC_FILE), TMP_SAVE_FILE)
+                .then(() => {
+                    const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
+                    const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
+
+                    expect(newSavedFile).to.equal(expectedFile);
+                });
+        });
+
+        it('return promise', () => {
+            const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'return-promise.js');
+            const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
+
+            const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
+            const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
+
+            return saveMockerResult(requireMockerModule(SRC_FILE), TMP_SAVE_FILE)
+                .then(() => {
+                    const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
+                    const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
+
+                    expect(newSavedFile).to.equal(expectedFile);
+                });
         });
     });
 });
