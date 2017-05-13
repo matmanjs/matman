@@ -1,9 +1,11 @@
 var version = require('./MatmanVersion');
-var mockerModuleTool = require('./mocker/mocker-module-tool');
+var util = require('./util');
+var mocker = require('./mocker');
+var tester = require('./tester');
 
 module.exports = {
-    mocker: {
-        tool: mockerModuleTool
-    },
-    version: version
+    version: version,
+    util: util,
+    mocker: mocker,
+    tester: tester
 };
