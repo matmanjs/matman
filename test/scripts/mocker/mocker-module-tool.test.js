@@ -1,9 +1,10 @@
 import path from 'path';
 import { expect } from 'chai';
+import fse from 'fs-extra';
 
-import fse from '../../../src/util/fse';
+import { mocker } from '../../../src';
 
-import mockerModuleTool from '../../../src/mocker/mocker-module-tool';
+const { mockerModuleTool } = mocker;
 
 // 测试目标
 const TEST_TARGET = 'mocker/mocker-module-tool.js';
