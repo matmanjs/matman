@@ -1,16 +1,10 @@
 {
   "name": "matman",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "mock service and tester assitant",
   "main": "app.js",
   "scripts": {
-    "build-css": "node-sass src/ -o src/",
-    "watch-css": "npm run build-css && node-sass src/ -o src/ --watch --recursive",
-    "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && react-scripts build",
-    "server": "node server/app",
-    "mat": "babel-node ./mat/index.js",
+    "start": "babel-node ./src/index.js",
     "test": "mocha --compilers js:babel-core/register"
   },
   "repository": {
