@@ -106,4 +106,49 @@ describe(TEST_TARGET, () => {
         });
 
     });
+
+    // 测试 using-faker.js
+    describe('mocker by using fake.js', () => {
+        const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'using-faker.js');
+
+        let jsonObj;
+
+        before(() => {
+            return mockerModuleTool.getResult(SRC_FILE)
+                .then((data) => {
+                    jsonObj = data;
+                });
+        });
+
+        it('Is object!', () => {
+            expect(jsonObj).to.be.an('object');
+        });
+
+        it('Have keys: name/email/uid', () => {
+            // 注意这里的比较是属性必须一一对应，不能少一个也不能一个
+            expect(jsonObj).to.have.all.keys(['name', 'email', 'uid']);
+        });
+    });
+
+    // 测试 using-superagent.js
+    describe('mocker from ajax by using superagent', () => {
+        const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'using-superagent.js');
+
+        let jsonObj;
+
+        before(() => {
+            return mockerModuleTool.getResult(SRC_FILE)
+                .then((data) => {
+                    jsonObj = data;
+                });
+        });
+
+        it('Is object!', () => {
+            expect(jsonObj).to.be.an('object');
+        });
+
+        it('Must have retcode field!', () => {
+            expect(jsonObj).to.have.property('retcode');
+        });
+    });
 });
