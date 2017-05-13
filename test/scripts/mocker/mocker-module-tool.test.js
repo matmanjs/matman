@@ -87,4 +87,23 @@ describe(TEST_TARGET, () => {
                 });
         });
     });
+
+    describe('save()', () => {
+
+        it('save plain object as .json file', () => {
+            const SRC_FILE = path.join(BASE_PATH_SRC, FOLDER_NAME, 'return-plain-object.js');
+            const OUTPUT_FILE_NAME = path.basename(SRC_FILE, '.js') + SAVE_FILE_SUFFIX;
+            const TMP_SAVE_FILE = path.join(TMP_SAVE_FOLDER, OUTPUT_FILE_NAME);
+            const EXPECTED_SAVE_FILE = path.join(BASE_PATH_EXPECTED, FOLDER_NAME, OUTPUT_FILE_NAME);
+
+            return mockerModuleTool.save(SRC_FILE, TMP_SAVE_FILE)
+                .then(() => {
+                    const newSavedFile = fse.readFileSync(TMP_SAVE_FILE, 'utf8');
+                    const expectedFile = fse.readFileSync(EXPECTED_SAVE_FILE, 'utf8');
+
+                    expect(newSavedFile).to.equal(expectedFile);
+                });
+        });
+
+    });
 });
