@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "babel-node ./src/index.js",
+    "server-babel": "babel-node ./tmp/servertest.js",
     "commitmsg": "validate-commit-msg",
     "commit": "git-cz ",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",

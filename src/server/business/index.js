@@ -34,7 +34,8 @@ function getMockResult(req, entry) {
   let mockerFullPath = path.isAbsolute(mockerPath) ? mockerPath : path.join(entry.MOCKER_PATH, mockerPath);
 
   // 返回哪个数据
-  let mockModuleName = '4';
+  let db = require(path.join(mockerFullPath, 'db.json'));
+  let mockModuleName = db.returnId;
 
   // 组装获取 mock module 的文件地址
   let mockModulePath = path.join(mockerFullPath, 'mock_modules', mockModuleName);
