@@ -41,12 +41,12 @@ module.exports = (entryPath) => {
         });
       })
       .catch((err) => {
-        res.jsonp({
-          url: req.url,
-          params: req.params,
-          query: req.query,
-          err: err
-        });
+        // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
+        let errMsg = err.stack || err;
+
+        console.error(errMsg);
+
+        res.status(500).send(errMsg);
       });
   });
 
