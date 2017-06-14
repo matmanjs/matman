@@ -9,6 +9,7 @@ const srcRootPath = path.join(__dirname, 'src-client');
 // 静态资源根目录
 const wwwStaticRoot = 'static';
 
+// index.html 模版的根目录
 const appHtmlPath = path.join(__dirname, 'public','index.html');
 
 // 编译后的根目录
@@ -27,7 +28,7 @@ export default {
   },
   output: {
     path: `${distRootPath}`,
-    filename: 'js/[name].bundle.js',
+    filename: 'js/[name].bundle.js', // TODO hash [contenthash:8]
     chunkFilename: 'js/[id].chunk.js',
     publicPath: `/`
   },
