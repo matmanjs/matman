@@ -2,10 +2,11 @@ const express = require('express');
 const methodOverride = require('method-override');
 const _ = require('lodash');
 const bodyParser = require('../body-parser');
-
 const business = require('../business');
 
-module.exports = (source) => {
+module.exports = (entryPath) => {
+  const entry = require(entryPath);
+
   // Create router
   const router = express.Router();
 
@@ -30,9 +31,23 @@ module.exports = (source) => {
 
   // GET /*
   router.get('/*', function (req, res) {
-    let data = business.getMockResult(req.params[0], req.query);
-
-    res.jsonp({ url: req.url, data: data });
+    business.getMockResult(req, entry)
+      .then((result) => {
+        res.jsonp({
+          url: req.url,
+          params: req.params,
+          query: req.query,
+          data: result
+        });
+      })
+      .catch((err) => {
+        res.jsonp({
+          url: req.url,
+          params: req.params,
+          query: req.query,
+          err: err
+        });
+      });
   });
 
   router.use((req, res) => {
