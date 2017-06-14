@@ -1,11 +1,15 @@
 import path from 'path';
 import webpack from 'webpack';
 
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 // 源代码的根目录
 const srcRootPath = path.join(__dirname, 'src-client');
 
 // 静态资源根目录
 const wwwStaticRoot = 'static';
+
+const appHtmlPath = path.join(__dirname, 'public','index.html');
 
 // 编译后的根目录
 const distRootPath = path.join(__dirname, 'www', wwwStaticRoot);
@@ -22,10 +26,10 @@ export default {
     ]
   },
   output: {
-    path: `${distRootPath}/js`,
-    filename: '[name].bundle.js',
-    chunkFilename: '[id].chunk.js',
-    publicPath: `/${wwwStaticRoot}/js/`
+    path: `${distRootPath}`,
+    filename: 'js/[name].bundle.js',
+    chunkFilename: 'js/[id].chunk.js',
+    publicPath: `/`
   },
   externals: {jquery: "jQuery"},
   resolve: {
@@ -61,7 +65,23 @@ export default {
     ]
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'common.js'}),
+    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'js/common.js'}),
     //new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: appHtmlPath,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
+    }),
   ]
 };

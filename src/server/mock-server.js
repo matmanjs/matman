@@ -8,11 +8,13 @@ const errorhandler = require('errorhandler');
 const objectAssign = require('object-assign');
 
 module.exports = function (opts) {
-  const userDir = path.join(process.cwd(), 'public');
-  const defaultDir = path.join(__dirname, '../../www/static');
-  const staticDir = fs.existsSync(userDir)
-    ? userDir
-    : defaultDir;
+  // const userDir = path.join(process.cwd(), 'public');
+  // const defaultDir = path.join(__dirname, '../../www/static');
+  // const staticDir = fs.existsSync(userDir)
+  //   ? userDir
+  //   : defaultDir;
+
+  const staticDir = path.join(__dirname, '../../www/static');
 
   opts = objectAssign({ logger: true, static: staticDir }, opts);
 
