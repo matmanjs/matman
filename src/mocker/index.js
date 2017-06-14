@@ -1,5 +1,7 @@
-var mockerModuleTool = require('./mocker-module-tool');
+const mockerModuleTool = require('./mocker-module-tool');
+const db = require('./db');
 
 module.exports = {
-    mockerModuleTool: mockerModuleTool
+  mockerModuleTool: mockerModuleTool,
+  db: db
 };
