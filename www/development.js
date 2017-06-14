@@ -22,6 +22,11 @@ server.use(middlewares);
 //   '/blog/:resource/:id/show': '/:resource/:id'
 // }));
 
+// GET /admin，跳转到 /
+server.get('/admin', function (req, res) {
+  res.redirect('/');
+});
+
 // GET /*
 server.get('/admin/*', function (req, res) {
   // res.jsonp({ url2: req.url });
