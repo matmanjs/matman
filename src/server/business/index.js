@@ -3,21 +3,29 @@ const path = require('path');
 const util = require('../../util');
 const mocker = require('../../mocker');
 
-const ROOT_PROJECT = path.join(__dirname, '../../../');
-const MOCK_MODULES_PATH = path.join(ROOT_PROJECT, './tmp/demo/src/mock_modules');
-
-function getAllMockFiles() {
+/**
+ * 获得所有的 mock module 文件
+ * @param {Object} entry 入口文件对象
+ * @return {Array} mock module 的文件列表
+ */
+function getAllMockModules(entry) {
   let allMockFiles = [];
 
-  util.getAll(MOCK_MODULES_PATH, { globs: ['*/mock/*.js'] }).forEach((entry) => {
+  util.file.getAll(entry.MOCKER_PATH, { globs: ['*/mock_modules/*.js'] }).forEach((entry) => {
     // console.log(entry.relativePath, path.parse(entry.relativePath));
-    allMockFiles.push(entry.relativePath)
+    allMockFiles.push(entry.relativePath);
   });
 
   return allMockFiles;
 }
 
-function getMockResult(req, entry) {
+/**
+ * 获取某个 mock module 的结果
+ * @param {Object} req Express的req对象，详见 http://expressjs.com/en/4x/api.html#req
+ * @param {Object} entry 入口文件对象
+ * @return {Promise}
+ */
+function getMockModuleResult(req, entry) {
   // 例如：/test/two/?t=1，
   // req.query.t=1
   // req.params[0]="test/two"
@@ -46,8 +54,8 @@ function getMockResult(req, entry) {
 }
 
 module.exports = {
-  getAllMockFiles: getAllMockFiles,
-  getMockResult: getMockResult,
+  getAllMockModules: getAllMockModules,
+  getMockModuleResult: getMockModuleResult,
 };
 
 
