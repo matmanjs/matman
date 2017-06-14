@@ -22,15 +22,16 @@ server.use(middlewares);
 //   '/blog/:resource/:id/show': '/:resource/:id'
 // }));
 
+// GET /*
+server.get('/admin/*', function (req, res) {
+  // res.jsonp({ url2: req.url });
+  res.sendFile(path.join(__dirname, 'static', 'index.html'));
+});
+
 // Use default router
 // server.use(router);
 server.use(routerMocker);
 // server.use('/mocker', routerMocker);
-
-// GET /*
-// server.get('/*', function (req, res) {
-//   res.jsonp({ url2: req.url });
-// });
 
 server.listen(3000, () => {
   console.log('matman server is running')
