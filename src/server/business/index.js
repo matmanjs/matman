@@ -1,4 +1,7 @@
 const path = require('path');
+const low = require('lowdb');
+const fileAsync = require('lowdb/lib/storages/file-async');
+
 const util = require('../../util');
 const mocker = require('../../mocker');
 
@@ -34,8 +37,9 @@ function getMockResult(req, entry) {
   let mockerFullPath = path.isAbsolute(mockerPath) ? mockerPath : path.join(entry.MOCKER_PATH, mockerPath);
 
   // 返回哪个数据
-  let db = require(path.join(mockerFullPath, 'db.json'));
-  let mockModuleName = db.returnId;
+  let db = low(path.join(mockerFullPath, 'db.json'), { storage: fileAsync });
+
+  let mockModuleName = db.get('returnId').value();
 
   // 组装获取 mock module 的文件地址
   let mockModulePath = path.join(mockerFullPath, 'mock_modules', mockModuleName);
