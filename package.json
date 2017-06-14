@@ -49,6 +49,7 @@
     "superagent": "^3.5.2",
     "update-notifier": "^2.2.0",
     "url": "^0.11.0",
+    "walk-sync": "^0.3.2",
     "yargs": "^8.0.2"
   },
   "devDependencies": {

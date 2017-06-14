@@ -1,5 +1,7 @@
-var fse = require('./fse');
+const fse = require('./fse');
+const file = require('./file');
 
 module.exports = {
-    fse: fse
+  fse: fse,
+  file: file
 };
