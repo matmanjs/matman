@@ -3,6 +3,8 @@ const methodOverride = require('method-override');
 const _ = require('lodash');
 const bodyParser = require('../body-parser');
 
+const business = require('../business');
+
 module.exports = (source) => {
   // Create router
   const router = express.Router();
@@ -24,6 +26,13 @@ module.exports = (source) => {
   // GET /id/:id
   router.get('/id/:id', function (req, res) {
     res.jsonp({ id: req.params.id });
+  });
+
+  // GET /*
+  router.get('/*', function (req, res) {
+    let data = business.getMockResult(req.params[0], req.query);
+
+    res.jsonp({ url: req.url, data: data });
   });
 
   router.use((req, res) => {
