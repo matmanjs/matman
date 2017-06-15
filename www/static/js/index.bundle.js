@@ -76,7 +76,7 @@ webpackJsonp([0],{
 	                    null,
 	                    _react2.default.createElement(
 	                        _reactRouterDom.Link,
-	                        { to: '/about' },
+	                        { to: '/admin/about' },
 	                        'About'
 	                    )
 	                ),
@@ -85,15 +85,15 @@ webpackJsonp([0],{
 	                    null,
 	                    _react2.default.createElement(
 	                        _reactRouterDom.Link,
-	                        { to: '/topics' },
+	                        { to: '/admin/topics' },
 	                        'Topics'
 	                    )
 	                )
 	            ),
 	            _react2.default.createElement('hr', null),
 	            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _home2.default }),
-	            _react2.default.createElement(_reactRouterDom.Route, { path: '/about', component: _about2.default }),
-	            _react2.default.createElement(_reactRouterDom.Route, { path: '/topics', component: _topics2.default })
+	            _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/about', component: _about2.default }),
+	            _react2.default.createElement(_reactRouterDom.Route, { path: '/admin/topics', component: _topics2.default })
 	        )
 	    );
 	};

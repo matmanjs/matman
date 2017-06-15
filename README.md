@@ -10,3 +10,7 @@ npm run server-babel;
 # 前端页面编译
 npm run webpack;
 ```
+
+## 系统 CGI
+
+`/sys-cgi/list`: 获得 mocker 的列表

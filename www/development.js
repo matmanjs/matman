@@ -2,7 +2,7 @@ const path = require('path');
 
 const matmanServer = require('../src/server');
 const server = matmanServer.create();
-const routerMocker = matmanServer.routerMocker(path.join(__dirname, '../tmp/demo/src/app.js'));
+const routerMocker = matmanServer.routerMocker(path.join(__dirname, '../test/demo/src/app.js'));
 const middlewares = matmanServer.mockServer();
 
 // Set default middlewares (logger, static, cors and no-cache)
