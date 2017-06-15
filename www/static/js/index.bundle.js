@@ -4388,6 +4388,8 @@ webpackJsonp([0],[
 	
 	var _reactRedux = __webpack_require__(184);
 	
+	var _action = __webpack_require__(398);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var MockerList = function (_Component) {
@@ -4401,10 +4403,15 @@ webpackJsonp([0],[
 	  MockerList.prototype.componentDidMount = function componentDidMount() {
 	    console.log('MockerList componentDidMount', this.props);
 	    // this.props.match === {"path":"/admin/mockers","url":"/admin/mockers","isExact":true,"params":{}}
+	
+	    this.props.loadMockerList();
 	  };
 	
 	  MockerList.prototype.render = function render() {
-	    var match = this.props.match;
+	    var _props = this.props,
+	        match = _props.match,
+	        isLoaded = _props.isLoaded,
+	        list = _props.list;
 	
 	
 	    return _react2.default.createElement(
@@ -4413,12 +4420,28 @@ webpackJsonp([0],[
 	      _react2.default.createElement(
 	        'h3',
 	        null,
-	        'hhhhhhhh'
+	        'match'
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        null,
+	        (0, _stringify2.default)(match)
 	      ),
 	      _react2.default.createElement(
 	        'h3',
 	        null,
-	        (0, _stringify2.default)(match)
+	        'Mocker List'
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        null,
+	        'isLoaded=',
+	        isLoaded + ''
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        null,
+	        (0, _stringify2.default)(list)
 	      )
 	    );
 	  };
@@ -4430,11 +4453,18 @@ webpackJsonp([0],[
 	  var mockerListInfo = state.mockerListInfo;
 	
 	
-	  return mockerListInfo;
+	  return {
+	    isLoaded: mockerListInfo.isLoaded,
+	    list: mockerListInfo.list
+	  };
 	}
 	
 	function mapDispatchToProps(dispatch) {
-	  return {};
+	  return {
+	    loadMockerList: function loadMockerList() {
+	      return dispatch((0, _action.loadMockerList)());
+	    }
+	  };
 	}
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MockerList);
@@ -6076,15 +6106,17 @@ webpackJsonp([0],[
 	
 	      // 发送 ajax 请求
 	      return (0, _superagent2.default)(opts.type, opts.url).send(opts.data).then(function (res) {
+	        return res.body || {};
+	      }).then(function (resData) {
 	        var finalAction = actionWith({
 	          type: successType,
-	          data: res.data || res || {}
+	          data: resData
 	        });
 	
 	        next(finalAction);
 	
 	        if (typeof opts._onSuccess === 'function') {
-	          opts._onSuccess(res.data || res || {}, next);
+	          opts._onSuccess(resData, next);
 	        }
 	
 	        return finalAction;
@@ -9759,7 +9791,7 @@ webpackJsonp([0],[
 /* 390 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	exports.__esModule = true;
 	
@@ -9771,11 +9803,12 @@ webpackJsonp([0],[
 	
 	var _keys2 = _interopRequireDefault(_keys);
 	
+	var _action = __webpack_require__(398);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var initialState = {
 	  isLoaded: false,
-	
 	  list: []
 	};
 	
@@ -9787,7 +9820,19 @@ webpackJsonp([0],[
 	      update = {};
 	
 	
-	  switch (type) {}
+	  switch (type) {
+	    case _action.MOCKER_LIST_REQUEST_SUCCESS:
+	      update = {
+	        isLoaded: true,
+	        list: data
+	      };
+	      break;
+	    case _action.MOCKER_LIST_REQUEST_FAIL:
+	      update = {
+	        isLoaded: true
+	      };
+	      break;
+	  }
 	
 	  return (0, _keys2.default)(update).length ? (0, _assign2.default)({}, state, update) : state;
 	}
@@ -9875,6 +9920,38 @@ webpackJsonp([0],[
 	
 	// exports
 
+
+/***/ }),
+/* 397 */,
+/* 398 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports.MOCKER_LIST_REQUEST_FAIL = exports.MOCKER_LIST_REQUEST_SUCCESS = exports.MOCKER_LIST_REQUEST = undefined;
+	exports.loadMockerList = loadMockerList;
+	
+	var _api = __webpack_require__(354);
+	
+	var MOCKER_LIST_REQUEST = exports.MOCKER_LIST_REQUEST = 'MOCKER_LIST_REQUEST';
+	var MOCKER_LIST_REQUEST_SUCCESS = exports.MOCKER_LIST_REQUEST_SUCCESS = 'MOCKER_LIST_REQUEST_SUCCESS';
+	var MOCKER_LIST_REQUEST_FAIL = exports.MOCKER_LIST_REQUEST_FAIL = 'MOCKER_LIST_REQUEST_FAIL';
+	
+	function fetchMockerList() {
+	  var _ref;
+	
+	  return _ref = {}, _ref[_api.CALL_API] = {
+	    types: [MOCKER_LIST_REQUEST, MOCKER_LIST_REQUEST_SUCCESS, MOCKER_LIST_REQUEST_FAIL],
+	    url: '/sys-cgi/mocker'
+	  }, _ref;
+	}
+	
+	function loadMockerList() {
+	  return function (dispatch, getState) {
+	    return dispatch(fetchMockerList());
+	  };
+	}
 
 /***/ })
 ]);

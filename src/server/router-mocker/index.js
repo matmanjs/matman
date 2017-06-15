@@ -29,8 +29,8 @@ module.exports = (entryPath) => {
     res.jsonp({ id: req.params.id });
   });
 
-  // GET /sys-cgi/list 所有的 mocker 列表信息
-  router.get('/sys-cgi/list', (req, res) => {
+  // GET /sys-cgi/mocker 所有的 mocker 列表信息
+  router.get('/sys-cgi/mocker', (req, res) => {
     let result = business.getMockerList(entry.MOCKER_PATH);
 
     res.jsonp(result);

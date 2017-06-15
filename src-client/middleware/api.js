@@ -72,15 +72,18 @@ export default store => next => action => {
   return request(opts.type, opts.url)
     .send(opts.data)
     .then((res) => {
+      return res.body || {};
+    })
+    .then((resData) => {
       let finalAction = actionWith({
         type: successType,
-        data: res.data || res || {}
+        data: resData
       });
 
       next(finalAction);
 
       if (typeof opts._onSuccess === 'function') {
-        opts._onSuccess(res.data || res || {}, next);
+        opts._onSuccess(resData, next);
       }
 
       return finalAction;

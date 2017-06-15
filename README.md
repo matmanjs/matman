@@ -13,4 +13,4 @@ npm run webpack;
 
 ## 系统 CGI
 
-`/sys-cgi/list`: 获得 mocker 的列表
+`/sys-cgi/mocker`: 获得 mocker 的列表
