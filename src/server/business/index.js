@@ -11,12 +11,72 @@ const mocker = require('../../mocker');
 function getAllMockModules(entry) {
   let allMockFiles = [];
 
-  util.file.getAll(entry.MOCKER_PATH, { globs: ['*/mock_modules/*.js'] }).forEach((entry) => {
-    // console.log(entry.relativePath, path.parse(entry.relativePath));
-    allMockFiles.push(entry.relativePath);
+  util.file.getAll(entry.MOCKER_PATH, { globs: ['*/mock_modules/*.js'] }).forEach((item) => {
+    // console.log(item.relativePath, path.parse(item.relativePath));
+    allMockFiles.push(item.relativePath);
   });
 
   return allMockFiles;
+}
+
+/**
+ * 获取所有的 mocker 列表
+ */
+function getMockerList(mockerFullPath) {
+  // 1. 获取所有的 mocker name
+  let mockerNameArr = [];
+
+  util.file.getAll(mockerFullPath, { globs: ['*'] }).forEach((item) => {
+    // 限制只处理文件夹类型的
+    if (item.isDirectory()) {
+      mockerNameArr.push(path.basename(item.relativePath));
+    } else {
+      console.error(`${path.join(item.basePath, item.relativePath)} SHOULD BE Directory!`)
+    }
+  });
+
+  console.log(mockerNameArr);
+
+  // 2. 根据 mocker name 获取该 mocker 下的所有 mock modules
+  let mockerArr = [];
+
+  mockerNameArr.forEach((mockerName) => {
+    let curMockerPath = path.join(mockerFullPath, mockerName);
+    let curMockModulesPath = path.join(curMockerPath, 'mock_modules');
+
+    // 获取当前的 mocker 下的 modules 列表
+    let modules = [];
+    util.file.getAll(curMockModulesPath, { globs: ['*'] }).forEach((item) => {
+      if (!item.isDirectory()) {
+        console.error('SHOULD BE Directory!')
+        return;
+      }
+
+      // 获取模块名
+      let mockModuleName = path.basename(item.relativePath);
+
+      // 获取这个模块的详细信息
+      let db = mocker.db.getDB(path.join(curMockModulesPath, mockModuleName, 'db.json'));
+
+      // 更新 db 数据
+      let dbState = db.getState();
+      dbState.name = mockModuleName;
+      db.setState(dbState);
+
+      modules.push(dbState);
+    });
+
+    // 当前 mokcer 的全部信息
+    let curMocker = {
+      name: mockerName,
+      fullPath: curMockerPath,
+      modules: modules,
+    }
+
+    mockerArr.push(curMocker);
+  })
+
+  return mockerArr;
 }
 
 /**
@@ -55,6 +115,7 @@ function getMockModuleResult(req, entry) {
 
 module.exports = {
   getAllMockModules: getAllMockModules,
+  getMockerList: getMockerList,
   getMockModuleResult: getMockModuleResult,
 };
 

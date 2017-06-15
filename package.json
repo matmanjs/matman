@@ -6,6 +6,7 @@
   "scripts": {
     "start": "babel-node ./src/index.js",
     "server-babel": "babel-node ./www/development.js",
+    "tmp-babel": "babel-node ./tmp/dbtest.js",
     "webpack": "webpack --watch",
     "webpack.build": "webpack",
     "commitmsg": "validate-commit-msg",
