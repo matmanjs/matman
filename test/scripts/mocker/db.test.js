@@ -14,14 +14,10 @@ const ROOT_TEST = path.join(ROOT_PROJECT, './test');
 
 const TEST_SUB_PATH = path.dirname(TEST_TARGET);
 const BASE_PATH_SRC = path.join(ROOT_TEST, './data/fixtures', TEST_SUB_PATH);
-const BASE_PATH_EXPECTED = path.join(ROOT_TEST, './data/expected', TEST_SUB_PATH);
 const BASE_PATH_TMP = path.join(ROOT_TEST, './tmp', TEST_SUB_PATH);
 
 // 以测试文件名为目录，将测试用的素材存储其中
 const FOLDER_NAME = path.basename(TEST_TARGET, '.js');
-
-// 保存的文件名后缀
-const SAVE_FILE_SUFFIX = '.json';
 
 describe(TEST_TARGET, () => {
   const TMP_SAVE_FOLDER = path.join(BASE_PATH_TMP, FOLDER_NAME);
@@ -58,26 +54,26 @@ describe(TEST_TARGET, () => {
 
   });
 
-  describe('getReturnId()', () => {
+  describe('getActiveModule()', () => {
 
-    it('mockerDB.getReturnId(db) return "1"', () => {
-      expect(mockerDB.getReturnId(db)).to.equal('1');
+    it('mockerDB.getActiveModule(db) return "1"', () => {
+      expect(mockerDB.getActiveModule(db)).to.equal('1');
     });
 
   });
 
-  describe('getReturnId()', () => {
+  describe('getActiveModule()', () => {
 
     before(() => {
-      mockerDB.setReturnId(db, '2');
+      mockerDB.setActiveModule(db, '2');
     });
 
     after(() => {
-      mockerDB.setReturnId(db, '1');
+      mockerDB.setActiveModule(db, '1');
     });
 
-    it('mockerDB.setReturnId(db,"2") success', () => {
-      expect(mockerDB.getReturnId(db)).to.equal('2');
+    it('mockerDB.setActiveModule(db,"2") success', () => {
+      expect(mockerDB.getActiveModule(db)).to.equal('2');
     });
 
   });

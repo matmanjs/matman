@@ -1,7 +1,7 @@
 const low = require('lowdb');
 const fileAsync = require('lowdb/lib/storages/file-async');
 
-const RETURN_ID_KEY = 'returnId';
+const ACTIVE_MODULE = 'operation.activeModule';
 
 function getDB(fullPath) {
   return low(fullPath, { storage: fileAsync });
@@ -11,18 +11,18 @@ function getValue(db, key) {
   return db.get(key).value();
 }
 
-function getReturnId(db) {
-  return getValue(db, RETURN_ID_KEY);
+function getActiveModule(db) {
+  return getValue(db, ACTIVE_MODULE);
 }
 
-function setReturnId(db, value) {
-  db.set(RETURN_ID_KEY, value)
+function setActiveModule(db, value) {
+  db.set(ACTIVE_MODULE, value)
     .write();
 }
 
 module.exports = {
   getDB: getDB,
   getValue: getValue,
-  getReturnId: getReturnId,
-  setReturnId: setReturnId
+  getActiveModule: getActiveModule,
+  setActiveModule: setActiveModule
 };
