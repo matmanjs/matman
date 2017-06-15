@@ -9,21 +9,21 @@ const fse = require('../util/fse');
  * @return {Promise}
  */
 function save(srcPath, savePath) {
-    return new Promise((resolve, reject) => {
-        getResult(srcPath)
-            .then((saveData) => {
-                saveJSON(saveData, savePath)
-                    .then((data) => {
-                        resolve(data);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
+  return new Promise((resolve, reject) => {
+    getResult(srcPath)
+      .then((saveData) => {
+        saveJSON(saveData, savePath)
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 
 /**
@@ -34,15 +34,15 @@ function save(srcPath, savePath) {
  * @return {Promise}
  */
 function saveJSON(data, savePath) {
-    return new Promise((resolve, reject) => {
-        fse.outputJsonAsync(path.resolve(savePath), data)
-            .then(() => {
-                resolve(data);
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
+  return new Promise((resolve, reject) => {
+    fse.outputJsonAsync(path.resolve(savePath), data)
+      .then(() => {
+        resolve(data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 
 /**
@@ -53,44 +53,44 @@ function saveJSON(data, savePath) {
  * @return {Promise}
  */
 function getResult(filePath) {
-    return new Promise((resolve, reject) => {
-        /**
-         * require mocker modules 之后的对象
-         * @type {Object | Function | Promise}
-         */
-        let saveTarget = requireModule(filePath);
+  return new Promise((resolve, reject) => {
+    /**
+     * require mocker modules 之后的对象
+     * @type {Object | Function | Promise}
+     */
+    let saveTarget = requireModule(filePath);
 
-        if (typeof saveTarget === 'function') {
-            // 如果传入的是方法，则执行方法
-            let saveObj = saveTarget();
+    if (typeof saveTarget === 'function') {
+      // 如果传入的是方法，则执行方法
+      let saveObj = saveTarget();
 
-            if (isPromiseObj(saveObj)) {
-                // 获得了方法执行的结果之后，判断返回的为 Promise 的话则获取最终结果值
-                saveObj
-                    .then((data) => {
-                        resolve(data);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    });
-            } else {
-                // 如果方法返回的是普通对象，则直接返回
-                resolve(saveObj);
-            }
-        } else if (isPromiseObj(saveTarget)) {
-            // 如果传入的为 Promise 的话则获取最终结果值
-            saveTarget
-                .then((data) => {
-                    resolve(data);
-                })
-                .catch((err) => {
-                    reject(err);
-                });
-        } else {
-            // 如果传入的是普通对象，则直接返回
-            resolve(saveTarget);
-        }
-    });
+      if (isPromiseObj(saveObj)) {
+        // 获得了方法执行的结果之后，判断返回的为 Promise 的话则获取最终结果值
+        saveObj
+          .then((data) => {
+            resolve(data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      } else {
+        // 如果方法返回的是普通对象，则直接返回
+        resolve(saveObj);
+      }
+    } else if (isPromiseObj(saveTarget)) {
+      // 如果传入的为 Promise 的话则获取最终结果值
+      saveTarget
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    } else {
+      // 如果传入的是普通对象，则直接返回
+      resolve(saveTarget);
+    }
+  });
 }
 
 /**
@@ -100,15 +100,15 @@ function getResult(filePath) {
  * @return {Object}
  */
 function requireModule(filePath) {
-    let result = require(path.resolve(filePath));
+  let result = require(path.resolve(filePath));
 
-    // 如果是es6写法 export default xxx，则编译之后的值会存储在result.default中
-    // 因此在这种情况下实际返回的时候，只需要返回 result.default 即可
-    if (typeof result.default !== 'undefined') {
-        result = result.default;
-    }
+  // 如果是es6写法 export default xxx，则编译之后的值会存储在result.default中
+  // 因此在这种情况下实际返回的时候，只需要返回 result.default 即可
+  if (typeof result.default !== 'undefined') {
+    result = result.default;
+  }
 
-    return result;
+  return result;
 }
 
 /**
@@ -118,11 +118,11 @@ function requireModule(filePath) {
  * @return {Boolean}
  */
 function isPromiseObj(obj) {
-    return obj && (typeof obj.then === 'function');
+  return obj && (typeof obj.then === 'function');
 }
 
 module.exports = {
-    save: save,
-    saveJSON: saveJSON,
-    getResult: getResult
+  save: save,
+  saveJSON: saveJSON,
+  getResult: getResult
 };
