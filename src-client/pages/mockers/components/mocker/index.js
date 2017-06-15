@@ -2,7 +2,7 @@ import React from 'react';
 
 const Mocker = ({ match }) => (
     <div>
-        <h3>{match.params.mockerName}</h3>
+        <h3>Hello, I am {match.params.mockerName}</h3>
     </div>
 );
 

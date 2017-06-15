@@ -4320,37 +4320,6 @@ webpackJsonp([0],[
 	      null,
 	      'Mockers'
 	    ),
-	    _react2.default.createElement(
-	      'ul',
-	      null,
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        _react2.default.createElement(
-	          _reactRouterDom.Link,
-	          { to: match.url + '/rendering' },
-	          'Rendering with React'
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        _react2.default.createElement(
-	          _reactRouterDom.Link,
-	          { to: match.url + '/components' },
-	          'Components'
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        _react2.default.createElement(
-	          _reactRouterDom.Link,
-	          { to: match.url + '/simple_cgi' },
-	          'simple_cgi'
-	        )
-	      )
-	    ),
 	    _react2.default.createElement(_reactRouterDom.Route, { path: match.url + '/:mockerName', component: _mocker2.default }),
 	    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: match.url, component: _list2.default })
 	  );
@@ -4388,6 +4357,8 @@ webpackJsonp([0],[
 	
 	var _reactRedux = __webpack_require__(184);
 	
+	var _reactRouterDom = __webpack_require__(225);
+	
 	var _action = __webpack_require__(398);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -4410,7 +4381,6 @@ webpackJsonp([0],[
 	  MockerList.prototype.render = function render() {
 	    var _props = this.props,
 	        match = _props.match,
-	        isLoaded = _props.isLoaded,
 	        list = _props.list;
 	
 	
@@ -4433,15 +4403,42 @@ webpackJsonp([0],[
 	        'Mocker List'
 	      ),
 	      _react2.default.createElement(
-	        'p',
-	        null,
-	        'isLoaded=',
-	        isLoaded + ''
-	      ),
-	      _react2.default.createElement(
-	        'p',
-	        null,
-	        (0, _stringify2.default)(list)
+	        'div',
+	        { className: 'list-wrapper' },
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          list.map(function (item, index) {
+	            return _react2.default.createElement(
+	              'li',
+	              { key: index },
+	              _react2.default.createElement(
+	                _reactRouterDom.Link,
+	                { to: match.url + '/' + item.name },
+	                item.name,
+	                ' - ',
+	                item.fullPath
+	              ),
+	              _react2.default.createElement(
+	                'ul',
+	                null,
+	                item.modules.map(function (module, index2) {
+	                  return _react2.default.createElement(
+	                    'li',
+	                    { key: index2 },
+	                    index2,
+	                    ' : ',
+	                    module.name,
+	                    ' - ',
+	                    module.version,
+	                    ' - ',
+	                    module.description
+	                  );
+	                })
+	              )
+	            );
+	          })
+	        )
 	      )
 	    );
 	  };
@@ -5940,6 +5937,7 @@ webpackJsonp([0],[
 	        _react2.default.createElement(
 	            'h3',
 	            null,
+	            'Hello, I am ',
 	            match.params.mockerName
 	        )
 	    );
