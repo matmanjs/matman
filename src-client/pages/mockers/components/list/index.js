@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 
 class MockerList extends Component {
   constructor(props, context) {
@@ -24,16 +24,16 @@ class MockerList extends Component {
   }
 }
 
-// function mapStateToProps(state) {
-//   const {} = state;
-//
-//   return {}
-// }
-//
-// function mapDispatchToProps(dispatch) {
-//   return {};
-// }
-//
-// export default connect(mapStateToProps, mapDispatchToProps)(MockerList);
-export default MockerList;
+function mapStateToProps(state) {
+  const {mockerListInfo} = state;
+
+  return mockerListInfo;
+}
+
+function mapDispatchToProps(dispatch) {
+  return {};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MockerList);
+// export default MockerList;
 

@@ -11,7 +11,7 @@ import About from './pages/about';
 import Topics from './pages/topics';
 import Mockers from './pages/mockers';
 
-const BasicExample = () => (
+const PageContainer = () => (
     <Router>
         <div>
             <ul>
@@ -31,4 +31,4 @@ const BasicExample = () => (
     </Router>
 );
 
-export default BasicExample
+export default PageContainer

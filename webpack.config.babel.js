@@ -37,6 +37,7 @@ export default {
     extensions: ['', '.js', '.jsx'],
     alias: {
       common: `${srcRootPath}/common`,
+      root: `${srcRootPath}`,
       admin: `${srcRootPath}/admin`
     }
   },
