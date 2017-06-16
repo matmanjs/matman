@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './index.css';
+import './index.less';
 
 const Home = () => (
   <div className="home">

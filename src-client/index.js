@@ -1,39 +1,65 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider, connect } from 'react-redux';
+import 'babel-polyfill';
 
-import PageContainer from './App';
+import { browserHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
-import store from './store';
+import configureStore from './store/configureStore';
+import routes from './routes';
+import Root from './containers/Root';
 
-import './index.css';
+// ===================================================================
+// 1. 创建 store
+// ===================================================================
+const store = configureStore(window.__initialState);
 
-export default function init(callback) {
-  // connect
-  const Root = connect(function (state) {
-    return state;
-  })(PageContainer);
+// ===================================================================
+// 2. 创建 history
+// ===================================================================
+const history = syncHistoryWithStore(browserHistory, store);
 
-  // try react render
-  try {
-    ReactDOM.render(
-      <Provider store={store}>
-        <Root />
-      </Provider>,
-      document.getElementById('root')
-    );
+// ===================================================================
+// 3. ReactDOM 渲染
+// ===================================================================
+ReactDOM.render(
+  <Root store={store} history={history} routes={routes} />,
+  document.getElementById('root')
+);
 
-    callback(true);
-  } catch (err) {
-    callback(false, err);
-  }
-}
-
-// 初始化
-init((isSuccess, err) => {
-  if (isSuccess) {
-    console.log('ReactDOM success');
-  } else {
-    console.error('ReactDOM err', err);
-  }
-});
+//
+// import PageContainer from './App';
+//
+// import store from './store';
+//
+// import './index.css';
+//
+// export default function init(callback) {
+//   // connect
+//   const Root = connect(function (state) {
+//     return state;
+//   })(PageContainer);
+//
+//   // try react render
+//   try {
+//     ReactDOM.render(
+//       <Provider store={store}>
+//         <Root />
+//       </Provider>,
+//       document.getElementById('root')
+//     );
+//
+//     callback(true);
+//   } catch (err) {
+//     callback(false, err);
+//   }
+// }
+//
+// // 初始化
+// init((isSuccess, err) => {
+//   if (isSuccess) {
+//     console.log('ReactDOM success');
+//   } else {
+//     console.error('ReactDOM err', err);
+//   }
+// });

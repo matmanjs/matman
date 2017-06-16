@@ -1,0 +1,27 @@
+.matman-layout {
+  position: relative;
+  min-height: 100%;
+
+  .layout-main {
+    margin-left: 224px;
+    transition: all 0.3s ease;
+  }
+
+  .layout-container {
+    margin: 24px 16px;
+  }
+
+  .layout-content {
+    background: #fff;
+    padding: 24px;
+    min-height: 288px;
+  }
+
+  &.collapse {
+    .layout-main {
+      margin-left: 64px;
+      transition: all 0.3s ease;
+    }
+  }
+}
+
