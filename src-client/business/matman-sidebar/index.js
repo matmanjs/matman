@@ -4,10 +4,9 @@ export const SIDEBAR_MENU_DATA = {
   children: [
     {
       id: 'home',
-      url: '/',
+      url: '/admin/home',
       icon: 'home',
-      title: 'Home',
-      indexOnly: true
+      title: 'Home'
     },
     {
       id: 'about',

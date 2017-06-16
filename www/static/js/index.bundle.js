@@ -13601,10 +13601,9 @@ webpackJsonp([0],[
 	  hide: true,
 	  children: [{
 	    id: 'home',
-	    url: '/',
+	    url: '/admin/home',
 	    icon: 'home',
-	    title: 'Home',
-	    indexOnly: true
+	    title: 'Home'
 	  }, {
 	    id: 'about',
 	    url: '/admin/about',
