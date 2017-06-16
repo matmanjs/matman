@@ -1,5 +1,6 @@
 .matman-layout {
   position: relative;
+  height: 100%;
   min-height: 100%;
 
   .layout-main {
@@ -21,6 +22,52 @@
     .layout-main {
       margin-left: 64px;
       transition: all 0.3s ease;
+    }
+
+    .layout-siderbar {
+      width: 64px;
+      transition: all 0.3s ease;
+
+      .siderbar-logo {
+        width: 32px;
+        margin: 16px;
+        transition: all 0.3s ease;
+      }
+
+      & > .ant-menu {
+        & > .ant-menu-item {
+          transition: all 0s ease;
+
+          .nav-text {
+            display: none;
+          }
+
+          & > .anticon {
+            font-size: 16px;
+            display: inline-block;
+          }
+
+          &:hover {
+            background: #2db7f5;
+            color: #fff;
+            transition: all 0s ease;
+
+            .nav-text {
+              display: inline-block;
+              vertical-align: top;
+              background: #2db7f5;
+              color: #fff;
+              padding-right: 16px;
+              border-radius: 0 5px 5px 0;
+            }
+          }
+        }
+      }
+
+      .sidebar-action {
+        width: 64px;
+        transition: all 0.3s ease;
+      }
     }
   }
 }

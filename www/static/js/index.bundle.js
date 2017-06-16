@@ -30,6 +30,8 @@ webpackJsonp([0],[
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
+	__webpack_require__(1040);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// ===================================================================
@@ -46,43 +48,6 @@ webpackJsonp([0],[
 	// 3. ReactDOM 渲染
 	// ===================================================================
 	_reactDom2.default.render(_react2.default.createElement(_Root2.default, { store: store, history: history, routes: _routes2.default }), document.getElementById('root'));
-	
-	//
-	// import PageContainer from './App';
-	//
-	// import store from './store';
-	//
-	// import './index.css';
-	//
-	// export default function init(callback) {
-	//   // connect
-	//   const Root = connect(function (state) {
-	//     return state;
-	//   })(PageContainer);
-	//
-	//   // try react render
-	//   try {
-	//     ReactDOM.render(
-	//       <Provider store={store}>
-	//         <Root />
-	//       </Provider>,
-	//       document.getElementById('root')
-	//     );
-	//
-	//     callback(true);
-	//   } catch (err) {
-	//     callback(false, err);
-	//   }
-	// }
-	//
-	// // 初始化
-	// init((isSuccess, err) => {
-	//   if (isSuccess) {
-	//     console.log('ReactDOM success');
-	//   } else {
-	//     console.error('ReactDOM err', err);
-	//   }
-	// });
 
 /***/ }),
 /* 1 */,
@@ -29942,7 +29907,7 @@ webpackJsonp([0],[
 	
 	
 	// module
-	exports.push([module.id, ".matman-layout {\n  position: relative;\n  min-height: 100%;\n}\n.matman-layout .layout-main {\n  margin-left: 224px;\n  transition: all 0.3s ease;\n}\n.matman-layout .layout-container {\n  margin: 24px 16px;\n}\n.matman-layout .layout-content {\n  background: #fff;\n  padding: 24px;\n  min-height: 288px;\n}\n.matman-layout.collapse .layout-main {\n  margin-left: 64px;\n  transition: all 0.3s ease;\n}\n", ""]);
+	exports.push([module.id, ".matman-layout {\n  position: relative;\n  height: 100%;\n  min-height: 100%;\n}\n.matman-layout .layout-main {\n  margin-left: 224px;\n  transition: all 0.3s ease;\n}\n.matman-layout .layout-container {\n  margin: 24px 16px;\n}\n.matman-layout .layout-content {\n  background: #fff;\n  padding: 24px;\n  min-height: 288px;\n}\n.matman-layout.collapse .layout-main {\n  margin-left: 64px;\n  transition: all 0.3s ease;\n}\n.matman-layout.collapse .layout-siderbar {\n  width: 64px;\n  transition: all 0.3s ease;\n}\n.matman-layout.collapse .layout-siderbar .siderbar-logo {\n  width: 32px;\n  margin: 16px;\n  transition: all 0.3s ease;\n}\n.matman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item {\n  transition: all 0s ease;\n}\n.matman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item .nav-text {\n  display: none;\n}\n.matman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item > .anticon {\n  font-size: 16px;\n  display: inline-block;\n}\n.matman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item:hover {\n  background: #2db7f5;\n  color: #fff;\n  transition: all 0s ease;\n}\n.matman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item:hover .nav-text {\n  display: inline-block;\n  vertical-align: top;\n  background: #2db7f5;\n  color: #fff;\n  padding-right: 16px;\n  border-radius: 0 5px 5px 0;\n}\n.matman-layout.collapse .layout-siderbar .sidebar-action {\n  width: 64px;\n  transition: all 0.3s ease;\n}\n", ""]);
 	
 	// exports
 
@@ -35729,7 +35694,7 @@ webpackJsonp([0],[
 	
 	
 	// module
-	exports.push([module.id, ".layout-siderbar {\n  width: 224px;\n  background: #404040;\n  position: absolute;\n  overflow: visible;\n  padding-bottom: 24px;\n  height: 100%;\n  transition: all 0.3s ease;\n}\n.layout-siderbar .siderbar-logo {\n  width: 150px;\n  height: 32px;\n  background: #333;\n  border-radius: 6px;\n  margin: 16px 24px 16px 28px;\n  transition: all 0.3s ease;\n}\n.layout-siderbar > .ant-menu {\n  margin-bottom: 20px;\n}\n.layout-siderbar > .ant-menu > .ant-menu-item {\n  margin: 16px 0;\n}\n.layout-siderbar > .ant-menu > .ant-menu-item .nav-text {\n  vertical-align: baseline;\n  display: inline-block;\n}\n.layout-siderbar > .ant-menu > .ant-menu-item > .anticon {\n  transition: font-size 0.3s;\n}\n.layout-siderbar .sidebar-action {\n  height: 42px;\n  width: 224px;\n  position: fixed;\n  bottom: 0;\n  background: #656565;\n  color: #fff;\n  text-align: center;\n  line-height: 42px;\n  cursor: pointer;\n  transition: all 0.3s ease;\n}\n.xman-layout.collapse .layout-siderbar {\n  width: 64px;\n  transition: all 0.3s ease;\n}\n.xman-layout.collapse .layout-siderbar .siderbar-logo {\n  width: 32px;\n  margin: 16px;\n  transition: all 0.3s ease;\n}\n.xman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item {\n  transition: all 0s ease;\n}\n.xman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item .nav-text {\n  display: none;\n}\n.xman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item > .anticon {\n  font-size: 16px;\n  display: inline-block;\n}\n.xman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item:hover {\n  background: #2db7f5;\n  color: #fff;\n  transition: all 0s ease;\n}\n.xman-layout.collapse .layout-siderbar > .ant-menu > .ant-menu-item:hover .nav-text {\n  display: inline-block;\n  vertical-align: top;\n  background: #2db7f5;\n  color: #fff;\n  padding-right: 16px;\n  border-radius: 0 5px 5px 0;\n}\n.xman-layout.collapse .layout-siderbar .sidebar-action {\n  width: 64px;\n  transition: all 0.3s ease;\n}\n", ""]);
+	exports.push([module.id, ".layout-siderbar {\n  width: 224px;\n  background: #404040;\n  position: fixed;\n  overflow: visible;\n  padding-bottom: 24px;\n  height: 100%;\n  transition: all 0.3s ease;\n}\n.layout-siderbar .siderbar-logo {\n  width: 150px;\n  height: 32px;\n  background: #333;\n  border-radius: 6px;\n  margin: 16px 24px 16px 28px;\n  transition: all 0.3s ease;\n}\n.layout-siderbar > .ant-menu {\n  margin-bottom: 20px;\n}\n.layout-siderbar > .ant-menu > .ant-menu-item {\n  margin: 16px 0;\n}\n.layout-siderbar > .ant-menu > .ant-menu-item .nav-text {\n  vertical-align: baseline;\n  display: inline-block;\n}\n.layout-siderbar > .ant-menu > .ant-menu-item > .anticon {\n  transition: font-size 0.3s;\n}\n.layout-siderbar .sidebar-action {\n  height: 42px;\n  width: 224px;\n  position: fixed;\n  bottom: 0;\n  background: #656565;\n  color: #fff;\n  text-align: center;\n  line-height: 42px;\n  cursor: pointer;\n  transition: all 0.3s ease;\n}\n", ""]);
 	
 	// exports
 
@@ -36425,7 +36390,7 @@ webpackJsonp([0],[
 	
 	  getComponent: function getComponent(nextState, cb) {
 	    __webpack_require__.e/* nsure */(3, function (require) {
-	      cb(null, __webpack_require__(1040).default);
+	      cb(null, __webpack_require__(1030).default);
 	    });
 	  },
 	  getChildRoutes: function getChildRoutes(partialNextState, cb) {
@@ -36541,6 +36506,46 @@ webpackJsonp([0],[
 	exports.default = (0, _reactRedux.connect)(function (state) {
 	  return state;
 	})(Root);
+
+/***/ }),
+/* 1040 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(1041);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(956)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/less-loader/dist/index.js!./index.less", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/less-loader/dist/index.js!./index.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 1041 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(955)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "#root {\n  height: 100%;\n}\n#root .dev-root {\n  height: 100%;\n}\n", ""]);
+	
+	// exports
+
 
 /***/ })
 ]);
