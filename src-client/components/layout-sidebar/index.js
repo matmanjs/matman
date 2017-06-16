@@ -61,9 +61,10 @@ class LayoutSidebar extends Component {
   /**
    * 判断路由是否是激活状态
    * @param {String} routeUrl 路由地址
+   * @param {Boolean} indexOnly 是否精确匹配
    */
-  isActive(routeUrl) {
-    return this.context.router.isActive(routeUrl);
+  isActive(routeUrl, indexOnly) {
+    return this.context.router.isActive(routeUrl, indexOnly);
   }
 
   /**
@@ -84,7 +85,7 @@ class LayoutSidebar extends Component {
 
     Object.keys(menuDataMap).forEach((id) => {
       let curMenu = menuDataMap[id];
-      if (curMenu && this.isActive(curMenu.url)) {
+      if (curMenu && this.isActive(curMenu.url, curMenu.indexOnly)) {
         arr.push(id);
       }
     });

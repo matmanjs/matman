@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import {
-  Route,
   Link
-} from 'react-router-dom';
+} from 'react-router';
 
-import { loadMockerList } from 'root/business/matman-mocker-list/action';
+import { loadMockerList } from '../../business/mocker-list/action';
 
 class MockerList extends Component {
   constructor(props, context) {
@@ -22,12 +21,14 @@ class MockerList extends Component {
   }
 
   render() {
-    const { match, list } = this.props;
+    const { location, route, list } = this.props;
 
     return (
       <div>
-        <h3>match</h3>
-        <p>{JSON.stringify(match)}</p>
+        <h3>location</h3>
+        <p>{JSON.stringify(location)}</p>
+        <h3>route</h3>
+        <p>{JSON.stringify(route)}</p>
 
         <h3>Mocker List</h3>
 
@@ -37,7 +38,7 @@ class MockerList extends Component {
               list.map((item, index) => {
                 return (
                   <li key={index}>
-                    <Link to={`${match.url}/${item.name}`}>{item.name} - {item.fullPath}</Link>
+                    <Link to={`/admin/mockers/mocker/${item.name}`}>{item.name} - {item.fullPath}</Link>
                     <ul>
                       {
                         item.modules.map((module, index2) => {

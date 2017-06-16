@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Mocker = ({ match }) => (
+const Mocker = (props) => (
     <div>
-        <h3>Hello, I am {match.params.mockerName}</h3>
+        <h3>Hello, I am in {props.routeParams.mockerName}</h3>
     </div>
 );
 

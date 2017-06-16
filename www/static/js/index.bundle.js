@@ -26,7 +26,7 @@ webpackJsonp([0],[
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _Root = __webpack_require__(1029);
+	var _Root = __webpack_require__(1037);
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
@@ -13603,12 +13603,18 @@ webpackJsonp([0],[
 	    id: 'home',
 	    url: '/',
 	    icon: 'home',
-	    title: 'Home'
+	    title: 'Home',
+	    indexOnly: true
 	  }, {
 	    id: 'about',
 	    url: '/admin/about',
 	    icon: 'desktop',
 	    title: 'About'
+	  }, {
+	    id: 'mockers',
+	    url: '/admin/mockers',
+	    icon: 'desktop',
+	    title: 'Mockers'
 	  }]
 	};
 
@@ -29794,10 +29800,12 @@ webpackJsonp([0],[
 	  childRoutes: [{
 	    path: '/',
 	    component: __webpack_require__(952).default,
-	    indexRoute: { onEnter: function onEnter(nextState, replace) {
+	    indexRoute: {
+	      onEnter: function onEnter(nextState, replace) {
 	        return replace('/admin/home');
-	      } },
-	    childRoutes: [__webpack_require__(1023).default, __webpack_require__(1027).default]
+	      }
+	    },
+	    childRoutes: [__webpack_require__(1023).default, __webpack_require__(1027).default, __webpack_require__(1029).default]
 	  }]
 	};
 
@@ -30347,11 +30355,12 @@ webpackJsonp([0],[
 	  /**
 	   * 判断路由是否是激活状态
 	   * @param {String} routeUrl 路由地址
+	   * @param {Boolean} indexOnly 是否精确匹配
 	   */
 	
 	
-	  LayoutSidebar.prototype.isActive = function isActive(routeUrl) {
-	    return this.context.router.isActive(routeUrl);
+	  LayoutSidebar.prototype.isActive = function isActive(routeUrl, indexOnly) {
+	    return this.context.router.isActive(routeUrl, indexOnly);
 	  };
 	
 	  /**
@@ -30378,7 +30387,7 @@ webpackJsonp([0],[
 	
 	    (0, _keys2.default)(menuDataMap).forEach(function (id) {
 	      var curMenu = menuDataMap[id];
-	      if (curMenu && _this2.isActive(curMenu.url)) {
+	      if (curMenu && _this2.isActive(curMenu.url, curMenu.indexOnly)) {
 	        arr.push(id);
 	      }
 	    });
@@ -36403,17 +36412,52 @@ webpackJsonp([0],[
 /* 1029 */
 /***/ (function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	exports.__esModule = true;
+	exports.default = {
+	  path: '/admin/mockers',
+	
+	  indexRoute: {
+	    onEnter: function onEnter(nextState, replace) {
+	      return replace('/admin/mockers/list');
+	    }
+	  },
+	
+	  getComponent: function getComponent(nextState, cb) {
+	    __webpack_require__.e/* nsure */(3, function (require) {
+	      cb(null, __webpack_require__(1040).default);
+	    });
+	  },
+	  getChildRoutes: function getChildRoutes(partialNextState, cb) {
+	    __webpack_require__.e/* nsure */(4, function (require) {
+	      cb(null, [__webpack_require__(1031).default, __webpack_require__(1035).default]);
+	    });
+	  }
+	};
+
+/***/ }),
+/* 1030 */,
+/* 1031 */,
+/* 1032 */,
+/* 1033 */,
+/* 1034 */,
+/* 1035 */,
+/* 1036 */,
+/* 1037 */
+/***/ (function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
 	if (process.env.NODE_ENV === 'production') {
-	  module.exports = __webpack_require__(1030);
+	  module.exports = __webpack_require__(1038);
 	} else {
-	  module.exports = __webpack_require__(1031);
+	  module.exports = __webpack_require__(1039);
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 1030 */
+/* 1038 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36452,7 +36496,7 @@ webpackJsonp([0],[
 	})(Root);
 
 /***/ }),
-/* 1031 */
+/* 1039 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
