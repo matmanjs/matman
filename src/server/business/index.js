@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const path = require('path');
 
 const util = require('../../util');
@@ -44,11 +45,19 @@ function getMockerList(mockerFullPath) {
     let curMockerPath = path.join(mockerFullPath, mockerName);
     let curMockModulesPath = path.join(curMockerPath, 'mock_modules');
 
+    // 获取这个 mocker 模块的详细信息
+    let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'db.json'));
+
+    // 更新 mocker db 数据
+    let mockerDBState = mockerDB.getState();
+    mockerDBState.name = mockerName;
+    mockerDB.setState(mockerDBState);
+
     // 获取当前的 mocker 下的 modules 列表
     let modules = [];
     util.file.getAll(curMockModulesPath, { globs: ['*'] }).forEach((item) => {
       if (!item.isDirectory()) {
-        console.error('SHOULD BE Directory!')
+        console.error('SHOULD BE Directory!');
         return;
       }
 
@@ -56,25 +65,22 @@ function getMockerList(mockerFullPath) {
       let mockModuleName = path.basename(item.relativePath);
 
       // 获取这个模块的详细信息
-      let db = mocker.db.getDB(path.join(curMockModulesPath, mockModuleName, 'db.json'));
+      let mockModuleDB = mocker.db.getDB(path.join(curMockModulesPath, mockModuleName, 'db.json'));
 
-      // 更新 db 数据
-      let dbState = db.getState();
-      dbState.name = mockModuleName;
-      db.setState(dbState);
+      // 更新 mock module db 数据
+      let mockModuleDBState = mockModuleDB.getState();
+      mockModuleDBState.name = mockModuleName;
+      mockModuleDBState.cgi = mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
+      mockModuleDB.setState(mockModuleDBState);
 
-      modules.push(dbState);
+      modules.push(mockModuleDBState);
     });
 
-    // 当前 mokcer 的全部信息
-    let curMocker = {
-      name: mockerName,
+    mockerArr.push(_.merge({}, mockerDBState, {
       fullPath: curMockerPath,
       modules: modules,
-    }
-
-    mockerArr.push(curMocker);
-  })
+    }));
+  });
 
   return mockerArr;
 }

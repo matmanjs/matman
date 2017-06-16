@@ -2,5 +2,6 @@
   "description": "成功：不存在该模块",
   "version": "0.0.1",
   "author": "helinjiang",
-  "name": "success_not_exist"
+  "name": "success_not_exist",
+  "cgi": "/cgi-bin/a/b/standard_cgi?_m_target=success_not_exist"
 }

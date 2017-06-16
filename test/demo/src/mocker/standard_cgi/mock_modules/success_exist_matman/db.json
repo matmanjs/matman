@@ -2,5 +2,6 @@
   "description": "成功：存在matman模块",
   "version": "0.0.1",
   "author": "helinjiang",
-  "name": "success_exist_matman"
+  "name": "success_exist_matman",
+  "cgi": "/cgi-bin/a/b/standard_cgi?_m_target=success_exist_matman"
 }

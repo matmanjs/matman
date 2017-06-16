@@ -38,13 +38,16 @@ class MockerList extends Component {
               list.map((item, index) => {
                 return (
                   <li key={index}>
+                    <h3>{index + 1}. {item.description}</h3>
+                    <p>{item.cgi}</p>
                     <Link to={`/admin/mockers/mocker/${item.name}`}>{item.name} - {item.fullPath}</Link>
                     <ul>
                       {
                         item.modules.map((module, index2) => {
                           return (
                             <li key={index2}>
-                              {index2} : {module.name} - {module.version} - {module.description}
+                              <p>{index + 1}.{index2 + 1} {module.name} - {module.version} - {module.description}</p>
+                              <p><a href={module.cgi} target="_blank">{module.cgi}</a></p>
                             </li>
                           )
                         })

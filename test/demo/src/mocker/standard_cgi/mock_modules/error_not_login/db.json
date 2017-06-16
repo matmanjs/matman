@@ -2,5 +2,6 @@
   "description": "错误：未登录",
   "version": "0.0.1",
   "author": "helinjiang",
-  "name": "error_not_login"
+  "name": "error_not_login",
+  "cgi": "/cgi-bin/a/b/standard_cgi?_m_target=error_not_login"
 }
