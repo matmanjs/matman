@@ -42,47 +42,54 @@ function getMockerList(mockerFullPath) {
   let mockerArr = [];
 
   mockerNameArr.forEach((mockerName) => {
-    let curMockerPath = path.join(mockerFullPath, mockerName);
-    let curMockModulesPath = path.join(curMockerPath, 'mock_modules');
-
-    // 获取这个 mocker 模块的详细信息
-    let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'db.json'));
-
-    // 更新 mocker db 数据
-    let mockerDBState = mockerDB.getState();
-    mockerDBState.name = mockerName;
-    mockerDB.setState(mockerDBState);
-
-    // 获取当前的 mocker 下的 modules 列表
-    let modules = [];
-    util.file.getAll(curMockModulesPath, { globs: ['*'] }).forEach((item) => {
-      if (!item.isDirectory()) {
-        console.error('SHOULD BE Directory!');
-        return;
-      }
-
-      // 获取模块名
-      let mockModuleName = path.basename(item.relativePath);
-
-      // 获取这个模块的详细信息
-      let mockModuleDB = mocker.db.getDB(path.join(curMockModulesPath, mockModuleName, 'db.json'));
-
-      // 更新 mock module db 数据
-      let mockModuleDBState = mockModuleDB.getState();
-      mockModuleDBState.name = mockModuleName;
-      mockModuleDBState.cgi = mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
-      mockModuleDB.setState(mockModuleDBState);
-
-      modules.push(mockModuleDBState);
-    });
-
-    mockerArr.push(_.merge({}, mockerDBState, {
-      fullPath: curMockerPath,
-      modules: modules,
-    }));
+    mockerArr.push(getMocker(mockerFullPath, mockerName));
   });
 
   return mockerArr;
+}
+
+/**
+ * 获取指定 mocker 的信息
+ */
+function getMocker(mockerFullPath, mockerName) {
+  let curMockerPath = path.join(mockerFullPath, mockerName);
+  let curMockModulesPath = path.join(curMockerPath, 'mock_modules');
+
+  // 获取这个 mocker 模块的详细信息
+  let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'db.json'));
+
+  // 更新 mocker db 数据
+  let mockerDBState = mockerDB.getState();
+  mockerDBState.name = mockerName;
+  mockerDB.setState(mockerDBState);
+
+  // 获取当前的 mocker 下的 modules 列表
+  let modules = [];
+  util.file.getAll(curMockModulesPath, { globs: ['*'] }).forEach((item) => {
+    if (!item.isDirectory()) {
+      console.error('SHOULD BE Directory!');
+      return;
+    }
+
+    // 获取模块名
+    let mockModuleName = path.basename(item.relativePath);
+
+    // 获取这个模块的详细信息
+    let mockModuleDB = mocker.db.getDB(path.join(curMockModulesPath, mockModuleName, 'db.json'));
+
+    // 更新 mock module db 数据
+    let mockModuleDBState = mockModuleDB.getState();
+    mockModuleDBState.name = mockModuleName;
+    mockModuleDBState.cgi = mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
+    mockModuleDB.setState(mockModuleDBState);
+
+    modules.push(mockModuleDBState);
+  });
+
+  return _.merge({}, mockerDBState, {
+    fullPath: curMockerPath,
+    modules: modules,
+  });
 }
 
 /**
@@ -139,6 +146,7 @@ function setActiveModule(mockerFullPath, mockerName, activeModule) {
 module.exports = {
   getAllMockModules: getAllMockModules,
   getMockerList: getMockerList,
+  getMocker: getMocker,
   getMockModuleResult: getMockModuleResult,
   setActiveModule: setActiveModule,
 };

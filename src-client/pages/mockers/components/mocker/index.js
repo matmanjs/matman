@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Table } from 'antd';
+import { Table, Card } from 'antd';
+
+import { loadMocker, setMockerActiveModule } from '../../business/mocker/action';
 
 class Mocker extends Component {
   constructor(props, context) {
@@ -11,10 +13,17 @@ class Mocker extends Component {
 
   componentDidMount() {
     console.log('Mocker componentDidMount', this.props);
+
+    this.fetch();
+  }
+
+  fetch() {
+    this.props.loadMocker(this.props.routeParams.mockerName);
   }
 
   getColumns() {
-    const activeModule = this.props.mockerData.operation.activeModule;
+    const { mockerData } = this.props;
+    const activeModule = mockerData.operation && mockerData.operation.activeModule || '';
 
     return [{
       title: 'Name',
@@ -57,7 +66,7 @@ class Mocker extends Component {
   }
 
   render() {
-    const { mockerData, routeParams, route } = this.props;
+    const { isLoaded, mockerData, routeParams, route } = this.props;
     const mockerName = routeParams.mockerName;
 
     const data = mockerData.modules;
@@ -70,52 +79,32 @@ class Mocker extends Component {
         <h3>route</h3>
         <p>{JSON.stringify(route)}</p>
 
-        <h3>Mocker</h3>
-        <p>Hello, I am in {mockerName}</p>
-        <Table rowKey="name" columns={columns} dataSource={data} />
+
+        <Card>
+          <p>Hello, I am in {mockerName}</p>
+        </Card>
+
+        <Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
       </div>
     )
   }
 }
 
 function mapStateToProps(state) {
-  const { mockerListInfo } = state;
+  const { mockerInfo } = state;
 
   return {
-    isLoaded: mockerListInfo.isLoaded,
-    mockerData: {
-      "version": "0.0.1",
-      "description": "标准CGI返回，查询某个模块",
-      "author": "helinjiang",
-      "cgi": "/cgi-bin/a/b/simple_cgi",
-      "operation": { "activeModule": "success_exist_matman" },
-      "name": "simple_cgi",
-      "fullPath": "D:\\gitprojects\\matman\\test\\demo\\src\\mocker\\simple_cgi",
-      "modules": [{
-        "description": "错误：未登录",
-        "version": "0.0.1",
-        "author": "helinjiang",
-        "name": "error_not_login",
-        "cgi": "/cgi-bin/a/b/simple_cgi?_m_target=error_not_login"
-      }, {
-        "description": "成功：存在matman模块",
-        "version": "0.0.1",
-        "author": "helinjiang",
-        "name": "success_exist_matman",
-        "cgi": "/cgi-bin/a/b/simple_cgi?_m_target=success_exist_matman"
-      }, {
-        "description": "成功：不存在该模块",
-        "version": "0.0.1",
-        "author": "helinjiang",
-        "name": "success_not_exist",
-        "cgi": "/cgi-bin/a/b/simple_cgi?_m_target=success_not_exist"
-      }]
-    },
+    isLoaded: mockerInfo.isLoaded,
+    mockerData: mockerInfo.data,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {};
+  return {
+    loadMocker(mockerName){
+      return dispatch(loadMocker(mockerName));
+    }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Mocker);

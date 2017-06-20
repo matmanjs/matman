@@ -13437,16 +13437,21 @@ webpackJsonp([0],[
 	
 	var _reducer2 = _interopRequireDefault(_reducer);
 	
-	var _reducer3 = __webpack_require__(651);
+	var _reducer3 = __webpack_require__(1170);
 	
 	var _reducer4 = _interopRequireDefault(_reducer3);
+	
+	var _reducer5 = __webpack_require__(651);
+	
+	var _reducer6 = _interopRequireDefault(_reducer5);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var rootReducer = (0, _redux.combineReducers)({
 	  routing: _reactRouterRedux.routerReducer, // 用于路由控制
 	  sidebarInfo: _reducer2.default,
-	  mockerListInfo: _reducer4.default
+	  mockerInfo: _reducer4.default,
+	  mockerListInfo: _reducer6.default
 	});
 	
 	exports.default = rootReducer;
@@ -13604,6 +13609,8 @@ webpackJsonp([0],[
 	
 	var _action = __webpack_require__(657);
 	
+	var _action2 = __webpack_require__(1171);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var initialState = {
@@ -13632,7 +13639,7 @@ webpackJsonp([0],[
 	      };
 	      break;
 	
-	    case _action.SET_ACTIVE_MODULE_REQUEST_SUCCESS:
+	    case _action2.SET_ACTIVE_MODULE_REQUEST_SUCCESS:
 	      update.list = state.list.map(function (item) {
 	        if (item.name === data.name) {
 	          item = _lodash2.default.merge({}, item, data);
@@ -30787,19 +30794,14 @@ webpackJsonp([0],[
 	'use strict';
 	
 	exports.__esModule = true;
-	exports.SET_ACTIVE_MODULE_REQUEST_FAIL = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST = exports.MOCKER_LIST_REQUEST_FAIL = exports.MOCKER_LIST_REQUEST_SUCCESS = exports.MOCKER_LIST_REQUEST = undefined;
+	exports.MOCKER_LIST_REQUEST_FAIL = exports.MOCKER_LIST_REQUEST_SUCCESS = exports.MOCKER_LIST_REQUEST = undefined;
 	exports.loadMockerList = loadMockerList;
-	exports.setMockerActiveModule = setMockerActiveModule;
 	
 	var _api = __webpack_require__(567);
 	
 	var MOCKER_LIST_REQUEST = exports.MOCKER_LIST_REQUEST = 'MOCKER_LIST_REQUEST';
 	var MOCKER_LIST_REQUEST_SUCCESS = exports.MOCKER_LIST_REQUEST_SUCCESS = 'MOCKER_LIST_REQUEST_SUCCESS';
 	var MOCKER_LIST_REQUEST_FAIL = exports.MOCKER_LIST_REQUEST_FAIL = 'MOCKER_LIST_REQUEST_FAIL';
-	
-	var SET_ACTIVE_MODULE_REQUEST = exports.SET_ACTIVE_MODULE_REQUEST = 'SET_ACTIVE_MODULE_REQUEST';
-	var SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = 'SET_ACTIVE_MODULE_REQUEST_SUCCESS';
-	var SET_ACTIVE_MODULE_REQUEST_FAIL = exports.SET_ACTIVE_MODULE_REQUEST_FAIL = 'SET_ACTIVE_MODULE_REQUEST_FAIL';
 	
 	function fetchMockerList() {
 	  var _ref;
@@ -30813,25 +30815,6 @@ webpackJsonp([0],[
 	function loadMockerList() {
 	  return function (dispatch, getState) {
 	    return dispatch(fetchMockerList());
-	  };
-	}
-	
-	function requestSetMockerActiveModule(mockerName, mockModuleName) {
-	  var _ref2;
-	
-	  return _ref2 = {}, _ref2[_api.CALL_API] = {
-	    types: [SET_ACTIVE_MODULE_REQUEST, SET_ACTIVE_MODULE_REQUEST_SUCCESS, SET_ACTIVE_MODULE_REQUEST_FAIL],
-	    url: '/sys-cgi/mocker/' + mockerName,
-	    type: 'POST',
-	    data: {
-	      activeModule: mockModuleName
-	    }
-	  }, _ref2;
-	}
-	
-	function setMockerActiveModule(mockerName, mockModuleName) {
-	  return function (dispatch, getState) {
-	    return dispatch(requestSetMockerActiveModule(mockerName, mockModuleName));
 	  };
 	}
 
@@ -53689,6 +53672,235 @@ webpackJsonp([0],[
 	
 	// exports
 
+
+/***/ }),
+/* 1058 */,
+/* 1059 */,
+/* 1060 */,
+/* 1061 */,
+/* 1062 */,
+/* 1063 */,
+/* 1064 */,
+/* 1065 */,
+/* 1066 */,
+/* 1067 */,
+/* 1068 */,
+/* 1069 */,
+/* 1070 */,
+/* 1071 */,
+/* 1072 */,
+/* 1073 */,
+/* 1074 */,
+/* 1075 */,
+/* 1076 */,
+/* 1077 */,
+/* 1078 */,
+/* 1079 */,
+/* 1080 */,
+/* 1081 */,
+/* 1082 */,
+/* 1083 */,
+/* 1084 */,
+/* 1085 */,
+/* 1086 */,
+/* 1087 */,
+/* 1088 */,
+/* 1089 */,
+/* 1090 */,
+/* 1091 */,
+/* 1092 */,
+/* 1093 */,
+/* 1094 */,
+/* 1095 */,
+/* 1096 */,
+/* 1097 */,
+/* 1098 */,
+/* 1099 */,
+/* 1100 */,
+/* 1101 */,
+/* 1102 */,
+/* 1103 */,
+/* 1104 */,
+/* 1105 */,
+/* 1106 */,
+/* 1107 */,
+/* 1108 */,
+/* 1109 */,
+/* 1110 */,
+/* 1111 */,
+/* 1112 */,
+/* 1113 */,
+/* 1114 */,
+/* 1115 */,
+/* 1116 */,
+/* 1117 */,
+/* 1118 */,
+/* 1119 */,
+/* 1120 */,
+/* 1121 */,
+/* 1122 */,
+/* 1123 */,
+/* 1124 */,
+/* 1125 */,
+/* 1126 */,
+/* 1127 */,
+/* 1128 */,
+/* 1129 */,
+/* 1130 */,
+/* 1131 */,
+/* 1132 */,
+/* 1133 */,
+/* 1134 */,
+/* 1135 */,
+/* 1136 */,
+/* 1137 */,
+/* 1138 */,
+/* 1139 */,
+/* 1140 */,
+/* 1141 */,
+/* 1142 */,
+/* 1143 */,
+/* 1144 */,
+/* 1145 */,
+/* 1146 */,
+/* 1147 */,
+/* 1148 */,
+/* 1149 */,
+/* 1150 */,
+/* 1151 */,
+/* 1152 */,
+/* 1153 */,
+/* 1154 */,
+/* 1155 */,
+/* 1156 */,
+/* 1157 */,
+/* 1158 */,
+/* 1159 */,
+/* 1160 */,
+/* 1161 */,
+/* 1162 */,
+/* 1163 */,
+/* 1164 */,
+/* 1165 */,
+/* 1166 */,
+/* 1167 */,
+/* 1168 */,
+/* 1169 */,
+/* 1170 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	var _assign = __webpack_require__(633);
+	
+	var _assign2 = _interopRequireDefault(_assign);
+	
+	var _keys = __webpack_require__(652);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _lodash = __webpack_require__(656);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	var _action = __webpack_require__(1171);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var initialState = {
+	  isLoaded: false,
+	  data: {
+	    modules: []
+	  }
+	};
+	
+	function mockerInfo() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	  var type = action.type,
+	      data = action.data,
+	      update = {};
+	
+	
+	  switch (type) {
+	    case _action.MOCKER_REQUEST_SUCCESS:
+	      update = {
+	        isLoaded: true,
+	        data: data
+	      };
+	      break;
+	    case _action.MOCKER_REQUEST_FAIL:
+	      update = {
+	        isLoaded: true
+	      };
+	      break;
+	
+	    case _action.SET_ACTIVE_MODULE_REQUEST_SUCCESS:
+	      update.data = _lodash2.default.merge({}, state.data, data);
+	      break;
+	  }
+	
+	  return (0, _keys2.default)(update).length ? (0, _assign2.default)({}, state, update) : state;
+	}
+	
+	exports.default = mockerInfo;
+
+/***/ }),
+/* 1171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports.SET_ACTIVE_MODULE_REQUEST_FAIL = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST = exports.MOCKER_REQUEST_FAIL = exports.MOCKER_REQUEST_SUCCESS = exports.MOCKER_REQUEST = undefined;
+	exports.loadMocker = loadMocker;
+	exports.setMockerActiveModule = setMockerActiveModule;
+	
+	var _api = __webpack_require__(567);
+	
+	var MOCKER_REQUEST = exports.MOCKER_REQUEST = 'MOCKER_REQUEST';
+	var MOCKER_REQUEST_SUCCESS = exports.MOCKER_REQUEST_SUCCESS = 'MOCKER_REQUEST_SUCCESS';
+	var MOCKER_REQUEST_FAIL = exports.MOCKER_REQUEST_FAIL = 'MOCKER_REQUEST_FAIL';
+	
+	var SET_ACTIVE_MODULE_REQUEST = exports.SET_ACTIVE_MODULE_REQUEST = 'SET_ACTIVE_MODULE_REQUEST';
+	var SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = 'SET_ACTIVE_MODULE_REQUEST_SUCCESS';
+	var SET_ACTIVE_MODULE_REQUEST_FAIL = exports.SET_ACTIVE_MODULE_REQUEST_FAIL = 'SET_ACTIVE_MODULE_REQUEST_FAIL';
+	
+	function fetchMocker(mockerName) {
+	  var _ref;
+	
+	  return _ref = {}, _ref[_api.CALL_API] = {
+	    types: [MOCKER_REQUEST, MOCKER_REQUEST_SUCCESS, MOCKER_REQUEST_FAIL],
+	    url: '/sys-cgi/mocker/' + mockerName
+	  }, _ref;
+	}
+	
+	function loadMocker(mockerName) {
+	  return function (dispatch, getState) {
+	    return dispatch(fetchMocker(mockerName));
+	  };
+	}
+	
+	function requestSetMockerActiveModule(mockerName, mockModuleName) {
+	  var _ref2;
+	
+	  return _ref2 = {}, _ref2[_api.CALL_API] = {
+	    types: [SET_ACTIVE_MODULE_REQUEST, SET_ACTIVE_MODULE_REQUEST_SUCCESS, SET_ACTIVE_MODULE_REQUEST_FAIL],
+	    url: '/sys-cgi/mocker/' + mockerName,
+	    type: 'POST',
+	    data: {
+	      activeModule: mockModuleName
+	    }
+	  }, _ref2;
+	}
+	
+	function setMockerActiveModule(mockerName, mockModuleName) {
+	  return function (dispatch, getState) {
+	    return dispatch(requestSetMockerActiveModule(mockerName, mockModuleName));
+	  };
+	}
 
 /***/ })
 ]);

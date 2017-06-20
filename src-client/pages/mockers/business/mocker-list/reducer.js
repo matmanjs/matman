@@ -4,8 +4,11 @@ import {
   MOCKER_LIST_REQUEST,
   MOCKER_LIST_REQUEST_SUCCESS,
   MOCKER_LIST_REQUEST_FAIL,
-  SET_ACTIVE_MODULE_REQUEST_SUCCESS,
 } from './action';
+
+import {
+  SET_ACTIVE_MODULE_REQUEST_SUCCESS,
+} from '../mocker/action';
 
 const initialState = {
   isLoaded: false,

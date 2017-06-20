@@ -1,6 +1,6 @@
 {
   "version": "0.0.1",
-  "description": "标准CGI返回，查询某个模块",
+  "description": "简单CGI返回，查询某个模块",
   "author": "helinjiang",
   "cgi": "/cgi-bin/a/b/simple_cgi",
   "operation": {

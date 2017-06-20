@@ -8,7 +8,8 @@ import {
 import { Radio, Input } from 'antd';
 const RadioGroup = Radio.Group;
 
-import { loadMockerList, setMockerActiveModule } from '../../business/mocker-list/action';
+import { loadMockerList } from '../../business/mocker-list/action';
+import { setMockerActiveModule } from '../../business/mocker/action';
 
 class MockerList extends Component {
   constructor(props, context) {
