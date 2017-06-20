@@ -5,12 +5,16 @@ import {
   Link
 } from 'react-router';
 
+import { Radio, Input } from 'antd';
+const RadioGroup = Radio.Group;
+
 import { loadMockerList } from '../../business/mocker-list/action';
 
 class MockerList extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
@@ -20,8 +24,19 @@ class MockerList extends Component {
     this.props.loadMockerList();
   }
 
+  onChange(e) {
+    console.log('onChange', e)
+    console.log('radio checked', e.target.value);
+  }
+
   render() {
     const { location, route, list } = this.props;
+
+    const radioStyle = {
+      display: 'block',
+      height: '30px',
+      lineHeight: '30px',
+    };
 
     return (
       <div>
@@ -29,6 +44,7 @@ class MockerList extends Component {
         <p>{JSON.stringify(location)}</p>
         <h3>route</h3>
         <p>{JSON.stringify(route)}</p>
+        <p>{JSON.stringify(list)}</p>
 
         <h3>Mocker List</h3>
 
@@ -39,14 +55,30 @@ class MockerList extends Component {
                 return (
                   <li key={index}>
                     <h3>{index + 1}. {item.description}</h3>
-                    <p>{item.cgi}</p>
-                    <Link to={`/admin/mockers/mocker/${item.name}`}>{item.name} - {item.fullPath}</Link>
+                    <p><a href={item.cgi} target="_blank">{item.cgi}</a></p>
+                    <Link to={`/admin/mockers/mocker/${item.name}`}>{item.name}
+                      - {item.fullPath}</Link>
+
+                    <br />
+                    <RadioGroup onChange={this.onChange} value={item.operation.activeModule}>
+                      {
+                        item.modules.map((module, index2) => {
+                          return (
+                            <Radio style={radioStyle} value={module.name}
+                                   key={index2}>{index + 1}.{index2 + 1} {module.name}
+                              - {module.version}- {module.description}</Radio>
+                          )
+                        })
+                      }
+                    </RadioGroup>
+
                     <ul>
                       {
                         item.modules.map((module, index2) => {
                           return (
                             <li key={index2}>
-                              <p>{index + 1}.{index2 + 1} {module.name} - {module.version} - {module.description}</p>
+                              <p>{index + 1}.{index2 + 1} {module.name} - {module.version}
+                                - {module.description}</p>
                               <p><a href={module.cgi} target="_blank">{module.cgi}</a></p>
                             </li>
                           )
