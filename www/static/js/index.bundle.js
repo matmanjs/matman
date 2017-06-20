@@ -13609,6 +13609,7 @@ webpackJsonp([0],[
 	var initialState = {
 	  isLoaded: false,
 	  data: {
+	    _cache: {},
 	    modules: []
 	  }
 	};

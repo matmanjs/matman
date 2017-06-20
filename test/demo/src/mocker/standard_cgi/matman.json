@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "description": "标准CGI返回，查询某个模块",
+  "author": "helinjiang",
+  "cgi": "/cgi-bin/a/b/standard_cgi",
+  "name": "standard_cgi",
+  "activeModule": "error_not_login",
+  "modules": [
+    {
+      "name": "error_not_login",
+      "description": "error_not_login",
+      "cgi": "/cgi-bin/a/b/standard_cgi?_m_target=error_not_login"
+    },
+    {
+      "name": "success_exist_matman",
+      "description": "success_exist_matman",
+      "cgi": "/cgi-bin/a/b/standard_cgi?_m_target=success_exist_matman"
+    },
+    {
+      "name": "success_not_exist",
+      "description": "success_not_exist",
+      "cgi": "/cgi-bin/a/b/standard_cgi?_m_target=success_not_exist"
+    }
+  ]
+}

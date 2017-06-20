@@ -41,8 +41,8 @@ class MockerList extends Component {
                 return (
                   <li key={index}>
                     <h3>{index + 1}. {item.description}</h3>
-                    <Link to={`/admin/mockers/mocker/${item._cache.name}`}>{item._cache.name}
-                      - {item.fullPath}</Link>
+                    <Link to={`/admin/mockers/mocker/${item.name}`}>{item.name}
+                      - {item._fullPath}</Link>
                   </li>
                 )
               })

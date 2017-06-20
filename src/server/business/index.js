@@ -1,3 +1,4 @@
+const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 
@@ -38,51 +39,85 @@ function getMockerList(mockerFullPath) {
 function getMocker(mockerFullPath, mockerName) {
   let curMockerPath = path.join(mockerFullPath, mockerName);
   let curMockModulesPath = path.join(curMockerPath, 'mock_modules');
+  let mockerConfigFile = path.join(curMockerPath, 'config.json');
 
-  // TODO db.json 可能不存在
+  // mocker 的 config.json 可能不存在
+  if (!fs.existsSync(mockerConfigFile)) {
+    console.error(mockerConfigFile + ' is not exist!');
+    return;
+  }
+
+  // 获取这个 mocker 模块的 config 信息
+  let mockerConfigDB = mocker.db.getDB(mockerConfigFile);
+  let mockerConfigDBState = mockerConfigDB.getState();
+
+  if (!mockerConfigDBState.cgi) {
+    console.error(mockerConfigFile + ' should define property of "cgi"! ');
+    return;
+  }
+
+  // matman.json 可能不存在，此时新增
+  let mockerDBFile = path.join(curMockerPath, 'matman.json');
+
   // 获取这个 mocker 模块的详细信息
-  let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'db.json'));
+  let mockerDB = mocker.db.getDB(mockerDBFile);
 
-  // 更新 mocker db 数据
-  let mockerDBState = mockerDB.getState();
-  mockerDBState._cache = mockerDBState._cache || {};
-  mockerDBState._cache.name = mockerDBState._cache.name || mockerName;
-  mockerDBState._cache.activeModule = mockerDBState._cache.activeModule || mockerDBState.defaultModule;
+  let mockerDBState;
+
+  if (!fs.existsSync(mockerDBFile)) {
+    mockerDBState = _.merge({}, mockerConfigDBState);
+  } else {
+    mockerDBState = _.merge({}, mockerDB.getState(), mockerConfigDBState);
+  }
+
+  mockerDBState.name = mockerDBState.name || mockerName;
+  mockerDBState.activeModule = mockerDBState.activeModule || mockerDBState.defaultModule;
 
   // 获取当前的 mocker 下的 modules 列表
   let modules = [];
   util.file.getAll(curMockModulesPath, { globs: ['*'] }).forEach((item) => {
     if (!item.isDirectory()) {
-      console.error('SHOULD BE Directory!');
+      console.error('SHOULD BE Directory!', item);
       return;
     }
 
     // 获取模块名
     let mockModuleName = path.basename(item.relativePath);
 
-    // 获取这个模块的详细信息
-    let mockModuleDB = mocker.db.getDB(path.join(curMockModulesPath, mockModuleName, 'db.json'));
+    // config.json 的作用是用于用户自定义，拥有最高的优先级
+    let mockModuleDBFile = path.join(curMockModulesPath, mockModuleName, 'config.json');
+    let mockModuleData;
 
-    // 更新 mock module db 数据
-    let mockModuleDBState = mockModuleDB.getState();
-    mockModuleDBState._cache = mockModuleDBState._cache || {};
-    mockModuleDBState._cache.name = mockModuleDBState._cache.name || mockModuleName;
-    mockModuleDBState._cache.cgi = mockModuleDBState._cache.cgi || mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
-    mockModuleDB.setState(mockModuleDBState);
+    if (!fs.existsSync(mockModuleDBFile)) {
+      // config.json不存在，则设置默认值
+      mockModuleData = {};
+    } else {
+      // config.json不存在，则获取这个模块的详细信息
+      let mockModuleDB = mocker.db.getDB(mockModuleDBFile);
 
-    modules.push(mockModuleDBState);
+      mockModuleData = mockModuleDB.getState();
+    }
+
+    mockModuleData.name = mockModuleData.name || mockModuleName;
+    mockModuleData.description = mockModuleData.description || mockModuleName;
+    mockModuleData.cgi = mockModuleData.cgi || mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
+
+    modules.push(mockModuleData);
   });
 
   // 如果不存在默认的activeModule，则设置第一个mock module为默认
-  if (!mockerDBState._cache.activeModule && modules.length) {
-    mockerDBState._cache.activeModule = modules[0]._cache.name;
+  if (!mockerDBState.activeModule && modules.length) {
+    mockerDBState.activeModule = modules[0].name;
   }
 
+  // mock module
+  mockerDBState.modules = modules;
+
+  // 更新到 matman.json
   mockerDB.setState(mockerDBState);
 
   return _.merge({}, mockerDBState, {
-    fullPath: curMockerPath,
-    modules: modules,
+    _fullPath: curMockerPath,
   });
 }
 
@@ -110,7 +145,7 @@ function getMockModuleResult(req, entry) {
   let mockerFullPath = path.isAbsolute(mockerPath) ? mockerPath : path.join(entry.MOCKER_PATH, mockerPath);
 
   // 返回哪个数据
-  let db = mocker.db.getDB(path.join(mockerFullPath, 'db.json'));
+  let db = mocker.db.getDB(path.join(mockerFullPath, 'matman.json'));
 
   let mockModuleName = req.query._m_target ? req.query._m_target : mocker.db.getActiveModule(db);
 
@@ -127,12 +162,11 @@ function setActiveModule(mockerFullPath, mockerName, activeModule) {
   let curMockerPath = path.join(mockerFullPath, mockerName);
 
   // 获取这个 mocker 模块的详细信息
-  let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'db.json'));
+  let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'matman.json'));
 
   // 更新 mocker db 数据
   let mockerDBState = mockerDB.getState();
-  mockerDBState._cache = mockerDBState._cache || {};
-  mockerDBState._cache.activeModule = activeModule;
+  mockerDBState.activeModule = activeModule;
   mockerDB.setState(mockerDBState);
 
   return mockerDBState;

@@ -45,3 +45,6 @@ yarn-error.log*
 
 .idea
 tmp
+
+
+www/static/js
