@@ -88,6 +88,7 @@ class Mocker extends Component {
         <Card>
           <h2>{mockerData.name} - {mockerData.version} - {mockerData.author} - {mockerData.description}</h2>
           <p><a href={mockerData.cgi} target="_blank">{mockerData.cgi}</a></p>
+          <p>本地路径：{mockerData._fullPath}</p>
         </Card>
 
         <Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
