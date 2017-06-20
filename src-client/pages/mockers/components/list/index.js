@@ -8,7 +8,7 @@ import {
 import { Radio, Input } from 'antd';
 const RadioGroup = Radio.Group;
 
-import { loadMockerList } from '../../business/mocker-list/action';
+import { loadMockerList, setMockerActiveModule } from '../../business/mocker-list/action';
 
 class MockerList extends Component {
   constructor(props, context) {
@@ -27,6 +27,12 @@ class MockerList extends Component {
   onChange(e) {
     console.log('onChange', e)
     console.log('radio checked', e.target.value);
+
+    let arr = e.target.value.split('/');
+
+    if (arr.length === 2) {
+      this.props.setMockerActiveModule(arr[0], arr[1]);
+    }
   }
 
   render() {
@@ -60,11 +66,11 @@ class MockerList extends Component {
                       - {item.fullPath}</Link>
 
                     <br />
-                    <RadioGroup onChange={this.onChange} value={item.operation.activeModule}>
+                    <RadioGroup onChange={this.onChange} value={`${item.name}/${item.operation.activeModule}`}>
                       {
                         item.modules.map((module, index2) => {
                           return (
-                            <Radio style={radioStyle} value={module.name}
+                            <Radio style={radioStyle} value={`${item.name}/${module.name}`}
                                    key={index2}>{index + 1}.{index2 + 1} {module.name}
                               - {module.version}- {module.description}</Radio>
                           )
@@ -109,6 +115,10 @@ function mapDispatchToProps(dispatch) {
   return {
     loadMockerList(){
       return dispatch(loadMockerList());
+    },
+
+    setMockerActiveModule(mockerName, mockModuleName){
+      return dispatch(setMockerActiveModule(mockerName, mockModuleName));
     }
   };
 }

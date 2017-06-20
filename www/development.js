@@ -33,6 +33,17 @@ server.get('/admin/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'static', 'index.html'));
 });
 
+// To handle POST, PUT and PATCH you need to use a body-parser
+// You can use the one used by JSON Server
+server.use(matmanServer.bodyParser);
+server.use((req, res, next) => {
+  if (req.method === 'POST') {
+    req.body.createdAt = Date.now()
+  }
+  // Continue to JSON Server router
+  next();
+});
+
 // Use default router
 // server.use(router);
 server.use(routerMocker);

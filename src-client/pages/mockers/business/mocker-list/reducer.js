@@ -1,7 +1,10 @@
+import _ from 'lodash';
+
 import {
   MOCKER_LIST_REQUEST,
   MOCKER_LIST_REQUEST_SUCCESS,
-  MOCKER_LIST_REQUEST_FAIL
+  MOCKER_LIST_REQUEST_FAIL,
+  SET_ACTIVE_MODULE_REQUEST_SUCCESS,
 } from './action';
 
 const initialState = {
@@ -24,6 +27,15 @@ function mockerListInfo(state = initialState, action) {
       update = {
         isLoaded: true
       };
+      break;
+
+    case SET_ACTIVE_MODULE_REQUEST_SUCCESS:
+      update.list = state.list.map((item) => {
+        if (item.name === data.name) {
+          item = _.merge({}, item, data);
+        }
+        return item;
+      });
       break;
   }
 

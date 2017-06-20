@@ -119,10 +119,28 @@ function getMockModuleResult(req, entry) {
   return mocker.mockerModuleTool.getResult(mockModulePath);
 }
 
+/**
+ * 设置 mocker 的 activeModule
+ */
+function setActiveModule(mockerFullPath, mockerName, activeModule) {
+  let curMockerPath = path.join(mockerFullPath, mockerName);
+
+  // 获取这个 mocker 模块的详细信息
+  let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'db.json'));
+
+  // 更新 mocker db 数据
+  let mockerDBState = mockerDB.getState();
+  mockerDBState.operation.activeModule = activeModule;
+  mockerDB.setState(mockerDBState);
+
+  return mockerDBState;
+}
+
 module.exports = {
   getAllMockModules: getAllMockModules,
   getMockerList: getMockerList,
   getMockModuleResult: getMockModuleResult,
+  setActiveModule: setActiveModule,
 };
 
 

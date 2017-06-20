@@ -36,6 +36,13 @@ module.exports = (entryPath) => {
     res.jsonp(result);
   });
 
+  // POST /sys-cgi/mocker/:mockerName 设置这个mocker的信息
+  router.post('/sys-cgi/mocker/:mockerName', (req, res) => {
+    let result = business.setActiveModule(entry.MOCKER_PATH, req.params.mockerName, req.body.activeModule);
+
+    res.jsonp(result);
+  });
+
   // GET /*
   router.get('/*', function (req, res) {
     business.getMockModuleResult(req, entry)
