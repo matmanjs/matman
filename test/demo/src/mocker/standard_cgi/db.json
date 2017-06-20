@@ -4,7 +4,7 @@
   "author": "helinjiang",
   "cgi": "/cgi-bin/a/b/standard_cgi",
   "operation": {
-    "activeModule": "success_exist_matman"
+    "activeModule": "success_not_exist"
   },
   "name": "standard_cgi"
 }

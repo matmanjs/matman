@@ -19,16 +19,6 @@ module.exports = (entryPath) => {
     res.jsonp(res.locals.data)
   };
 
-  // GET /list
-  router.get('/list', (req, res) => {
-    res.jsonp({ name: 'list' });
-  });
-
-  // GET /id/:id
-  router.get('/id/:id', function (req, res) {
-    res.jsonp({ id: req.params.id });
-  });
-
   // GET /sys-cgi/mocker 所有的 mocker 列表信息
   router.get('/sys-cgi/mocker', (req, res) => {
     let result = business.getMockerList(entry.MOCKER_PATH);
@@ -54,12 +44,13 @@ module.exports = (entryPath) => {
   router.get('/*', function (req, res) {
     business.getMockModuleResult(req, entry)
       .then((result) => {
-        res.jsonp({
-          url: req.url,
-          params: req.params,
-          query: req.query,
-          data: result
-        });
+        // res.jsonp({
+        //   url: req.url,
+        //   params: req.params,
+        //   query: req.query,
+        //   data: result
+        // });
+        res.jsonp(result);
       })
       .catch((err) => {
         // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象

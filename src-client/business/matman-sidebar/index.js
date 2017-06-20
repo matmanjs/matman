@@ -9,12 +9,6 @@ export const SIDEBAR_MENU_DATA = {
       title: 'Home'
     },
     {
-      id: 'about',
-      url: '/admin/about',
-      icon: 'desktop',
-      title: 'About'
-    },
-    {
       id: 'mockers',
       url: '/admin/mockers',
       icon: 'desktop',

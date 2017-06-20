@@ -13575,11 +13575,6 @@ webpackJsonp([0],[
 	    icon: 'home',
 	    title: 'Home'
 	  }, {
-	    id: 'about',
-	    url: '/admin/about',
-	    icon: 'desktop',
-	    title: 'About'
-	  }, {
 	    id: 'mockers',
 	    url: '/admin/mockers',
 	    icon: 'desktop',
@@ -46880,7 +46875,7 @@ webpackJsonp([0],[
 	        return replace('/admin/home');
 	      }
 	    },
-	    childRoutes: [__webpack_require__(1024).default, __webpack_require__(1028).default, __webpack_require__(1030).default]
+	    childRoutes: [__webpack_require__(1024).default, __webpack_require__(1030).default]
 	  }]
 	};
 
@@ -53467,22 +53462,7 @@ webpackJsonp([0],[
 /* 1025 */,
 /* 1026 */,
 /* 1027 */,
-/* 1028 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	exports.__esModule = true;
-	exports.default = {
-	  path: '/admin/about',
-	  getComponent: function getComponent(nextState, cb) {
-	    __webpack_require__.e/* nsure */(2, function (require) {
-	      cb(null, __webpack_require__(1029).default);
-	    });
-	  }
-	};
-
-/***/ }),
+/* 1028 */,
 /* 1029 */,
 /* 1030 */
 /***/ (function(module, exports, __webpack_require__) {

@@ -9,9 +9,7 @@ export default {
     },
     childRoutes: [
       require('../pages/home/routes').default,
-      require('../pages/about/routes').default,
-      require('../pages/mockers/routes').default,
-      // require('../pages/topics'),
+      require('../pages/mockers/routes').default
     ]
   }]
 };
