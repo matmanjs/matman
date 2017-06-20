@@ -9,6 +9,7 @@ class Mocker extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this.handleActive = this.handleActive.bind(this);
   }
 
   componentDidMount() {
@@ -19,6 +20,10 @@ class Mocker extends Component {
 
   fetch() {
     this.props.loadMocker(this.props.routeParams.mockerName);
+  }
+
+  handleActive(name) {
+    this.props.setMockerActiveModule(this.props.routeParams.mockerName, name);
   }
 
   getColumns() {
@@ -51,7 +56,7 @@ class Mocker extends Component {
         <span>
           {
             (record.name !== activeModule) ?
-              <a href="#">Active It</a>
+              <a href="javascript:;" onClick={this.handleActive.bind(this, record.name)}>Active It</a>
               : <span>Aready active</span>
           }
 
@@ -81,7 +86,8 @@ class Mocker extends Component {
 
 
         <Card>
-          <p>Hello, I am in {mockerName}</p>
+          <h2>Hello, I am in {mockerName}</h2>
+          <p><a href={mockerData.cgi} target="_blank">{mockerData.cgi}</a></p>
         </Card>
 
         <Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
@@ -103,6 +109,10 @@ function mapDispatchToProps(dispatch) {
   return {
     loadMocker(mockerName){
       return dispatch(loadMocker(mockerName));
+    },
+
+    setMockerActiveModule(mockerName, mockModuleName){
+      return dispatch(setMockerActiveModule(mockerName, mockModuleName));
     }
   };
 }
