@@ -5,23 +5,7 @@ const util = require('../../util');
 const mocker = require('../../mocker');
 
 /**
- * 获得所有的 mock module 文件
- * @param {Object} entry 入口文件对象
- * @return {Array} mock module 的文件列表
- */
-function getAllMockModules(entry) {
-  let allMockFiles = [];
-
-  util.file.getAll(entry.MOCKER_PATH, { globs: ['*/mock_modules/*.js'] }).forEach((item) => {
-    // console.log(item.relativePath, path.parse(item.relativePath));
-    allMockFiles.push(item.relativePath);
-  });
-
-  return allMockFiles;
-}
-
-/**
- * 获取所有的 mocker 列表
+ * 获取所有的 mocker 列表，包括各个mocker的mock module信息
  */
 function getMockerList(mockerFullPath) {
   // 1. 获取所有的 mocker name
@@ -49,19 +33,21 @@ function getMockerList(mockerFullPath) {
 }
 
 /**
- * 获取指定 mocker 的信息
+ * 获取指定 mocker 的信息，包括mock module信息
  */
 function getMocker(mockerFullPath, mockerName) {
   let curMockerPath = path.join(mockerFullPath, mockerName);
   let curMockModulesPath = path.join(curMockerPath, 'mock_modules');
 
+  // TODO db.json 可能不存在
   // 获取这个 mocker 模块的详细信息
   let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'db.json'));
 
   // 更新 mocker db 数据
   let mockerDBState = mockerDB.getState();
-  mockerDBState.name = mockerName;
-  mockerDB.setState(mockerDBState);
+  mockerDBState._cache = mockerDBState._cache || {};
+  mockerDBState._cache.name = mockerDBState._cache.name || mockerName;
+  mockerDBState._cache.activeModule = mockerDBState._cache.activeModule || mockerDBState.defaultModule;
 
   // 获取当前的 mocker 下的 modules 列表
   let modules = [];
@@ -79,12 +65,20 @@ function getMocker(mockerFullPath, mockerName) {
 
     // 更新 mock module db 数据
     let mockModuleDBState = mockModuleDB.getState();
-    mockModuleDBState.name = mockModuleName;
-    mockModuleDBState.cgi = mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
+    mockModuleDBState._cache = mockModuleDBState._cache || {};
+    mockModuleDBState._cache.name = mockModuleDBState._cache.name || mockModuleName;
+    mockModuleDBState._cache.cgi = mockModuleDBState._cache.cgi || mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
     mockModuleDB.setState(mockModuleDBState);
 
     modules.push(mockModuleDBState);
   });
+
+  // 如果不存在默认的activeModule，则设置第一个mock module为默认
+  if (!mockerDBState._cache.activeModule && modules.length) {
+    mockerDBState._cache.activeModule = modules[0]._cache.name;
+  }
+
+  mockerDB.setState(mockerDBState);
 
   return _.merge({}, mockerDBState, {
     fullPath: curMockerPath,
@@ -137,14 +131,14 @@ function setActiveModule(mockerFullPath, mockerName, activeModule) {
 
   // 更新 mocker db 数据
   let mockerDBState = mockerDB.getState();
-  mockerDBState.operation.activeModule = activeModule;
+  mockerDBState._cache = mockerDBState._cache || {};
+  mockerDBState._cache.activeModule = activeModule;
   mockerDB.setState(mockerDBState);
 
   return mockerDBState;
 }
 
 module.exports = {
-  getAllMockModules: getAllMockModules,
   getMockerList: getMockerList,
   getMocker: getMocker,
   getMockModuleResult: getMockModuleResult,

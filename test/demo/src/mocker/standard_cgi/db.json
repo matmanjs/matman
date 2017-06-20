@@ -3,8 +3,8 @@
   "description": "标准CGI返回，查询某个模块",
   "author": "helinjiang",
   "cgi": "/cgi-bin/a/b/standard_cgi",
-  "operation": {
+  "_cache": {
+    "name": "standard_cgi",
     "activeModule": "success_not_exist"
-  },
-  "name": "standard_cgi"
+  }
 }

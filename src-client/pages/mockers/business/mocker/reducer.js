@@ -10,6 +10,7 @@ import {
 const initialState = {
   isLoaded: false,
   data: {
+    _cache:{},
     modules: []
   },
 };

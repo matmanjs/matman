@@ -3,8 +3,9 @@
   "description": "简单CGI返回，查询某个模块",
   "author": "helinjiang",
   "cgi": "/cgi-bin/a/b/simple_cgi",
-  "operation": {
+  "defaultModule": "success_exist_matman",
+  "_cache": {
+    "name": "simple_cgi",
     "activeModule": "success_exist_matman"
-  },
-  "name": "simple_cgi"
+  }
 }

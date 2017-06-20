@@ -28,14 +28,14 @@ class Mocker extends Component {
 
   getColumns() {
     const { mockerData } = this.props;
-    const activeModule = mockerData.operation && mockerData.operation.activeModule || '';
+    const activeModule = mockerData._cache.activeModule || '';
 
     return [{
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: '_cache.name',
+      key: '_cache.name',
       render: (text, record) => (
-        <a href={record.cgi} target="_blank">{text}</a>
+        <a href={record._cache.cgi} target="_blank">{text}</a>
       ),
     }, {
       title: 'Version',
@@ -55,8 +55,8 @@ class Mocker extends Component {
       render: (text, record) => (
         <span>
           {
-            (record.name !== activeModule) ?
-              <a href="javascript:;" onClick={this.handleActive.bind(this, record.name)}>Active It</a>
+            (record._cache.name !== activeModule) ?
+              <a href="javascript:;" onClick={this.handleActive.bind(this, record._cache.name)}>Active It</a>
               : <span>Aready active</span>
           }
 
@@ -77,6 +77,10 @@ class Mocker extends Component {
     const data = mockerData.modules;
     const columns = this.getColumns();
 
+    const rowKey = (record) => {
+      return record._cache.name;
+    };
+
     return (
       <div>
         <h3>location</h3>
@@ -90,7 +94,7 @@ class Mocker extends Component {
           <p><a href={mockerData.cgi} target="_blank">{mockerData.cgi}</a></p>
         </Card>
 
-        <Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
+        <Table loading={!isLoaded} rowKey={rowKey} columns={columns} dataSource={data} />
       </div>
     )
   }
