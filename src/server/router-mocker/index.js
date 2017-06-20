@@ -43,7 +43,16 @@ module.exports = (entryPath) => {
 
   // GET /*
   router.get('/*', function (req, res) {
-    business.getMockModuleResult(req, entry)
+    // Express的req对象，详见 http://expressjs.com/en/4x/api.html#req
+    // 例如：/test/two/?t=1，
+    // req.query.t=1
+    // req.params[0]="test/two"
+
+    let mockerBasePath = entry.MOCKER_PATH
+    let url = req.params[0];
+    let params = req.query;
+
+    business.getMockModule(mockerBasePath, url, params)
       .then((result) => {
         // res.jsonp({
         //   url: req.url,

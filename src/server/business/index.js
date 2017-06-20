@@ -8,11 +8,11 @@ const mocker = require('../../mocker');
 /**
  * 获取所有的 mocker 列表，包括各个mocker的mock module信息
  */
-function getMockerList(mockerFullPath) {
+function getMockerList(mockerBasePath) {
   // 1. 获取所有的 mocker name
   let mockerNameArr = [];
 
-  util.file.getAll(mockerFullPath, { globs: ['*'] }).forEach((item) => {
+  util.file.getAll(mockerBasePath, { globs: ['*'] }).forEach((item) => {
     // 限制只处理文件夹类型的
     if (item.isDirectory()) {
       mockerNameArr.push(path.basename(item.relativePath));
@@ -27,17 +27,52 @@ function getMockerList(mockerFullPath) {
   let mockerArr = [];
 
   mockerNameArr.forEach((mockerName) => {
-    mockerArr.push(getMocker(mockerFullPath, mockerName));
+    mockerArr.push(getMocker(mockerBasePath, mockerName));
   });
 
   return mockerArr;
 }
 
 /**
+ * 根据 url 请求，获取某个 mock module 的结果
+ *
+ * @param {String} mockerBasePath
+ * @param {String} url 当前请求的 url
+ * @param {Object} params req.query值
+ * @return {Promise}
+ */
+function getMockModule(mockerBasePath, url, params) {
+  // 注意 url 的值前面是没有 / 的，但用户配置 route 时可能会增加，因此需要增加之后再去获取
+  let checkUrlArr = [url, '/' + url];
+
+  let jsonFileArr = util.file.getAll(mockerBasePath, { globs: ['*/matman.json'] });
+
+  // 循环查找
+  for (let i = 0, length = jsonFileArr.length; i < length; i++) {
+    let item = jsonFileArr[i];
+    let db = mocker.db.getDB(path.join(item.basePath, item.relativePath));
+    let dbState = db.getState();
+    console.log(dbState);
+
+    if (checkUrlArr.indexOf(dbState.cgi) > -1) {
+      // 有可能是指定的 mock module， 也可能是当前的 mock module
+      let mockModuleName = params._m_target ? params._m_target : dbState.activeModule;
+
+      // 组装获取 mock module 的文件地址
+      let mockModulePath = path.join(mockerBasePath, dbState.name, 'mock_modules', mockModuleName);
+
+      return mocker.mockerModuleTool.getResult(mockModulePath);
+    }
+  }
+
+  return Promise.reject('UNKNOWN_CGI');
+}
+
+/**
  * 获取指定 mocker 的信息，包括mock module信息
  */
-function getMocker(mockerFullPath, mockerName) {
-  let curMockerPath = path.join(mockerFullPath, mockerName);
+function getMocker(mockerBasePath, mockerName) {
+  let curMockerPath = path.join(mockerBasePath, mockerName);
   let curMockModulesPath = path.join(curMockerPath, 'mock_modules');
   let mockerConfigFile = path.join(curMockerPath, 'config.json');
 
@@ -122,44 +157,10 @@ function getMocker(mockerFullPath, mockerName) {
 }
 
 /**
- * 获取某个 mock module 的结果
- * @param {Object} req Express的req对象，详见 http://expressjs.com/en/4x/api.html#req
- * @param {Object} entry 入口文件对象
- * @return {Promise}
- */
-function getMockModuleResult(req, entry) {
-  // 例如：/test/two/?t=1，
-  // req.query.t=1
-  // req.params[0]="test/two"
-
-  // 当前请求的 url
-  let url = req.params[0];
-
-  // 获取对应的mocker路径，可能是绝对路径，也可能是相对于 entry.MOCKER_PATH 的相对路径
-  // 注意 url 的值前面是没有 / 的，但用户配置 route 时可能会增加，因此需要增加之后再去获取
-  let mockerPath = entry.route[url] || entry.route['/' + url];
-  if (!mockerPath) {
-    return Promise.reject('UNKNOWN_CGI');
-  }
-
-  let mockerFullPath = path.isAbsolute(mockerPath) ? mockerPath : path.join(entry.MOCKER_PATH, mockerPath);
-
-  // 返回哪个数据
-  let db = mocker.db.getDB(path.join(mockerFullPath, 'matman.json'));
-
-  let mockModuleName = req.query._m_target ? req.query._m_target : mocker.db.getActiveModule(db);
-
-  // 组装获取 mock module 的文件地址
-  let mockModulePath = path.join(mockerFullPath, 'mock_modules', mockModuleName);
-
-  return mocker.mockerModuleTool.getResult(mockModulePath);
-}
-
-/**
  * 设置 mocker 的 activeModule
  */
-function setActiveModule(mockerFullPath, mockerName, activeModule) {
-  let curMockerPath = path.join(mockerFullPath, mockerName);
+function setActiveModule(mockerBasePath, mockerName, activeModule) {
+  let curMockerPath = path.join(mockerBasePath, mockerName);
 
   // 获取这个 mocker 模块的详细信息
   let mockerDB = mocker.db.getDB(path.join(curMockerPath, 'matman.json'));
@@ -175,7 +176,7 @@ function setActiveModule(mockerFullPath, mockerName, activeModule) {
 module.exports = {
   getMockerList: getMockerList,
   getMocker: getMocker,
-  getMockModuleResult: getMockModuleResult,
+  getMockModule: getMockModule,
   setActiveModule: setActiveModule,
 };
 
