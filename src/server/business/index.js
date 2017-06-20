@@ -110,7 +110,7 @@ function getMockModuleResult(req, entry) {
   // 注意 url 的值前面是没有 / 的，但用户配置 route 时可能会增加，因此需要增加之后再去获取
   let mockerPath = entry.route[url] || entry.route['/' + url];
   if (!mockerPath) {
-    return Promise.reject('unknown cgi');
+    return Promise.reject('UNKNOWN_CGI');
   }
 
   let mockerFullPath = path.isAbsolute(mockerPath) ? mockerPath : path.join(entry.MOCKER_PATH, mockerPath);

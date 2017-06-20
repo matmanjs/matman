@@ -1,6 +1,7 @@
 const express = require('express');
 const methodOverride = require('method-override');
 const _ = require('lodash');
+const request = require('request');
 const bodyParser = require('../body-parser');
 const business = require('../business');
 
@@ -57,8 +58,25 @@ module.exports = (entryPath) => {
         let errMsg = err.stack || err;
 
         console.error(errMsg);
+        // 如果是未知的CGI，则透传结果即可
+        if (errMsg === 'UNKNOWN_CGI') {
+          // Load remote data
+          const opts = {
+            url: 'http://' + req.headers.host + req.url,
+            json: true
+          };
 
-        res.status(500).send(errMsg);
+          request(opts, (err, response) => {
+            if (err) {
+              res.status(500).send(err);
+            } else {
+              res.jsonp(response.body);
+            }
+          })
+        } else {
+          res.status(500).send(errMsg);
+        }
+
       });
   });
 
