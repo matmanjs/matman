@@ -1,11 +1,13 @@
-var version = require('./MatmanVersion');
-var util = require('./util');
-var mocker = require('./mocker');
-var tester = require('./tester');
+const version = require('./MatmanVersion');
+const util = require('./util');
+const mocker = require('./mocker');
+const tester = require('./tester');
+const run = require('./run');
 
 module.exports = {
-    version: version,
-    util: util,
-    mocker: mocker,
-    tester: tester
+  version: version,
+  util: util,
+  mocker: mocker,
+  tester: tester,
+  run: run,
 };
