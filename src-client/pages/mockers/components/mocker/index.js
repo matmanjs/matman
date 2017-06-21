@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import superagent from 'superagent';
+import urlUtil from 'url';
 
-import { Table, Card } from 'antd';
+import { Table, Card, Modal, Button } from 'antd';
 
 import { loadMocker, setMockerActiveModule } from '../../business/mocker/action';
 
@@ -9,7 +11,14 @@ class Mocker extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this.state = {
+      showModal: false,
+      modalShowData: {},
+    };
+
     this.handleActive = this.handleActive.bind(this);
+    this.handleModalOk = this.handleModalOk.bind(this);
+    this.handleClickMockModule = this.handleClickMockModule.bind(this);
   }
 
   componentDidMount() {
@@ -22,8 +31,54 @@ class Mocker extends Component {
     this.props.loadMocker(this.props.routeParams.mockerName);
   }
 
+  getMockModuleByPost(url, data) {
+    return new Promise((resolve, reject) => {
+      superagent.post(url)
+        .set('Content-Type', 'application/json')
+        .send(data)
+        .withCredentials()
+        .end((err, res) => {
+          if (err) {
+            return reject(err);
+          }
+
+          resolve(res.body);
+        });
+    });
+  }
+
   handleActive(name) {
     this.props.setMockerActiveModule(this.props.routeParams.mockerName, name);
+  }
+
+  handleModalOk() {
+    this.setState({
+      showModal: false,
+      modalShowData: {},
+    });
+  }
+
+  handleClickMockModule(mockModuleData, event) {
+    const { mockerData } = this.props;
+    console.log('mockerData', mockerData);
+
+    // post 请求就不需要跳转了
+    if (mockerData.method === 'post') {
+      event.preventDefault();
+
+      let cgi = mockModuleData.cgi,
+        urlObj = urlUtil.parse(cgi);
+
+      this.getMockModuleByPost(urlObj.pathname, { '_m_target': mockModuleData.name }).then((data) => {
+        console.log(data)
+        this.setState({
+          showModal: true,
+          modalShowData: data,
+        })
+      }).catch((err) => {
+        console.error(err)
+      });
+    }
   }
 
   getColumns() {
@@ -35,7 +90,7 @@ class Mocker extends Component {
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <a href={record.cgi} target="_blank">{text}</a>
+        <a href={record.cgi} target="_blank" onClick={this.handleClickMockModule.bind(this, record)}>{text}</a>
       ),
     }, {
       title: 'Version',
@@ -71,8 +126,7 @@ class Mocker extends Component {
   }
 
   render() {
-    const { isLoaded, mockerData, routeParams, route } = this.props;
-    const mockerName = routeParams.mockerName;
+    const { isLoaded, mockerData, route } = this.props;
 
     const data = mockerData.modules;
     const columns = this.getColumns();
@@ -87,11 +141,24 @@ class Mocker extends Component {
 
         <Card>
           <h2>{mockerData.name} - {mockerData.version} - {mockerData.author} - {mockerData.description}</h2>
-          <p><a href={mockerData.cgi} target="_blank">{mockerData.cgi}</a></p>
+          <p>{mockerData.method} : <a href={mockerData.cgi} target="_blank">{mockerData.cgi}</a></p>
           <p>本地路径：{mockerData._fullPath}</p>
         </Card>
 
         <Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
+
+        <Modal
+          title="结果"
+          visible={this.state.showModal}
+          footer={[
+            <Button key="submit" type="primary" size="large" onClick={this.handleModalOk}>
+              知道了
+            </Button>,
+          ]}
+        >
+          <textarea name="cgidata" id="cgidata" style={{ width: '100%', minHeight: '600px' }}
+                    value={JSON.stringify(this.state.modalShowData, null, 2)} readOnly></textarea>
+        </Modal>
       </div>
     )
   }

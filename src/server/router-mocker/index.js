@@ -11,6 +11,7 @@ module.exports = (entryPath) => {
   let mockerList = business.getMockerList(entry.MOCKER_PATH);
 
   // Create router
+  // http://expressjs.com/en/4x/api.html#router
   const router = express.Router();
 
   // Add middlewares
@@ -48,13 +49,13 @@ module.exports = (entryPath) => {
   mockerList.forEach((mockerData) => {
     //TODO cgi 可能不是以 / 开头的，建议以 route 形式会更好
 
-    let type = mockerData.type || 'get';
+    // 默认是 get 请求，除非定义 method 字段
+    const METHOD = (mockerData.method || 'get').toLowerCase();
+    const ROUTE_PATH = mockerData.cgi;
 
-    router[type](mockerData.cgi, function (req, res) {
+    // http://expressjs.com/en/4x/api.html#router.METHOD
+    router[METHOD](ROUTE_PATH, function (req, res) {
       // Express的req对象，详见 http://expressjs.com/en/4x/api.html#req
-      // 例如：/test/two/?t=1，
-      // req.query.t=1
-      // req.params[0]="test/two"
 
       // post 请求
       // mockerData.cgi="/cgi-bin/a/b/post_cgi"
@@ -79,10 +80,10 @@ module.exports = (entryPath) => {
 
       let mockerBasePath = entry.MOCKER_PATH;
       // let url = req.params[0];
-      let url = mockerData.cgi;
-      let params = (type === 'post') ? req.body : req.query;
+      let url = ROUTE_PATH;
+      let params = (METHOD === 'post') ? req.body : req.query;
 
-      console.log('router type 3', type, mockerData.cgi, url, params)
+      console.log('router METHOD 3', METHOD, mockerData.cgi, url, params)
 
       business.getMockModule(mockerBasePath, url, params)
         .then((result) => {

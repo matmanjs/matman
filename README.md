@@ -14,3 +14,7 @@ npm run webpack;
 ## 系统 CGI
 
 `/sys-cgi/mocker`: 获得 mocker 的列表
+
+## mock modules
+
+字段的定义

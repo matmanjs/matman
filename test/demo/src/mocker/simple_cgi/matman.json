@@ -5,7 +5,7 @@
   "cgi": "/cgi-bin/a/b/simple_cgi",
   "defaultModule": "success_exist_matman",
   "name": "simple_cgi",
-  "activeModule": "error_not_login",
+  "activeModule": "success_exist_matman",
   "modules": [
     {
       "name": "error_not_login",
@@ -24,5 +24,7 @@
       "name": "success_not_exist",
       "cgi": "/cgi-bin/a/b/simple_cgi?_m_target=success_not_exist"
     }
-  ]
+  ],
+  "route": "/cgi-bin/a/b/simple_cgi",
+  "method": "get"
 }
