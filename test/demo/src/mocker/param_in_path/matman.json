@@ -5,7 +5,7 @@
   "route": "/cgi-bin/a/b/id/:id/:subId",
   "method": "get",
   "name": "param_in_path",
-  "activeModule": "error_not_login",
+  "activeModule": "success_simple",
   "modules": [
     {
       "name": "error_not_login",

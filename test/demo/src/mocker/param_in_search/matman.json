@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "description": "有参数在url 的 search 部分",
+  "author": "helinjiang",
+  "route": "/cgi-bin/a/b/detail",
+  "method": "get",
+  "name": "param_in_search",
+  "activeModule": "error_not_login",
+  "modules": [
+    {
+      "name": "error_not_login",
+      "description": "error_not_login",
+      "query": {
+        "_m_target": "error_not_login"
+      }
+    },
+    {
+      "version": "0.0.1",
+      "description": "请求参数 id=1&type=new",
+      "author": "helinjiang",
+      "query": {
+        "id": 1,
+        "type": "new",
+        "_m_target": "success_special_query"
+      },
+      "name": "success_special_query"
+    }
+  ]
+}

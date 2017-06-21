@@ -47,6 +47,8 @@ function getMockModule(mockerBasePath, route, params, req) {
   // 循环查找
   for (let i = 0, length = jsonFileArr.length; i < length; i++) {
     let item = jsonFileArr[i];
+
+    // 获取每个 mocker 中的 matman.json 文件内容，以便寻找到相同 route 的那个 mocker
     let db = mocker.db.getDB(path.join(item.basePath, item.relativePath));
     let dbState = db.getState();
     console.log(dbState);
@@ -57,6 +59,14 @@ function getMockModule(mockerBasePath, route, params, req) {
 
       // 组装获取 mock module 的文件地址
       let mockModulePath = path.join(mockerBasePath, dbState.name, 'mock_modules', mockModuleName);
+
+      // 还有部分参数在 mock module 的 query 字段中
+      for (let j = 0, lengthj = dbState.modules.length; j < lengthj; j++) {
+        let mockModuleItem = dbState.modules[j];
+        if (mockModuleName === mockModuleItem.name) {
+          params = _.merge({}, mockModuleItem.query, params);
+        }
+      }
 
       return mocker.mockerModuleTool.getResult(mockModulePath, params, req);
     }
@@ -137,7 +147,7 @@ function getMocker(mockerBasePath, mockerName) {
     mockModuleData.description = mockModuleData.description || mockModuleName;
 
     // TODO 如果是 /id/:id 类型的，则此处可能会有问题，或许还需要把请求值放入到query中
-    mockModuleData.query = mockModuleData.query || { _m_target: mockModuleName };
+    mockModuleData.query = _.merge({}, mockModuleData.query, { _m_target: mockModuleName });
 
     modules.push(mockModuleData);
   });

@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "description": "有参数在url 的 search 部分",
+  "author": "helinjiang",
+  "route": "/cgi-bin/a/b/detail",
+  "method": "get"
+}
