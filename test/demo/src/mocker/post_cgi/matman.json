@@ -5,7 +5,7 @@
   "route": "/cgi-bin/a/b/post_cgi",
   "method": "post",
   "name": "post_cgi",
-  "activeModule": "error_not_login",
+  "activeModule": "success_exist_matman",
   "modules": [
     {
       "name": "error_not_login",

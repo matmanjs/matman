@@ -107,6 +107,7 @@ function getMocker(mockerBasePath, mockerName) {
   }
 
   mockerDBState.name = mockerDBState.name || mockerName;
+  mockerDBState.description = mockerDBState.description || mockerDBState.name;
   mockerDBState.activeModule = mockerDBState.activeModule || mockerDBState.defaultModule;
   mockerDBState.method = mockerDBState.method || 'get';
 

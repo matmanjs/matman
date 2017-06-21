@@ -1,7 +1,7 @@
 {
   "route": "/cgi-bin/a/b/simple_cgi",
   "name": "simple_cgi",
-  "activeModule": "error_not_login",
+  "activeModule": "success_exist_matman",
   "method": "get",
   "modules": [
     {
@@ -25,5 +25,6 @@
         "_m_target": "success_not_exist"
       }
     }
-  ]
+  ],
+  "description": "simple_cgi"
 }
