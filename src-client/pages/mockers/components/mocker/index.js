@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import superagent from 'superagent';
-import urlUtil from 'url';
+import util from '../../../../business/util';
 
 import { Table, Card, Modal, Button } from 'antd';
 
@@ -66,10 +66,10 @@ class Mocker extends Component {
     if (mockerData.method === 'post') {
       event.preventDefault();
 
-      let cgi = mockModuleData.cgi,
-        urlObj = urlUtil.parse(cgi);
+      // let cgi = mockModuleData.cgi,
+      //   urlObj = urlUtil.parse(cgi);
 
-      this.getMockModuleByPost(urlObj.pathname, { '_m_target': mockModuleData.name }).then((data) => {
+      this.getMockModuleByPost(mockerData.route, mockModuleData.query).then((data) => {
         console.log(data)
         this.setState({
           showModal: true,
@@ -85,12 +85,21 @@ class Mocker extends Component {
     const { mockerData } = this.props;
     const activeModule = mockerData.activeModule || '';
 
+    const getUrl = (query) => {
+      if (mockerData.method === 'post') {
+        return mockerData.route;
+      }
+
+      return util.getUrl(mockerData.route, query);
+    };
+
     return [{
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <a href={record.cgi} target="_blank" onClick={this.handleClickMockModule.bind(this, record)}>{text}</a>
+        <a href={getUrl(record.query)} target="_blank"
+           onClick={this.handleClickMockModule.bind(this, record)}>{text}</a>
       ),
     }, {
       title: 'Version',
@@ -141,7 +150,7 @@ class Mocker extends Component {
 
         <Card>
           <h2>{mockerData.name} - {mockerData.version} - {mockerData.author} - {mockerData.description}</h2>
-          <p>{mockerData.method} : <a href={mockerData.cgi} target="_blank">{mockerData.cgi}</a></p>
+          <p>{mockerData.method} : <a href={mockerData.route} target="_blank">{mockerData.route}</a></p>
           <p>本地路径：{mockerData._fullPath}</p>
         </Card>
 

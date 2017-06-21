@@ -2,29 +2,34 @@
   "version": "0.0.1",
   "description": "简单CGI返回，查询某个模块",
   "author": "helinjiang",
-  "cgi": "/cgi-bin/a/b/simple_cgi",
+  "route": "/cgi-bin/a/b/simple_cgi",
   "defaultModule": "success_exist_matman",
   "name": "simple_cgi",
-  "activeModule": "success_exist_matman",
+  "activeModule": "success_not_exist",
+  "method": "get",
   "modules": [
     {
       "name": "error_not_login",
       "description": "error_not_login",
-      "cgi": "/cgi-bin/a/b/simple_cgi?_m_target=error_not_login"
+      "query": {
+        "_m_target": "error_not_login"
+      }
     },
     {
       "description": "成功：存在matman模块",
       "name": "success_exist_matman",
-      "cgi": "/cgi-bin/a/b/simple_cgi?_m_target=success_exist_matman"
+      "query": {
+        "_m_target": "success_exist_matman"
+      }
     },
     {
       "description": "成功：不存在该模块",
       "version": "0.0.1",
       "author": "helinjiang",
       "name": "success_not_exist",
-      "cgi": "/cgi-bin/a/b/simple_cgi?_m_target=success_not_exist"
+      "query": {
+        "_m_target": "success_not_exist"
+      }
     }
-  ],
-  "route": "/cgi-bin/a/b/simple_cgi",
-  "method": "get"
+  ]
 }

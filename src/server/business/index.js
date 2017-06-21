@@ -54,7 +54,7 @@ function getMockModule(mockerBasePath, url, params) {
     let dbState = db.getState();
     console.log(dbState);
 
-    if (checkUrlArr.indexOf(dbState.cgi) > -1) {
+    if (checkUrlArr.indexOf(dbState.route) > -1) {
       // 有可能是指定的 mock module， 也可能是当前的 mock module
       let mockModuleName = params._m_target ? params._m_target : dbState.activeModule;
 
@@ -86,8 +86,9 @@ function getMocker(mockerBasePath, mockerName) {
   let mockerConfigDB = mocker.db.getDB(mockerConfigFile);
   let mockerConfigDBState = mockerConfigDB.getState();
 
-  if (!mockerConfigDBState.cgi) {
-    console.error(mockerConfigFile + ' should define property of "cgi"! ');
+  // 至少得有 route 字段，否则报错
+  if (!mockerConfigDBState.route) {
+    console.error(mockerConfigFile + ' should define property of "route"! ');
     return;
   }
 
@@ -136,7 +137,9 @@ function getMocker(mockerBasePath, mockerName) {
 
     mockModuleData.name = mockModuleData.name || mockModuleName;
     mockModuleData.description = mockModuleData.description || mockModuleName;
-    mockModuleData.cgi = mockModuleData.cgi || mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
+
+    // TODO 如果是 /id/:id 类型的，则此处可能会有问题，或许还需要把请求值放入到query中
+    mockModuleData.query = mockModuleData.query || { _m_target: mockModuleName };
 
     modules.push(mockModuleData);
   });

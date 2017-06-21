@@ -15,6 +15,26 @@ npm run webpack;
 
 `/sys-cgi/mocker`: 获得 mocker 的列表
 
-## mock modules
+## 字段定义
 
-字段的定义
+mocker 的 `config.json` 文件中字段的定义
+
+| 字段名 | 是否必须 | 含义描述 |
+| --- | --- | --- |
+| `route` | 是 | 路由 |
+| `method` | 否 | 请求类型：`get`、`post` 等， 默认为 `get` |
+| `version` | 否 | 版本号 |
+| `description` | 否 | 描述，默认值为name字段的值 |
+| `author` | 否 | 作者 |
+| `name` | 否 | 名字，默认为文件名 |
+| `defaultModule` | 否 | 默认的 mock module 模块，如果不填，则会按文件名取第一个 mock module |
+
+mock module 的 `config.json` 文件中字段的定义
+
+| 字段名 | 是否必须 | 含义描述 |
+| --- | --- | --- |
+| `version` | 否 | 版本号 |
+| `description` | 否 | 描述，默认值为name字段的值 |
+| `author` | 否 | 作者 |
+| `name` | 否 | 名字，默认为文件名 |
+| `query` | 否 | 对象，额外的请求参数和值 |

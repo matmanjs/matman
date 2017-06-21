@@ -51,7 +51,7 @@ module.exports = (entryPath) => {
 
     // 默认是 get 请求，除非定义 method 字段
     const METHOD = (mockerData.method || 'get').toLowerCase();
-    const ROUTE_PATH = mockerData.cgi;
+    const ROUTE_PATH = mockerData.route;
 
     // http://expressjs.com/en/4x/api.html#router.METHOD
     router[METHOD](ROUTE_PATH, function (req, res) {
@@ -83,7 +83,7 @@ module.exports = (entryPath) => {
       let url = ROUTE_PATH;
       let params = (METHOD === 'post') ? req.body : req.query;
 
-      console.log('router METHOD 3', METHOD, mockerData.cgi, url, params)
+      console.log('router METHOD 3', METHOD, mockerData.route, url, params)
 
       business.getMockModule(mockerBasePath, url, params)
         .then((result) => {
