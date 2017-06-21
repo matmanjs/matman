@@ -34,17 +34,14 @@ function getMockerList(mockerBasePath) {
 }
 
 /**
- * 根据 url 请求，获取某个 mock module 的结果
+ * 根据 route 请求，获取某个 mock module 的结果
  *
  * @param {String} mockerBasePath
- * @param {String} url 当前请求的 url
+ * @param {String} route 当前请求的 route
  * @param {Object} params req.query值
  * @return {Promise}
  */
-function getMockModule(mockerBasePath, url, params) {
-  // 注意 url 的值前面是没有 / 的，但用户配置 route 时可能会增加，因此需要增加之后再去获取
-  let checkUrlArr = [url, '/' + url];
-
+function getMockModule(mockerBasePath, route, params, req) {
   let jsonFileArr = util.file.getAll(mockerBasePath, { globs: ['*/matman.json'] });
 
   // 循环查找
@@ -54,14 +51,14 @@ function getMockModule(mockerBasePath, url, params) {
     let dbState = db.getState();
     console.log(dbState);
 
-    if (checkUrlArr.indexOf(dbState.route) > -1) {
+    if (route === dbState.route) {
       // 有可能是指定的 mock module， 也可能是当前的 mock module
       let mockModuleName = params._m_target ? params._m_target : dbState.activeModule;
 
       // 组装获取 mock module 的文件地址
       let mockModulePath = path.join(mockerBasePath, dbState.name, 'mock_modules', mockModuleName);
 
-      return mocker.mockerModuleTool.getResult(mockModulePath);
+      return mocker.mockerModuleTool.getResult(mockModulePath, params, req);
     }
   }
 
@@ -155,6 +152,8 @@ function getMocker(mockerBasePath, mockerName) {
 
   // 更新到 matman.json
   mockerDB.setState(mockerDBState);
+
+  // 如果是 id/:id 的形式，则params也需要有
 
   return _.merge({}, mockerDBState, {
     _fullPath: curMockerPath,

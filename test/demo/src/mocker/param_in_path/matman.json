@@ -1,0 +1,32 @@
+{
+  "version": "0.0.1",
+  "description": "有参数在url pathname 中",
+  "author": "helinjiang",
+  "route": "/cgi-bin/a/b/id/:id",
+  "method": "get",
+  "name": "param_in_path",
+  "activeModule": "success_simple",
+  "modules": [
+    {
+      "name": "error_not_login",
+      "description": "error_not_login",
+      "query": {
+        "_m_target": "error_not_login"
+      }
+    },
+    {
+      "name": "success_simple",
+      "description": "success_simple",
+      "query": {
+        "_m_target": "success_simple"
+      }
+    }
+  ],
+  "params": [
+    {
+      "name": "id",
+      "type": "number",
+      "defaultValue": 111
+    }
+  ]
+}

@@ -49,10 +49,12 @@ function saveJSON(data, savePath) {
  * 通过文件路径获得将 mocker_modules 模块的结果对象
  *
  * @param {String} filePath 文件路径
+ * @param {Object} [params] 透传的参数，如果mock module为函数的话，则它将作为函数的第一个参数
+ * @param {Object} [req] express中的req对象，，如果mock module为函数的话，则它将作为函数的第二个参数
  *
  * @return {Promise}
  */
-function getResult(filePath) {
+function getResult(filePath, params, req) {
   return new Promise((resolve, reject) => {
     /**
      * require mocker modules 之后的对象
@@ -62,7 +64,7 @@ function getResult(filePath) {
 
     if (typeof saveTarget === 'function') {
       // 如果传入的是方法，则执行方法
-      let saveObj = saveTarget();
+      let saveObj = saveTarget(params, req);
 
       if (isPromiseObj(saveObj)) {
         // 获得了方法执行的结果之后，判断返回的为 Promise 的话则获取最终结果值

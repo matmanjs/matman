@@ -58,7 +58,7 @@ module.exports = (entryPath) => {
       // Express的req对象，详见 http://expressjs.com/en/4x/api.html#req
 
       // post 请求
-      // mockerData.cgi="/cgi-bin/a/b/post_cgi"
+      // mockerData.route="/cgi-bin/a/b/post_cgi"
       // post http://localhost:3000/cgi-bin/a/b/post_cgi data={activeModule:"error_not_login"}
       // req.baseUrl=""
       // req.originalUrl="/cgi-bin/a/b/post_cgi"
@@ -69,7 +69,7 @@ module.exports = (entryPath) => {
       // req.body = data
 
       // get 请求
-      // mockerData.cgi="/cgi-bin/a/b/simple_cgi"
+      // mockerData.route="/cgi-bin/a/b/simple_cgi"
       // get http://localhost:3000/cgi-bin/a/b/simple_cgi?activeModule=error_not_login
       // req.baseUrl=""
       // req.originalUrl="/cgi-bin/a/b/simple_cgi?activeModule=error_not_login"
@@ -78,21 +78,27 @@ module.exports = (entryPath) => {
       // req.OriginalMethod="GET"
       // req.query.activeModule = "error_not_login"
 
+      // get 请求且route为匹配类型
+      // mockerData.route="/cgi-bin/a/b/id/:id"
+      // get http://localhost:3000/cgi-bin/a/b/id/1?activeModule=error_not_login
+      // req.baseUrl=""
+      // req.originalUrl="/cgi-bin/a/b/id/1?activeModule=error_not_login"
+      // req.url="/cgi-bin/a/b/id/1?activeModule=error_not_login"
+      // req.method="GET"
+      // req.OriginalMethod="GET"
+      // req.query.activeModule = "error_not_login"
+      // req.params.id = "1"
+
       let mockerBasePath = entry.MOCKER_PATH;
-      // let url = req.params[0];
       let url = ROUTE_PATH;
       let params = (METHOD === 'post') ? req.body : req.query;
 
-      console.log('router METHOD 3', METHOD, mockerData.route, url, params)
+      // 还要合并一下来自 url path 中的参数值
+      params = _.merge({}, params, req.params);
 
-      business.getMockModule(mockerBasePath, url, params)
+      // 请求
+      business.getMockModule(mockerBasePath, url, params, req)
         .then((result) => {
-          // res.jsonp({
-          //   url: req.url,
-          //   params: req.params,
-          //   query: req.query,
-          //   data: result
-          // });
           res.jsonp(result);
         })
         .catch((err) => {

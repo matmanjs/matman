@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import superagent from 'superagent';
-import util from '../../../../business/util';
 
-import { Table, Card, Modal, Button } from 'antd';
+import { Table, Card, Modal, Button, Input } from 'antd';
 
 import { loadMocker, setMockerActiveModule } from '../../business/mocker/action';
 
@@ -14,11 +13,36 @@ class Mocker extends Component {
     this.state = {
       showModal: false,
       modalShowData: {},
+      cgiParams: {}
     };
 
     this.handleActive = this.handleActive.bind(this);
     this.handleModalOk = this.handleModalOk.bind(this);
     this.handleShowResult = this.handleShowResult.bind(this);
+    this.handleParamsChange = this.handleParamsChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isLoaded && (this.props.isLoaded !== nextProps.isLoaded)) {
+      const { mockerData } = nextProps;
+      let curRoute = mockerData.route;
+      let mockerParams = mockerData.params || [];
+      let { cgiParams } = this.state;
+
+      let url = curRoute;
+
+      if (mockerParams.length) {
+        mockerParams.forEach((item) => {
+          if (item.defaultValue) {
+            cgiParams[item.name] = item.defaultValue;
+          }
+        });
+
+        this.setState({
+          cgiParams: cgiParams
+        });
+      }
+    }
   }
 
   componentDidMount() {
@@ -75,10 +99,11 @@ class Mocker extends Component {
 
   handleShowResult(query = {}) {
     const { mockerData } = this.props;
-    console.log('mockerData', mockerData);
+    const actualURL = this.getActurlURL();
+    console.log('mockerData', mockerData, actualURL);
 
     if (mockerData.method === 'post') {
-      this.getMockModuleByPost(mockerData.route, query)
+      this.getMockModuleByPost(actualURL, query)
         .then((data) => {
           console.log(data);
           this.setState({
@@ -90,7 +115,7 @@ class Mocker extends Component {
           console.error(err)
         });
     } else {
-      this.getMockModuleByGet(mockerData.route, query)
+      this.getMockModuleByGet(actualURL, query)
         .then((data) => {
           console.log(data);
           this.setState({
@@ -102,6 +127,16 @@ class Mocker extends Component {
           console.error(err)
         });
     }
+  }
+
+  handleParamsChange(fieldName, event) {
+    let { cgiParams } = this.state;
+
+    cgiParams[fieldName] = event.target.value;
+
+    this.setState({
+      cgiParams: cgiParams
+    });
   }
 
   getColumns() {
@@ -150,11 +185,30 @@ class Mocker extends Component {
     }];
   }
 
+  getActurlURL() {
+    const { mockerData } = this.props;
+    const { cgiParams } = this.state;
+
+    let curUrl = mockerData.route;
+
+    if (Object.keys(cgiParams).length) {
+      Object.keys(cgiParams).forEach((key) => {
+        curUrl = curUrl.replace(':' + key, cgiParams[key]);
+      })
+    }
+
+    console.log('curUrl', curUrl);
+    return curUrl;
+  }
+
   render() {
     const { isLoaded, mockerData, route } = this.props;
+    const { showModal, modalShowData } = this.state;
 
     const data = mockerData.modules;
     const columns = this.getColumns();
+
+    let curUrl = this.getActurlURL();
 
     return (
       <div>
@@ -168,11 +222,26 @@ class Mocker extends Component {
             <div>
               <Card>
                 <h2>{mockerData.name} - {mockerData.version} - {mockerData.author} - {mockerData.description}</h2>
-                <p>
+                <p>route: {mockerData.route}</p>
+                <div>
+                  {
+                    mockerData.params && mockerData.params.length ? (
+                      mockerData.params.map((item, index) => {
+                        return <div key={index}>
+                          {item.name}:
+                          <Input placeholder={item.name}
+                                 defaultValue={item.defaultValue}
+                                 onChange={this.handleParamsChange.bind(this, item.name)}
+                          />
+                        </div>
+                      })
+                    ) : null
+                  }
+
                   <Button type="primary" size="large" onClick={this.handleShowResult.bind(this, {})}>
-                    {mockerData.method} : {mockerData.route}
+                    {mockerData.method} : {curUrl}
                   </Button>
-                </p>
+                </div>
                 <p>本地路径：{mockerData._fullPath}</p>
               </Card>
 
@@ -180,7 +249,7 @@ class Mocker extends Component {
 
               <Modal
                 title="结果"
-                visible={this.state.showModal}
+                visible={showModal}
                 footer={[
                   <Button key="submit" type="primary" size="large" onClick={this.handleModalOk}>
                     知道了
@@ -188,7 +257,7 @@ class Mocker extends Component {
                 ]}
               >
                   <textarea name="cgidata" id="cgidata" style={{ width: '100%', minHeight: '600px' }}
-                            value={JSON.stringify(this.state.modalShowData, null, 2)} readOnly></textarea>
+                            value={JSON.stringify(modalShowData, null, 2)} readOnly></textarea>
               </Modal>
             </div>
           ) : null
@@ -203,7 +272,7 @@ function mapStateToProps(state) {
 
   return {
     isLoaded: mockerInfo.isLoaded,
-    mockerData: mockerInfo.data,
+    mockerData: mockerInfo.data
   };
 }
 
