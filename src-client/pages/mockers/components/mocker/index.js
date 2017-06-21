@@ -17,7 +17,7 @@ class Mocker extends Component {
     };
 
     this.handleActive = this.handleActive.bind(this);
-    this.handleModalOk = this.handleModalOk.bind(this);
+    this.handleModalHide = this.handleModalHide.bind(this);
     this.handleShowResult = this.handleShowResult.bind(this);
     this.handleParamsChange = this.handleParamsChange.bind(this);
   }
@@ -90,7 +90,7 @@ class Mocker extends Component {
     this.props.setMockerActiveModule(this.props.routeParams.mockerName, name);
   }
 
-  handleModalOk() {
+  handleModalHide() {
     this.setState({
       showModal: false,
       modalShowData: {},
@@ -250,8 +250,10 @@ class Mocker extends Component {
               <Modal
                 title="结果"
                 visible={showModal}
+                onCancel={this.handleModalHide}
+                onOk={this.handleModalHide}
                 footer={[
-                  <Button key="submit" type="primary" size="large" onClick={this.handleModalOk}>
+                  <Button key="submit" type="primary" size="large" onClick={this.handleModalHide}>
                     知道了
                   </Button>,
                 ]}
