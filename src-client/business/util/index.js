@@ -1,5 +1,11 @@
 function getUrl(url, query) {
-  return url + (url.indexOf('?') > -1 ? '&' : '?') + param(query);
+  let queryStr = param(query);
+
+  if (!queryStr) {
+    return url
+  }
+
+  return url + (url.indexOf('?') > -1 ? '&' : '?') + queryStr;
 }
 
 function param(obj) {

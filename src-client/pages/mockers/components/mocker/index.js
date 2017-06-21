@@ -58,7 +58,7 @@ class Mocker extends Component {
     });
   }
 
-  handleClickMockModule(mockModuleData, event) {
+  handleClickMockModule(mockModuleData = {}, event) {
     const { mockerData } = this.props;
     console.log('mockerData', mockerData);
 
@@ -81,24 +81,25 @@ class Mocker extends Component {
     }
   }
 
+  getUrl(query) {
+    const { mockerData } = this.props;
+    if (mockerData.method === 'post') {
+      return mockerData.route;
+    }
+
+    return util.getUrl(mockerData.route, query);
+  }
+
   getColumns() {
     const { mockerData } = this.props;
     const activeModule = mockerData.activeModule || '';
-
-    const getUrl = (query) => {
-      if (mockerData.method === 'post') {
-        return mockerData.route;
-      }
-
-      return util.getUrl(mockerData.route, query);
-    };
 
     return [{
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
       render: (text, record) => (
-        <a href={getUrl(record.query)} target="_blank"
+        <a href={this.getUrl(record.query)} target="_blank"
            onClick={this.handleClickMockModule.bind(this, record)}>{text}</a>
       ),
     }, {
@@ -147,27 +148,35 @@ class Mocker extends Component {
         <h3>route</h3>
         <p>{JSON.stringify(route)}</p>
 
+        {
+          isLoaded ? (
+            <div>
+              <Card>
+                <h2>{mockerData.name} - {mockerData.version} - {mockerData.author} - {mockerData.description}</h2>
+                <p>{mockerData.method} :
+                  <a href={this.getUrl()} target="_blank"
+                     onClick={this.handleClickMockModule.bind(this, { query: {} })}>{mockerData.route}</a>
+                </p>
+                <p>本地路径：{mockerData._fullPath}</p>
+              </Card>
 
-        <Card>
-          <h2>{mockerData.name} - {mockerData.version} - {mockerData.author} - {mockerData.description}</h2>
-          <p>{mockerData.method} : <a href={mockerData.route} target="_blank">{mockerData.route}</a></p>
-          <p>本地路径：{mockerData._fullPath}</p>
-        </Card>
+              < Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
 
-        <Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
-
-        <Modal
-          title="结果"
-          visible={this.state.showModal}
-          footer={[
-            <Button key="submit" type="primary" size="large" onClick={this.handleModalOk}>
-              知道了
-            </Button>,
-          ]}
-        >
-          <textarea name="cgidata" id="cgidata" style={{ width: '100%', minHeight: '600px' }}
+              <Modal
+                title="结果"
+                visible={this.state.showModal}
+                footer={[
+                  <Button key="submit" type="primary" size="large" onClick={this.handleModalOk}>
+                    知道了
+                  </Button>,
+                ]}
+              >
+                  <textarea name="cgidata" id="cgidata" style={{ width: '100%', minHeight: '600px' }}
                     value={JSON.stringify(this.state.modalShowData, null, 2)} readOnly></textarea>
-        </Modal>
+              </Modal>
+            </div>
+          ) : null
+        }
       </div>
     )
   }
