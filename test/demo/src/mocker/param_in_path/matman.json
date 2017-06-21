@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "description": "有参数在url pathname 中",
   "author": "helinjiang",
-  "route": "/cgi-bin/a/b/id/:id",
+  "route": "/cgi-bin/a/b/id/:id/:subId",
   "method": "get",
   "name": "param_in_path",
-  "activeModule": "success_simple",
+  "activeModule": "error_not_login",
   "modules": [
     {
       "name": "error_not_login",
@@ -27,6 +27,11 @@
       "name": "id",
       "type": "number",
       "defaultValue": 111
+    },
+    {
+      "name": "subId",
+      "type": "number",
+      "defaultValue": 222
     }
   ]
 }
