@@ -122,6 +122,7 @@ function getMocker(mockerBasePath, mockerName) {
   }
 
   mockerDBState.name = mockerDBState.name || mockerName;
+  mockerDBState.disable = mockerDBState.disable || false;
   mockerDBState.description = mockerDBState.description || mockerDBState.name;
   mockerDBState.activeModule = mockerDBState.activeModule || mockerDBState.defaultModule;
   mockerDBState.method = mockerDBState.method || 'get';
@@ -179,9 +180,12 @@ function getMocker(mockerBasePath, mockerName) {
 }
 
 /**
- * 设置 mocker 的 activeModule
+ * 更新 mocker 的 信息
+ * @param mockerBasePath
+ * @param mockerName
+ * @param newState
  */
-function setActiveModule(mockerBasePath, mockerName, activeModule) {
+function updateMocker(mockerBasePath, mockerName, newState) {
   let curMockerPath = path.join(mockerBasePath, mockerName);
 
   // 获取这个 mocker 模块的详细信息
@@ -189,7 +193,7 @@ function setActiveModule(mockerBasePath, mockerName, activeModule) {
 
   // 更新 mocker db 数据
   let mockerDBState = mockerDB.getState();
-  mockerDBState.activeModule = activeModule;
+  mockerDBState = _.merge({}, mockerDBState, newState);
   mockerDB.setState(mockerDBState);
 
   return mockerDBState;
@@ -198,8 +202,8 @@ function setActiveModule(mockerBasePath, mockerName, activeModule) {
 module.exports = {
   getMockerList: getMockerList,
   getMocker: getMocker,
-  getMockModule: getMockModule,
-  setActiveModule: setActiveModule,
+  updateMocker: updateMocker,
+  getMockModule: getMockModule
 };
 
 

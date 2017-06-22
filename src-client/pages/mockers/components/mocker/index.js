@@ -4,7 +4,7 @@ import superagent from 'superagent';
 
 import { Table, Card, Modal, Button, Input } from 'antd';
 
-import { loadMocker, setMockerActiveModule } from '../../business/mocker/action';
+import { loadMocker, setMockerActiveModule, setMockerDisable } from '../../business/mocker/action';
 
 class Mocker extends Component {
   constructor(props, context) {
@@ -20,16 +20,15 @@ class Mocker extends Component {
     this.handleModalHide = this.handleModalHide.bind(this);
     this.handleShowResult = this.handleShowResult.bind(this);
     this.handleParamsChange = this.handleParamsChange.bind(this);
+    this.handleDisable = this.handleDisable.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isLoaded && (this.props.isLoaded !== nextProps.isLoaded)) {
+      // 加载完 mocker 信息之后，要初始化填写的参数
       const { mockerData } = nextProps;
-      let curRoute = mockerData.route;
       let mockerParams = mockerData.params || [];
       let { cgiParams } = this.state;
-
-      let url = curRoute;
 
       if (mockerParams.length) {
         mockerParams.forEach((item) => {
@@ -87,7 +86,7 @@ class Mocker extends Component {
   }
 
   handleActive(name) {
-    this.props.setMockerActiveModule(this.props.routeParams.mockerName, name);
+    this.props.setMockerActiveModule(this.props.mockerData.name, name);
   }
 
   handleModalHide() {
@@ -137,6 +136,11 @@ class Mocker extends Component {
     this.setState({
       cgiParams: cgiParams
     });
+  }
+
+  handleDisable() {
+    console.log('handleDisable', this.props.mockerData.disable);
+    this.props.setMockerDisable(this.props.mockerData.name, !this.props.mockerData.disable);
   }
 
   getColumns() {
@@ -220,6 +224,11 @@ class Mocker extends Component {
         {
           isLoaded ? (
             <div>
+              <h2>当前 mock 服务{mockerData.disable ? '禁用' : '启用'}中</h2>
+              <Button type="primary" size="large" onClick={this.handleDisable}>
+                {mockerData.disable ? '启用' : '禁用'} mock 服务
+              </Button>
+
               <Card>
                 <h2>{mockerData.name} - {mockerData.version} - {mockerData.author} - {mockerData.description}</h2>
                 <p>route: {mockerData.route}</p>
@@ -286,6 +295,10 @@ function mapDispatchToProps(dispatch) {
 
     setMockerActiveModule(mockerName, mockModuleName){
       return dispatch(setMockerActiveModule(mockerName, mockModuleName));
+    },
+
+    setMockerDisable(mockerName, value){
+      return dispatch(setMockerDisable(mockerName, value));
     }
   };
 }

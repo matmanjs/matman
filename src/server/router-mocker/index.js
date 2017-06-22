@@ -39,11 +39,12 @@ module.exports = (entryPath) => {
 
   // POST /sys-cgi/mocker/:mockerName 设置这个mocker的信息
   router.post('/sys-cgi/mocker/:mockerName', (req, res) => {
-    let result = business.setActiveModule(entry.MOCKER_PATH, req.params.mockerName, req.body.activeModule);
+    let result = business.updateMocker(entry.MOCKER_PATH, req.params.mockerName, req.body);
 
     res.jsonp(result);
   });
 
+  // 所有的请求都会经过这里，可以做一些类似权限控制的事情
   router.all('*', function (req, res, next) {
     next();
   });
