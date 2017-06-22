@@ -6,7 +6,7 @@
   "method": "get",
   "name": "param_in_search",
   "disable": false,
-  "activeModule": "error_not_login",
+  "activeModule": "success_special_query",
   "modules": [
     {
       "name": "error_not_login",
@@ -26,5 +26,6 @@
       },
       "name": "success_special_query"
     }
-  ]
+  ],
+  "createdAt": 1498123888368
 }

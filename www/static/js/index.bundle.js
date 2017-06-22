@@ -26,11 +26,11 @@ webpackJsonp([0],[
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _Root = __webpack_require__(1182);
+	var _Root = __webpack_require__(1186);
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
-	__webpack_require__(1185);
+	__webpack_require__(1189);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -13608,10 +13608,7 @@ webpackJsonp([0],[
 	
 	var initialState = {
 	  isLoaded: false,
-	  data: {
-	    _cache: {},
-	    modules: []
-	  }
+	  data: {}
 	};
 	
 	function mockerInfo() {
@@ -13623,6 +13620,11 @@ webpackJsonp([0],[
 	
 	
 	  switch (type) {
+	    case _action.MOCKER_REQUEST:
+	      update = {
+	        isLoaded: false
+	      };
+	      break;
 	    case _action.MOCKER_REQUEST_SUCCESS:
 	      update = {
 	        isLoaded: true,
@@ -53768,20 +53770,24 @@ webpackJsonp([0],[
 /* 1179 */,
 /* 1180 */,
 /* 1181 */,
-/* 1182 */
+/* 1182 */,
+/* 1183 */,
+/* 1184 */,
+/* 1185 */,
+/* 1186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
 	if (process.env.NODE_ENV === 'production') {
-	  module.exports = __webpack_require__(1183);
+	  module.exports = __webpack_require__(1187);
 	} else {
-	  module.exports = __webpack_require__(1184);
+	  module.exports = __webpack_require__(1188);
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 1183 */
+/* 1187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53820,7 +53826,7 @@ webpackJsonp([0],[
 	})(Root);
 
 /***/ }),
-/* 1184 */
+/* 1188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53868,13 +53874,13 @@ webpackJsonp([0],[
 	})(Root);
 
 /***/ }),
-/* 1185 */
+/* 1189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(1186);
+	var content = __webpack_require__(1190);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(959)(content, {});
@@ -53894,7 +53900,7 @@ webpackJsonp([0],[
 	}
 
 /***/ }),
-/* 1186 */
+/* 1190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(958)();

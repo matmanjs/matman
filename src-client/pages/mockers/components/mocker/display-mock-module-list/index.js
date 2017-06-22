@@ -7,7 +7,7 @@ export default function MockerMockModuleList(props) {
   const { isLoaded, mockerData, onShowResult, updateActive } = props;
 
   const activeModule = mockerData.activeModule || '';
-  const mockModuleList = mockerData.modules;
+  const mockModuleList = mockerData.modules || [];
 
   const tableColumns = [{
     title: 'Name',

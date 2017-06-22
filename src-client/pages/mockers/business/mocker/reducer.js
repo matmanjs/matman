@@ -9,10 +9,7 @@ import {
 
 const initialState = {
   isLoaded: false,
-  data: {
-    _cache:{},
-    modules: []
-  },
+  data: {},
 };
 
 function mockerInfo(state = initialState, action) {
@@ -20,6 +17,11 @@ function mockerInfo(state = initialState, action) {
     update = {};
 
   switch (type) {
+    case MOCKER_REQUEST:
+      update = {
+        isLoaded: false
+      };
+      break;
     case MOCKER_REQUEST_SUCCESS:
       update = {
         isLoaded: true,

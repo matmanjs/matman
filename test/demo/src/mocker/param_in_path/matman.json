@@ -18,7 +18,7 @@
   ],
   "name": "param_in_path",
   "disable": false,
-  "activeModule": "error_not_login",
+  "activeModule": "success_simple",
   "modules": [
     {
       "name": "error_not_login",
@@ -34,5 +34,6 @@
         "_m_target": "success_simple"
       }
     }
-  ]
+  ],
+  "createdAt": 1498122679280
 }

@@ -42,12 +42,12 @@ class Mocker extends Component {
             cgiParams[item.name] = item.defaultValue;
           }
         });
-
-        this.setState({
-          cgiParams: cgiParams,
-          actualURL: this.getActualURL(mockerData, cgiParams)
-        });
       }
+
+      this.setState({
+        cgiParams: cgiParams,
+        actualURL: this.getActualURL(mockerData, cgiParams)
+      });
     }
   }
 
