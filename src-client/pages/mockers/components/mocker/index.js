@@ -6,6 +6,8 @@ import { Table, Card, Modal, Button, Input } from 'antd';
 
 import { loadMocker, setMockerActiveModule, setMockerDisable } from '../../business/mocker/action';
 
+import MockerDetail from './display-detail';
+
 class Mocker extends Component {
   constructor(props, context) {
     super(props, context);
@@ -13,7 +15,8 @@ class Mocker extends Component {
     this.state = {
       showModal: false,
       modalShowData: {},
-      cgiParams: {}
+      cgiParams: {},
+      actualURL: ''
     };
 
     this.handleActive = this.handleActive.bind(this);
@@ -38,7 +41,8 @@ class Mocker extends Component {
         });
 
         this.setState({
-          cgiParams: cgiParams
+          cgiParams: cgiParams,
+          actualURL: this.getActualURL(mockerData, cgiParams)
         });
       }
     }
@@ -98,7 +102,8 @@ class Mocker extends Component {
 
   handleShowResult(query = {}) {
     const { mockerData } = this.props;
-    const actualURL = this.getActurlURL();
+    const { actualURL } = this.state;
+
     console.log('mockerData', mockerData, actualURL);
 
     if (mockerData.method === 'post') {
@@ -129,12 +134,14 @@ class Mocker extends Component {
   }
 
   handleParamsChange(fieldName, event) {
+    let { mockerData } = this.props;
     let { cgiParams } = this.state;
 
     cgiParams[fieldName] = event.target.value;
 
     this.setState({
-      cgiParams: cgiParams
+      cgiParams: cgiParams,
+      actualURL: this.getActualURL(mockerData, cgiParams)
     });
   }
 
@@ -189,10 +196,7 @@ class Mocker extends Component {
     }];
   }
 
-  getActurlURL() {
-    const { mockerData } = this.props;
-    const { cgiParams } = this.state;
-
+  getActualURL(mockerData, cgiParams) {
     let curUrl = mockerData.route;
 
     if (Object.keys(cgiParams).length) {
@@ -207,12 +211,10 @@ class Mocker extends Component {
 
   render() {
     const { isLoaded, mockerData, route } = this.props;
-    const { showModal, modalShowData } = this.state;
+    const { showModal, modalShowData, actualURL } = this.state;
 
     const data = mockerData.modules;
     const columns = this.getColumns();
-
-    let curUrl = this.getActurlURL();
 
     return (
       <div>
@@ -229,30 +231,12 @@ class Mocker extends Component {
                 {mockerData.disable ? '启用' : '禁用'} mock 服务
               </Button>
 
-              <Card>
-                <h2>{mockerData.name} - {mockerData.version} - {mockerData.author} - {mockerData.description}</h2>
-                <p>route: {mockerData.route}</p>
-                <div>
-                  {
-                    mockerData.params && mockerData.params.length ? (
-                      mockerData.params.map((item, index) => {
-                        return <div key={index}>
-                          {item.name}:
-                          <Input placeholder={item.name}
-                                 defaultValue={item.defaultValue}
-                                 onChange={this.handleParamsChange.bind(this, item.name)}
-                          />
-                        </div>
-                      })
-                    ) : null
-                  }
-
-                  <Button type="primary" size="large" onClick={this.handleShowResult.bind(this, {})}>
-                    {mockerData.method} : {curUrl}
-                  </Button>
-                </div>
-                <p>本地路径：{mockerData._fullPath}</p>
-              </Card>
+              <MockerDetail
+                mockerData={mockerData}
+                curUrl={actualURL}
+                onParamsChange={this.handleParamsChange}
+                onShowResult={this.handleShowResult}
+              />
 
               < Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
 
