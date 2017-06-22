@@ -57,7 +57,7 @@ module.exports = (entryPath) => {
     const ROUTE_PATH = mockerData.route;
 
     // http://expressjs.com/en/4x/api.html#router.METHOD
-    router[METHOD](ROUTE_PATH, function (req, res) {
+    router[METHOD](ROUTE_PATH, function (req, res, next) {
       // Express的req对象，详见 http://expressjs.com/en/4x/api.html#req
 
       // post 请求
@@ -93,27 +93,38 @@ module.exports = (entryPath) => {
       // req.params.id = "1"
 
       let mockerBasePath = entry.MOCKER_PATH;
-      let url = ROUTE_PATH;
-      let params = (METHOD === 'post') ? req.body : req.query;
 
-      // 还要合并一下来自 url path 中的参数值
-      params = _.merge({}, params, req.params);
+      // 此处要重新获取新的数据，以便取到缓存的。
+      // TODO 此处还可以优化，比如及时更新缓存中的数据，而不需要每次都去获取
+      let curMockerData = business.getMocker(mockerBasePath, mockerData.name);
 
-      // 请求
-      business.getMockModule(mockerBasePath, url, params, req)
-        .then((result) => {
-          res.append('matman-mocker', result.mockerDBState.name);
-          res.append('matman-mock-module', result.mockModuleName);
-          res.jsonp(result.data);
-        })
-        .catch((err) => {
-          // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
-          let errMsg = err.stack || err;
+      if (curMockerData.disable) {
+        // 如果当前禁用了 mock 服务，则不处理
+        next();
+      } else {
+        let url = ROUTE_PATH;
+        let params = (METHOD === 'post') ? req.body : req.query;
 
-          console.error(errMsg);
+        // 还要合并一下来自 url path 中的参数值
+        params = _.merge({}, params, req.params);
 
-          res.status(500).send(errMsg);
-        });
+        // 请求
+        business.getMockModule(mockerBasePath, url, params, req)
+          .then((result) => {
+            res.append('matman-mocker', result.mockerDBState.name);
+            res.append('matman-mock-module', result.mockModuleName);
+            res.jsonp(result.data);
+          })
+          .catch((err) => {
+            // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
+            let errMsg = err.stack || err;
+
+            console.error(errMsg);
+
+            res.status(500).send(errMsg);
+          });
+      }
+
     });
   });
 
