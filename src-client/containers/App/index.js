@@ -1,13 +1,12 @@
 import './index.less';
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 import classnames from 'classnames';
 
 import LayoutSidebar from '../../components/layout-sidebar';
 import LayoutHeader from '../../components/layout-header';
-import LayoutBreadcrumb from '../../components/layout-breadcrumb';
 import LayoutFooter from '../../components/layout-footer';
 
 class App extends Component {
@@ -29,12 +28,8 @@ class App extends Component {
 
           <LayoutHeader />
 
-          <LayoutBreadcrumb />
-
           <div className="layout-container">
-            <div className="layout-content">
               {this.props.children}
-            </div>
           </div>
 
           <LayoutFooter />
