@@ -94,12 +94,20 @@ module.exports = (entryPath) => {
 
       let mockerBasePath = entry.MOCKER_PATH;
 
-      // 此处要重新获取新的数据，以便取到缓存的。
-      // TODO 此处还可以优化，比如及时更新缓存中的数据，而不需要每次都去获取
-      let curMockerData = business.getMocker(mockerBasePath, mockerData.name);
+      // 从请求 req 或者 config.json 文件中检查当前请求是否需要禁用 mock 服务
+      let isDisable = req.query._m_disable || req.body._m_disable;
+      if (!isDisable) {
+        // 此处要重新获取新的数据，以便取到缓存的。
+        // TODO 此处还可以优化，比如及时更新缓存中的数据，而不需要每次都去获取
+        let curMockerData = business.getMocker(mockerBasePath, mockerData.name);
 
-      if (curMockerData.disable) {
+        isDisable = curMockerData.disable;
+      }
+
+      if (isDisable) {
         // 如果当前禁用了 mock 服务，则不处理
+        res.locals.isDisabled = true;
+        res.locals.mockerName = mockerData.name;
         next();
       } else {
         let url = ROUTE_PATH;
@@ -166,6 +174,10 @@ module.exports = (entryPath) => {
         _m_from: 1
       }
     };
+
+    if (res.locals.isDisabled) {
+      res.append('matman-disable', res.locals.mockerName);
+    }
 
     if (req.method === 'GET' && !isRequested) {
       request

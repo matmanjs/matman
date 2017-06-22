@@ -42,3 +42,5 @@ mock module 的 `config.json` 文件中字段的定义
 | `query` | 否 | 对象，额外的请求参数和值 |
 
 如果是 mock 数据，则在 response header 中会有 `matman-mocker` 和 `matman-mock-module` 字段。
+
+从请求 `req` 或者 config.json 文件中检查当前请求是否需要禁用 mock 服务，区别在于前者是单次请求（携带了 `_m_disable` 参数），而后者是所有的请求都禁用。
