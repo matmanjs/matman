@@ -1,6 +1,6 @@
-import './index.less';
-
 import React, { Component } from 'react';
+
+import './index.less';
 
 class LayoutHeader extends Component {
 

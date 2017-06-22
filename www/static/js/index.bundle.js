@@ -52986,11 +52986,11 @@ webpackJsonp([0],[
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
-	__webpack_require__(1012);
-	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	__webpack_require__(1012);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -53054,7 +53054,7 @@ webpackJsonp([0],[
 	
 	
 	// module
-	exports.push([module.id, ".layout-header {\n  background: #fff;\n  height: 64px;\n  border-bottom: 1px solid #e9e9e9;\n}\n", ""]);
+	exports.push([module.id, ".layout-header {\n  height: 64px;\n  line-height: 64px;\n  padding: 0 16px;\n  border-bottom: 1px solid #e9e9e9;\n  background: #fff;\n}\n", ""]);
 	
 	// exports
 
@@ -53079,11 +53079,11 @@ webpackJsonp([0],[
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
-	__webpack_require__(1015);
-	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	__webpack_require__(1015);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
