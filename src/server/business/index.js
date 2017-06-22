@@ -51,7 +51,7 @@ function getMockModule(mockerBasePath, route, params, req) {
     // 获取每个 mocker 中的 matman.json 文件内容，以便寻找到相同 route 的那个 mocker
     let db = mocker.db.getDB(path.join(item.basePath, item.relativePath));
     let dbState = db.getState();
-    console.log(dbState);
+    // console.log(dbState);
 
     if (route === dbState.route) {
       // 有可能是指定的 mock module， 也可能是当前的 mock module
@@ -68,7 +68,15 @@ function getMockModule(mockerBasePath, route, params, req) {
         }
       }
 
-      return mocker.mockerModuleTool.getResult(mockModulePath, params, req);
+      return mocker.mockerModuleTool.getResult(mockModulePath, params, req)
+        .then((data) => {
+          return {
+            data: data,
+            mockerDBState: dbState,
+            mockModuleName: mockModuleName,
+            params: params,
+          }
+        });
     }
   }
 

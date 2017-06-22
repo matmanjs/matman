@@ -101,7 +101,9 @@ module.exports = (entryPath) => {
       // 请求
       business.getMockModule(mockerBasePath, url, params, req)
         .then((result) => {
-          res.jsonp(result);
+          res.append('matman-mocker', result.mockerDBState.name);
+          res.append('matman-mock-module', result.mockModuleName);
+          res.jsonp(result.data);
         })
         .catch((err) => {
           // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
