@@ -30,6 +30,7 @@ class LayoutSidebar extends Component {
     this.state = {
       defaultSelectedKeys: [],
       defaultOpenKeys: [],
+      selectedKeys: [],
       needInitMenu: false
     };
 
@@ -52,8 +53,17 @@ class LayoutSidebar extends Component {
 
       this.setState({
         defaultSelectedKeys: defaultSelectedKeys,
+        selectedKeys: defaultSelectedKeys,
         defaultOpenKeys: defaultOpenKeys,
         needInitMenu: true
+      })
+    }
+
+    if (this.props.pathname !== nextProps.pathname) {
+      console.log(`${this.props.pathname} => ${nextProps.pathname}`);
+
+      this.setState({
+        selectedKeys: this.getSelectedKeys(menuDataMap, nextProps.pathname)
       })
     }
   }
@@ -78,6 +88,27 @@ class LayoutSidebar extends Component {
   /**
    * 获取菜单中默认选中的菜单对应的id数组
    * @param {Object} menuDataMap <id,menuOBJ>键值对
+   * @param {String} curPathName 当前的 pathname
+   * @return {Array}
+   */
+  getSelectedKeys(menuDataMap, curPathName) {
+    let arr = [];
+
+    Object.keys(menuDataMap).forEach((id) => {
+      let curMenu = menuDataMap[id];
+      if (curMenu && (curMenu.indexOnly && (curPathName === curMenu.url) || (curPathName.indexOf(curMenu.url) > -1))) {
+        arr.push(id);
+      }
+    });
+
+    // console.log('getSelectedKeys', arr);
+
+    return arr;
+  }
+
+  /**
+   * 获取菜单中默认选中的菜单对应的id数组
+   * @param {Object} menuDataMap <id,menuOBJ>键值对
    * @return {Array}
    */
   getDefaultSelectedKeys(menuDataMap) {
@@ -89,6 +120,8 @@ class LayoutSidebar extends Component {
         arr.push(id);
       }
     });
+
+    // console.log('getDefaultSelectedKeys', arr);
 
     return arr;
   }
@@ -117,6 +150,8 @@ class LayoutSidebar extends Component {
     selectedKeys.forEach((id) => {
       _getKeys(id);
     });
+
+    // console.log('getDefaultOpenKeys', arr);
 
     return arr;
   }
@@ -176,7 +211,7 @@ class LayoutSidebar extends Component {
 
   render() {
     const { collapse, menuData } = this.props,
-      { defaultSelectedKeys, defaultOpenKeys, needInitMenu } = this.state,
+      { defaultSelectedKeys, defaultOpenKeys, selectedKeys, needInitMenu } = this.state,
       isShowMenu = needInitMenu && menuData && Object.keys(menuData).length;
 
     return (
@@ -192,6 +227,7 @@ class LayoutSidebar extends Component {
             <Menu mode="inline" theme="dark"
                   defaultSelectedKeys={defaultSelectedKeys}
                   defaultOpenKeys={defaultOpenKeys}
+                  selectedKeys={selectedKeys}
                   onSelect={this.handleSelectMenu}>
               {
                 menuData.children.map((item) => {
@@ -212,12 +248,13 @@ class LayoutSidebar extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { sidebarInfo } = state;
+  const { sidebarInfo, routing } = state;
 
   return {
     collapse: sidebarInfo.collapse,
     menuData: sidebarInfo.menuData,
     menuDataMap: sidebarInfo.menuDataMap,
+    pathname: routing.locationBeforeTransitions.pathname,
   };
 };
 
