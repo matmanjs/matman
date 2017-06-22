@@ -7,6 +7,9 @@ import { Table, Card, Modal, Button, Input } from 'antd';
 import { loadMocker, setMockerActiveModule, setMockerDisable } from '../../business/mocker/action';
 
 import MockerDetail from './display-detail';
+import MockerShowResult from './display-show-result';
+import MockerSwitcher from './display-switcher';
+import MockerMockModuleList from './display-mock-module-list';
 
 class Mocker extends Component {
   constructor(props, context) {
@@ -51,10 +54,7 @@ class Mocker extends Component {
   componentDidMount() {
     console.log('Mocker componentDidMount', this.props);
 
-    this.fetch();
-  }
-
-  fetch() {
+    // 加载这个 mocker 的信息
     this.props.loadMocker(this.props.routeParams.mockerName);
   }
 
@@ -104,8 +104,6 @@ class Mocker extends Component {
     const { mockerData } = this.props;
     const { actualURL } = this.state;
 
-    console.log('mockerData', mockerData, actualURL);
-
     if (mockerData.method === 'post') {
       this.getMockModuleByPost(actualURL, query)
         .then((data) => {
@@ -146,54 +144,8 @@ class Mocker extends Component {
   }
 
   handleDisable() {
-    console.log('handleDisable', this.props.mockerData.disable);
+    // console.log('handleDisable', this.props.mockerData.disable);
     this.props.setMockerDisable(this.props.mockerData.name, !this.props.mockerData.disable);
-  }
-
-  getColumns() {
-    const { mockerData } = this.props;
-    const activeModule = mockerData.activeModule || '';
-
-    return [{
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text, record) => (
-        <Button type="primary" size="large" onClick={this.handleShowResult.bind(this, record.query)}>
-          {text}
-        </Button>
-      ),
-    }, {
-      title: 'Version',
-      dataIndex: 'version',
-      key: 'version',
-    }, {
-      title: 'Author',
-      dataIndex: 'author',
-      key: 'author',
-    }, {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    }, {
-      title: 'Action',
-      key: 'action',
-      render: (text, record) => (
-        <span>
-          {
-            (record.name !== activeModule) ?
-              <a href="javascript:;" onClick={this.handleActive.bind(this, record.name)}>Active It</a>
-              : <span>Aready active</span>
-          }
-
-          <span className="ant-divider" />
-          <a href="#">Edit</a>
-
-          <span className="ant-divider" />
-          <a href="#">Delete</a>
-        </span>
-      ),
-    }];
   }
 
   getActualURL(mockerData, cgiParams) {
@@ -210,26 +162,18 @@ class Mocker extends Component {
   }
 
   render() {
-    const { isLoaded, mockerData, route } = this.props;
+    const { isLoaded, mockerData } = this.props;
     const { showModal, modalShowData, actualURL } = this.state;
-
-    const data = mockerData.modules;
-    const columns = this.getColumns();
 
     return (
       <div>
-        <h3>location</h3>
-        <p>{JSON.stringify(location)}</p>
-        <h3>route</h3>
-        <p>{JSON.stringify(route)}</p>
-
         {
           isLoaded ? (
             <div>
-              <h2>当前 mock 服务{mockerData.disable ? '禁用' : '启用'}中</h2>
-              <Button type="primary" size="large" onClick={this.handleDisable}>
-                {mockerData.disable ? '启用' : '禁用'} mock 服务
-              </Button>
+              <MockerSwitcher
+                isDisabled={mockerData.disable}
+                updateDisable={this.handleDisable}
+              />
 
               <MockerDetail
                 mockerData={mockerData}
@@ -238,24 +182,23 @@ class Mocker extends Component {
                 onShowResult={this.handleShowResult}
               />
 
-              < Table loading={!isLoaded} rowKey="name" columns={columns} dataSource={data} />
+              <MockerMockModuleList
+                isLoaded={isLoaded}
+                mockerData={mockerData}
+                onShowResult={this.handleShowResult}
+                updateActive={this.handleActive}
+              />
 
-              <Modal
-                title="结果"
-                visible={showModal}
-                onCancel={this.handleModalHide}
-                onOk={this.handleModalHide}
-                footer={[
-                  <Button key="submit" type="primary" size="large" onClick={this.handleModalHide}>
-                    知道了
-                  </Button>,
-                ]}
-              >
-                  <textarea name="cgidata" id="cgidata" style={{ width: '100%', minHeight: '600px' }}
-                            value={JSON.stringify(modalShowData, null, 2)} readOnly></textarea>
-              </Modal>
+              <MockerShowResult
+                isShow={showModal}
+                data={modalShowData}
+                onHide={this.handleModalHide}
+              />
+
             </div>
-          ) : null
+          ) : (
+            <div>加载中...</div>
+          )
         }
       </div>
     )

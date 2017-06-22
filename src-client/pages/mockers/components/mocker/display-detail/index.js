@@ -1,8 +1,10 @@
 import React from 'react';
 import { Card, Button, Input } from 'antd';
 
+import './index.less';
+
 export default function MockerDetail(props) {
-  let { mockerData, curUrl } = props;
+  const { mockerData, curUrl } = props;
 
   return (
     <div className="mocker-detail">
