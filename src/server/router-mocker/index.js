@@ -51,8 +51,6 @@ module.exports = (entryPath) => {
   // 根据用户配置的路由关系，进行解析
   // console.log('mockerList', mockerList);
   mockerList.forEach((mockerData) => {
-    //TODO cgi 可能不是以 / 开头的，建议以 route 形式会更好
-
     // 默认是 get 请求，除非定义 method 字段
     const METHOD = (mockerData.method || 'get').toLowerCase();
     const ROUTE_PATH = mockerData.route;
@@ -139,23 +137,45 @@ module.exports = (entryPath) => {
     // req.body.activeModule = "error_not_login"
 
     // 未匹配到的请求将会来到这里
-    console.log('[use]', req.url, req.query._m_ignore);
+    // console.log('[use]', req.url, req.query._m_from);
+
+    // 判断是否已经是第二次请求了。
+    // 请求本地服务的时候，可能会陷入死循环中，因此此处校验最多只请求一次。
+    const isRequested = !!req.query._m_from;
 
     const opts = {
       url: 'http://' + req.headers.host + req.url,
       headers: req.headers,
-      jar: true
+      jar: true,
+      // timeout: 4000,
+      qs: {
+        _m_from: 1
+      }
     };
 
-    if (req.method === 'GET') {
+    if (req.method === 'GET' && !isRequested) {
       request
         .get(_.merge({}, opts))
+        .on('response', function (response) {
+          // console.log(response.statusCode) // 200
+        })
+        .on('error', function (err) {
+          console.error(err);
+          res.status(500).send(err.stack);
+        })
         .pipe(res);
-    } else if (req.method === 'POST') {
+    } else if (req.method === 'POST' && !isRequested) {
       request
         .post(_.merge({}, opts, {
-          form: req.body
+          form: req.body,
         }))
+        .on('response', function (response) {
+          // console.log(response.statusCode)
+        })
+        .on('error', function (err) {
+          console.error(err);
+          res.status(500).send(err.stack);
+        })
         .pipe(res);
     } else {
       if (!res.locals.data) {
