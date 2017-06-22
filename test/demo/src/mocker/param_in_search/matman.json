@@ -5,6 +5,7 @@
   "route": "/cgi-bin/a/b/detail",
   "method": "get",
   "name": "param_in_search",
+  "disable": false,
   "activeModule": "error_not_login",
   "modules": [
     {

@@ -8787,33 +8787,34 @@ webpackJsonp([0],[
 	 */
 	var ActionTypes = exports.ActionTypes = {
 	  INIT: '@@redux/INIT'
+	};
 	
-	  /**
-	   * Creates a Redux store that holds the state tree.
-	   * The only way to change the data in the store is to call `dispatch()` on it.
-	   *
-	   * There should only be a single store in your app. To specify how different
-	   * parts of the state tree respond to actions, you may combine several reducers
-	   * into a single reducer function by using `combineReducers`.
-	   *
-	   * @param {Function} reducer A function that returns the next state tree, given
-	   * the current state tree and the action to handle.
-	   *
-	   * @param {any} [preloadedState] The initial state. You may optionally specify it
-	   * to hydrate the state from the server in universal apps, or to restore a
-	   * previously serialized user session.
-	   * If you use `combineReducers` to produce the root reducer function, this must be
-	   * an object with the same shape as `combineReducers` keys.
-	   *
-	   * @param {Function} [enhancer] The store enhancer. You may optionally specify it
-	   * to enhance the store with third-party capabilities such as middleware,
-	   * time travel, persistence, etc. The only store enhancer that ships with Redux
-	   * is `applyMiddleware()`.
-	   *
-	   * @returns {Store} A Redux store that lets you read the state, dispatch actions
-	   * and subscribe to changes.
-	   */
-	};function createStore(reducer, preloadedState, enhancer) {
+	/**
+	 * Creates a Redux store that holds the state tree.
+	 * The only way to change the data in the store is to call `dispatch()` on it.
+	 *
+	 * There should only be a single store in your app. To specify how different
+	 * parts of the state tree respond to actions, you may combine several reducers
+	 * into a single reducer function by using `combineReducers`.
+	 *
+	 * @param {Function} reducer A function that returns the next state tree, given
+	 * the current state tree and the action to handle.
+	 *
+	 * @param {any} [preloadedState] The initial state. You may optionally specify it
+	 * to hydrate the state from the server in universal apps, or to restore a
+	 * previously serialized user session.
+	 * If you use `combineReducers` to produce the root reducer function, this must be
+	 * an object with the same shape as `combineReducers` keys.
+	 *
+	 * @param {Function} enhancer The store enhancer. You may optionally specify it
+	 * to enhance the store with third-party capabilities such as middleware,
+	 * time travel, persistence, etc. The only store enhancer that ships with Redux
+	 * is `applyMiddleware()`.
+	 *
+	 * @returns {Store} A Redux store that lets you read the state, dispatch actions
+	 * and subscribe to changes.
+	 */
+	function createStore(reducer, preloadedState, enhancer) {
 	  var _ref2;
 	
 	  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
@@ -8947,8 +8948,7 @@ webpackJsonp([0],[
 	
 	    var listeners = currentListeners = nextListeners;
 	    for (var i = 0; i < listeners.length; i++) {
-	      var listener = listeners[i];
-	      listener();
+	      listeners[i]();
 	    }
 	
 	    return action;
@@ -8977,7 +8977,7 @@ webpackJsonp([0],[
 	   * Interoperability point for observable/reactive libraries.
 	   * @returns {observable} A minimal observable of state changes.
 	   * For more information, see the observable proposal:
-	   * https://github.com/tc39/proposal-observable
+	   * https://github.com/zenparsing/es-observable
 	   */
 	  function observable() {
 	    var _ref;
@@ -9424,7 +9424,7 @@ webpackJsonp([0],[
 	  var actionType = action && action.type;
 	  var actionName = actionType && '"' + actionType.toString() + '"' || 'an action';
 	
-	  return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state. ' + 'If you want this reducer to hold no value, you can return null instead of undefined.';
+	  return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state.';
 	}
 	
 	function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
@@ -9452,18 +9452,18 @@ webpackJsonp([0],[
 	  }
 	}
 	
-	function assertReducerShape(reducers) {
+	function assertReducerSanity(reducers) {
 	  Object.keys(reducers).forEach(function (key) {
 	    var reducer = reducers[key];
 	    var initialState = reducer(undefined, { type: _createStore.ActionTypes.INIT });
 	
 	    if (typeof initialState === 'undefined') {
-	      throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined. If you don\'t want to set a value for this reducer, ' + 'you can use null instead of undefined.');
+	      throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined.');
 	    }
 	
 	    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
 	    if (typeof reducer(undefined, { type: type }) === 'undefined') {
-	      throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + _createStore.ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined, but can be null.');
+	      throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + _createStore.ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined.');
 	    }
 	  });
 	}
@@ -9502,24 +9502,23 @@ webpackJsonp([0],[
 	  }
 	  var finalReducerKeys = Object.keys(finalReducers);
 	
-	  var unexpectedKeyCache = void 0;
 	  if (process.env.NODE_ENV !== 'production') {
-	    unexpectedKeyCache = {};
+	    var unexpectedKeyCache = {};
 	  }
 	
-	  var shapeAssertionError = void 0;
+	  var sanityError;
 	  try {
-	    assertReducerShape(finalReducers);
+	    assertReducerSanity(finalReducers);
 	  } catch (e) {
-	    shapeAssertionError = e;
+	    sanityError = e;
 	  }
 	
 	  return function combination() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	    var action = arguments[1];
 	
-	    if (shapeAssertionError) {
-	      throw shapeAssertionError;
+	    if (sanityError) {
+	      throw sanityError;
 	    }
 	
 	    if (process.env.NODE_ENV !== 'production') {
@@ -9531,16 +9530,16 @@ webpackJsonp([0],[
 	
 	    var hasChanged = false;
 	    var nextState = {};
-	    for (var _i = 0; _i < finalReducerKeys.length; _i++) {
-	      var _key = finalReducerKeys[_i];
-	      var reducer = finalReducers[_key];
-	      var previousStateForKey = state[_key];
+	    for (var i = 0; i < finalReducerKeys.length; i++) {
+	      var key = finalReducerKeys[i];
+	      var reducer = finalReducers[key];
+	      var previousStateForKey = state[key];
 	      var nextStateForKey = reducer(previousStateForKey, action);
 	      if (typeof nextStateForKey === 'undefined') {
-	        var errorMessage = getUndefinedStateErrorMessage(_key, action);
+	        var errorMessage = getUndefinedStateErrorMessage(key, action);
 	        throw new Error(errorMessage);
 	      }
-	      nextState[_key] = nextStateForKey;
+	      nextState[key] = nextStateForKey;
 	      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
 	    }
 	    return hasChanged ? nextState : state;
@@ -9580,19 +9579,12 @@ webpackJsonp([0],[
 
 /***/ }),
 /* 563 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
 	'use strict';
 	
 	exports.__esModule = true;
 	exports['default'] = bindActionCreators;
-	
-	var _warning = __webpack_require__(562);
-	
-	var _warning2 = _interopRequireDefault(_warning);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
 	function bindActionCreator(actionCreator, dispatch) {
 	  return function () {
 	    return dispatch(actionCreator.apply(undefined, arguments));
@@ -9636,8 +9628,6 @@ webpackJsonp([0],[
 	    var actionCreator = actionCreators[key];
 	    if (typeof actionCreator === 'function') {
 	      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
-	    } else {
-	      (0, _warning2['default'])('bindActionCreators expected a function actionCreator for key \'' + key + '\', instead received type \'' + typeof actionCreator + '\'.');
 	    }
 	  }
 	  return boundActionCreators;
@@ -9740,11 +9730,13 @@ webpackJsonp([0],[
 	    return funcs[0];
 	  }
 	
-	  return funcs.reduce(function (a, b) {
-	    return function () {
-	      return a(b.apply(undefined, arguments));
-	    };
-	  });
+	  var last = funcs[funcs.length - 1];
+	  var rest = funcs.slice(0, -1);
+	  return function () {
+	    return rest.reduceRight(function (composed, f) {
+	      return f(composed);
+	    }, last.apply(undefined, arguments));
+	  };
 	}
 
 /***/ }),
@@ -30796,6 +30788,7 @@ webpackJsonp([0],[
 	exports.SET_ACTIVE_MODULE_REQUEST_FAIL = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST = exports.MOCKER_REQUEST_FAIL = exports.MOCKER_REQUEST_SUCCESS = exports.MOCKER_REQUEST = undefined;
 	exports.loadMocker = loadMocker;
 	exports.setMockerActiveModule = setMockerActiveModule;
+	exports.setMockerDisable = setMockerDisable;
 	
 	var _api = __webpack_require__(567);
 	
@@ -30822,22 +30815,30 @@ webpackJsonp([0],[
 	  };
 	}
 	
-	function requestSetMockerActiveModule(mockerName, mockModuleName) {
+	function requestUpdateMocker(mockerName, newMockerState) {
 	  var _ref2;
 	
 	  return _ref2 = {}, _ref2[_api.CALL_API] = {
 	    types: [SET_ACTIVE_MODULE_REQUEST, SET_ACTIVE_MODULE_REQUEST_SUCCESS, SET_ACTIVE_MODULE_REQUEST_FAIL],
 	    url: '/sys-cgi/mocker/' + mockerName,
 	    type: 'POST',
-	    data: {
-	      activeModule: mockModuleName
-	    }
+	    data: newMockerState
 	  }, _ref2;
 	}
 	
 	function setMockerActiveModule(mockerName, mockModuleName) {
 	  return function (dispatch, getState) {
-	    return dispatch(requestSetMockerActiveModule(mockerName, mockModuleName));
+	    return dispatch(requestUpdateMocker(mockerName, {
+	      activeModule: mockModuleName
+	    }));
+	  };
+	}
+	
+	function setMockerDisable(mockerName, value) {
+	  return function (dispatch, getState) {
+	    return dispatch(requestUpdateMocker(mockerName, {
+	      disable: value
+	    }));
 	  };
 	}
 
@@ -44490,9 +44491,7 @@ webpackJsonp([0],[
 	}
 	
 	function rgb2hex(rgb) {
-	  var alpha = rgb.length === 4 ? componentToHex(rgb[3] * 255) : "";
-	
-	  return "#" + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]) + alpha;
+	  return "#" + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
 	}
 	
 	module.exports = rgb2hex;
@@ -44590,36 +44589,17 @@ webpackJsonp([0],[
 /* 935 */
 /***/ (function(module, exports) {
 
-	function expand(hex) {
-	  var result = "#";
-	
-	  for (var i = 1; i < hex.length; i++) {
-	    var val = hex.charAt(i);
-	    result += val + val;
-	  }
-	
-	  return result;
-	}
-	
 	function hex(hex) {
-	  // #RGB or #RGBA
-	  if(hex.length === 4 || hex.length === 5) {
-	    hex = expand(hex);
+	  if (hex.length === 4) {
+	    hex = '#' + hex.charAt(1) + hex.charAt(1) +
+	      hex.charAt(2) + hex.charAt(2) + 
+	      hex.charAt(3) + hex.charAt(3);
 	  }
-	
-	  var rgb = [
+	  return [
 	    parseInt(hex.substring(1,3), 16),
 	    parseInt(hex.substring(3,5), 16),
 	    parseInt(hex.substring(5,7), 16)
 	  ];
-	
-	  // #RRGGBBAA
-	  if (hex.length === 9) {
-	    var alpha = parseFloat((parseInt(hex.substring(7,9), 16) / 255).toFixed(2));
-	    rgb.push(alpha);
-	  }
-	
-	  return rgb;
 	}
 	
 	module.exports = hex;

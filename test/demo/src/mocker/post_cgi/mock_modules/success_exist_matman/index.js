@@ -1,6 +1,6 @@
-import { success } from '../../base';
+const base = require('../../base');
 
-export default success({
+module.exports = base.success({
   "isExist": true,
   "name": "matman",
   "version": "0.0.1"

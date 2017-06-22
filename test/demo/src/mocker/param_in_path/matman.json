@@ -4,8 +4,21 @@
   "author": "helinjiang",
   "route": "/cgi-bin/a/b/id/:id/:subId",
   "method": "get",
+  "params": [
+    {
+      "name": "id",
+      "type": "number",
+      "defaultValue": 111
+    },
+    {
+      "name": "subId",
+      "type": "number",
+      "defaultValue": 222
+    }
+  ],
   "name": "param_in_path",
-  "activeModule": "success_simple",
+  "disable": false,
+  "activeModule": "error_not_login",
   "modules": [
     {
       "name": "error_not_login",
@@ -20,18 +33,6 @@
       "query": {
         "_m_target": "success_simple"
       }
-    }
-  ],
-  "params": [
-    {
-      "name": "id",
-      "type": "number",
-      "defaultValue": 111
-    },
-    {
-      "name": "subId",
-      "type": "number",
-      "defaultValue": 222
     }
   ]
 }
