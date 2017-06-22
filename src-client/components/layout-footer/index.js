@@ -11,7 +11,7 @@ class LayoutFooter extends Component {
   render() {
     return (
       <div className="layout-footer">
-        XMAN-ADMIN 版权所有
+        matman 版权所有
       </div>
     );
   }

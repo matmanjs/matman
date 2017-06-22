@@ -4,26 +4,25 @@ import { Row, Col, Card, Button, Input } from 'antd';
 import './index.less';
 
 export default function MockerDetail(props) {
-  const { mockerData, curUrl } = props;
+  const { mockerData, curUrl, onShowResult, onParamsChange } = props;
 
   return (
     <div className="mocker-detail">
       <Row>
-        <Col span={24}>
-          <h2>{mockerData.name}</h2>
-          <p>
-            {mockerData.version ? `v${mockerData.version}` : ''}
-            {mockerData.author ? ` by ${mockerData.author}` : ''}
-          </p>
-          <p>{mockerData.description}</p>
-          <p>本地路径：{mockerData._fullPath}</p>
-          <p>配置的路由: {mockerData.route}</p>
-        </Col>
-      </Row>
-
-      <Row>
         <Col span={12}>
           <Card>
+
+            <Button
+              type={mockerData.disable ? 'default' : 'primary'}
+              size="large"
+              icon="link"
+              onClick={onShowResult.bind(this, {})}>
+
+              {mockerData.method} : {curUrl}
+
+            </Button>
+
+
             <div>
               {
                 mockerData.params && mockerData.params.length ? (
@@ -32,17 +31,22 @@ export default function MockerDetail(props) {
                       {item.name}:
                       <Input placeholder={item.name}
                              defaultValue={item.defaultValue}
-                             onChange={props.onParamsChange.bind(this, item.name)}
+                             onChange={onParamsChange.bind(this, item.name)}
                       />
                     </div>
                   })
                 ) : null
               }
-
-              <Button type="primary" size="large" onClick={props.onShowResult.bind(this, {})}>
-                {mockerData.method} : {curUrl}
-              </Button>
             </div>
+
+            <h2>{mockerData.name}</h2>
+            <p>
+              {mockerData.version ? `v${mockerData.version}` : ''}
+              {mockerData.author ? ` by ${mockerData.author}` : ''}
+            </p>
+            <p>{mockerData.description}</p>
+            <p>本地路径：{mockerData._fullPath}</p>
+            <p>配置的路由: {mockerData.route}</p>
           </Card>
         </Col>
 

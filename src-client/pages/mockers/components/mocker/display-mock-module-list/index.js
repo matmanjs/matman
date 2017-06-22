@@ -14,7 +14,7 @@ export default function MockerMockModuleList(props) {
     dataIndex: 'name',
     key: 'name',
     render: (text, record) => (
-      <Button type="primary" size="large" onClick={onShowResult.bind(this, record.query)}>
+      <Button type={mockerData.disable ? 'default' : 'primary'} onClick={onShowResult.bind(this, record.query)}>
         {text}
       </Button>
     ),
@@ -34,19 +34,21 @@ export default function MockerMockModuleList(props) {
     title: 'Action',
     key: 'action',
     render: (text, record) => (
-      <span>
-          {
-            (record.name !== activeModule) ?
-              <a href="javascript:;" onClick={updateActive.bind(this, record.name)}>Active It</a>
-              : <span>Aready active</span>
-          }
+      <div>
+        {
+          (record.name !== activeModule) ?
+            <Button type={mockerData.disable ? 'default' : 'primary'} onClick={updateActive.bind(this, record.name)}>
+              Active It
+            </Button>
+            : <span>Aready active</span>
+        }
 
         <span className="ant-divider" />
-          <a href="#">Edit</a>
+        <Button disabled> 编辑 </Button>
 
-          <span className="ant-divider" />
-          <a href="#">Delete</a>
-        </span>
+        <span className="ant-divider" />
+        <Button disabled> 删除 </Button>
+      </div>
     ),
   }];
 

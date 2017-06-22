@@ -24,7 +24,7 @@ export default function MockerSwitcher(props) {
         )
       }
 
-      <Button type="primary" size="large" onClick={updateDisable}>
+      <Button type={isDisabled ? 'primary' : 'default'} icon="setting" onClick={updateDisable}>
         {isDisabled ? '启用' : '禁用'} mock 服务
       </Button>
 
