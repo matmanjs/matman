@@ -39,3 +39,5 @@ mock module 的 `config.json` 文件中字段的定义
 | `author` | 否 | 作者 |
 | `name` | 否 | 名字，默认为文件名 |
 | `query` | 否 | 对象，额外的请求参数和值 |
+
+如果是 mock 数据，则在 response header 中会有 `matman-mocker` 和 `matman-mock-module` 字段。
