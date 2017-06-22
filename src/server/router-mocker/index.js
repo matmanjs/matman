@@ -44,6 +44,10 @@ module.exports = (entryPath) => {
     res.jsonp(result);
   });
 
+  router.all('*', function (req, res, next) {
+    next();
+  });
+
   // 根据用户配置的路由关系，进行解析
   // console.log('mockerList', mockerList);
   mockerList.forEach((mockerData) => {
@@ -106,65 +110,62 @@ module.exports = (entryPath) => {
           let errMsg = err.stack || err;
 
           console.error(errMsg);
+
+          res.status(500).send(errMsg);
         });
     });
   });
 
-  // GET /*
-  // router.get('/*', function (req, res) {
-  //   // Express的req对象，详见 http://expressjs.com/en/4x/api.html#req
-  //   // 例如：/test/two/?t=1，
-  //   // req.query.t=1
-  //   // req.params[0]="test/two"
-  //
-  //   let mockerBasePath = entry.MOCKER_PATH
-  //   let url = req.params[0];
-  //   let params = req.query;
-  //
-  //   business.getMockModule(mockerBasePath, url, params)
-  //     .then((result) => {
-  //       // res.jsonp({
-  //       //   url: req.url,
-  //       //   params: req.params,
-  //       //   query: req.query,
-  //       //   data: result
-  //       // });
-  //       res.jsonp(result);
-  //     })
-  //     .catch((err) => {
-  //       // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
-  //       let errMsg = err.stack || err;
-  //
-  //       console.error(errMsg);
-  //       // 如果是未知的CGI，则透传结果即可
-  //       if (errMsg === 'UNKNOWN_CGI') {
-  //         // Load remote data
-  //         const opts = {
-  //           url: 'http://' + req.headers.host + req.url,
-  //           json: true
-  //         };
-  //
-  //         request(opts, (err, response) => {
-  //           if (err) {
-  //             res.status(500).send(err);
-  //           } else {
-  //             res.jsonp(response.body);
-  //           }
-  //         })
-  //       } else {
-  //         res.status(500).send(errMsg);
-  //       }
-  //
-  //     });
-  // });
-
   router.use((req, res) => {
-    if (!res.locals.data) {
-      res.status(404);
-      res.locals.data = {};
+    // get 请求
+    // get http://localhost:3000/cgi-bin/a/b/not_exist_cgi?activeModule=error_not_login
+    // req.headers.host="localhost:3000"
+    // req.params[0]="/cgi-bin/a/b/not_exist_cgi"
+    // req.baseUrl=""
+    // req.originalUrl="/cgi-bin/a/b/not_exist_cgi?activeModule=error_not_login"
+    // req.url="/cgi-bin/a/b/not_exist_cgi?activeModule=error_not_login"
+    // req.method="GET"
+    // req.OriginalMethod="GET"
+    // req.query.activeModule = "error_not_login"
+
+    // post 请求
+    // post http://localhost:3000/cgi-bin/a/b/not_exist_cgi data={activeModule:"error_not_login"}
+    // req.params[0]="/cgi-bin/a/b/not_exist_cgi"
+    // req.baseUrl=""
+    // req.originalUrl="/cgi-bin/a/b/not_exist_cgi"
+    // req.url="/cgi-bin/a/b/not_exist_cgi"
+    // req.method="POST"
+    // req.OriginalMethod="POST"
+    // req.body.activeModule = "error_not_login"
+
+    // 未匹配到的请求将会来到这里
+    console.log('[use]', req.url, req.query._m_ignore);
+
+    const opts = {
+      url: 'http://' + req.headers.host + req.url,
+      headers: req.headers,
+      jar: true
+    };
+
+    if (req.method === 'GET') {
+      request
+        .get(_.merge({}, opts))
+        .pipe(res);
+    } else if (req.method === 'POST') {
+      request
+        .post(_.merge({}, opts, {
+          form: req.body
+        }))
+        .pipe(res);
+    } else {
+      if (!res.locals.data) {
+        res.status(404);
+        res.locals.data = {};
+      }
+
+      router.render(req, res);
     }
 
-    router.render(req, res);
   });
 
   router.use((err, req, res, next) => {
