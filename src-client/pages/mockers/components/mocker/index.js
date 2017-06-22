@@ -10,6 +10,8 @@ import MockerShowResult from './display-show-result';
 import MockerSwitcher from './display-switcher';
 import MockerMockModuleList from './display-mock-module-list';
 
+import './index.less';
+
 class Mocker extends Component {
   constructor(props, context) {
     super(props, context);
@@ -165,7 +167,7 @@ class Mocker extends Component {
     const { showModal, modalShowData, actualURL } = this.state;
 
     return (
-      <div>
+      <div className="mockers-mocker">
 
         <MockerBreadcrumb name={mockerData.name} />
 

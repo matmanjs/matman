@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import {
-  Link
-} from 'react-router';
+import { Link } from 'react-router';
 
 import { loadMockerList } from '../../business/mocker-list/action';
+
+import './index.less';
 
 class MockerList extends Component {
   constructor(props, context) {
@@ -19,30 +19,20 @@ class MockerList extends Component {
   }
 
   render() {
-    const { location, route, list } = this.props;
+    const { list } = this.props;
 
     return (
-      <div>
-        <h2>location</h2>
-        <p>{JSON.stringify(location)}</p>
-
-        <h2>route</h2>
-        <p>{JSON.stringify(route)}</p>
-
-        <h2>list</h2>
-        <p>{JSON.stringify(list)}</p>
-
-        <h2>Mocker List</h2>
-
+      <div className="mockers-list">
         <div className="list-wrapper">
           <ul>
             {
               list.map((item, index) => {
                 return (
                   <li key={index}>
-                    <h3>{index + 1}. {item.description}</h3>
-                    <Link to={`/admin/mockers/mocker/${item.name}`}>{item.name}
-                      - {item._fullPath}</Link>
+                    <h3>{index + 1}. {item.name}</h3>
+                    <p>{item.description}</p>
+                    <p>{item._fullPath}</p>
+                    <Link to={`/admin/mockers/mocker/${item.name}`}>{item.name}</Link>
                   </li>
                 )
               })
