@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const request = require('request');
 const Promise = require('bluebird');
+const querystring = require('querystring');
 
 /**
  * 在mock module中进行请求
@@ -36,11 +37,26 @@ function requestInMock(req, params, requestOpts) {
     } else if (req.method === 'POST') {
       let requestOptsForm = requestOpts.form;
 
-      // 移除这个字段，避免又被干扰
+      // 移除form这个字段，避免又被干扰
       delete requestOpts.form;
 
+      let formValue = _.merge({ _m_from: 2 }, req.body, params, requestOptsForm);
+
+      let formValueStr = querystring.stringify(formValue);
+
+      let requestOptsHeaders = requestOpts.headers;
+
+      // 移除headers这个字段，避免又被干扰
+      delete requestOpts.headers;
+
+      // 由于修改了 data，则需要重新设置 content-length 的值
+      let headersValue = _.merge({}, req.headers, {
+        "content-length": Buffer.byteLength(formValueStr)
+      }, requestOptsHeaders);
+
       opts = _.merge({}, defaultRequestOpts, {
-        form: _.merge({ _m_from: 2 }, req.body, params, requestOptsForm),
+        form: formValue,
+        headers: headersValue,
       }, requestOpts);
     } else {
       opts = _.merge({}, defaultRequestOpts, requestOpts);
