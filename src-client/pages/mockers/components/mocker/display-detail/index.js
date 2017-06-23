@@ -4,7 +4,7 @@ import { Row, Col, Card, Button, Input } from 'antd';
 import './index.less';
 
 export default function MockerDetail(props) {
-  const { mockerData, curUrl, onShowResult, onParamsChange } = props;
+  const { mockerData, curUrl, host, onShowResult, onParamsChange } = props;
 
   return (
     <div className="mocker-detail">
@@ -16,7 +16,7 @@ export default function MockerDetail(props) {
               type={mockerData.disable ? 'default' : 'primary'}
               size="large"
               icon="link"
-              onClick={onShowResult.bind(this, {})}>
+              onClick={onShowResult.bind(this, {}, host)}>
 
               {mockerData.method} : {curUrl}
 
