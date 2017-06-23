@@ -23,21 +23,29 @@ export function loadMocker(mockerName) {
   };
 }
 
-function requestSetMockerActiveModule(mockerName, mockModuleName) {
+function requestUpdateMocker(mockerName, newMockerState) {
   return {
     [CALL_API]: {
       types: [SET_ACTIVE_MODULE_REQUEST, SET_ACTIVE_MODULE_REQUEST_SUCCESS, SET_ACTIVE_MODULE_REQUEST_FAIL],
       url: `/sys-cgi/mocker/${mockerName}`,
       type: 'POST',
-      data: {
-        activeModule: mockModuleName,
-      }
+      data: newMockerState
     },
   }
 }
 
 export function setMockerActiveModule(mockerName, mockModuleName) {
   return (dispatch, getState) => {
-    return dispatch(requestSetMockerActiveModule(mockerName, mockModuleName));
+    return dispatch(requestUpdateMocker(mockerName, {
+      activeModule: mockModuleName,
+    }));
+  };
+}
+
+export function setMockerDisable(mockerName, value) {
+  return (dispatch, getState) => {
+    return dispatch(requestUpdateMocker(mockerName, {
+      disable: value,
+    }));
   };
 }

@@ -2,5 +2,7 @@
   "version": "0.0.1",
   "description": "标准CGI返回，查询某个模块",
   "author": "helinjiang",
-  "cgi": "/cgi-bin/a/b/standard_cgi"
+  "route": "/cgi-bin/a/b/standard_cgi",
+  "defaultModule": "success_exist_matman",
+  "method": "get"
 }

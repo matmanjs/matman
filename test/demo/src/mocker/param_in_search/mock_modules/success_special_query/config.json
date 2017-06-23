@@ -1,0 +1,9 @@
+{
+  "version": "0.0.1",
+  "description": "请求参数 id=1&type=new",
+  "author": "helinjiang",
+  "query": {
+    "id": 1,
+    "type": "new"
+  }
+}

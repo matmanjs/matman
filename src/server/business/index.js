@@ -34,34 +34,49 @@ function getMockerList(mockerBasePath) {
 }
 
 /**
- * 根据 url 请求，获取某个 mock module 的结果
+ * 根据 route 请求，获取某个 mock module 的结果
  *
  * @param {String} mockerBasePath
- * @param {String} url 当前请求的 url
+ * @param {String} route 当前请求的 route
  * @param {Object} params req.query值
  * @return {Promise}
  */
-function getMockModule(mockerBasePath, url, params) {
-  // 注意 url 的值前面是没有 / 的，但用户配置 route 时可能会增加，因此需要增加之后再去获取
-  let checkUrlArr = [url, '/' + url];
-
+function getMockModule(mockerBasePath, route, params, req) {
   let jsonFileArr = util.file.getAll(mockerBasePath, { globs: ['*/matman.json'] });
 
   // 循环查找
   for (let i = 0, length = jsonFileArr.length; i < length; i++) {
     let item = jsonFileArr[i];
+
+    // 获取每个 mocker 中的 matman.json 文件内容，以便寻找到相同 route 的那个 mocker
     let db = mocker.db.getDB(path.join(item.basePath, item.relativePath));
     let dbState = db.getState();
-    console.log(dbState);
+    // console.log(dbState);
 
-    if (checkUrlArr.indexOf(dbState.cgi) > -1) {
+    if (route === dbState.route) {
       // 有可能是指定的 mock module， 也可能是当前的 mock module
       let mockModuleName = params._m_target ? params._m_target : dbState.activeModule;
 
       // 组装获取 mock module 的文件地址
       let mockModulePath = path.join(mockerBasePath, dbState.name, 'mock_modules', mockModuleName);
 
-      return mocker.mockerModuleTool.getResult(mockModulePath);
+      // 还有部分参数在 mock module 的 query 字段中
+      for (let j = 0, lengthj = dbState.modules.length; j < lengthj; j++) {
+        let mockModuleItem = dbState.modules[j];
+        if (mockModuleName === mockModuleItem.name) {
+          params = _.merge({}, mockModuleItem.query, params);
+        }
+      }
+
+      return mocker.mockerModuleTool.getResult(mockModulePath, params, req)
+        .then((data) => {
+          return {
+            data: data,
+            mockerDBState: dbState,
+            mockModuleName: mockModuleName,
+            params: params,
+          }
+        });
     }
   }
 
@@ -86,8 +101,9 @@ function getMocker(mockerBasePath, mockerName) {
   let mockerConfigDB = mocker.db.getDB(mockerConfigFile);
   let mockerConfigDBState = mockerConfigDB.getState();
 
-  if (!mockerConfigDBState.cgi) {
-    console.error(mockerConfigFile + ' should define property of "cgi"! ');
+  // 至少得有 route 字段，否则报错
+  if (!mockerConfigDBState.route) {
+    console.error(mockerConfigFile + ' should define property of "route"! ');
     return;
   }
 
@@ -106,7 +122,10 @@ function getMocker(mockerBasePath, mockerName) {
   }
 
   mockerDBState.name = mockerDBState.name || mockerName;
+  mockerDBState.disable = mockerDBState.disable || false;
+  mockerDBState.description = mockerDBState.description || mockerDBState.name;
   mockerDBState.activeModule = mockerDBState.activeModule || mockerDBState.defaultModule;
+  mockerDBState.method = mockerDBState.method || 'get';
 
   // 获取当前的 mocker 下的 modules 列表
   let modules = [];
@@ -135,7 +154,9 @@ function getMocker(mockerBasePath, mockerName) {
 
     mockModuleData.name = mockModuleData.name || mockModuleName;
     mockModuleData.description = mockModuleData.description || mockModuleName;
-    mockModuleData.cgi = mockModuleData.cgi || mockerDBState.cgi + (mockerDBState.cgi.indexOf('?') > -1 ? '&' : '?') + '_m_target=' + mockModuleName;
+
+    // TODO 如果是 /id/:id 类型的，则此处可能会有问题，或许还需要把请求值放入到query中
+    mockModuleData.query = _.merge({}, mockModuleData.query, { _m_target: mockModuleName });
 
     modules.push(mockModuleData);
   });
@@ -151,15 +172,20 @@ function getMocker(mockerBasePath, mockerName) {
   // 更新到 matman.json
   mockerDB.setState(mockerDBState);
 
+  // 如果是 id/:id 的形式，则params也需要有
+
   return _.merge({}, mockerDBState, {
     _fullPath: curMockerPath,
   });
 }
 
 /**
- * 设置 mocker 的 activeModule
+ * 更新 mocker 的 信息
+ * @param mockerBasePath
+ * @param mockerName
+ * @param newState
  */
-function setActiveModule(mockerBasePath, mockerName, activeModule) {
+function updateMocker(mockerBasePath, mockerName, newState) {
   let curMockerPath = path.join(mockerBasePath, mockerName);
 
   // 获取这个 mocker 模块的详细信息
@@ -167,7 +193,7 @@ function setActiveModule(mockerBasePath, mockerName, activeModule) {
 
   // 更新 mocker db 数据
   let mockerDBState = mockerDB.getState();
-  mockerDBState.activeModule = activeModule;
+  mockerDBState = _.merge({}, mockerDBState, newState);
   mockerDB.setState(mockerDBState);
 
   return mockerDBState;
@@ -176,8 +202,8 @@ function setActiveModule(mockerBasePath, mockerName, activeModule) {
 module.exports = {
   getMockerList: getMockerList,
   getMocker: getMocker,
-  getMockModule: getMockModule,
-  setActiveModule: setActiveModule,
+  updateMocker: updateMocker,
+  getMockModule: getMockModule
 };
 
 

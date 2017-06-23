@@ -26,11 +26,11 @@ webpackJsonp([0],[
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _Root = __webpack_require__(1165);
+	var _Root = __webpack_require__(1204);
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
-	__webpack_require__(1168);
+	__webpack_require__(1207);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -13608,10 +13608,7 @@ webpackJsonp([0],[
 	
 	var initialState = {
 	  isLoaded: false,
-	  data: {
-	    _cache: {},
-	    modules: []
-	  }
+	  data: {}
 	};
 	
 	function mockerInfo() {
@@ -13623,6 +13620,11 @@ webpackJsonp([0],[
 	
 	
 	  switch (type) {
+	    case _action.MOCKER_REQUEST:
+	      update = {
+	        isLoaded: false
+	      };
+	      break;
 	    case _action.MOCKER_REQUEST_SUCCESS:
 	      update = {
 	        isLoaded: true,
@@ -30788,6 +30790,7 @@ webpackJsonp([0],[
 	exports.SET_ACTIVE_MODULE_REQUEST_FAIL = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST = exports.MOCKER_REQUEST_FAIL = exports.MOCKER_REQUEST_SUCCESS = exports.MOCKER_REQUEST = undefined;
 	exports.loadMocker = loadMocker;
 	exports.setMockerActiveModule = setMockerActiveModule;
+	exports.setMockerDisable = setMockerDisable;
 	
 	var _api = __webpack_require__(567);
 	
@@ -30814,22 +30817,30 @@ webpackJsonp([0],[
 	  };
 	}
 	
-	function requestSetMockerActiveModule(mockerName, mockModuleName) {
+	function requestUpdateMocker(mockerName, newMockerState) {
 	  var _ref2;
 	
 	  return _ref2 = {}, _ref2[_api.CALL_API] = {
 	    types: [SET_ACTIVE_MODULE_REQUEST, SET_ACTIVE_MODULE_REQUEST_SUCCESS, SET_ACTIVE_MODULE_REQUEST_FAIL],
 	    url: '/sys-cgi/mocker/' + mockerName,
 	    type: 'POST',
-	    data: {
-	      activeModule: mockModuleName
-	    }
+	    data: newMockerState
 	  }, _ref2;
 	}
 	
 	function setMockerActiveModule(mockerName, mockModuleName) {
 	  return function (dispatch, getState) {
-	    return dispatch(requestSetMockerActiveModule(mockerName, mockModuleName));
+	    return dispatch(requestUpdateMocker(mockerName, {
+	      activeModule: mockModuleName
+	    }));
+	  };
+	}
+	
+	function setMockerDisable(mockerName, value) {
+	  return function (dispatch, getState) {
+	    return dispatch(requestUpdateMocker(mockerName, {
+	      disable: value
+	    }));
 	  };
 	}
 
@@ -46993,7 +47004,7 @@ webpackJsonp([0],[
 	        return replace('/admin/home');
 	      }
 	    },
-	    childRoutes: [__webpack_require__(1026).default, __webpack_require__(1030).default]
+	    childRoutes: [__webpack_require__(1017).default, __webpack_require__(1021).default]
 	  }]
 	};
 
@@ -47037,11 +47048,7 @@ webpackJsonp([0],[
 	
 	var _layoutHeader2 = _interopRequireDefault(_layoutHeader);
 	
-	var _layoutBreadcrumb = __webpack_require__(1014);
-	
-	var _layoutBreadcrumb2 = _interopRequireDefault(_layoutBreadcrumb);
-	
-	var _layoutFooter = __webpack_require__(1023);
+	var _layoutFooter = __webpack_require__(1014);
 	
 	var _layoutFooter2 = _interopRequireDefault(_layoutFooter);
 	
@@ -47067,15 +47074,10 @@ webpackJsonp([0],[
 	        'div',
 	        { className: 'layout-main' },
 	        _react2.default.createElement(_layoutHeader2.default, null),
-	        _react2.default.createElement(_layoutBreadcrumb2.default, null),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'layout-container' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'layout-content' },
-	            this.props.children
-	          )
+	          this.props.children
 	        ),
 	        _react2.default.createElement(_layoutFooter2.default, null)
 	      )
@@ -47510,6 +47512,7 @@ webpackJsonp([0],[
 	    _this.state = {
 	      defaultSelectedKeys: [],
 	      defaultOpenKeys: [],
+	      selectedKeys: [],
 	      needInitMenu: false
 	    };
 	
@@ -47534,8 +47537,17 @@ webpackJsonp([0],[
 	
 	      this.setState({
 	        defaultSelectedKeys: defaultSelectedKeys,
+	        selectedKeys: defaultSelectedKeys,
 	        defaultOpenKeys: defaultOpenKeys,
 	        needInitMenu: true
+	      });
+	    }
+	
+	    if (this.props.pathname !== nextProps.pathname) {
+	      console.log(this.props.pathname + ' => ' + nextProps.pathname);
+	
+	      this.setState({
+	        selectedKeys: this.getSelectedKeys(menuDataMap, nextProps.pathname)
 	      });
 	    }
 	  };
@@ -47564,6 +47576,29 @@ webpackJsonp([0],[
 	  /**
 	   * 获取菜单中默认选中的菜单对应的id数组
 	   * @param {Object} menuDataMap <id,menuOBJ>键值对
+	   * @param {String} curPathName 当前的 pathname
+	   * @return {Array}
+	   */
+	
+	
+	  LayoutSidebar.prototype.getSelectedKeys = function getSelectedKeys(menuDataMap, curPathName) {
+	    var arr = [];
+	
+	    (0, _keys2.default)(menuDataMap).forEach(function (id) {
+	      var curMenu = menuDataMap[id];
+	      if (curMenu && (curMenu.indexOnly && curPathName === curMenu.url || curPathName.indexOf(curMenu.url) > -1)) {
+	        arr.push(id);
+	      }
+	    });
+	
+	    // console.log('getSelectedKeys', arr);
+	
+	    return arr;
+	  };
+	
+	  /**
+	   * 获取菜单中默认选中的菜单对应的id数组
+	   * @param {Object} menuDataMap <id,menuOBJ>键值对
 	   * @return {Array}
 	   */
 	
@@ -47579,6 +47614,8 @@ webpackJsonp([0],[
 	        arr.push(id);
 	      }
 	    });
+	
+	    // console.log('getDefaultSelectedKeys', arr);
 	
 	    return arr;
 	  };
@@ -47609,6 +47646,8 @@ webpackJsonp([0],[
 	    selectedKeys.forEach(function (id) {
 	      _getKeys(id);
 	    });
+	
+	    // console.log('getDefaultOpenKeys', arr);
 	
 	    return arr;
 	  };
@@ -47691,6 +47730,7 @@ webpackJsonp([0],[
 	        _state = this.state,
 	        defaultSelectedKeys = _state.defaultSelectedKeys,
 	        defaultOpenKeys = _state.defaultOpenKeys,
+	        selectedKeys = _state.selectedKeys,
 	        needInitMenu = _state.needInitMenu,
 	        isShowMenu = needInitMenu && menuData && (0, _keys2.default)(menuData).length;
 	
@@ -47707,6 +47747,7 @@ webpackJsonp([0],[
 	        { mode: 'inline', theme: 'dark',
 	          defaultSelectedKeys: defaultSelectedKeys,
 	          defaultOpenKeys: defaultOpenKeys,
+	          selectedKeys: selectedKeys,
 	          onSelect: this.handleSelectMenu },
 	        menuData.children.map(function (item) {
 	          return _this4.getRenderMenuItem(item);
@@ -47734,13 +47775,15 @@ webpackJsonp([0],[
 	
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  var sidebarInfo = state.sidebarInfo;
+	  var sidebarInfo = state.sidebarInfo,
+	      routing = state.routing;
 	
 	
 	  return {
 	    collapse: sidebarInfo.collapse,
 	    menuData: sidebarInfo.menuData,
-	    menuDataMap: sidebarInfo.menuDataMap
+	    menuDataMap: sidebarInfo.menuDataMap,
+	    pathname: routing.locationBeforeTransitions.pathname
 	  };
 	};
 	
@@ -52943,11 +52986,11 @@ webpackJsonp([0],[
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
-	__webpack_require__(1012);
-	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	__webpack_require__(1012);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -53011,7 +53054,7 @@ webpackJsonp([0],[
 	
 	
 	// module
-	exports.push([module.id, ".layout-header {\n  background: #fff;\n  height: 64px;\n  border-bottom: 1px solid #e9e9e9;\n}\n", ""]);
+	exports.push([module.id, ".layout-header {\n  height: 64px;\n  line-height: 64px;\n  padding: 0 16px;\n  border-bottom: 1px solid #e9e9e9;\n  background: #fff;\n}\n", ""]);
 	
 	// exports
 
@@ -53024,162 +53067,9 @@ webpackJsonp([0],[
 	
 	exports.__esModule = true;
 	
-	var _css = __webpack_require__(1015);
-	
-	var _breadcrumb = __webpack_require__(1018);
-	
-	var _breadcrumb2 = _interopRequireDefault(_breadcrumb);
-	
 	var _classCallCheck2 = __webpack_require__(874);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-	
-	var _possibleConstructorReturn2 = __webpack_require__(875);
-	
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-	
-	var _inherits2 = __webpack_require__(893);
-	
-	var _inherits3 = _interopRequireDefault(_inherits2);
-	
-	__webpack_require__(1021);
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var LayoutBreadcrumb = function (_Component) {
-	  (0, _inherits3.default)(LayoutBreadcrumb, _Component);
-	
-	  function LayoutBreadcrumb(props, context) {
-	    (0, _classCallCheck3.default)(this, LayoutBreadcrumb);
-	    return (0, _possibleConstructorReturn3.default)(this, _Component.call(this, props, context));
-	  }
-	
-	  LayoutBreadcrumb.prototype.render = function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'layout-breadcrumb' },
-	      _react2.default.createElement(
-	        _breadcrumb2.default,
-	        null,
-	        _react2.default.createElement(
-	          _breadcrumb2.default.Item,
-	          null,
-	          '\u9996\u9875'
-	        ),
-	        _react2.default.createElement(
-	          _breadcrumb2.default.Item,
-	          null,
-	          '\u5E94\u7528\u5217\u8868'
-	        ),
-	        _react2.default.createElement(
-	          _breadcrumb2.default.Item,
-	          null,
-	          '\u67D0\u5E94\u7528'
-	        )
-	      )
-	    );
-	  };
-	
-	  return LayoutBreadcrumb;
-	}(_react.Component);
-	
-	exports.default = LayoutBreadcrumb;
-
-/***/ }),
-/* 1015 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	__webpack_require__(963);
-	
-	__webpack_require__(1016);
-
-/***/ }),
-/* 1016 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(1017);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(959)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!../../../../css-loader/index.js!./index.css", function() {
-				var newContent = require("!!../../../../css-loader/index.js!./index.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ }),
-/* 1017 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(958)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".ant-breadcrumb {\n  color: rgba(0, 0, 0, 0.65);\n  font-size: 12px;\n}\n.ant-breadcrumb a {\n  color: rgba(0, 0, 0, 0.65);\n  transition: color .3s;\n}\n.ant-breadcrumb a:hover {\n  color: #49a9ee;\n}\n.ant-breadcrumb > span:last-child {\n  font-weight: bold;\n  color: rgba(0, 0, 0, 0.65);\n}\n.ant-breadcrumb > span:last-child .ant-breadcrumb-separator {\n  display: none;\n}\n.ant-breadcrumb-separator {\n  margin: 0 8px;\n  color: rgba(0, 0, 0, 0.3);\n}\n.ant-breadcrumb-link > .anticon + span {\n  margin-left: 4px;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ }),
-/* 1018 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _Breadcrumb = __webpack_require__(1019);
-	
-	var _Breadcrumb2 = _interopRequireDefault(_Breadcrumb);
-	
-	var _BreadcrumbItem = __webpack_require__(1020);
-	
-	var _BreadcrumbItem2 = _interopRequireDefault(_BreadcrumbItem);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	_Breadcrumb2['default'].Item = _BreadcrumbItem2['default'];
-	exports['default'] = _Breadcrumb2['default'];
-	module.exports = exports['default'];
-
-/***/ }),
-/* 1019 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _classCallCheck2 = __webpack_require__(874);
-	
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-	
-	var _createClass2 = __webpack_require__(968);
-	
-	var _createClass3 = _interopRequireDefault(_createClass2);
 	
 	var _possibleConstructorReturn2 = __webpack_require__(875);
 	
@@ -53193,309 +53083,7 @@ webpackJsonp([0],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _propTypes = __webpack_require__(483);
-	
-	var _propTypes2 = _interopRequireDefault(_propTypes);
-	
-	var _warning = __webpack_require__(1005);
-	
-	var _warning2 = _interopRequireDefault(_warning);
-	
-	var _BreadcrumbItem = __webpack_require__(1020);
-	
-	var _BreadcrumbItem2 = _interopRequireDefault(_BreadcrumbItem);
-	
-	var _classnames = __webpack_require__(960);
-	
-	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function getBreadcrumbName(route, params) {
-	    if (!route.breadcrumbName) {
-	        return null;
-	    }
-	    var paramsKeys = Object.keys(params).join('|');
-	    var name = route.breadcrumbName.replace(new RegExp(':(' + paramsKeys + ')', 'g'), function (replacement, key) {
-	        return params[key] || replacement;
-	    });
-	    return name;
-	}
-	function defaultItemRender(route, params, routes, paths) {
-	    var isLastItem = routes.indexOf(route) === routes.length - 1;
-	    var name = getBreadcrumbName(route, params);
-	    return isLastItem ? _react2['default'].createElement(
-	        'span',
-	        null,
-	        name
-	    ) : _react2['default'].createElement(
-	        'a',
-	        { href: '#/' + paths.join('/') },
-	        name
-	    );
-	}
-	
-	var Breadcrumb = function (_React$Component) {
-	    (0, _inherits3['default'])(Breadcrumb, _React$Component);
-	
-	    function Breadcrumb() {
-	        (0, _classCallCheck3['default'])(this, Breadcrumb);
-	        return (0, _possibleConstructorReturn3['default'])(this, (Breadcrumb.__proto__ || Object.getPrototypeOf(Breadcrumb)).apply(this, arguments));
-	    }
-	
-	    (0, _createClass3['default'])(Breadcrumb, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var props = this.props;
-	            (0, _warning2['default'])(!('linkRender' in props || 'nameRender' in props), '`linkRender` and `nameRender` are removed, please use `itemRender` instead, ' + 'see: http://u.ant.design/item-render.');
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var crumbs = void 0;
-	            var _props = this.props,
-	                separator = _props.separator,
-	                prefixCls = _props.prefixCls,
-	                style = _props.style,
-	                className = _props.className,
-	                routes = _props.routes,
-	                _props$params = _props.params,
-	                params = _props$params === undefined ? {} : _props$params,
-	                children = _props.children,
-	                _props$itemRender = _props.itemRender,
-	                itemRender = _props$itemRender === undefined ? defaultItemRender : _props$itemRender;
-	
-	            if (routes && routes.length > 0) {
-	                var paths = [];
-	                crumbs = routes.map(function (route) {
-	                    route.path = route.path || '';
-	                    var path = route.path.replace(/^\//, '');
-	                    Object.keys(params).forEach(function (key) {
-	                        path = path.replace(':' + key, params[key]);
-	                    });
-	                    if (path) {
-	                        paths.push(path);
-	                    }
-	                    return _react2['default'].createElement(
-	                        _BreadcrumbItem2['default'],
-	                        { separator: separator, key: route.breadcrumbName || path },
-	                        itemRender(route, params, routes, paths)
-	                    );
-	                });
-	            } else if (children) {
-	                crumbs = _react2['default'].Children.map(children, function (element, index) {
-	                    if (!element) {
-	                        return element;
-	                    }
-	                    (0, _warning2['default'])(element.type && element.type.__ANT_BREADCRUMB_ITEM, 'Breadcrumb only accepts Breadcrumb.Item as it\'s children');
-	                    return (0, _react.cloneElement)(element, {
-	                        separator: separator,
-	                        key: index
-	                    });
-	                });
-	            }
-	            return _react2['default'].createElement(
-	                'div',
-	                { className: (0, _classnames2['default'])(className, prefixCls), style: style },
-	                crumbs
-	            );
-	        }
-	    }]);
-	    return Breadcrumb;
-	}(_react2['default'].Component);
-	
-	exports['default'] = Breadcrumb;
-	
-	Breadcrumb.defaultProps = {
-	    prefixCls: 'ant-breadcrumb',
-	    separator: '/'
-	};
-	Breadcrumb.propTypes = {
-	    prefixCls: _propTypes2['default'].string,
-	    separator: _propTypes2['default'].node,
-	    routes: _propTypes2['default'].array,
-	    params: _propTypes2['default'].object,
-	    linkRender: _propTypes2['default'].func,
-	    nameRender: _propTypes2['default'].func
-	};
-	module.exports = exports['default'];
-
-/***/ }),
-/* 1020 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _extends2 = __webpack_require__(901);
-	
-	var _extends3 = _interopRequireDefault(_extends2);
-	
-	var _classCallCheck2 = __webpack_require__(874);
-	
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-	
-	var _createClass2 = __webpack_require__(968);
-	
-	var _createClass3 = _interopRequireDefault(_createClass2);
-	
-	var _possibleConstructorReturn2 = __webpack_require__(875);
-	
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-	
-	var _inherits2 = __webpack_require__(893);
-	
-	var _inherits3 = _interopRequireDefault(_inherits2);
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _propTypes = __webpack_require__(483);
-	
-	var _propTypes2 = _interopRequireDefault(_propTypes);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	var __rest = undefined && undefined.__rest || function (s, e) {
-	    var t = {};
-	    for (var p in s) {
-	        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-	    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-	        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
-	    }return t;
-	};
-	
-	var BreadcrumbItem = function (_React$Component) {
-	    (0, _inherits3['default'])(BreadcrumbItem, _React$Component);
-	
-	    function BreadcrumbItem() {
-	        (0, _classCallCheck3['default'])(this, BreadcrumbItem);
-	        return (0, _possibleConstructorReturn3['default'])(this, (BreadcrumbItem.__proto__ || Object.getPrototypeOf(BreadcrumbItem)).apply(this, arguments));
-	    }
-	
-	    (0, _createClass3['default'])(BreadcrumbItem, [{
-	        key: 'render',
-	        value: function render() {
-	            var _a = this.props,
-	                prefixCls = _a.prefixCls,
-	                separator = _a.separator,
-	                children = _a.children,
-	                restProps = __rest(_a, ["prefixCls", "separator", "children"]);
-	            var link = void 0;
-	            if ('href' in this.props) {
-	                link = _react2['default'].createElement(
-	                    'a',
-	                    (0, _extends3['default'])({ className: prefixCls + '-link' }, restProps),
-	                    children
-	                );
-	            } else {
-	                link = _react2['default'].createElement(
-	                    'span',
-	                    (0, _extends3['default'])({ className: prefixCls + '-link' }, restProps),
-	                    children
-	                );
-	            }
-	            if (children) {
-	                return _react2['default'].createElement(
-	                    'span',
-	                    null,
-	                    link,
-	                    _react2['default'].createElement(
-	                        'span',
-	                        { className: prefixCls + '-separator' },
-	                        separator
-	                    )
-	                );
-	            }
-	            return null;
-	        }
-	    }]);
-	    return BreadcrumbItem;
-	}(_react2['default'].Component);
-	
-	exports['default'] = BreadcrumbItem;
-	
-	BreadcrumbItem.__ANT_BREADCRUMB_ITEM = true;
-	BreadcrumbItem.defaultProps = {
-	    prefixCls: 'ant-breadcrumb',
-	    separator: '/'
-	};
-	BreadcrumbItem.propTypes = {
-	    prefixCls: _propTypes2['default'].string,
-	    separator: _propTypes2['default'].oneOfType([_propTypes2['default'].string, _propTypes2['default'].element]),
-	    href: _propTypes2['default'].string
-	};
-	module.exports = exports['default'];
-
-/***/ }),
-/* 1021 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-	
-	// load the styles
-	var content = __webpack_require__(1022);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(959)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/index.js!./index.less", function() {
-				var newContent = require("!!../../../node_modules/css-loader/index.js!../../../node_modules/less-loader/dist/index.js!./index.less");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ }),
-/* 1022 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(958)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, ".layout-breadcrumb {\n  margin: 7px 0 -17px 24px;\n}\n", ""]);
-	
-	// exports
-
-
-/***/ }),
-/* 1023 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	exports.__esModule = true;
-	
-	var _classCallCheck2 = __webpack_require__(874);
-	
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-	
-	var _possibleConstructorReturn2 = __webpack_require__(875);
-	
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-	
-	var _inherits2 = __webpack_require__(893);
-	
-	var _inherits3 = _interopRequireDefault(_inherits2);
-	
-	__webpack_require__(1024);
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
+	__webpack_require__(1015);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -53511,7 +53099,7 @@ webpackJsonp([0],[
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'layout-footer' },
-	      'XMAN-ADMIN \u7248\u6743\u6240\u6709'
+	      'matman \u7248\u6743\u6240\u6709'
 	    );
 	  };
 	
@@ -53521,13 +53109,13 @@ webpackJsonp([0],[
 	exports.default = LayoutFooter;
 
 /***/ }),
-/* 1024 */
+/* 1015 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(1025);
+	var content = __webpack_require__(1016);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(959)(content, {});
@@ -53547,7 +53135,7 @@ webpackJsonp([0],[
 	}
 
 /***/ }),
-/* 1025 */
+/* 1016 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(958)();
@@ -53561,7 +53149,7 @@ webpackJsonp([0],[
 
 
 /***/ }),
-/* 1026 */
+/* 1017 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53571,16 +53159,16 @@ webpackJsonp([0],[
 	  path: '/admin/home',
 	  getComponent: function getComponent(nextState, cb) {
 	    __webpack_require__.e/* nsure */(1, function (require) {
-	      cb(null, __webpack_require__(1027).default);
+	      cb(null, __webpack_require__(1018).default);
 	    });
 	  }
 	};
 
 /***/ }),
-/* 1027 */,
-/* 1028 */,
-/* 1029 */,
-/* 1030 */
+/* 1018 */,
+/* 1019 */,
+/* 1020 */,
+/* 1021 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53597,17 +53185,26 @@ webpackJsonp([0],[
 	
 	  getComponent: function getComponent(nextState, cb) {
 	    __webpack_require__.e/* nsure */(2, function (require) {
-	      cb(null, __webpack_require__(1031).default);
+	      cb(null, __webpack_require__(1022).default);
 	    });
 	  },
 	  getChildRoutes: function getChildRoutes(partialNextState, cb) {
 	    __webpack_require__.e/* nsure */(3, function (require) {
-	      cb(null, [__webpack_require__(1032).default, __webpack_require__(1036).default]);
+	      cb(null, [__webpack_require__(1023).default, __webpack_require__(1027).default]);
 	    });
 	  }
 	};
 
 /***/ }),
+/* 1022 */,
+/* 1023 */,
+/* 1024 */,
+/* 1025 */,
+/* 1026 */,
+/* 1027 */,
+/* 1028 */,
+/* 1029 */,
+/* 1030 */,
 /* 1031 */,
 /* 1032 */,
 /* 1033 */,
@@ -53742,20 +53339,59 @@ webpackJsonp([0],[
 /* 1162 */,
 /* 1163 */,
 /* 1164 */,
-/* 1165 */
+/* 1165 */,
+/* 1166 */,
+/* 1167 */,
+/* 1168 */,
+/* 1169 */,
+/* 1170 */,
+/* 1171 */,
+/* 1172 */,
+/* 1173 */,
+/* 1174 */,
+/* 1175 */,
+/* 1176 */,
+/* 1177 */,
+/* 1178 */,
+/* 1179 */,
+/* 1180 */,
+/* 1181 */,
+/* 1182 */,
+/* 1183 */,
+/* 1184 */,
+/* 1185 */,
+/* 1186 */,
+/* 1187 */,
+/* 1188 */,
+/* 1189 */,
+/* 1190 */,
+/* 1191 */,
+/* 1192 */,
+/* 1193 */,
+/* 1194 */,
+/* 1195 */,
+/* 1196 */,
+/* 1197 */,
+/* 1198 */,
+/* 1199 */,
+/* 1200 */,
+/* 1201 */,
+/* 1202 */,
+/* 1203 */,
+/* 1204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
 	if (process.env.NODE_ENV === 'production') {
-	  module.exports = __webpack_require__(1166);
+	  module.exports = __webpack_require__(1205);
 	} else {
-	  module.exports = __webpack_require__(1167);
+	  module.exports = __webpack_require__(1206);
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 1166 */
+/* 1205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53794,7 +53430,7 @@ webpackJsonp([0],[
 	})(Root);
 
 /***/ }),
-/* 1167 */
+/* 1206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53842,13 +53478,13 @@ webpackJsonp([0],[
 	})(Root);
 
 /***/ }),
-/* 1168 */
+/* 1207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(1169);
+	var content = __webpack_require__(1208);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(959)(content, {});
@@ -53868,7 +53504,7 @@ webpackJsonp([0],[
 	}
 
 /***/ }),
-/* 1169 */
+/* 1208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(958)();
@@ -53876,7 +53512,7 @@ webpackJsonp([0],[
 	
 	
 	// module
-	exports.push([module.id, "#root {\n  height: 100%;\n}\n#root .dev-root {\n  height: 100%;\n}\n", ""]);
+	exports.push([module.id, "body {\n  font-size: 14px;\n}\n#root {\n  height: 100%;\n}\n#root .dev-root {\n  height: 100%;\n}\n", ""]);
 	
 	// exports
 
