@@ -10,7 +10,7 @@ const Promise = require('bluebird');
  * @param {Object} requestOpts request组件的opts参数
  * @return {Promise}
  */
-function ajaxInMock(req, params, requestOpts) {
+function requestInMock(req, params, requestOpts) {
   return new Promise((resolve, reject) => {
     const defaultRequestOpts = {
       url: 'http://' + req.headers.host + req.url,
@@ -70,5 +70,5 @@ function ajaxInMock(req, params, requestOpts) {
 }
 
 module.exports = {
-  ajaxInMock: ajaxInMock,
+  requestInMock: requestInMock,
 };

@@ -5,5 +5,5 @@ const request = require('./request');
 module.exports = {
   fse: fse,
   file: file,
-  ajaxInMock: request.ajaxInMock
+  requestInMock: request.requestInMock
 };
