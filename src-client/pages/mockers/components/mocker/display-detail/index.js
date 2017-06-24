@@ -4,7 +4,26 @@ import { Row, Col, Card, Button, Input } from 'antd';
 import './index.less';
 
 export default function MockerDetail(props) {
-  const { mockerData, curUrl, host, onShowResult, onParamsChange } = props;
+  const { mockerData, actualURL, onShowResult, onParamsChange } = props;
+
+  let curUrl = actualURL;
+
+  // 获得当前激活状态的那个 mock module
+  let mockModuleList = mockerData.modules || [],
+    mockModuleData;
+
+  for (let i = 0, length = mockModuleList.length; i < length; i++) {
+    let curMockModule = mockModuleList[i];
+
+    if (curMockModule.name === mockerData.activeModule) {
+      if (curMockModule.host) {
+        curUrl = `http://${curMockModule.host}${curUrl}`;
+      }
+
+      mockModuleData = curMockModule;
+      break;
+    }
+  }
 
   return (
     <div className="mocker-detail">
@@ -16,7 +35,7 @@ export default function MockerDetail(props) {
               type={mockerData.disable ? 'default' : 'primary'}
               size="large"
               icon="link"
-              onClick={onShowResult.bind(this, {}, host)}>
+              onClick={onShowResult.bind(this, mockModuleData.query, mockModuleData.host)}>
 
               {mockerData.method} : {curUrl}
 

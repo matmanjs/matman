@@ -22,6 +22,7 @@ mocker 的 `config.json` 文件中字段的定义
 | 字段名 | 是否必须 | 含义描述 |
 | --- | --- | --- |
 | `route` | 是 | 路由 |
+| `routeExtra` | 否 | 对象，路由匹配的额外定义，一旦定义了这个字段，则不仅校验 `route`，请求参数还要满足 `routeExtra` 的限制 |
 | `disable` | 否 | 如果该值为 `true`，则会直接请求现网数据，不再使用 mock 服务了 |
 | `params` | 否 | 数组，如果路由中包含了参数，则必须定义它。例如 `/a/b/id/:id`，则需要定义 `[{"name": "id","type": "number"}]` |
 | `method` | 否 | 请求类型：`get`、`post` 等， 默认为 `get` |

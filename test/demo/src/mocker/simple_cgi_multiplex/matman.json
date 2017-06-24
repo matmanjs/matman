@@ -1,0 +1,30 @@
+{
+  "route": "/cgi-bin/a/b/simple_cgi",
+  "routeExtra": {
+    "type": 1
+  },
+  "name": "simple_cgi_multiplex",
+  "disable": false,
+  "description": "simple_cgi_multiplex",
+  "activeModule": "error_not_login",
+  "method": "get",
+  "modules": [
+    {
+      "query": {
+        "type": 1,
+        "_m_target": "error_not_login"
+      },
+      "name": "error_not_login",
+      "description": "error_not_login"
+    },
+    {
+      "query": {
+        "type": 1,
+        "_m_target": "success_hello"
+      },
+      "name": "success_hello",
+      "description": "success_hello"
+    }
+  ],
+  "createdAt": 1498274270612
+}

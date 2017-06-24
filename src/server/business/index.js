@@ -33,18 +33,10 @@ function getMockerList(mockerBasePath) {
   return mockerArr;
 }
 
-/**
- * 根据 route 请求，获取某个 mock module 的结果
- *
- * @param {String} mockerBasePath
- * @param {String} route 当前请求的 route
- * @param {Object} params req.query值
- * @return {Promise}
- */
-function getMockModule(mockerBasePath, route, params, req) {
-  let jsonFileArr = util.file.getAll(mockerBasePath, { globs: ['*/matman.json'] });
+function getCurMocker(jsonFileArr, route, params = {}) {
+  let arr = [];
 
-  // 循环查找
+  // 循环查找所有的 matman.json 文件，对比 route 字段，可能会有多个匹配
   for (let i = 0, length = jsonFileArr.length; i < length; i++) {
     let item = jsonFileArr[i];
 
@@ -53,34 +45,111 @@ function getMockModule(mockerBasePath, route, params, req) {
     let dbState = db.getState();
     // console.log(dbState);
 
+    // 不仅校验 dbState.route ，还需要校验 dbState.routeExtra
     if (route === dbState.route) {
-      // 有可能是指定的 mock module， 也可能是当前的 mock module
-      let mockModuleName = params._m_target ? params._m_target : dbState.activeModule;
-
-      // 组装获取 mock module 的文件地址
-      let mockModulePath = path.join(mockerBasePath, dbState.name, 'mock_modules', mockModuleName);
-
-      // 还有部分参数在 mock module 的 query 字段中
-      for (let j = 0, lengthj = dbState.modules.length; j < lengthj; j++) {
-        let mockModuleItem = dbState.modules[j];
-        if (mockModuleName === mockModuleItem.name) {
-          params = _.merge({}, mockModuleItem.query, params);
-        }
-      }
-
-      return mocker.mockerModuleTool.getResult(mockModulePath, params, req)
-        .then((data) => {
-          return {
-            data: data,
-            mockerDBState: dbState,
-            mockModuleName: mockModuleName,
-            params: params,
-          }
-        });
+      arr.push(dbState);
     }
   }
 
-  return Promise.reject('UNKNOWN_CGI');
+  // 如果只有一个匹配，则一定是它
+  if (arr.length < 2) {
+    return arr[0];
+  }
+
+  let paramsKeyLength = Object.keys(params).length;
+
+  let pureOne;
+
+  // 有多个匹配时，要比对 routeExtra 值
+  for (let j = 0, lengthj = arr.length; j < lengthj; j++) {
+    let curMockerData = arr[j],
+      routeExtra = curMockerData.routeExtra || {},
+      routeExtraKeys = Object.keys(routeExtra),
+      routeExtraKeyLength = routeExtraKeys.length;
+
+    if (!routeExtraKeyLength) {
+      // 如果没有配置限定
+
+      if (!paramsKeyLength) {
+        // 如果请求参数也为空，则就是它了
+        return curMockerData;
+      }
+
+      // 如果请求参数不为空，这个很难判断，但如果没有其他精准匹配结果，则返回它
+      pureOne = curMockerData;
+
+    } else {
+      // 如果配置了限定
+
+      if (!paramsKeyLength) {
+        // 如果请求参数也为空，则肯定不是它
+        continue;
+      }
+
+      let isFound = true;
+
+      // 如果请求参数不为空，则对比参数值
+      for (let k = 0; k < routeExtraKeyLength; k++) {
+        let field = routeExtraKeys[k];
+
+        // 这里都转化为字符串来比较，一旦不相等，则不再判断了
+        if ((routeExtra[field] + '') !== (params[field] + '')) {
+          isFound = false;
+          break;
+        }
+      }
+
+      if (isFound) {
+        return curMockerData;
+      }
+    }
+  }
+
+  return pureOne;
+}
+
+/**
+ * 根据 route 请求，获取某个 mock module 的结果
+ *
+ * @param {String} mockerBasePath
+ * @param {String} route 当前请求的 route
+ * @param {Object} params 请求参数值
+ * @param {Object} req req
+ * @return {Promise}
+ */
+function getMockModule(mockerBasePath, route, params, req) {
+  let jsonFileArr = util.file.getAll(mockerBasePath, { globs: ['*/matman.json'] });
+
+  // 匹配 mocker
+  let mockerData = getCurMocker(jsonFileArr, route, params);
+
+  if (!mockerData) {
+    return Promise.reject('UNKNOWN_CGI');
+  }
+
+  // 有可能是指定的 mock module， 也可能是当前的 mock module
+  let mockModuleName = params._m_target ? params._m_target : mockerData.activeModule;
+
+  // 组装获取 mock module 的文件地址
+  let mockModulePath = path.join(mockerBasePath, mockerData.name, 'mock_modules', mockModuleName);
+
+  // 还有部分参数在 mock module 的 query 字段中
+  for (let j = 0, lengthj = mockerData.modules.length; j < lengthj; j++) {
+    let mockModuleItem = mockerData.modules[j];
+    if (mockModuleName === mockModuleItem.name) {
+      params = _.merge({}, mockModuleItem.query, params);
+    }
+  }
+
+  return mocker.mockerModuleTool.getResult(mockModulePath, params, req)
+    .then((data) => {
+      return {
+        data: data,
+        mockerDBState: mockerData,
+        mockModuleName: mockModuleName,
+        params: params,
+      }
+    });
 }
 
 /**

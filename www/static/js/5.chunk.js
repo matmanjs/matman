@@ -1168,22 +1168,6 @@ webpackJsonp([5],{
 	        actualURL = _state.actualURL;
 	
 	
-	    var curUrl = actualURL;
-	
-	    // 检查当前的mock module 是否有host，如果有，则使用该host
-	    var mockModuleList = mockerData.modules || [],
-	        length = mockModuleList.length,
-	        host = void 0;
-	
-	    for (var i = 0; i < length; i++) {
-	      var curMockModule = mockModuleList[i];
-	      if (curMockModule.host && curMockModule.name === mockerData.activeModule) {
-	        curUrl = 'http://' + curMockModule.host + curUrl;
-	        host = curMockModule.host;
-	        break;
-	      }
-	    }
-	
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'mockers-mocker' },
@@ -1197,8 +1181,7 @@ webpackJsonp([5],{
 	        }),
 	        _react2.default.createElement(_displayDetail2.default, {
 	          mockerData: mockerData,
-	          curUrl: curUrl,
-	          host: host,
+	          actualURL: actualURL,
 	          onParamsChange: this.handleParamsChange,
 	          onShowResult: this.handleShowResult
 	        }),
@@ -1763,11 +1746,29 @@ webpackJsonp([5],{
 	  var _this = this;
 	
 	  var mockerData = props.mockerData,
-	      curUrl = props.curUrl,
-	      host = props.host,
+	      actualURL = props.actualURL,
 	      onShowResult = props.onShowResult,
 	      onParamsChange = props.onParamsChange;
 	
+	
+	  var curUrl = actualURL;
+	
+	  // 获得当前激活状态的那个 mock module
+	  var mockModuleList = mockerData.modules || [],
+	      mockModuleData = void 0;
+	
+	  for (var i = 0, length = mockModuleList.length; i < length; i++) {
+	    var curMockModule = mockModuleList[i];
+	
+	    if (curMockModule.name === mockerData.activeModule) {
+	      if (curMockModule.host) {
+	        curUrl = 'http://' + curMockModule.host + curUrl;
+	      }
+	
+	      mockModuleData = curMockModule;
+	      break;
+	    }
+	  }
 	
 	  return _react2.default.createElement(
 	    'div',
@@ -1787,7 +1788,7 @@ webpackJsonp([5],{
 	              type: mockerData.disable ? 'default' : 'primary',
 	              size: 'large',
 	              icon: 'link',
-	              onClick: onShowResult.bind(this, {}, host) },
+	              onClick: onShowResult.bind(this, mockModuleData.query, mockModuleData.host) },
 	            mockerData.method,
 	            ' : ',
 	            curUrl
