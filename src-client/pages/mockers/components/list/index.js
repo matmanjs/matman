@@ -26,11 +26,11 @@ class MockerList extends Component {
     return (
       <div className="mockers-list">
         <div className="list-wrapper">
-          <Row gutter={16}>
-            {
-              list.map((item, index) => {
-                return (
-                  <Col span={8} key={index}>
+          {
+            list.map((item, index) => {
+              return (
+                <Row key={index}>
+                  <Col span={24}>
                     <Card title={`${index + 1}. ${item.name}`}>
                       <div className="detail">
                         <p>{item.description}</p>
@@ -42,10 +42,10 @@ class MockerList extends Component {
                       </Link>
                     </Card>
                   </Col>
-                )
-              })
-            }
-          </Row>
+                </Row>
+              )
+            })
+          }
         </div>
       </div>
     )
