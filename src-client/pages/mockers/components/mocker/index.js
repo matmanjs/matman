@@ -101,9 +101,14 @@ class Mocker extends Component {
     });
   }
 
-  handleShowResult(query = {}) {
+  handleShowResult(query = {}, host) {
     const { mockerData } = this.props;
-    const { actualURL } = this.state;
+    let { actualURL } = this.state;
+
+    // 如果有指定的host，则使用指定的host
+    if (host && (actualURL.indexOf(host) < 0)) {
+      actualURL = `http://${host}${actualURL}`;
+    }
 
     if (mockerData.method === 'post') {
       this.getMockModuleByPost(actualURL, query)
@@ -166,6 +171,7 @@ class Mocker extends Component {
     const { isLoaded, mockerData } = this.props;
     const { showModal, modalShowData, actualURL } = this.state;
 
+
     return (
       <div className="mockers-mocker">
 
@@ -181,7 +187,7 @@ class Mocker extends Component {
 
               <MockerDetail
                 mockerData={mockerData}
-                curUrl={actualURL}
+                actualURL={actualURL}
                 onParamsChange={this.handleParamsChange}
                 onShowResult={this.handleShowResult}
               />

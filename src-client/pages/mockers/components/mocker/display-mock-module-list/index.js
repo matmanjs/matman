@@ -14,7 +14,7 @@ export default function MockerMockModuleList(props) {
     dataIndex: 'name',
     key: 'name',
     render: (text, record) => (
-      <Button type={mockerData.disable ? 'default' : 'primary'} onClick={onShowResult.bind(this, record.query)}>
+      <Button type={mockerData.disable ? 'default' : 'primary'} onClick={onShowResult.bind(this, record.query, record.host)}>
         {text}
       </Button>
     ),
@@ -26,6 +26,10 @@ export default function MockerMockModuleList(props) {
     title: 'Author',
     dataIndex: 'author',
     key: 'author',
+  }, {
+    title: 'Host',
+    dataIndex: 'host',
+    key: 'host',
   }, {
     title: 'Description',
     dataIndex: 'description',
