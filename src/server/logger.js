@@ -10,7 +10,7 @@ exports.init = function (logPath) {
       {
         type: 'file', //文件输出
         filename: isAbsolute ? path.join(logPath, 'access.log') : 'logs/access.log',
-        maxLogSize: 1024 * 50,
+        maxLogSize: 1024 * 1024 * 50, // 50MB
         // backups: 1,
         category: 'http',
         absolute: isAbsolute
@@ -18,7 +18,7 @@ exports.init = function (logPath) {
       {
         type: 'file', //文件输出
         filename: isAbsolute ? path.join(logPath, 'matman.log') : 'logs/matman.log',
-        maxLogSize: 1024 * 50,
+        maxLogSize: 1024 * 1024 * 50, // 50MB
         // backups: 1,
         category: 'matman',
         absolute: isAbsolute
