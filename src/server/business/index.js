@@ -1,6 +1,7 @@
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
+const marked = require('marked');
 
 const util = require('../../util');
 const mocker = require('../../mocker');
@@ -249,6 +250,44 @@ function getMocker(mockerBasePath, mockerName) {
 }
 
 /**
+ * 获取指定 mocker 的 README 信息
+ */
+function getMockerReadme(mockerBasePath, mockerName) {
+  let curMockerPath = path.join(mockerBasePath, mockerName);
+
+  let mockerReadmeFile = path.join(curMockerPath, 'readme.md');
+  if (!fs.existsSync(mockerReadmeFile)) {
+    mockerReadmeFile = path.join(curMockerPath, 'readme.MD');
+    if (!fs.existsSync(mockerReadmeFile)) {
+      mockerReadmeFile = path.join(curMockerPath, 'README.md');
+      if (!fs.existsSync(mockerReadmeFile)) {
+        mockerReadmeFile = path.join(curMockerPath, 'README.MD');
+        if (!fs.existsSync(mockerReadmeFile)) {
+          return '';
+        }
+      }
+    }
+  }
+
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false
+  });
+
+  try {
+    return marked(fs.readFileSync(mockerReadmeFile, 'utf8'));
+  } catch (e) {
+    return e.stack;
+  }
+}
+
+/**
  * 更新 mocker 的 信息
  * @param mockerBasePath
  * @param mockerName
@@ -271,6 +310,7 @@ function updateMocker(mockerBasePath, mockerName, newState) {
 module.exports = {
   getMockerList: getMockerList,
   getMocker: getMocker,
+  getMockerReadme: getMockerReadme,
   updateMocker: updateMocker,
   getMockModule: getMockModule
 };

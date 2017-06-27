@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import superagent from 'superagent';
 
-import { loadMocker, setMockerActiveModule, setMockerDisable } from '../../business/mocker/action';
+import { loadMocker, loadMockerReadme, setMockerActiveModule, setMockerDisable } from '../../business/mocker/action';
 
 import MockerBreadcrumb from './display-breadcrumb';
 import MockerDetail from './display-detail';
 import MockerShowResult from './display-show-result';
 import MockerSwitcher from './display-switcher';
 import MockerMockModuleList from './display-mock-module-list';
+import MockerReadme from './display-readme';
 
 import './index.less';
 
@@ -57,6 +58,7 @@ class Mocker extends Component {
 
     // 加载这个 mocker 的信息
     this.props.loadMocker(this.props.routeParams.mockerName);
+    this.props.loadMockerReadme(this.props.routeParams.mockerName);
   }
 
   getMockModuleByPost(url, data) {
@@ -168,9 +170,8 @@ class Mocker extends Component {
   }
 
   render() {
-    const { isLoaded, mockerData } = this.props;
+    const { isLoaded, mockerData, readme } = this.props;
     const { showModal, modalShowData, actualURL } = this.state;
-
 
     return (
       <div className="mockers-mocker">
@@ -205,6 +206,8 @@ class Mocker extends Component {
                 onHide={this.handleModalHide}
               />
 
+              <MockerReadme htmlContent={readme} />
+
             </div>
           ) : (
             <div>加载中...</div>
@@ -220,7 +223,8 @@ function mapStateToProps(state) {
 
   return {
     isLoaded: mockerInfo.isLoaded,
-    mockerData: mockerInfo.data
+    mockerData: mockerInfo.data,
+    readme: mockerInfo.readme,
   };
 }
 
@@ -228,6 +232,10 @@ function mapDispatchToProps(dispatch) {
   return {
     loadMocker(mockerName){
       return dispatch(loadMocker(mockerName));
+    },
+
+    loadMockerReadme(mockerName){
+      return dispatch(loadMockerReadme(mockerName));
     },
 
     setMockerActiveModule(mockerName, mockModuleName){

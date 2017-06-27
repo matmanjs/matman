@@ -4,12 +4,14 @@ import {
   MOCKER_REQUEST,
   MOCKER_REQUEST_SUCCESS,
   MOCKER_REQUEST_FAIL,
+  MOCKER_README_REQUEST_SUCCESS,
   SET_ACTIVE_MODULE_REQUEST_SUCCESS,
 } from './action';
 
 const initialState = {
   isLoaded: false,
   data: {},
+  readme: ''
 };
 
 function mockerInfo(state = initialState, action) {
@@ -31,6 +33,12 @@ function mockerInfo(state = initialState, action) {
     case MOCKER_REQUEST_FAIL:
       update = {
         isLoaded: true
+      };
+      break;
+
+    case MOCKER_README_REQUEST_SUCCESS:
+      update = {
+        readme: data.html
       };
       break;
 

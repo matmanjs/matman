@@ -37,6 +37,15 @@ module.exports = (entryPath) => {
     res.jsonp(result);
   });
 
+  // GET /sys-cgi/mocker/:mockerName 获得这个 mocker 的信息
+  router.get('/sys-cgi/mocker/:mockerName/readme', (req, res) => {
+    // res.send(business.getMockerReadme(entry.MOCKER_PATH, req.params.mockerName));
+    // res.send(business.getMockerReadme(entry.MOCKER_PATH, req.params.mockerName));
+    res.jsonp({
+      html: business.getMockerReadme(entry.MOCKER_PATH, req.params.mockerName)
+    });
+  });
+
   // POST /sys-cgi/mocker/:mockerName 设置这个mocker的信息
   router.post('/sys-cgi/mocker/:mockerName', (req, res) => {
     let result = business.updateMocker(entry.MOCKER_PATH, req.params.mockerName, req.body);

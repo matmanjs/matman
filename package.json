@@ -47,6 +47,7 @@
     "lodash-id": "^0.14.0",
     "log4js": "^1.1.1",
     "lowdb": "^0.16.2",
+    "marked": "^0.3.6",
     "method-override": "^2.3.9",
     "object-assign": "^4.1.1",
     "pluralize": "^5.0.0",
