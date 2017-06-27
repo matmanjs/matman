@@ -3,6 +3,9 @@ const path = require('path');
 
 const matmanServer = require('./server');
 
+const logger = require('./server/logger');
+const matmanLog = logger.matmanLog();
+
 module.exports = (entryPath) => {
   // 校验 entryPath 文件是否存在
   if (!fs.existsSync(entryPath)) {
@@ -28,6 +31,8 @@ module.exports = (entryPath) => {
     res.sendFile(path.join(__dirname, '../www/static', 'index.html'));
   });
 
+  server.use(logger.connectLogger(entryPath));
+
   // To handle POST, PUT and PATCH you need to use a body-parser
   // You can use the one used by JSON Server
   server.use(matmanServer.bodyParser);
@@ -43,6 +48,7 @@ module.exports = (entryPath) => {
   server.use(routerMocker);
 
   server.listen(3000, () => {
-    console.log('matman server is running')
+    console.log('matman server is running');
+    matmanLog.info('matman server is running');
   });
 };
