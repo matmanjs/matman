@@ -1,6 +1,6 @@
 const path = require('path');
 
-const matman = require('../../../src');
+const matman = require('../../src');
 
 let options = {};
 
