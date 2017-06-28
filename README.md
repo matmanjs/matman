@@ -24,7 +24,7 @@ matman.run(options);
 | `LOG_PATH` | 否 | `String` | 日志文件存储的路径，默认值为 `${ROOT_PATH}/logs` |
 | `port` | 否 | `Number` | 端口号，默认为 `3000` |
 
-更多使用请看 [demo](https://github.com/helinjiang/matman/tree/master/test/demo)。
+更多使用请看 [demo](https://github.com/helinjiang/matman/tree/master/demo)。
 
 ## 技术细节
 
@@ -52,7 +52,7 @@ matman 提供了一套路由系统，用于将 CGI 和 本地的 mocker 建立�
 
 其中必须配置的字段为 `route`。matman 是基于 [Express](http://expressjs.com/) 开发的，因此这里的 `route` 值最终将被应用到 `app.use(route,callback)` 中，而 `callback` 回调返回最终将引用到对应的 mocker 中的文件。
 
-具体使用细节可以参考 [demo](https://github.com/helinjiang/matman/tree/master/test/demo)。
+具体使用细节可以参考 [demo](https://github.com/helinjiang/matman/tree/master/demo)。
 
 ### mock module
 

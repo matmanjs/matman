@@ -27,5 +27,6 @@
       "name": "success_special_query"
     }
   ],
-  "createdAt": 1498123888368
+  "createdAt": 1498123888368,
+  "priority": 0
 }

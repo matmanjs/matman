@@ -1,0 +1,33 @@
+{
+  "route": "/cgi-bin/a/b/simple_cgi",
+  "name": "simple_cgi",
+  "disable": false,
+  "description": "simple_cgi",
+  "activeModule": "error_not_login",
+  "method": "get",
+  "modules": [
+    {
+      "name": "error_not_login",
+      "description": "error_not_login",
+      "query": {
+        "_m_target": "error_not_login"
+      }
+    },
+    {
+      "name": "success_exist_matman",
+      "description": "success_exist_matman",
+      "query": {
+        "_m_target": "success_exist_matman"
+      }
+    },
+    {
+      "name": "success_not_exist",
+      "description": "success_not_exist",
+      "query": {
+        "_m_target": "success_not_exist"
+      }
+    }
+  ],
+  "createdAt": 1498142226157,
+  "priority": 0
+}
