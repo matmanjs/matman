@@ -6,14 +6,16 @@
   "method": "get",
   "name": "param_in_search",
   "disable": false,
-  "activeModule": "success_special_query",
+  "activeModule": "error_not_login",
+  "priority": 0,
   "modules": [
     {
       "name": "error_not_login",
       "description": "error_not_login",
       "query": {
         "_m_target": "error_not_login"
-      }
+      },
+      "priority": 0
     },
     {
       "version": "0.0.1",
@@ -24,8 +26,8 @@
         "type": "new",
         "_m_target": "success_special_query"
       },
-      "name": "success_special_query"
+      "name": "success_special_query",
+      "priority": 0
     }
-  ],
-  "createdAt": 1498123888368
+  ]
 }

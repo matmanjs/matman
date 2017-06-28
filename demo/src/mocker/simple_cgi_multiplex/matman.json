@@ -8,6 +8,7 @@
   "description": "simple_cgi_multiplex",
   "activeModule": "error_not_login",
   "method": "get",
+  "priority": 0,
   "modules": [
     {
       "query": {
@@ -15,7 +16,8 @@
         "_m_target": "error_not_login"
       },
       "name": "error_not_login",
-      "description": "error_not_login"
+      "description": "error_not_login",
+      "priority": 0
     },
     {
       "query": {
@@ -23,8 +25,8 @@
         "_m_target": "success_hello"
       },
       "name": "success_hello",
-      "description": "success_hello"
+      "description": "success_hello",
+      "priority": 0
     }
-  ],
-  "createdAt": 1498274270612
+  ]
 }

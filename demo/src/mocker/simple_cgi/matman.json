@@ -1,34 +1,35 @@
 {
-  "version": "0.0.1",
-  "description": "POST 类型的CGI",
-  "author": "helinjiang",
-  "route": "/cgi-bin/a/b/post_cgi",
-  "method": "post",
-  "name": "post_cgi",
+  "route": "/cgi-bin/a/b/simple_cgi",
+  "name": "simple_cgi",
   "disable": false,
-  "activeModule": "success_exist_matman",
+  "description": "simple_cgi",
+  "activeModule": "error_not_login",
+  "method": "get",
+  "priority": 0,
   "modules": [
     {
       "name": "error_not_login",
       "description": "error_not_login",
       "query": {
         "_m_target": "error_not_login"
-      }
+      },
+      "priority": 0
     },
     {
       "name": "success_exist_matman",
       "description": "success_exist_matman",
       "query": {
         "_m_target": "success_exist_matman"
-      }
+      },
+      "priority": 0
     },
     {
       "name": "success_not_exist",
       "description": "success_not_exist",
       "query": {
         "_m_target": "success_not_exist"
-      }
+      },
+      "priority": 0
     }
-  ],
-  "createdAt": 1498143666454
+  ]
 }

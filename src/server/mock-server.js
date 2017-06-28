@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const logger = require('morgan');
+// const logger = require('morgan');
 const cors = require('cors');
 const compression = require('compression');
 const errorhandler = require('errorhandler');
@@ -25,17 +25,17 @@ module.exports = function (opts) {
     arr.push(compression());
   }
 
-  // Logger
-  if (opts.logger) {
-    arr.push(
-      logger('dev', {
-        skip: (req) => (
-          process.env.NODE_ENV === 'test' ||
-          req.path === '/favicon.ico'
-        )
-      })
-    );
-  }
+  // Logger，使用 log4js 来代替
+  // if (opts.logger) {
+  //   arr.push(
+  //     logger('dev', {
+  //       skip: (req) => (
+  //         process.env.NODE_ENV === 'test' ||
+  //         req.path === '/favicon.ico'
+  //       )
+  //     })
+  //   );
+  // }
 
   // Enable CORS for all the requests, including static files
   if (!opts.noCors) {

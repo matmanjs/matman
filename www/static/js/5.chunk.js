@@ -997,7 +997,11 @@ webpackJsonp([5],{
 	
 	var _displayMockModuleList2 = _interopRequireDefault(_displayMockModuleList);
 	
-	__webpack_require__(1209);
+	var _displayReadme = __webpack_require__(1209);
+	
+	var _displayReadme2 = _interopRequireDefault(_displayReadme);
+	
+	__webpack_require__(1212);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -1053,6 +1057,7 @@ webpackJsonp([5],{
 	
 	    // 加载这个 mocker 的信息
 	    this.props.loadMocker(this.props.routeParams.mockerName);
+	    this.props.loadMockerReadme(this.props.routeParams.mockerName);
 	  };
 	
 	  Mocker.prototype.getMockModuleByPost = function getMockModuleByPost(url, data) {
@@ -1161,7 +1166,8 @@ webpackJsonp([5],{
 	  Mocker.prototype.render = function render() {
 	    var _props = this.props,
 	        isLoaded = _props.isLoaded,
-	        mockerData = _props.mockerData;
+	        mockerData = _props.mockerData,
+	        readme = _props.readme;
 	    var _state = this.state,
 	        showModal = _state.showModal,
 	        modalShowData = _state.modalShowData,
@@ -1195,7 +1201,8 @@ webpackJsonp([5],{
 	          isShow: showModal,
 	          data: modalShowData,
 	          onHide: this.handleModalHide
-	        })
+	        }),
+	        _react2.default.createElement(_displayReadme2.default, { htmlContent: readme })
 	      ) : _react2.default.createElement(
 	        'div',
 	        null,
@@ -1213,7 +1220,8 @@ webpackJsonp([5],{
 	
 	  return {
 	    isLoaded: mockerInfo.isLoaded,
-	    mockerData: mockerInfo.data
+	    mockerData: mockerInfo.data,
+	    readme: mockerInfo.readme
 	  };
 	}
 	
@@ -1221,6 +1229,9 @@ webpackJsonp([5],{
 	  return {
 	    loadMocker: function loadMocker(mockerName) {
 	      return dispatch((0, _action.loadMocker)(mockerName));
+	    },
+	    loadMockerReadme: function loadMockerReadme(mockerName) {
+	      return dispatch((0, _action.loadMockerReadme)(mockerName));
 	    },
 	    setMockerActiveModule: function setMockerActiveModule(mockerName, mockModuleName) {
 	      return dispatch((0, _action.setMockerActiveModule)(mockerName, mockModuleName));
@@ -16270,6 +16281,16 @@ webpackJsonp([5],{
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
 	
+	/*
+	 var MenuItem = Menu.Item;
+	
+	 var menu = <Menu><MenuItem>1</MenuItem></Menu>;
+	
+	 <DropDown trigger="click" animationName="" overlay={<>} onSelect={}>
+	 <button>open</button>
+	 </DropDown>
+	*/
+	
 	var Dropdown = function (_Component) {
 	  _inherits(Dropdown, _Component);
 	
@@ -16303,18 +16324,11 @@ webpackJsonp([5],{
 	  };
 	
 	  Dropdown.prototype.getMenuElement = function getMenuElement() {
-	    var _props = this.props,
-	        overlay = _props.overlay,
-	        prefixCls = _props.prefixCls;
-	
-	    var extraOverlayProps = {
-	      prefixCls: prefixCls + '-menu',
+	    var props = this.props;
+	    return _react2["default"].cloneElement(props.overlay, {
+	      prefixCls: props.prefixCls + '-menu',
 	      onClick: this.onClick
-	    };
-	    if (typeof overlay.type === 'string') {
-	      delete extraOverlayProps.prefixCls;
-	    }
-	    return _react2["default"].cloneElement(overlay, extraOverlayProps);
+	    });
 	  };
 	
 	  Dropdown.prototype.getPopupDomNode = function getPopupDomNode() {
@@ -16322,20 +16336,20 @@ webpackJsonp([5],{
 	  };
 	
 	  Dropdown.prototype.render = function render() {
-	    var _props2 = this.props,
-	        prefixCls = _props2.prefixCls,
-	        children = _props2.children,
-	        transitionName = _props2.transitionName,
-	        animation = _props2.animation,
-	        align = _props2.align,
-	        placement = _props2.placement,
-	        getPopupContainer = _props2.getPopupContainer,
-	        showAction = _props2.showAction,
-	        hideAction = _props2.hideAction,
-	        overlayClassName = _props2.overlayClassName,
-	        overlayStyle = _props2.overlayStyle,
-	        trigger = _props2.trigger,
-	        otherProps = _objectWithoutProperties(_props2, ['prefixCls', 'children', 'transitionName', 'animation', 'align', 'placement', 'getPopupContainer', 'showAction', 'hideAction', 'overlayClassName', 'overlayStyle', 'trigger']);
+	    var _props = this.props,
+	        prefixCls = _props.prefixCls,
+	        children = _props.children,
+	        transitionName = _props.transitionName,
+	        animation = _props.animation,
+	        align = _props.align,
+	        placement = _props.placement,
+	        getPopupContainer = _props.getPopupContainer,
+	        showAction = _props.showAction,
+	        hideAction = _props.hideAction,
+	        overlayClassName = _props.overlayClassName,
+	        overlayStyle = _props.overlayStyle,
+	        trigger = _props.trigger,
+	        otherProps = _objectWithoutProperties(_props, ['prefixCls', 'children', 'transitionName', 'animation', 'align', 'placement', 'getPopupContainer', 'showAction', 'hideAction', 'overlayClassName', 'overlayStyle', 'trigger']);
 	
 	    return _react2["default"].createElement(
 	      _rcTrigger2["default"],
@@ -16376,7 +16390,6 @@ webpackJsonp([5],{
 	  align: _propTypes2["default"].object,
 	  overlayStyle: _propTypes2["default"].object,
 	  placement: _propTypes2["default"].string,
-	  overlay: _propTypes2["default"].node,
 	  trigger: _propTypes2["default"].array,
 	  showAction: _propTypes2["default"].array,
 	  hideAction: _propTypes2["default"].array,
@@ -18425,10 +18438,96 @@ webpackJsonp([5],{
 /***/ 1209:
 /***/ (function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	var _css = __webpack_require__(1034);
+	
+	var _card = __webpack_require__(1037);
+	
+	var _card2 = _interopRequireDefault(_card);
+	
+	exports.default = MockerReadme;
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	__webpack_require__(1210);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function MockerReadme(props) {
+	  var htmlContent = props.htmlContent;
+	
+	
+	  if (!htmlContent) {
+	    return null;
+	  }
+	
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'mocker-readme' },
+	    _react2.default.createElement(
+	      _card2.default,
+	      { title: '\u4F7F\u7528\u8BF4\u660E' },
+	      _react2.default.createElement('div', { className: 'readme-content', dangerouslySetInnerHTML: { __html: htmlContent } })
+	    )
+	  );
+	}
+
+/***/ }),
+
+/***/ 1210:
+/***/ (function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(1210);
+	var content = __webpack_require__(1211);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(959)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/less-loader/dist/index.js!./index.less", function() {
+				var newContent = require("!!../../../../../../node_modules/css-loader/index.js!../../../../../../node_modules/less-loader/dist/index.js!./index.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+
+/***/ 1211:
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(958)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".mocker-readme {\n  margin-top: 10px;\n}\n", ""]);
+	
+	// exports
+
+
+/***/ }),
+
+/***/ 1212:
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(1213);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(959)(content, {});
@@ -18449,7 +18548,7 @@ webpackJsonp([5],{
 
 /***/ }),
 
-/***/ 1210:
+/***/ 1213:
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(958)();

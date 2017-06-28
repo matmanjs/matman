@@ -5,9 +5,7 @@ const request = require('request');
 const bodyParser = require('../body-parser');
 const business = require('../business');
 
-module.exports = (entryPath) => {
-  const entry = require(entryPath);
-
+module.exports = (entry) => {
   let mockerList = business.getMockerList(entry.MOCKER_PATH);
 
   // Create router
@@ -35,6 +33,15 @@ module.exports = (entryPath) => {
     let result = business.getMocker(entry.MOCKER_PATH, req.params.mockerName);
 
     res.jsonp(result);
+  });
+
+  // GET /sys-cgi/mocker/:mockerName/readme 获得这个 mocker 的readme信息
+  router.get('/sys-cgi/mocker/:mockerName/readme', (req, res) => {
+    // res.send(business.getMockerReadme(entry.MOCKER_PATH, req.params.mockerName));
+    // res.send(business.getMockerReadme(entry.MOCKER_PATH, req.params.mockerName));
+    res.jsonp({
+      html: business.getMockerReadme(entry.MOCKER_PATH, req.params.mockerName)
+    });
   });
 
   // POST /sys-cgi/mocker/:mockerName 设置这个mocker的信息

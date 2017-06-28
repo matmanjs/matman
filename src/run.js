@@ -3,14 +3,26 @@ const path = require('path');
 
 const matmanServer = require('./server');
 
-module.exports = (entryPath) => {
-  // 校验 entryPath 文件是否存在
-  if (!fs.existsSync(entryPath)) {
-    console.error(entryPath + ' is not exist!');
+const logger = require('./server/logger');
+const matmanLog = logger.matmanLog();
+
+module.exports = (opts) => {
+  let configOpts;
+
+  if (typeof opts === 'string' && fs.existsSync(opts)) {
+    configOpts = require(opts);
+  } else if (typeof opts === 'object') {
+    configOpts = opts;
+  }
+
+  console.log(configOpts)
+
+  if (!configOpts || !configOpts.ROOT_PATH || !configOpts.MOCKER_PATH) {
+    console.error('Params error!', opts);
     return;
   }
 
-  const routerMocker = matmanServer.routerMocker(entryPath);
+  const routerMocker = matmanServer.routerMocker(configOpts);
   const server = matmanServer.create();
   const middlewares = matmanServer.mockServer();
 
@@ -28,6 +40,8 @@ module.exports = (entryPath) => {
     res.sendFile(path.join(__dirname, '../www/static', 'index.html'));
   });
 
+  server.use(logger.connectLogger(configOpts));
+
   // To handle POST, PUT and PATCH you need to use a body-parser
   // You can use the one used by JSON Server
   server.use(matmanServer.bodyParser);
@@ -42,7 +56,8 @@ module.exports = (entryPath) => {
   // Use default router
   server.use(routerMocker);
 
-  server.listen(3000, () => {
-    console.log('matman server is running')
+  server.listen(configOpts.port || 3000, () => {
+    console.log('matman server is running');
+    matmanLog.info('matman server is running');
   });
 };

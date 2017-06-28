@@ -1,6 +1,7 @@
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
+const marked = require('marked');
 
 const util = require('../../util');
 const mocker = require('../../mocker');
@@ -195,6 +196,7 @@ function getMocker(mockerBasePath, mockerName) {
   mockerDBState.description = mockerDBState.description || mockerDBState.name;
   mockerDBState.activeModule = mockerDBState.activeModule || mockerDBState.defaultModule;
   mockerDBState.method = mockerDBState.method || 'get';
+  mockerDBState.priority = mockerDBState.priority || 0;
 
   // 获取当前的 mocker 下的 modules 列表
   let modules = [];
@@ -227,6 +229,8 @@ function getMocker(mockerBasePath, mockerName) {
     // TODO 如果是 /id/:id 类型的，则此处可能会有问题，或许还需要把请求值放入到query中
     mockModuleData.query = _.merge({}, mockModuleData.query, { _m_target: mockModuleName });
 
+    mockModuleData.priority = mockModuleData.priority || 0;
+
     modules.push(mockModuleData);
   });
 
@@ -246,6 +250,44 @@ function getMocker(mockerBasePath, mockerName) {
   return _.merge({}, mockerDBState, {
     _fullPath: curMockerPath,
   });
+}
+
+/**
+ * 获取指定 mocker 的 README 信息
+ */
+function getMockerReadme(mockerBasePath, mockerName) {
+  let curMockerPath = path.join(mockerBasePath, mockerName);
+
+  let mockerReadmeFile = path.join(curMockerPath, 'readme.md');
+  if (!fs.existsSync(mockerReadmeFile)) {
+    mockerReadmeFile = path.join(curMockerPath, 'readme.MD');
+    if (!fs.existsSync(mockerReadmeFile)) {
+      mockerReadmeFile = path.join(curMockerPath, 'README.md');
+      if (!fs.existsSync(mockerReadmeFile)) {
+        mockerReadmeFile = path.join(curMockerPath, 'README.MD');
+        if (!fs.existsSync(mockerReadmeFile)) {
+          return '';
+        }
+      }
+    }
+  }
+
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false
+  });
+
+  try {
+    return marked(fs.readFileSync(mockerReadmeFile, 'utf8'));
+  } catch (e) {
+    return e.stack;
+  }
 }
 
 /**
@@ -271,6 +313,7 @@ function updateMocker(mockerBasePath, mockerName, newState) {
 module.exports = {
   getMockerList: getMockerList,
   getMocker: getMocker,
+  getMockerReadme: getMockerReadme,
   updateMocker: updateMocker,
   getMockModule: getMockModule
 };

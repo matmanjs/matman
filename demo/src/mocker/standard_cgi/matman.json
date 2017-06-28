@@ -4,19 +4,23 @@
   "author": "helinjiang",
   "route": "/cgi-bin/a/b/standard_cgi",
   "defaultModule": "success_exist_matman",
-  "name": "standard_cgi",
-  "activeModule": "success_exist_matman",
   "method": "get",
+  "priority": 100,
+  "name": "standard_cgi",
+  "disable": false,
+  "activeModule": "success_exist_matman",
   "modules": [
     {
       "name": "error_not_login",
       "description": "error_not_login",
       "query": {
         "_m_target": "error_not_login"
-      }
+      },
+      "priority": 0
     },
     {
       "description": "成功：存在matman模块",
+      "priority": 100,
       "name": "success_exist_matman",
       "query": {
         "_m_target": "success_exist_matman"
@@ -29,8 +33,8 @@
       "name": "success_not_exist",
       "query": {
         "_m_target": "success_not_exist"
-      }
+      },
+      "priority": 0
     }
-  ],
-  "disable": false
+  ]
 }

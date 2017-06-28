@@ -26,11 +26,11 @@ webpackJsonp([0],[
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _Root = __webpack_require__(1211);
+	var _Root = __webpack_require__(1214);
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
-	__webpack_require__(1214);
+	__webpack_require__(1217);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -13616,7 +13616,8 @@ webpackJsonp([0],[
 	
 	var initialState = {
 	  isLoaded: false,
-	  data: {}
+	  data: {},
+	  readme: ''
 	};
 	
 	function mockerInfo() {
@@ -13636,12 +13637,22 @@ webpackJsonp([0],[
 	    case _action.MOCKER_REQUEST_SUCCESS:
 	      update = {
 	        isLoaded: true,
-	        data: data
+	        data: _lodash2.default.merge({}, data, {
+	          modules: (data.modules || []).sort(function (a, b) {
+	            return b.priority - a.priority;
+	          })
+	        })
 	      };
 	      break;
 	    case _action.MOCKER_REQUEST_FAIL:
 	      update = {
 	        isLoaded: true
+	      };
+	      break;
+	
+	    case _action.MOCKER_README_REQUEST_SUCCESS:
+	      update = {
+	        readme: data.html
 	      };
 	      break;
 	
@@ -30795,8 +30806,9 @@ webpackJsonp([0],[
 	'use strict';
 	
 	exports.__esModule = true;
-	exports.SET_ACTIVE_MODULE_REQUEST_FAIL = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST = exports.MOCKER_REQUEST_FAIL = exports.MOCKER_REQUEST_SUCCESS = exports.MOCKER_REQUEST = undefined;
+	exports.SET_ACTIVE_MODULE_REQUEST_FAIL = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST = exports.MOCKER_README_REQUEST_FAIL = exports.MOCKER_README_REQUEST_SUCCESS = exports.MOCKER_README_REQUEST = exports.MOCKER_REQUEST_FAIL = exports.MOCKER_REQUEST_SUCCESS = exports.MOCKER_REQUEST = undefined;
 	exports.loadMocker = loadMocker;
+	exports.loadMockerReadme = loadMockerReadme;
 	exports.setMockerActiveModule = setMockerActiveModule;
 	exports.setMockerDisable = setMockerDisable;
 	
@@ -30805,6 +30817,10 @@ webpackJsonp([0],[
 	var MOCKER_REQUEST = exports.MOCKER_REQUEST = 'MOCKER_REQUEST';
 	var MOCKER_REQUEST_SUCCESS = exports.MOCKER_REQUEST_SUCCESS = 'MOCKER_REQUEST_SUCCESS';
 	var MOCKER_REQUEST_FAIL = exports.MOCKER_REQUEST_FAIL = 'MOCKER_REQUEST_FAIL';
+	
+	var MOCKER_README_REQUEST = exports.MOCKER_README_REQUEST = 'MOCKER_README_REQUEST';
+	var MOCKER_README_REQUEST_SUCCESS = exports.MOCKER_README_REQUEST_SUCCESS = 'MOCKER_README_REQUEST_SUCCESS';
+	var MOCKER_README_REQUEST_FAIL = exports.MOCKER_README_REQUEST_FAIL = 'MOCKER_README_REQUEST_FAIL';
 	
 	var SET_ACTIVE_MODULE_REQUEST = exports.SET_ACTIVE_MODULE_REQUEST = 'SET_ACTIVE_MODULE_REQUEST';
 	var SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.SET_ACTIVE_MODULE_REQUEST_SUCCESS = 'SET_ACTIVE_MODULE_REQUEST_SUCCESS';
@@ -30825,15 +30841,30 @@ webpackJsonp([0],[
 	  };
 	}
 	
-	function requestUpdateMocker(mockerName, newMockerState) {
+	function fetchMockerReadme(mockerName) {
 	  var _ref2;
 	
 	  return _ref2 = {}, _ref2[_api.CALL_API] = {
+	    types: [MOCKER_README_REQUEST, MOCKER_README_REQUEST_SUCCESS, MOCKER_README_REQUEST_FAIL],
+	    url: '/sys-cgi/mocker/' + mockerName + '/readme'
+	  }, _ref2;
+	}
+	
+	function loadMockerReadme(mockerName) {
+	  return function (dispatch, getState) {
+	    return dispatch(fetchMockerReadme(mockerName));
+	  };
+	}
+	
+	function requestUpdateMocker(mockerName, newMockerState) {
+	  var _ref3;
+	
+	  return _ref3 = {}, _ref3[_api.CALL_API] = {
 	    types: [SET_ACTIVE_MODULE_REQUEST, SET_ACTIVE_MODULE_REQUEST_SUCCESS, SET_ACTIVE_MODULE_REQUEST_FAIL],
 	    url: '/sys-cgi/mocker/' + mockerName,
 	    type: 'POST',
 	    data: newMockerState
-	  }, _ref2;
+	  }, _ref3;
 	}
 	
 	function setMockerActiveModule(mockerName, mockModuleName) {
@@ -30895,7 +30926,9 @@ webpackJsonp([0],[
 	    case _action.MOCKER_LIST_REQUEST_SUCCESS:
 	      update = {
 	        isLoaded: true,
-	        list: data
+	        list: (data || []).sort(function (a, b) {
+	          return b.priority - a.priority;
+	        })
 	      };
 	      break;
 	    case _action.MOCKER_LIST_REQUEST_FAIL:
@@ -53414,20 +53447,23 @@ webpackJsonp([0],[
 /* 1208 */,
 /* 1209 */,
 /* 1210 */,
-/* 1211 */
+/* 1211 */,
+/* 1212 */,
+/* 1213 */,
+/* 1214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
 	if (process.env.NODE_ENV === 'production') {
-	  module.exports = __webpack_require__(1212);
+	  module.exports = __webpack_require__(1215);
 	} else {
-	  module.exports = __webpack_require__(1213);
+	  module.exports = __webpack_require__(1216);
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 1212 */
+/* 1215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53466,7 +53502,7 @@ webpackJsonp([0],[
 	})(Root);
 
 /***/ }),
-/* 1213 */
+/* 1216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53514,13 +53550,13 @@ webpackJsonp([0],[
 	})(Root);
 
 /***/ }),
-/* 1214 */
+/* 1217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(1215);
+	var content = __webpack_require__(1218);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(959)(content, {});
@@ -53540,7 +53576,7 @@ webpackJsonp([0],[
 	}
 
 /***/ }),
-/* 1215 */
+/* 1218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(958)();
