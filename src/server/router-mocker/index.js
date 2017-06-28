@@ -37,7 +37,7 @@ module.exports = (entryPath) => {
     res.jsonp(result);
   });
 
-  // GET /sys-cgi/mocker/:mockerName 获得这个 mocker 的信息
+  // GET /sys-cgi/mocker/:mockerName/readme 获得这个 mocker 的readme信息
   router.get('/sys-cgi/mocker/:mockerName/readme', (req, res) => {
     // res.send(business.getMockerReadme(entry.MOCKER_PATH, req.params.mockerName));
     // res.send(business.getMockerReadme(entry.MOCKER_PATH, req.params.mockerName));
