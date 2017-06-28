@@ -6,14 +6,23 @@ const matmanServer = require('./server');
 const logger = require('./server/logger');
 const matmanLog = logger.matmanLog();
 
-module.exports = (entryPath) => {
-  // 校验 entryPath 文件是否存在
-  if (!fs.existsSync(entryPath)) {
-    console.error(entryPath + ' is not exist!');
+module.exports = (opts) => {
+  let configOpts;
+
+  if (typeof opts === 'string' && fs.existsSync(opts)) {
+    configOpts = require(opts);
+  } else if (typeof opts === 'object') {
+    configOpts = opts;
+  }
+
+  console.log(configOpts)
+
+  if (!configOpts || !configOpts.ROOT_PATH || !configOpts.MOCKER_PATH) {
+    console.error('Params error!', opts);
     return;
   }
 
-  const routerMocker = matmanServer.routerMocker(entryPath);
+  const routerMocker = matmanServer.routerMocker(configOpts);
   const server = matmanServer.create();
   const middlewares = matmanServer.mockServer();
 
@@ -31,7 +40,7 @@ module.exports = (entryPath) => {
     res.sendFile(path.join(__dirname, '../www/static', 'index.html'));
   });
 
-  server.use(logger.connectLogger(entryPath));
+  server.use(logger.connectLogger(configOpts));
 
   // To handle POST, PUT and PATCH you need to use a body-parser
   // You can use the one used by JSON Server

@@ -28,9 +28,7 @@ exports.init = function (logPath) {
   });
 };
 
-exports.connectLogger = function (entryPath) {
-  const entry = require(entryPath);
-
+exports.connectLogger = function (entry) {
   this.init(entry.LOG_PATH ? entry.LOG_PATH : path.join(entry.ROOT_PATH, 'logs'));
 
   // return log4js.connectLogger(this.logger('http'), { level: 'auto', format: ':method :url' });

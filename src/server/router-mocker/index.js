@@ -5,9 +5,7 @@ const request = require('request');
 const bodyParser = require('../body-parser');
 const business = require('../business');
 
-module.exports = (entryPath) => {
-  const entry = require(entryPath);
-
+module.exports = (entry) => {
   let mockerList = business.getMockerList(entry.MOCKER_PATH);
 
   // Create router
