@@ -23,7 +23,9 @@ function mockerListInfo(state = initialState, action) {
     case MOCKER_LIST_REQUEST_SUCCESS:
       update = {
         isLoaded: true,
-        list: data
+        list: (data || []).sort((a, b) => {
+          return b.priority - a.priority
+        })
       };
       break;
     case MOCKER_LIST_REQUEST_FAIL:

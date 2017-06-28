@@ -4,5 +4,6 @@
   "author": "helinjiang",
   "route": "/cgi-bin/a/b/standard_cgi",
   "defaultModule": "success_exist_matman",
-  "method": "get"
+  "method": "get",
+  "priority": 100
 }

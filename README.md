@@ -54,6 +54,8 @@ matman 提供了一套路由系统，用于将 CGI 和 本地的 mocker 建立�
 
 具体使用细节可以参考 [demo](https://github.com/helinjiang/matman/tree/master/demo)。
 
+matman 项目启动之后，会在每个 mocker 中生成一个缓存文件 `matman.json`，一般情况下你无须关注，由于 matman 的存储是使用文件夹存储的，如果你需要保持你的行为，你可以保存 `matman.json` ，但请不要直接修改，而是使用 `config.json` 文件。
+
 ### mock module
 
 #### 必须符合 CommonJS 规范

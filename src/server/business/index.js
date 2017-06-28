@@ -196,6 +196,7 @@ function getMocker(mockerBasePath, mockerName) {
   mockerDBState.description = mockerDBState.description || mockerDBState.name;
   mockerDBState.activeModule = mockerDBState.activeModule || mockerDBState.defaultModule;
   mockerDBState.method = mockerDBState.method || 'get';
+  mockerDBState.priority = mockerDBState.priority || 0;
 
   // 获取当前的 mocker 下的 modules 列表
   let modules = [];
@@ -227,6 +228,8 @@ function getMocker(mockerBasePath, mockerName) {
 
     // TODO 如果是 /id/:id 类型的，则此处可能会有问题，或许还需要把请求值放入到query中
     mockModuleData.query = _.merge({}, mockModuleData.query, { _m_target: mockModuleName });
+
+    mockModuleData.priority = mockModuleData.priority || 0;
 
     modules.push(mockModuleData);
   });

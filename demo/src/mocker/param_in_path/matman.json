@@ -18,23 +18,24 @@
   ],
   "name": "param_in_path",
   "disable": false,
-  "activeModule": "success_simple",
+  "activeModule": "error_not_login",
+  "priority": 0,
   "modules": [
     {
       "name": "error_not_login",
       "description": "error_not_login",
       "query": {
         "_m_target": "error_not_login"
-      }
+      },
+      "priority": 0
     },
     {
       "name": "success_simple",
       "description": "success_simple",
       "query": {
         "_m_target": "success_simple"
-      }
+      },
+      "priority": 0
     }
-  ],
-  "createdAt": 1498145748848,
-  "priority": 0
+  ]
 }

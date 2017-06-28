@@ -27,7 +27,11 @@ function mockerInfo(state = initialState, action) {
     case MOCKER_REQUEST_SUCCESS:
       update = {
         isLoaded: true,
-        data: data
+        data: _.merge({}, data, {
+          modules: (data.modules || []).sort((a, b) => {
+            return b.priority - a.priority
+          })
+        })
       };
       break;
     case MOCKER_REQUEST_FAIL:

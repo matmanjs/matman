@@ -13637,7 +13637,11 @@ webpackJsonp([0],[
 	    case _action.MOCKER_REQUEST_SUCCESS:
 	      update = {
 	        isLoaded: true,
-	        data: data
+	        data: _lodash2.default.merge({}, data, {
+	          modules: (data.modules || []).sort(function (a, b) {
+	            return b.priority - a.priority;
+	          })
+	        })
 	      };
 	      break;
 	    case _action.MOCKER_REQUEST_FAIL:
@@ -30922,7 +30926,9 @@ webpackJsonp([0],[
 	    case _action.MOCKER_LIST_REQUEST_SUCCESS:
 	      update = {
 	        isLoaded: true,
-	        list: data
+	        list: (data || []).sort(function (a, b) {
+	          return b.priority - a.priority;
+	        })
 	      };
 	      break;
 	    case _action.MOCKER_LIST_REQUEST_FAIL:
