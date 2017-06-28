@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card } from 'antd';
+import { Card } from 'antd';
 
 import './index.less';
 
