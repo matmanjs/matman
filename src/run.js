@@ -56,7 +56,7 @@ module.exports = (opts) => {
   // Use default router
   server.use(routerMocker);
 
-  server.listen(3000, () => {
+  server.listen(configOpts.port || 3000, () => {
     console.log('matman server is running');
     matmanLog.info('matman server is running');
   });
