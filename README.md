@@ -7,9 +7,24 @@ Mock service and Tester assistant
 
 ## 如何使用
 
+matman 提供 `run` 方法来启动，接受一个配置参数
 
+```
+const matman = require('matman');
 
- 更多使用请看 [demo](https://github.com/helinjiang/matman/tree/master/test/demo)。
+const options = {};
+
+matman.run(options);
+```
+
+ 字段名 | 是否必须 | 类型 | 含义描述 |
+| --- | --- | --- | --- |
+| `ROOT_PATH` | 是 | `String` | 项目根目录 |
+| `MOCKER_PATH` | 是 | `String` | `mocker` 文件的路径 |
+| `LOG_PATH` | 否 | `String` | 日志文件存储的路径，默认值为 `${ROOT_PATH}/logs` |
+| `port` | 否 | `Number` | 端口号，默认为 `3000` |
+
+更多使用请看 [demo](https://github.com/helinjiang/matman/tree/master/test/demo)。
 
 ## 技术细节
 
