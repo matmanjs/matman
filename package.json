@@ -1,6 +1,6 @@
 {
   "name": "matman",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "mock service and tester assitant",
   "main": "src/index.js",
   "scripts": {
@@ -49,6 +49,7 @@
     "lowdb": "^0.16.2",
     "marked": "^0.3.6",
     "method-override": "^2.3.9",
+    "morgan": "^1.8.2",
     "object-assign": "^4.1.1",
     "pluralize": "^5.0.0",
     "react": "^15.6.0",
