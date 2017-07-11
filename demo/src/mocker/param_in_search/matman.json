@@ -29,5 +29,9 @@
       "name": "success_special_query",
       "priority": 0
     }
+  ],
+  "tags": [
+    "首屏加载",
+    "全部"
   ]
 }

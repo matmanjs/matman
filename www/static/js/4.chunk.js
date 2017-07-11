@@ -43,6 +43,10 @@ webpackJsonp([4],{
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
+	var _lodash = __webpack_require__(656);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -62,7 +66,15 @@ webpackJsonp([4],{
 	
 	  function MockerList(props, context) {
 	    (0, _classCallCheck3.default)(this, MockerList);
-	    return (0, _possibleConstructorReturn3.default)(this, _Component.call(this, props, context));
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _Component.call(this, props, context));
+	
+	    _this.state = {
+	      curTag: '全部'
+	    };
+	
+	    _this.handleClickTag = _this.handleClickTag.bind(_this);
+	    return _this;
 	  }
 	
 	  MockerList.prototype.componentDidMount = function componentDidMount() {
@@ -71,18 +83,59 @@ webpackJsonp([4],{
 	    this.props.loadMockerList();
 	  };
 	
+	  MockerList.prototype.getAllTags = function getAllTags(list) {
+	
+	    var arr = [];
+	
+	    list.forEach(function (item) {
+	      arr = arr.concat(item.tags);
+	    });
+	
+	    return _lodash2.default.uniq(arr);
+	  };
+	
+	  MockerList.prototype.handleClickTag = function handleClickTag(tagName) {
+	    this.setState({
+	      curTag: tagName
+	    });
+	  };
+	
 	  MockerList.prototype.render = function render() {
+	    var _this2 = this;
+	
+	    var curTag = this.state.curTag;
 	    var list = this.props.list;
 	
+	
+	    var tagList = this.getAllTags(list);
 	
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'mockers-list' },
 	      _react2.default.createElement(
 	        'div',
+	        { className: 'tag-wrapper' },
+	        _react2.default.createElement(
+	          _button2.default.Group,
+	          null,
+	          tagList.map(function (tagName, tagIndex) {
+	            return _react2.default.createElement(
+	              _button2.default,
+	              {
+	                key: tagIndex,
+	                className: tagName === curTag ? 'active' : '',
+	                icon: 'tag',
+	                onClick: _this2.handleClickTag.bind(_this2, tagName) },
+	              tagName
+	            );
+	          })
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
 	        { className: 'list-wrapper' },
 	        list.map(function (item, index) {
-	          return _react2.default.createElement(
+	          return item.tags.indexOf(curTag) > -1 ? _react2.default.createElement(
 	            _row2.default,
 	            { key: index },
 	            _react2.default.createElement(
@@ -91,6 +144,21 @@ webpackJsonp([4],{
 	              _react2.default.createElement(
 	                _card2.default,
 	                { title: index + 1 + '. ' + item.name },
+	                _react2.default.createElement(
+	                  _button2.default.Group,
+	                  null,
+	                  item.tags.map(function (tagName, tagIndex) {
+	                    return _react2.default.createElement(
+	                      _button2.default,
+	                      {
+	                        key: tagIndex,
+	                        className: tagName === curTag ? 'active' : '',
+	                        icon: 'tag',
+	                        onClick: _this2.handleClickTag.bind(_this2, tagName) },
+	                      tagName
+	                    );
+	                  })
+	                ),
 	                _react2.default.createElement(
 	                  'div',
 	                  { className: 'detail' },
@@ -116,7 +184,7 @@ webpackJsonp([4],{
 	                )
 	              )
 	            )
-	          );
+	          ) : null;
 	        })
 	      )
 	    );
@@ -1120,7 +1188,7 @@ webpackJsonp([4],{
 	
 	
 	// module
-	exports.push([module.id, ".mockers-list .list-wrapper .ant-card {\n  margin-bottom: 16px;\n  font-size: 14px;\n}\n.mockers-list .list-wrapper .ant-card .detail {\n  margin-bottom: 20px;\n}\n", ""]);
+	exports.push([module.id, ".mockers-list .tag-wrapper {\n  margin: 10px 0;\n}\n.mockers-list .list-wrapper .ant-card {\n  margin-bottom: 16px;\n  font-size: 14px;\n}\n.mockers-list .list-wrapper .ant-card .detail {\n  margin-bottom: 20px;\n}\n", ""]);
 	
 	// exports
 

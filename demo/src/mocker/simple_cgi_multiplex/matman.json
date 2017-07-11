@@ -28,5 +28,8 @@
       "description": "success_hello",
       "priority": 0
     }
+  ],
+  "tags": [
+    "全部"
   ]
 }
