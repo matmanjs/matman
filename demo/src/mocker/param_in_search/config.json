@@ -3,5 +3,8 @@
   "description": "有参数在url 的 search 部分",
   "author": "helinjiang",
   "route": "/cgi-bin/a/b/detail",
-  "method": "get"
+  "method": "get",
+  "tags": [
+    "首屏加载"
+  ]
 }

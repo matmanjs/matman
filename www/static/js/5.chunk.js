@@ -16281,16 +16281,6 @@ webpackJsonp([5],{
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
 	
-	/*
-	 var MenuItem = Menu.Item;
-	
-	 var menu = <Menu><MenuItem>1</MenuItem></Menu>;
-	
-	 <DropDown trigger="click" animationName="" overlay={<>} onSelect={}>
-	 <button>open</button>
-	 </DropDown>
-	*/
-	
 	var Dropdown = function (_Component) {
 	  _inherits(Dropdown, _Component);
 	
@@ -16324,11 +16314,18 @@ webpackJsonp([5],{
 	  };
 	
 	  Dropdown.prototype.getMenuElement = function getMenuElement() {
-	    var props = this.props;
-	    return _react2["default"].cloneElement(props.overlay, {
-	      prefixCls: props.prefixCls + '-menu',
+	    var _props = this.props,
+	        overlay = _props.overlay,
+	        prefixCls = _props.prefixCls;
+	
+	    var extraOverlayProps = {
+	      prefixCls: prefixCls + '-menu',
 	      onClick: this.onClick
-	    });
+	    };
+	    if (typeof overlay.type === 'string') {
+	      delete extraOverlayProps.prefixCls;
+	    }
+	    return _react2["default"].cloneElement(overlay, extraOverlayProps);
 	  };
 	
 	  Dropdown.prototype.getPopupDomNode = function getPopupDomNode() {
@@ -16336,20 +16333,20 @@ webpackJsonp([5],{
 	  };
 	
 	  Dropdown.prototype.render = function render() {
-	    var _props = this.props,
-	        prefixCls = _props.prefixCls,
-	        children = _props.children,
-	        transitionName = _props.transitionName,
-	        animation = _props.animation,
-	        align = _props.align,
-	        placement = _props.placement,
-	        getPopupContainer = _props.getPopupContainer,
-	        showAction = _props.showAction,
-	        hideAction = _props.hideAction,
-	        overlayClassName = _props.overlayClassName,
-	        overlayStyle = _props.overlayStyle,
-	        trigger = _props.trigger,
-	        otherProps = _objectWithoutProperties(_props, ['prefixCls', 'children', 'transitionName', 'animation', 'align', 'placement', 'getPopupContainer', 'showAction', 'hideAction', 'overlayClassName', 'overlayStyle', 'trigger']);
+	    var _props2 = this.props,
+	        prefixCls = _props2.prefixCls,
+	        children = _props2.children,
+	        transitionName = _props2.transitionName,
+	        animation = _props2.animation,
+	        align = _props2.align,
+	        placement = _props2.placement,
+	        getPopupContainer = _props2.getPopupContainer,
+	        showAction = _props2.showAction,
+	        hideAction = _props2.hideAction,
+	        overlayClassName = _props2.overlayClassName,
+	        overlayStyle = _props2.overlayStyle,
+	        trigger = _props2.trigger,
+	        otherProps = _objectWithoutProperties(_props2, ['prefixCls', 'children', 'transitionName', 'animation', 'align', 'placement', 'getPopupContainer', 'showAction', 'hideAction', 'overlayClassName', 'overlayStyle', 'trigger']);
 	
 	    return _react2["default"].createElement(
 	      _rcTrigger2["default"],
@@ -16390,6 +16387,7 @@ webpackJsonp([5],{
 	  align: _propTypes2["default"].object,
 	  overlayStyle: _propTypes2["default"].object,
 	  placement: _propTypes2["default"].string,
+	  overlay: _propTypes2["default"].node,
 	  trigger: _propTypes2["default"].array,
 	  showAction: _propTypes2["default"].array,
 	  hideAction: _propTypes2["default"].array,
