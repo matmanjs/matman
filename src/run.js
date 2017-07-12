@@ -1,5 +1,10 @@
 const fs = require('fs');
 const path = require('path');
+
+//rewrite promise, bluebird is more faster
+require('babel-runtime/core-js/promise').default = require('bluebird');
+global.Promise = require('bluebird');
+
 const babelCompileDirectory = require('babel-d');
 
 const matmanServer = require('./server');
