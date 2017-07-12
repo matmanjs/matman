@@ -197,7 +197,7 @@ function getMocker(mockerBasePath, mockerName) {
   mockerDBState.activeModule = mockerDBState.activeModule || mockerDBState.defaultModule;
   mockerDBState.method = mockerDBState.method || 'get';
   mockerDBState.priority = mockerDBState.priority || 0;
-  mockerDBState.tags = _.union(mockerDBState.tags || [], ['全部']);
+  mockerDBState.tags = _.union(['全部'], mockerDBState.tags || []);
 
   // 获取当前的 mocker 下的 modules 列表
   let modules = [];
