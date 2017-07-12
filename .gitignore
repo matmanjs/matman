@@ -45,3 +45,4 @@ yarn-error.log*
 
 .idea
 tmp
+demo/app
