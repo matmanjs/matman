@@ -10,9 +10,9 @@ Mock service and Tester assistant
 matman 提供 `run` 方法来启动，接受一个配置参数
 
 ```
-const matman = require('matman');
+var matman = require('matman');
 
-const options = {};
+var options = {};
 
 matman.run(options);
 ```
@@ -20,7 +20,9 @@ matman.run(options);
  字段名 | 是否必须 | 类型 | 含义描述 |
 | --- | --- | --- | --- |
 | `ROOT_PATH` | 是 | `String` | 项目根目录 |
-| `MOCKER_PATH` | 是 | `String` | `mocker` 文件的路径 |
+| `SRC_PATH` | 否 | `String` | 源文件的目录，默认值为 `${ROOT_PATH}/src` |
+| `APP_PATH` | 否 | `String` | 运行目录，默认值为 `${ROOT_PATH}/app` |
+| `MOCKER_RELATIVE_PATH` | 否 | `String` | `mocker` 文件相对源文件目录的路径，默认值为 `'./mocker'` |
 | `LOG_PATH` | 否 | `String` | 日志文件存储的路径，默认值为 `${ROOT_PATH}/logs` |
 | `port` | 否 | `Number` | 端口号，默认为 `3000` |
 
@@ -49,6 +51,7 @@ matman 提供了一套路由系统，用于将 CGI 和 本地的 mocker 建立�
 | `name` | 否 | `String` | 名字，默认为文件名 |
 | `defaultModule` | 否 | `String` | 默认的 mock module 模块，如果不填，则会按文件名取第一个 mock module |
 | `priority` | 否 | `Number` | 默认为 `0`，值越大，则会展现在列表最前面，如果值一样，则顺序不固定 |
+| `tags` | 否 | `Array` | 默认为 `['全部']`，标签 |
 
 其中必须配置的字段为 `route`。matman 是基于 [Express](http://expressjs.com/) 开发的，因此这里的 `route` 值最终将被应用到 `app.use(route,callback)` 中，而 `callback` 回调返回最终将引用到对应的 mocker 中的文件。
 
