@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const babelCompileDirectory = require('babel-d');
 
 const matmanServer = require('./server');
 
@@ -17,9 +18,26 @@ module.exports = (opts) => {
 
   console.log(configOpts)
 
-  if (!configOpts || !configOpts.ROOT_PATH || !configOpts.MOCKER_PATH) {
-    console.error('Params error!', opts);
+  if (!configOpts || !configOpts.ROOT_PATH) {
+    console.error('Params error!', opts, configOpts);
     return;
+  }
+
+  // 设置默认值
+  configOpts.SRC_PATH = configOpts.SRC_PATH || path.join(configOpts.ROOT_PATH, './src');
+  configOpts.APP_PATH = configOpts.APP_PATH || path.join(configOpts.ROOT_PATH, './lib');
+  configOpts.MOCKER_RELATIVE_PATH = configOpts.MOCKER_RELATIVE_PATH || './mocker';
+  configOpts.LOG_PATH = configOpts.LOG_PATH || path.join(configOpts.ROOT_PATH, 'logs');
+  configOpts.port = configOpts.port || 3000;
+
+  // 确认 MOCKER_PATH 的值
+  if (configOpts.SRC_PATH === configOpts.APP_PATH) {
+    // 如果源文件目录和运行目录一致，就不进行babel编译了
+    configOpts.MOCKER_PATH = path.join(configOpts.SRC_PATH, configOpts.MOCKER_RELATIVE_PATH);
+  } else {
+    // babel 编译
+    babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
+    configOpts.MOCKER_PATH = path.join(configOpts.APP_PATH, configOpts.MOCKER_RELATIVE_PATH);
   }
 
   const routerMocker = matmanServer.routerMocker(configOpts);

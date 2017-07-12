@@ -8,7 +8,7 @@
   "priority": 100,
   "name": "standard_cgi",
   "disable": false,
-  "activeModule": "success_exist_matman",
+  "activeModule": "error_not_login",
   "modules": [
     {
       "name": "error_not_login",
@@ -41,5 +41,6 @@
     "全部",
     "重要",
     "首屏加载"
-  ]
+  ],
+  "createdAt": 1499823876106
 }

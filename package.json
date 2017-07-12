@@ -4,8 +4,8 @@
   "description": "mock service and tester assitant",
   "main": "lib/index.js",
   "scripts": {
-    "start": "babel-node ./src/index.js",
-    "server-babel": "npm run compile && babel-node ./demo/src/app.js",
+    "start": "npm run compile && node ./demo/entry.js",
+    "server-babel": "babel-node ./demo/entry.js",
     "tmp-babel": "babel-node ./tmp/dbtest.js",
     "compile": "babel --presets es2015-loose,stage-1 --plugins transform-runtime src/ --out-dir lib/ --source-maps",
     "webpack": "webpack --watch",
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "antd": "^2.11.0",
+    "babel-d": "^0.0.1",
     "babel-polyfill": "^6.23.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
