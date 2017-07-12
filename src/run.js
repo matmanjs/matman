@@ -16,8 +16,6 @@ module.exports = (opts) => {
     configOpts = opts;
   }
 
-  console.log(configOpts)
-
   if (!configOpts || !configOpts.ROOT_PATH) {
     console.error('Params error!', opts, configOpts);
     return;
@@ -25,7 +23,7 @@ module.exports = (opts) => {
 
   // 设置默认值
   configOpts.SRC_PATH = configOpts.SRC_PATH || path.join(configOpts.ROOT_PATH, './src');
-  configOpts.APP_PATH = configOpts.APP_PATH || path.join(configOpts.ROOT_PATH, './lib');
+  configOpts.APP_PATH = configOpts.APP_PATH || path.join(configOpts.ROOT_PATH, './app');
   configOpts.MOCKER_RELATIVE_PATH = configOpts.MOCKER_RELATIVE_PATH || './mocker';
   configOpts.LOG_PATH = configOpts.LOG_PATH || path.join(configOpts.ROOT_PATH, 'logs');
   configOpts.port = configOpts.port || 3000;
@@ -39,6 +37,8 @@ module.exports = (opts) => {
     babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
     configOpts.MOCKER_PATH = path.join(configOpts.APP_PATH, configOpts.MOCKER_RELATIVE_PATH);
   }
+
+  matmanLog.info(configOpts);
 
   const routerMocker = matmanServer.routerMocker(configOpts);
   const server = matmanServer.create();
