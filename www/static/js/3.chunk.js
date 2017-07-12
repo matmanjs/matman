@@ -9,7 +9,7 @@ webpackJsonp([3],{
 	exports.default = {
 	  path: '/admin/mockers/list',
 	  getComponent: function getComponent(nextState, cb) {
-	    __webpack_require__.e/* nsure */(4/* empty */, function (require) {
+	    __webpack_require__.e/* nsure */(4, function (require) {
 	      cb(null, __webpack_require__(1024).default);
 	    });
 	  }
