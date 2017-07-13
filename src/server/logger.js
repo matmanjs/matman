@@ -42,6 +42,6 @@ exports.logger = function (name) {
   return logger;
 };
 
-exports.matmanLog = function () {
+exports.matmanLogger = function () {
   return this.logger('matman');
 };

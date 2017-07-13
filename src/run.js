@@ -10,10 +10,10 @@ const babelCompileDirectory = require('babel-d');
 const matmanServer = require('./server');
 
 const logger = require('./server/logger');
-const matmanLog = logger.matmanLog();
+const matmanLogger = logger.matmanLogger();
 
 // 暴露一个全局log变量
-global.matmanLog = matmanLog;
+global.matmanLogger = matmanLogger;
 
 module.exports = (opts) => {
   let configOpts;
@@ -48,7 +48,7 @@ module.exports = (opts) => {
 
   logger.init(configOpts.LOG_PATH);
 
-  matmanLog.info(configOpts);
+  matmanLogger.info(configOpts);
 
   const routerMocker = matmanServer.routerMocker(configOpts);
   const server = matmanServer.create();
@@ -95,6 +95,6 @@ module.exports = (opts) => {
 
   server.listen(configOpts.port || 3000, () => {
     console.log('matman server is running');
-    matmanLog.info('matman server is running');
+    matmanLogger.info('matman server is running');
   });
 };

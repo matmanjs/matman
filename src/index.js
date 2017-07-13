@@ -10,5 +10,5 @@ module.exports = {
   mocker: mocker,
   tester: tester,
   run: run,
-  log: global.matmanLog
+  log: global.matmanLogger
 };
