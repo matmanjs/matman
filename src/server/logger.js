@@ -28,9 +28,7 @@ exports.init = function (logPath) {
   });
 };
 
-exports.connectLogger = function (entry) {
-  this.init(entry.LOG_PATH ? entry.LOG_PATH : path.join(entry.ROOT_PATH, 'logs'));
-
+exports.connectLogger = function () {
   // return log4js.connectLogger(this.logger('http'), { level: 'auto', format: ':method :url' });
   // https://github.com/nomiddlename/log4js-example/blob/master/app.js
   return log4js.connectLogger(this.logger('http'), { level: 'auto' });
@@ -44,6 +42,6 @@ exports.logger = function (name) {
   return logger;
 };
 
-exports.matmanLog = function () {
+exports.matmanLogger = function () {
   return this.logger('matman');
 };

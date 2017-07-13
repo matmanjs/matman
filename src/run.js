@@ -10,7 +10,10 @@ const babelCompileDirectory = require('babel-d');
 const matmanServer = require('./server');
 
 const logger = require('./server/logger');
-const matmanLog = logger.matmanLog();
+const matmanLogger = logger.matmanLogger();
+
+// 暴露一个全局log变量
+global.matmanLogger = matmanLogger;
 
 module.exports = (opts) => {
   let configOpts;
@@ -43,7 +46,9 @@ module.exports = (opts) => {
     configOpts.MOCKER_PATH = path.join(configOpts.APP_PATH, configOpts.MOCKER_RELATIVE_PATH);
   }
 
-  matmanLog.info(configOpts);
+  logger.init(configOpts.LOG_PATH);
+
+  matmanLogger.info(configOpts);
 
   const routerMocker = matmanServer.routerMocker(configOpts);
   const server = matmanServer.create();
@@ -72,7 +77,7 @@ module.exports = (opts) => {
     res.sendFile(path.join(__dirname, '../www/static', 'index.html'));
   });
 
-  server.use(logger.connectLogger(configOpts));
+  server.use(logger.connectLogger());
 
   // To handle POST, PUT and PATCH you need to use a body-parser
   // You can use the one used by JSON Server
@@ -90,6 +95,6 @@ module.exports = (opts) => {
 
   server.listen(configOpts.port || 3000, () => {
     console.log('matman server is running');
-    matmanLog.info('matman server is running');
+    matmanLogger.info('matman server is running');
   });
 };
