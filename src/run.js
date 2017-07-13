@@ -57,6 +57,15 @@ module.exports = (opts) => {
     res.redirect('/');
   });
 
+  // GET /admin/mockers/mocker/:mockerName/static/* 静态资源
+  // http://localhost:3000/admin/mockers/mocker/standard_cgi/static/1.png
+  server.get('/admin/mockers/mocker/:mockerName/static/*', (req, res) => {
+    // req.params[0] = 'subdir/3.png'
+    // req.params.mockerName = 'standard_cgi'
+    let imageFilePath = path.join(configOpts.MOCKER_PATH, req.params.mockerName, 'static', req.params[0]);
+    res.sendfile(imageFilePath);
+  });
+
   // GET /admin/*
   server.get('/admin/*', function (req, res) {
     // res.jsonp({ url2: req.url });

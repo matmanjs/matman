@@ -285,7 +285,11 @@ function getMockerReadme(mockerBasePath, mockerName) {
   });
 
   try {
-    return marked(fs.readFileSync(mockerReadmeFile, 'utf8'));
+    let content = fs.readFileSync(mockerReadmeFile, 'utf8');
+
+    content = content.replace(/__MOCKER__/g, mockerName);
+
+    return marked(content);
   } catch (e) {
     return e.stack;
   }
