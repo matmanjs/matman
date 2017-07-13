@@ -43,6 +43,8 @@ module.exports = (opts) => {
     configOpts.MOCKER_PATH = path.join(configOpts.APP_PATH, configOpts.MOCKER_RELATIVE_PATH);
   }
 
+  logger.init(configOpts.LOG_PATH);
+
   matmanLog.info(configOpts);
 
   const routerMocker = matmanServer.routerMocker(configOpts);
@@ -72,7 +74,7 @@ module.exports = (opts) => {
     res.sendFile(path.join(__dirname, '../www/static', 'index.html'));
   });
 
-  server.use(logger.connectLogger(configOpts));
+  server.use(logger.connectLogger());
 
   // To handle POST, PUT and PATCH you need to use a body-parser
   // You can use the one used by JSON Server
