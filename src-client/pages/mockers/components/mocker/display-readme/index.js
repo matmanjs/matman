@@ -13,7 +13,7 @@ export default function MockerReadme(props) {
   return (
     <div className="mocker-readme">
       <Card title="使用说明">
-        <div className="readme-content" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+        <div id="readme-content" className="readme-content" dangerouslySetInnerHTML={{ __html: htmlContent }} />
       </Card>
     </div>
   );
