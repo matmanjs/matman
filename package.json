@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "antd": "^2.11.0",
-    "babel-d": "^0.1.2",
+    "babel-d": "^0.1.3",
     "babel-polyfill": "^6.23.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
