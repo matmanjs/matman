@@ -5,6 +5,18 @@ const parserUtil = require('../../../src/parser/parser-util');
 
 describe('parser-util.js', () => {
 
+  describe('getMixinHandlerData() not define property of route', () => {
+    let handlerInfo;
+
+    before(() => {
+      handlerInfo = parserUtil.getMixinHandlerData('not_define_route', {}, null);
+    });
+
+    it('should return null', () => {
+      expect(handlerInfo).to.be.null;
+    });
+  });
+
   describe('getMixinHandlerData() default value', () => {
     let handlerInfo;
 
