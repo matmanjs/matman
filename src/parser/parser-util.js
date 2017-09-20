@@ -18,6 +18,7 @@ function getMixinHandlerData(handlerName, handlerConfigDBState, cacheData) {
     return null;
   }
 
+  // 始终以 config.json 中定义的为最高优先级（除了defaultModule字段），如果没定义，则使用 cache 值，最后才是默认值
   let data = _.merge({
     name: handlerName,
     description: handlerName,
@@ -26,10 +27,10 @@ function getMixinHandlerData(handlerName, handlerConfigDBState, cacheData) {
     priority: 0,
   }, cacheData, handlerConfigDBState);
 
-  // 当前激活的是那个 module
+  // 当前激活的是哪个 module，优先使用 cache 中
   data.activeModule = data.activeModule || data.defaultModule;
 
-  // 标签，用于过滤，字符串数组
+  // 标签，用于过滤，字符串数组，合并
   data.tags = _.union(['全部'], data.tags || []);
 
   return data;
