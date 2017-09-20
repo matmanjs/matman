@@ -13,7 +13,9 @@
     "commitmsg": "validate-commit-msg",
     "commit": "git-cz ",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "test": "mocha --compilers js:babel-core/register"
+    "test": "mocha --compilers js:babel-core/register",
+    "test-part": "mocha ./test/scripts/parser/parser-util.test.js --compilers js:babel-core/register"
+
   },
   "repository": {
     "type": "git",
