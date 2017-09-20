@@ -6,7 +6,7 @@ const marked = require('marked');
 const util = require('../util');
 const mocker = require('../mocker');
 
-const parserUtil = require('./util');
+const parserUtil = require('./parser-util');
 
 export default class HandlerParser {
   constructor(basePath, dataPath) {
@@ -47,6 +47,8 @@ export default class HandlerParser {
 
     handlerNameArr.forEach((handlerName) => {
       let handlerInfo = this.getHandlerInfo(handlerName);
+
+      // 有可能该 handler 不合法，只有合法的 handler 才进行处理
       if (handlerInfo) {
         handlerArr.push(this.getHandlerInfo(handlerName));
       }
@@ -81,6 +83,12 @@ export default class HandlerParser {
     //===============================================================
     const CUR_HANDLER_DATA_PATH = path.join(this.dataPath, handlerName);
 
+    // 如果数据目录不存在，则要先创建，否则在 lowdb 处理保存时，就会提示该文件不存在
+    // a/b/xx.json 可以不存在，但是其所在的目录 a/b/ 必须要存在
+    if (!fs.existsSync(CUR_HANDLER_DATA_PATH)) {
+      util.fse.ensureDirSync(CUR_HANDLER_DATA_PATH);
+    }
+
     let handlerDB = mocker.db.getDB(path.join(CUR_HANDLER_DATA_PATH, this.matmanJson));
 
     //===============================================================
@@ -109,30 +117,32 @@ export default class HandlerParser {
       let curHandleModuleName = path.basename(item.relativePath);
 
       // config.json 的作用是用于用户自定义，拥有最高的优先级
-      let curHandleModuleDBFile = path.join(CUR_HANDLE_MODULE_PATH, curHandleModuleName, this.handleModuleConfigName);
-      let curHandleModuleData = parserUtil.getMixinHandleModuleData(curHandleModuleName, mocker.db.getDB(curHandleModuleDBFile).getState());
+      let CUR_HANDLE_MODULE_CONFIG = path.join(CUR_HANDLE_MODULE_PATH, curHandleModuleName, this.handleModuleConfigName);
+      let curHandleModuleData = parserUtil.getMixinHandleModuleData(curHandleModuleName, mocker.db.getDB(CUR_HANDLE_MODULE_CONFIG).getState());
 
       modules.push(curHandleModuleData);
     });
+
+    // handle_modules 列表
+    handlerDBState.modules = modules;
+
+    //===============================================================
+    // 5. 其他默认处理
+    //===============================================================
 
     // 如果不存在默认的 activeModule，则设置第一个 handle_module 为默认
     if (!handlerDBState.activeModule && modules.length) {
       handlerDBState.activeModule = modules[0].name;
     }
 
-    // handle_modules 列表
-    handlerDBState.modules = modules;
+    //===============================================================
+    // 6. 保存并更新 this.matmanJson
+    //===============================================================
+    handlerDB.setState(handlerDBState).write();
 
-    // 如果数据目录不存在，则要先创建，因为后续涉及到要保存
-
-    if (!fs.existsSync(CUR_HANDLER_DATA_PATH)) {
-      util.fse.ensureDirSync(CUR_HANDLER_DATA_PATH);
-    }
-
-    // 更新 this.matmanJson
-    handlerDB.setState(handlerDBState);
-
-    // 如果是 id/:id 的形式，则params也需要有
+    //===============================================================
+    // 7. 合并返回
+    //===============================================================
 
     return _.merge({}, handlerDBState, {
       _fullPath: CUR_HANDLER_PATH,
