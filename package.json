@@ -13,9 +13,7 @@
     "commitmsg": "validate-commit-msg",
     "commit": "git-cz ",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "test": "mocha --compilers js:babel-core/register",
-    "test-part": "mocha ./test/scripts/parser/parser-util.test.js --compilers js:babel-core/register"
-
+    "test": "mocha --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -50,7 +48,7 @@
     "lodash": "^4.17.4",
     "lodash-id": "^0.14.0",
     "log4js": "^1.1.1",
-    "lowdb": "^0.16.2",
+    "lowdb": "^1.0.0",
     "marked": "^0.3.6",
     "method-override": "^2.3.9",
     "morgan": "^1.8.2",
