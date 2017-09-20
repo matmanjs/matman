@@ -118,7 +118,17 @@ export default class HandlerParser {
 
       // config.json 的作用是用于用户自定义，拥有最高的优先级
       let CUR_HANDLE_MODULE_CONFIG = path.join(CUR_HANDLE_MODULE_PATH, curHandleModuleName, this.handleModuleConfigName);
-      let curHandleModuleData = parserUtil.getMixinHandleModuleData(curHandleModuleName, mocker.db.getDB(CUR_HANDLE_MODULE_CONFIG).getState());
+
+      // 获取各个 handle_module 中 config.json 的数据
+      let handleModuleConfigDBState;
+      if (!fs.existsSync(CUR_HANDLE_MODULE_CONFIG)) {
+        handleModuleConfigDBState = {};
+      } else {
+        handleModuleConfigDBState = mocker.db.getDB(CUR_HANDLE_MODULE_CONFIG).getState();
+      }
+
+      // 获取最后处理之后的数据
+      let curHandleModuleData = parserUtil.getMixinHandleModuleData(curHandleModuleName, handleModuleConfigDBState);
 
       modules.push(curHandleModuleData);
     });
