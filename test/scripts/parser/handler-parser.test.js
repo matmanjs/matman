@@ -116,6 +116,28 @@ describe('handler-parser.js getAllHandler()', () => {
       ]);
     });
 
+    it('data.modules has success_1', () => {
+      expect(data.modules).to.include({
+        "name": "success_1",
+        "description": "success_1",
+        "priority": 0,
+        "query": {
+          "_m_target": "success_1"
+        }
+      });
+    });
+
+    it('data.modules has name_success_3', () => {
+      expect(data.modules).to.include({
+        "name": "name_success_3",
+        "description": "description_success_3",
+        "priority": 100,
+        "query": {
+          "_m_target": "success_3"
+        }
+      });
+    });
+
   });
 
   // describe('check simple_cgi', () => {
