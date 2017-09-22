@@ -39,19 +39,6 @@ describe('handler-parser.js getAllHandler()', () => {
       expect(data).to.be.an('object');
     });
 
-    // let a = {
-    //   name: 'simple_cgi',
-    //   description: 'simple_cgi',
-    //   disable: false,
-    //   method: 'get',
-    //   priority: 0,
-    //   route: '/cgi-bin/a/b/simple_cgi',
-    //   activeModule: 'error_not_login',
-    //   tags: ['全部'],
-    //   modules: [[Object], [Object], [Object]],
-    //   _fullPath: 'D:\\gitprojects\\matman\\test\\data\\fixtures\\parser\\simple_cgi'
-    // }
-
     it('should have some properties', () => {
       expect(data).to.include({
         name: 'simple_cgi',
@@ -72,6 +59,11 @@ describe('handler-parser.js getAllHandler()', () => {
     it('data.modules length is 3', () => {
       expect(data.modules).have.lengthOf(3);
     });
+
+    it('data.modules is correct', () => {
+      expect(data.modules.map(item => item.name)).to.include.members(['error_not_login', 'success_exist_matman', 'success_not_exist']);
+    });
+
   });
 
 });

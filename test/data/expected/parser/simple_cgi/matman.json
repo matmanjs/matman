@@ -1,0 +1,38 @@
+{
+  "name": "simple_cgi",
+  "description": "simple_cgi",
+  "disable": false,
+  "method": "get",
+  "priority": 0,
+  "route": "/cgi-bin/a/b/simple_cgi",
+  "activeModule": "error_not_login",
+  "tags": [
+    "全部"
+  ],
+  "modules": [
+    {
+      "name": "error_not_login",
+      "description": "error_not_login",
+      "priority": 0,
+      "query": {
+        "_m_target": "error_not_login"
+      }
+    },
+    {
+      "name": "success_exist_matman",
+      "description": "success_exist_matman",
+      "priority": 0,
+      "query": {
+        "_m_target": "success_exist_matman"
+      }
+    },
+    {
+      "name": "success_not_exist",
+      "description": "success_not_exist",
+      "priority": 0,
+      "query": {
+        "_m_target": "success_not_exist"
+      }
+    }
+  ]
+}
