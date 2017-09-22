@@ -108,23 +108,24 @@ export default class HandlerParser {
     let modules = [];
 
     util.file.getAll(CUR_HANDLE_MODULE_PATH, { globs: ['*'] }).forEach((item) => {
-      if (!item.isDirectory()) {
-        console.error('SHOULD BE Directory!', item);
-        return;
-      }
-
-      // 获取模块名
-      let curHandleModuleName = path.basename(item.relativePath);
-
-      // config.json 的作用是用于用户自定义，拥有最高的优先级
-      let CUR_HANDLE_MODULE_CONFIG = path.join(CUR_HANDLE_MODULE_PATH, curHandleModuleName, this.handleModuleConfigName);
-
       // 获取各个 handle_module 中 config.json 的数据
-      let handleModuleConfigDBState;
-      if (!fs.existsSync(CUR_HANDLE_MODULE_CONFIG)) {
-        handleModuleConfigDBState = {};
+      let handleModuleConfigDBState = {};
+      let curHandleModuleName = '';
+
+      if (item.isDirectory()) {
+        // 获取模块名
+        curHandleModuleName = path.basename(item.relativePath);
+
+        // 如果 handle_module 是一个目录，则需要去检查其是否存在 config.json 文件，优先使用它
+        // config.json 的作用是用于用户自定义，拥有最高的优先级
+        let CUR_HANDLE_MODULE_CONFIG = path.join(CUR_HANDLE_MODULE_PATH, curHandleModuleName, this.handleModuleConfigName);
+
+        if (fs.existsSync(CUR_HANDLE_MODULE_CONFIG)) {
+          handleModuleConfigDBState = mocker.db.getDB(CUR_HANDLE_MODULE_CONFIG).getState();
+        }
       } else {
-        handleModuleConfigDBState = mocker.db.getDB(CUR_HANDLE_MODULE_CONFIG).getState();
+        // 获取模块名
+        curHandleModuleName = path.basename(item.relativePath, path.extname(item.relativePath));
       }
 
       // 获取最后处理之后的数据
