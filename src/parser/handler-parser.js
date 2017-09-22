@@ -17,6 +17,24 @@ export default class HandlerParser {
     this.handlerConfigName = 'config.json';
     this.handleModuleConfigName = 'config.json';
     this.matmanJson = 'matman.json';
+
+    // cache 文件名
+    this.dbFile = 'db.json';
+
+    // cache 的数据
+    this.allHandlerData = [];
+  }
+
+  save() {
+    this.allHandlerData = this.getAllHandler();
+
+    // 保存一份到本地缓存
+    let db = mocker.db.getDB(path.join(this.dataPath, this.dbFile));
+    db.setState({
+      basePath: this.basePath,
+      dataPath: this.dataPath,
+      data: this.allHandlerData
+    }).write();
   }
 
   /**
@@ -58,7 +76,7 @@ export default class HandlerParser {
   }
 
   /**
-   * 获取指定 handler 的信息，当然包括 handle_modules 信息
+   * 通过名字获取 handler 的信息，当然包括 handle_modules 信息
    * @param {String} handlerName 指定的 handler 的名字
    */
   getHandlerInfo(handlerName) {
@@ -159,5 +177,16 @@ export default class HandlerParser {
     return _.merge({}, handlerDBState, {
       _fullPath: CUR_HANDLER_PATH,
     });
+  }
+
+  /**
+   * 通过路由及额外参数获取 handler 的信息，当然包括 handle_modules 信息
+   *
+   * @param {String} route 路由规则
+   * @param {Object} [params] 额外参数
+   * @return {Object}
+   */
+  getHandlerInfoByRoute(route, params = {}) {
+
   }
 }
