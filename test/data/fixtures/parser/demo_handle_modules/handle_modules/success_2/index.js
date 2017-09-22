@@ -1,3 +1,3 @@
 module.exports = {
-  "isExist": false
+  "result": 2
 };
