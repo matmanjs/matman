@@ -24,46 +24,88 @@ describe('handler-parser.js getAllHandler()', () => {
   //     fse.removeSync(TMP_SAVE_FOLDER);
   // });
 
-  describe('check simple_cgi', () => {
+  describe('check demo_simple', () => {
     let data;
 
     before(() => {
       allHandlerInfo.forEach((item) => {
-        if (!data && (item.name === 'simple_cgi')) {
+        if (!data && (item.name === 'demo_simple')) {
           data = item;
         }
       })
     });
 
-    it('should return db object', () => {
+    it('should return an object', () => {
       expect(data).to.be.an('object');
     });
 
     it('should have some properties', () => {
       expect(data).to.include({
-        name: 'simple_cgi',
-        description: 'simple_cgi',
-        disable: false,
-        method: 'get',
-        priority: 0,
-        route: '/cgi-bin/a/b/simple_cgi',
-        activeModule: 'error_not_login'
+        "name": "demo_simple",
+        "description": "demo_simple",
+        "disable": false,
+        "method": "get",
+        "priority": 0,
+        "route": "/cgi-bin/a/b/demo_simple",
+        "activeModule": "error"
       });
     });
 
-    it('data._fullPath include words of "simple_cgi"', () => {
-      // D:\\gitprojects\\matman\\test\\data\\fixtures\\parser\\simple_cgi
-      expect(data._fullPath).to.include('simple_cgi');
+    it('data._fullPath include words of "demo_simple"', () => {
+      // D:\\gitprojects\\matman\\test\\data\\fixtures\\parser\\demo_simple
+      expect(data._fullPath).to.include('demo_simple');
     });
 
-    it('data.modules length is 3', () => {
-      expect(data.modules).have.lengthOf(3);
+    it('data.modules length is 2', () => {
+      expect(data.modules).have.lengthOf(2);
     });
 
     it('data.modules is correct', () => {
-      expect(data.modules.map(item => item.name)).to.include.members(['error_not_login', 'success_exist_matman', 'success_not_exist']);
+      expect(data.modules.map(item => item.name)).to.include.members(['error', 'success']);
     });
 
   });
+
+  // describe('check simple_cgi', () => {
+  //   let data;
+  //
+  //   before(() => {
+  //     allHandlerInfo.forEach((item) => {
+  //       if (!data && (item.name === 'simple_cgi')) {
+  //         data = item;
+  //       }
+  //     })
+  //   });
+  //
+  //   it('should return db object', () => {
+  //     expect(data).to.be.an('object');
+  //   });
+  //
+  //   it('should have some properties', () => {
+  //     expect(data).to.include({
+  //       name: 'simple_cgi',
+  //       description: 'simple_cgi',
+  //       disable: false,
+  //       method: 'get',
+  //       priority: 0,
+  //       route: '/cgi-bin/a/b/simple_cgi',
+  //       activeModule: 'error_not_login'
+  //     });
+  //   });
+  //
+  //   it('data._fullPath include words of "simple_cgi"', () => {
+  //     // D:\\gitprojects\\matman\\test\\data\\fixtures\\parser\\simple_cgi
+  //     expect(data._fullPath).to.include('simple_cgi');
+  //   });
+  //
+  //   it('data.modules length is 3', () => {
+  //     expect(data.modules).have.lengthOf(3);
+  //   });
+  //
+  //   it('data.modules is correct', () => {
+  //     expect(data.modules.map(item => item.name)).to.include.members(['error_not_login', 'success_exist_matman', 'success_not_exist']);
+  //   });
+  //
+  // });
 
 });
