@@ -10,27 +10,64 @@ const BASE_PATH_FIXTURES = path.join(ROOT_TEST, './data/fixtures/parser');
 const BASE_PATH_EXPECTED = path.join(ROOT_TEST, './data/expected/parser');
 const BASE_PATH_TMP = path.join(ROOT_TEST, './tmp/parser');
 
-describe('handler-parser.js parseAndSave()', () => {
-  let data;
+describe('handler-parser.js parseAndSave() and get data from cache', () => {
+  let handlerParser, data;
 
   before(() => {
-    new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_TMP).parseAndSave();
+    handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_TMP);
+
+    handlerParser.parseAndSave();
 
     data = fse.readJsonSync(path.join(BASE_PATH_TMP, 'db.json'));
   });
 
   after(() => {
-    // fse.removeSync(TMP_SAVE_FOLDER);
+    fse.removeSync(BASE_PATH_TMP);
   });
 
-  it('should return an object', () => {
-    expect(data).to.be.an('object');
+  describe('check exist and correct', () => {
+    it('should return an object', () => {
+      expect(data).to.be.an('object');
+    });
+
+    it('should eql data/expected/parser/db.json', () => {
+      let expectedData = fse.readJsonSync(path.join(BASE_PATH_EXPECTED, 'db.json'));
+
+      expect(data.data).to.eql(expectedData.data);
+    });
   });
 
-  it('should eql data/expected/parser/db.json', () => {
-    let expectedData = fse.readJsonSync(path.join(BASE_PATH_EXPECTED, 'db.json'));
+  describe('check cache: getAllHandler()', () => {
+    let cacheAllHandlerList;
 
-    expect(data.data).to.eql(expectedData.data);
+    before(() => {
+      cacheAllHandlerList = handlerParser.getAllHandler();
+    });
+
+    it('should return an array and length is 3', () => {
+      expect(cacheAllHandlerList).to.be.an('array')
+        .and.have.lengthOf(3);
+    });
+  });
+
+  describe('check cache: getHandlerInfo(demo_simple)', () => {
+    let cacheHandlerInfo;
+
+    before(() => {
+      cacheHandlerInfo = handlerParser.getHandlerInfo('demo_simple');
+    });
+
+    it('should return an object and correct', () => {
+      expect(cacheHandlerInfo).to.include({
+        "name": "demo_simple",
+        "description": "demo_simple",
+        "disable": false,
+        "method": "get",
+        "priority": 0,
+        "route": "/cgi-bin/a/b/demo_simple",
+        "activeModule": "error"
+      });
+    });
   });
 
 });
