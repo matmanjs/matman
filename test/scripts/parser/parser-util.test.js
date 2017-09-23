@@ -69,7 +69,7 @@ describe('parser-util.js getMixinHandlerData()', () => {
     it('should contain special values', () => {
       expect(handlerInfo).to.include({
         route: '/cgi-bin/a/b/special_value',
-        name: 'special_value_name',
+        name: 'special_value',
         description: 'special_value description',
         disable: true,
         method: 'post',
@@ -111,7 +111,7 @@ describe('parser-util.js getMixinHandlerData()', () => {
     it('should contain special values', () => {
       expect(handlerInfo).to.include({
         route: '/cgi-bin/a/b/special_value',
-        name: 'special_value_name',
+        name: 'special_value',
         description: 'special_value description',
         disable: true,
         method: 'post',

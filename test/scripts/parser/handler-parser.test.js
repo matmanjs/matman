@@ -55,11 +55,6 @@ describe('handler-parser.js getAllHandler(true)', () => {
       });
     });
 
-    it('data._fullPath include words of "demo_simple"', () => {
-      // D:\\gitprojects\\matman\\test\\data\\fixtures\\parser\\demo_simple
-      expect(data._fullPath).to.include('demo_simple');
-    });
-
     it('data.modules length is 2', () => {
       expect(data.modules).have.lengthOf(2);
     });
@@ -75,7 +70,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
 
     before(() => {
       allHandlerInfo.forEach((item) => {
-        if (!data && (item.name === 'name_demo_handle_modules')) {
+        if (!data && (item.name === 'demo_handle_modules')) {
           data = item;
         }
       })
@@ -87,7 +82,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
 
     it('should have some properties', () => {
       expect(data).to.include({
-        "name": "name_demo_handle_modules",
+        "name": "demo_handle_modules",
         "description": "description_demo_handle_modules",
         "disable": false,
         "method": "get",
@@ -96,11 +91,6 @@ describe('handler-parser.js getAllHandler(true)', () => {
         "activeModule": "success_1",
         "defaultModule": "success_1",
       });
-    });
-
-    it('data._fullPath include words of "demo_handle_modules"', () => {
-      // D:\\gitprojects\\matman\\test\\data\\fixtures\\parser\\demo_simple
-      expect(data._fullPath).to.include('demo_handle_modules');
     });
 
     it('data.modules length is 5', () => {
@@ -112,7 +102,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
         'error',
         'success_1',
         'success_2',
-        'name_success_3',
+        'success_3',
         'success_4'
       ]);
     });
@@ -130,7 +120,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
 
     it('data.modules has name_success_3', () => {
       expect(data.modules).to.include({
-        "name": "name_success_3",
+        "name": "success_3",
         "description": "description_success_3",
         "priority": 100,
         "query": {

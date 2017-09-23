@@ -169,9 +169,7 @@ export default class HandlerParser {
     // 6. 合并返回
     //===============================================================
 
-    return _.merge({}, handlerData, {
-      _fullPath: CUR_HANDLER_PATH,
-    });
+    return handlerData;
   }
 
   /**
