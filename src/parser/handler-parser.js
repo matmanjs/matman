@@ -17,6 +17,9 @@ export default class HandlerParser {
     this.handlerConfigName = 'config.json';
     this.handleModuleConfigName = 'config.json';
 
+    // 注意此处一定要保证存储数据的地址是可存在的，否则会保存。
+    util.fse.ensureDirSync(this.dataPath);
+
     this.db = mocker.db.getDB(path.join(this.dataPath, 'db.json'));
   }
 
