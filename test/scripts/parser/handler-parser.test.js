@@ -8,19 +8,42 @@ const ROOT_TEST = path.join(ROOT_PROJECT, './test');
 
 const BASE_PATH_FIXTURES = path.join(ROOT_TEST, './data/fixtures/parser');
 const BASE_PATH_EXPECTED = path.join(ROOT_TEST, './data/expected/parser');
-// const BASE_PATH_TMP = path.join(ROOT_TEST, './tmp', TEST_SUB_PATH);
+const BASE_PATH_TMP = path.join(ROOT_TEST, './tmp/parser');
+
+describe('handler-parser.js parseAndSave()', () => {
+  let data;
+
+  before(() => {
+    new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_TMP).parseAndSave();
+
+    data = fse.readJsonSync(path.join(BASE_PATH_TMP, 'db.json'));
+  });
+
+  after(() => {
+    // fse.removeSync(TMP_SAVE_FOLDER);
+  });
+
+  it('should return an object', () => {
+    expect(data).to.be.an('object');
+  });
+
+  it('should eql data/expected/parser/db.json', () => {
+    let expectedData = fse.readJsonSync(path.join(BASE_PATH_EXPECTED, 'db.json'));
+
+    expect(data.data).to.eql(expectedData.data);
+  });
+
+});
 
 describe('handler-parser.js getAllHandler(true)', () => {
   let allHandlerInfo;
 
   before(() => {
-    fse.removeSync(path.join(BASE_PATH_EXPECTED, 'db.json'));
-
     let handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
 
     allHandlerInfo = handlerParser.getAllHandler(true);
 
-    console.log(allHandlerInfo)
+    // console.log(allHandlerInfo)
 
   });
 
@@ -130,47 +153,5 @@ describe('handler-parser.js getAllHandler(true)', () => {
     });
 
   });
-
-  // describe('check simple_cgi', () => {
-  //   let data;
-  //
-  //   before(() => {
-  //     allHandlerInfo.forEach((item) => {
-  //       if (!data && (item.name === 'simple_cgi')) {
-  //         data = item;
-  //       }
-  //     })
-  //   });
-  //
-  //   it('should return db object', () => {
-  //     expect(data).to.be.an('object');
-  //   });
-  //
-  //   it('should have some properties', () => {
-  //     expect(data).to.include({
-  //       name: 'simple_cgi',
-  //       description: 'simple_cgi',
-  //       disable: false,
-  //       method: 'get',
-  //       priority: 0,
-  //       route: '/cgi-bin/a/b/simple_cgi',
-  //       activeModule: 'error_not_login'
-  //     });
-  //   });
-  //
-  //   it('data._fullPath include words of "simple_cgi"', () => {
-  //     // D:\\gitprojects\\matman\\test\\data\\fixtures\\parser\\simple_cgi
-  //     expect(data._fullPath).to.include('simple_cgi');
-  //   });
-  //
-  //   it('data.modules length is 3', () => {
-  //     expect(data.modules).have.lengthOf(3);
-  //   });
-  //
-  //   it('data.modules is correct', () => {
-  //     expect(data.modules.map(item => item.name)).to.include.members(['error_not_login', 'success_exist_matman', 'success_not_exist']);
-  //   });
-  //
-  // });
 
 });
