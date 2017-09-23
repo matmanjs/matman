@@ -27,14 +27,20 @@ export default class HandlerParser {
     this.db.setState({
       basePath: this.basePath,
       dataPath: this.dataPath,
-      data: this.getAllHandler()
+      data: this.getAllHandler(true)
     }).write();
   }
 
   /**
    * 扫描所有的 handler 信息
+   * @param {boolean} [isReset] 是否为重置，如果为true，则将忽略缓存数据
    */
-  getAllHandler() {
+  getAllHandler(isReset) {
+    // 如果是优先缓存，则直接返回。
+    if (!isReset) {
+      return this.db.get('data').value();
+    }
+
     // 1. 获取所有的 handler name
     let handlerNameArr = [];
 
@@ -52,7 +58,7 @@ export default class HandlerParser {
     });
 
     // 打印一些结果
-    console.log(handlerNameArr);
+    // console.log(handlerNameArr);
 
     // 2. 根据 handler name 获取该 handler 下的所有 handle_modules
     let handlerArr = [];

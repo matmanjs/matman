@@ -10,15 +10,16 @@ const BASE_PATH_FIXTURES = path.join(ROOT_TEST, './data/fixtures/parser');
 const BASE_PATH_EXPECTED = path.join(ROOT_TEST, './data/expected/parser');
 // const BASE_PATH_TMP = path.join(ROOT_TEST, './tmp', TEST_SUB_PATH);
 
-describe('handler-parser.js getAllHandler()', () => {
+describe('handler-parser.js getAllHandler(true)', () => {
   let allHandlerInfo;
 
   before(() => {
-    fse.removeSync(BASE_PATH_EXPECTED);
+    fse.removeSync(path.join(BASE_PATH_EXPECTED, 'db.json'));
 
     let handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
 
-    allHandlerInfo = handlerParser.getAllHandler();
+    allHandlerInfo = handlerParser.getAllHandler(true);
+
     console.log(allHandlerInfo)
 
   });
