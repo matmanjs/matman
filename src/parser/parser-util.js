@@ -62,7 +62,87 @@ function getMixinHandleModuleData(handleModuleName, handleModuleConfigData) {
   return data;
 }
 
+/**
+ * 获取 handle_module 信息
+ *
+ * @param {Array} allHandlerList 所有的 handler 列表
+ * @param {String} route 路由规则
+ * @param {Object} [params] 请求的参数
+ * @return {Object}
+ *
+ */
+function getMatchedHandler(allHandlerList, route, params = {}) {
+  //===============================================================
+  // 1. 找出所有匹配 route 的元素，可能有多个
+  //===============================================================
+  let arr = [];
+
+  allHandlerList.forEach((item) => {
+    if (route === item.route) {
+      arr.push(item);
+    }
+  });
+
+  // 如果只有一个匹配，则一定是它
+  if (arr.length < 2) {
+    return arr[0];
+  }
+
+  //===============================================================
+  // 2. 不仅校验 route ，还需要校验 routeExtra 属性
+  //===============================================================
+  let paramsKeyLength = Object.keys(params).length;
+  let pureOne;
+
+  for (let i = 0, length = arr.length; i < length; i++) {
+    let curHandlerData = arr[i],
+      routeExtra = curHandlerData.routeExtra || {},
+      routeExtraKeys = Object.keys(routeExtra),
+      routeExtraKeyLength = routeExtraKeys.length;
+
+    if (!routeExtraKeyLength) {
+      // 如果没有配置限定
+
+      if (!paramsKeyLength) {
+        // 如果请求参数也为空，则就是它了
+        return curHandlerData;
+      }
+
+      // 如果请求参数不为空，这个很难判断，但如果没有其他精准匹配结果，则返回它
+      pureOne = curHandlerData;
+
+    } else {
+      // 如果配置了限定
+
+      if (!paramsKeyLength) {
+        // 如果请求参数也为空，则肯定不是它
+        continue;
+      }
+
+      let isFound = true;
+
+      // 如果请求参数不为空，则对比参数值
+      for (let k = 0; k < routeExtraKeyLength; k++) {
+        let field = routeExtraKeys[k];
+
+        // 这里都转化为字符串来比较，一旦不相等，则不再判断了
+        if ((routeExtra[field] + '') !== (params[field] + '')) {
+          isFound = false;
+          break;
+        }
+      }
+
+      if (isFound) {
+        return curHandlerData;
+      }
+    }
+  }
+
+  return pureOne;
+}
+
 module.exports = {
   getMixinHandlerData: getMixinHandlerData,
   getMixinHandleModuleData: getMixinHandleModuleData,
+  getMatchedHandler: getMatchedHandler,
 };

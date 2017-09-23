@@ -185,3 +185,60 @@ describe('parser-util.js getMixinHandleModuleData()', () => {
   });
 
 });
+
+describe('parser-util.js getMatchedHandler()', () => {
+  const ALL_HANDLER_LIST = [{
+    "name": "name",
+    "route": "/cgi-bin/a/a"
+  }, {
+    "name": "name1",
+    "route": "/cgi-bin/a/b"
+  }, {
+    "name": "name2",
+    "route": "/cgi-bin/a/b",
+    "routeExtra": {
+      "a": 1
+    }
+  }, {
+    "name": "name3",
+    "route": "/cgi-bin/a/b",
+    "routeExtra": {
+      "a": 2
+    }
+  }, {
+    "name": "name4",
+    "route": "/cgi-bin/a/b",
+    "routeExtra": {
+      "a": 1,
+      "b": 1
+    }
+  }];
+
+  it('should return [name]', () => {
+    let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/a');
+
+    expect(handlerInfo.name).to.equal("name");
+  });
+
+  it('should return [name1]', () => {
+    let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/b');
+
+    expect(handlerInfo.name).to.equal("name1");
+  });
+
+  it('should return [name2]', () => {
+    let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/b', {
+      "a": 1
+    });
+    expect(handlerInfo.name).to.equal("name2");
+  });
+
+  it('should return [name4]', () => {
+    let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/b', {
+      "a": 1,
+      "b": 1
+    });
+    expect(handlerInfo.name).to.equal("name4");
+  });
+
+});

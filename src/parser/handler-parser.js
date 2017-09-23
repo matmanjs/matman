@@ -35,13 +35,15 @@ export default class HandlerParser {
   }
 
   /**
-   * 扫描所有的 handler 信息
+   * 获取所有的 handler 信息
+   *
    * @param {boolean} [isReset] 是否为重置，如果为true，则将忽略缓存数据
+   * @return {Array}
    */
   getAllHandler(isReset) {
     // 如果是优先缓存，则直接返回。
     if (!isReset) {
-      return this.db.get('data').value();
+      return this.db.get('data').value() || [];
     }
 
     // 1. 获取所有的 handler name
@@ -80,8 +82,10 @@ export default class HandlerParser {
 
   /**
    * 通过名字获取 handler 的信息，当然包括 handle_modules 信息
+   *
    * @param {String} handlerName 指定的 handler 的名字
-   * @param {boolean} [isReset] 是否为重置，如果为true，则将忽略缓存数据
+   * @param {Boolean} [isReset] 是否为重置，如果为true，则将忽略缓存数据
+   * @return {Object}
    */
   getHandlerInfo(handlerName, isReset) {
     //===============================================================
@@ -107,7 +111,7 @@ export default class HandlerParser {
     // 我们需要有个配置文件，用于指导如何匹配规则，因此是必须的
     if (!fs.existsSync(CUR_HANDLER_CONFIG)) {
       console.error(CUR_HANDLER_CONFIG + ' is not exist!');
-      return;
+      return null;
     }
 
     let handlerConfigData = mocker.db.getDB(CUR_HANDLER_CONFIG).getState();
@@ -119,7 +123,7 @@ export default class HandlerParser {
 
     // TODO 如果匹配规则一模一样，需要进行警告提示！！！！！
     if (!handlerData) {
-      return;
+      return null;
     }
 
     //===============================================================
@@ -176,13 +180,13 @@ export default class HandlerParser {
   }
 
   /**
-   * 通过路由及额外参数获取 handler 的信息，当然包括 handle_modules 信息
+   * 通过路由及请求参数获取 handler 的信息
    *
    * @param {String} route 路由规则
-   * @param {Object} [params] 额外参数
+   * @param {Object} [params] 请求的参数
    * @return {Object}
    */
   getHandlerInfoByRoute(route, params = {}) {
-
+    return parserUtil.getMatchedHandler(this.getAllHandler(), route, params);
   }
 }
