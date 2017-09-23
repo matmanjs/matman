@@ -50,7 +50,7 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
     });
   });
 
-  describe('check cache: getHandlerInfo(demo_simple)', () => {
+  describe('check cache: getHandlerInfo("demo_simple")', () => {
     let cacheHandlerInfo;
 
     before(() => {
@@ -79,14 +79,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
     let handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
 
     allHandlerInfo = handlerParser.getAllHandler(true);
-
-    // console.log(allHandlerInfo)
-
   });
-
-  // after(() => {
-  //     fse.removeSync(TMP_SAVE_FOLDER);
-  // });
 
   describe('check demo_simple', () => {
     let data;
@@ -189,6 +182,29 @@ describe('handler-parser.js getAllHandler(true)', () => {
       });
     });
 
+  });
+
+});
+
+describe('handler-parser.js getHandlerInfo("demo_simple", true)', () => {
+  let handlerInfo;
+
+  before(() => {
+    let handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
+
+    handlerInfo = handlerParser.getHandlerInfo('demo_simple', true);
+  });
+
+  it('should return an object and correct', () => {
+    expect(handlerInfo).to.include({
+      "name": "demo_simple",
+      "description": "demo_simple",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "route": "/cgi-bin/a/b/demo_simple",
+      "activeModule": "error"
+    });
   });
 
 });
