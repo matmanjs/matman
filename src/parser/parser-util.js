@@ -72,73 +72,57 @@ function getMixinHandleModuleData(handleModuleName, handleModuleConfigData) {
  *
  */
 function getMatchedHandler(allHandlerList, route, params = {}) {
-  //===============================================================
-  // 1. 找出所有匹配 route 的元素，可能有多个
-  //===============================================================
-  let arr = [];
+  let matchedArr = [];
+  let paramsKeyLength = Object.keys(params).length;
 
   allHandlerList.forEach((item) => {
-    if (route === item.route) {
-      arr.push(item);
+    // 如果连 route 都没匹配，则无需后续处理
+    if (route !== item.route) {
+      return;
     }
-  });
 
-  // 如果只有一个匹配，则一定是它
-  if (arr.length < 2) {
-    return arr[0];
-  }
+    let obj = {
+      match: 1,
+      data: item
+    };
 
-  //===============================================================
-  // 2. 不仅校验 route ，还需要校验 routeExtra 属性
-  //===============================================================
-  let paramsKeyLength = Object.keys(params).length;
-  let pureOne;
-
-  for (let i = 0, length = arr.length; i < length; i++) {
-    let curHandlerData = arr[i],
-      routeExtra = curHandlerData.routeExtra || {},
+    let routeExtra = item.routeExtra || {},
       routeExtraKeys = Object.keys(routeExtra),
       routeExtraKeyLength = routeExtraKeys.length;
 
+    // 如果 routeExtra 为空，则放入数组中之后，无须再后续处理
     if (!routeExtraKeyLength) {
-      // 如果没有配置限定
-
-      if (!paramsKeyLength) {
-        // 如果请求参数也为空，则就是它了
-        return curHandlerData;
-      }
-
-      // 如果请求参数不为空，这个很难判断，但如果没有其他精准匹配结果，则返回它
-      pureOne = curHandlerData;
-
-    } else {
-      // 如果配置了限定
-
-      if (!paramsKeyLength) {
-        // 如果请求参数也为空，则肯定不是它
-        continue;
-      }
-
-      let isFound = true;
-
-      // 如果请求参数不为空，则对比参数值
-      for (let k = 0; k < routeExtraKeyLength; k++) {
-        let field = routeExtraKeys[k];
-
-        // 这里都转化为字符串来比较，一旦不相等，则不再判断了
-        if ((routeExtra[field] + '') !== (params[field] + '')) {
-          isFound = false;
-          break;
-        }
-      }
-
-      if (isFound) {
-        return curHandlerData;
-      }
+      matchedArr.push(obj);
+      return;
     }
-  }
 
-  return pureOne;
+    // 如果 routeExtra 不为空，但请求参数为空，则肯定是匹配失败了的，无须放入数组
+    if (routeExtraKeyLength && !paramsKeyLength) {
+      return;
+    }
+
+    let isExistNotMatchedField = false;
+
+    // 如果 routeExtra 不为空，且请求参数也为空，则为其计算匹配度
+    routeExtraKeys.forEach((routeExtraKey) => {
+      // 注意，这里都转化为字符串来比较
+      if ((routeExtra[routeExtraKey] + '') === (params[routeExtraKey] + '')) {
+        obj.match++;
+      } else {
+        // 如果定义了 routeExtra，就要全匹配，有一个不匹配都不行
+        isExistNotMatchedField = true;
+      }
+    });
+
+    if (!isExistNotMatchedField) {
+      matchedArr.push(obj);
+    }
+  });
+
+  return matchedArr.length ? matchedArr.sort((a, b) => {
+    return b.match - a.match
+  })[0].data : null;
+
 }
 
 module.exports = {
