@@ -16,29 +16,23 @@ export default class HandlerParser {
     this.handleModulesName = 'handle_modules';
     this.handlerConfigName = 'config.json';
     this.handleModuleConfigName = 'config.json';
-    this.matmanJson = 'matman.json';
 
-    // cache 文件名
-    this.dbFile = 'db.json';
-
-    // cache 的数据
-    this.allHandlerData = [];
+    this.db = mocker.db.getDB(path.join(this.dataPath, 'db.json'));
   }
 
-  save() {
-    this.allHandlerData = this.getAllHandler();
-
-    // 保存一份到本地缓存
-    let db = mocker.db.getDB(path.join(this.dataPath, this.dbFile));
-    db.setState({
+  /**
+   * 分析并保存数据到本地
+   */
+  parseAndSave() {
+    this.db.setState({
       basePath: this.basePath,
       dataPath: this.dataPath,
-      data: this.allHandlerData
+      data: this.getAllHandler()
     }).write();
   }
 
   /**
-   * 获取某个路径下的所有的 handler 信息
+   * 扫描所有的 handler 信息
    */
   getAllHandler() {
     // 1. 获取所有的 handler name
@@ -64,11 +58,11 @@ export default class HandlerParser {
     let handlerArr = [];
 
     handlerNameArr.forEach((handlerName) => {
-      let handlerInfo = this.getHandlerInfo(handlerName);
+      let handlerInfo = this.getHandlerInfo(handlerName, true);
 
       // 有可能该 handler 不合法，只有合法的 handler 才进行处理
       if (handlerInfo) {
-        handlerArr.push(this.getHandlerInfo(handlerName));
+        handlerArr.push(handlerInfo);
       }
     });
 
@@ -78,13 +72,26 @@ export default class HandlerParser {
   /**
    * 通过名字获取 handler 的信息，当然包括 handle_modules 信息
    * @param {String} handlerName 指定的 handler 的名字
+   * @param {boolean} [isReset] 是否为重置，如果为true，则将忽略缓存数据
    */
-  getHandlerInfo(handlerName) {
-    const CUR_HANDLER_PATH = path.join(this.basePath, handlerName);
+  getHandlerInfo(handlerName, isReset) {
+    //===============================================================
+    // 1. 从缓存数据库中获取 handler 数据
+    //===============================================================
+    let cacheData = this.db.get('data').find({ name: handlerName }).value();
+
+    // 如果是优先缓存，则直接返回。
+    if (!isReset) {
+      return cacheData;
+    }
 
     //===============================================================
-    // 1. 获取这个 handler 模块的 config 信息
+    // 2. 获取这个 handler 模块的 config 信息
     //===============================================================
+
+    // 如果不需要缓存，则从文件系统中获取并处理
+    const CUR_HANDLER_PATH = path.join(this.basePath, handlerName);
+
     const CUR_HANDLER_CONFIG = path.join(CUR_HANDLER_PATH, this.handlerConfigName);
 
     // 注意：handler 的 config.json 可能不存在，此时需要提示错误
@@ -94,28 +101,15 @@ export default class HandlerParser {
       return;
     }
 
-    let handlerConfigDB = mocker.db.getDB(CUR_HANDLER_CONFIG);
-
-    //===============================================================
-    // 2. 获取这个 handler 模块的详细cache信息
-    //===============================================================
-    const CUR_HANDLER_DATA_PATH = path.join(this.dataPath, handlerName);
-
-    // 如果数据目录不存在，则要先创建，否则在 lowdb 处理保存时，就会提示该文件不存在
-    // a/b/xx.json 可以不存在，但是其所在的目录 a/b/ 必须要存在
-    if (!fs.existsSync(CUR_HANDLER_DATA_PATH)) {
-      util.fse.ensureDirSync(CUR_HANDLER_DATA_PATH);
-    }
-
-    let handlerDB = mocker.db.getDB(path.join(CUR_HANDLER_DATA_PATH, this.matmanJson));
+    let handlerConfigData = mocker.db.getDB(CUR_HANDLER_CONFIG).getState();
 
     //===============================================================
     // 3. 以一定的方式， 获取 handler 模块最终信息
     //===============================================================
-    let handlerDBState = parserUtil.getMixinHandlerData(handlerName, handlerConfigDB.getState(), handlerDB.getState());
+    let handlerData = parserUtil.getMixinHandlerData(handlerName, handlerConfigData, cacheData);
 
     // TODO 如果匹配规则一模一样，需要进行警告提示！！！！！
-    if (!handlerDBState) {
+    if (!handlerData) {
       return;
     }
 
@@ -154,27 +148,22 @@ export default class HandlerParser {
     });
 
     // handle_modules 列表
-    handlerDBState.modules = modules;
+    handlerData.modules = modules;
 
     //===============================================================
     // 5. 其他默认处理
     //===============================================================
 
     // 如果不存在默认的 activeModule，则设置第一个 handle_module 为默认
-    if (!handlerDBState.activeModule && modules.length) {
-      handlerDBState.activeModule = modules[0].name;
+    if (!handlerData.activeModule && modules.length) {
+      handlerData.activeModule = modules[0].name;
     }
 
     //===============================================================
-    // 6. 保存并更新 this.matmanJson
-    //===============================================================
-    handlerDB.setState(handlerDBState).write();
-
-    //===============================================================
-    // 7. 合并返回
+    // 6. 合并返回
     //===============================================================
 
-    return _.merge({}, handlerDBState, {
+    return _.merge({}, handlerData, {
       _fullPath: CUR_HANDLER_PATH,
     });
   }

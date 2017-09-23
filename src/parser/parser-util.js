@@ -6,14 +6,14 @@ const path = require('path');
  * 获取 handlerData 信息
  *
  * @param {String} handlerName 该 handler 名字
- * @param {Object} handlerConfigDBState config.json中的数据
+ * @param {Object} handlerConfigData config.json中的数据
  * @param {Object} cacheData 缓存数据
  * @return {Object}
  */
-function getMixinHandlerData(handlerName, handlerConfigDBState, cacheData) {
+function getMixinHandlerData(handlerName, handlerConfigData, cacheData) {
   // 至少得有 route 字段，否则报错
   // 我们是需要 route 字段来匹配的，因此是必须的
-  if (!handlerConfigDBState.route) {
+  if (!handlerConfigData.route) {
     console.error(handlerName + ' should define property of "route"! ');
     return null;
   }
@@ -25,7 +25,7 @@ function getMixinHandlerData(handlerName, handlerConfigDBState, cacheData) {
     disable: false,
     method: 'get',
     priority: 0,
-  }, cacheData, handlerConfigDBState);
+  }, cacheData, handlerConfigData);
 
   // 当前激活的是哪个 module，优先使用 cache 中
   data.activeModule = data.activeModule || data.defaultModule;
