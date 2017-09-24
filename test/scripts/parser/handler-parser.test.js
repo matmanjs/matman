@@ -209,6 +209,26 @@ describe('handler-parser.js getHandler("demo_simple", true)', () => {
 
 });
 
+
+describe('parser-util.js getHandlerByRoute()', () => {
+  let handlerParser;
+
+  before(() => {
+    handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
+  });
+
+  it('demo_simple >> null should return [demo_simple]', () => {
+    let handlerInfo = handlerParser.getHandlerByRoute('/cgi-bin/a/b/demo_simple');
+    expect(handlerInfo.name).to.equal("demo_simple");
+  });
+
+  it('demo_handle_modules >> null should return [demo_handle_modules]', () => {
+    let handlerInfo = handlerParser.getHandlerByRoute('/cgi-bin/a/b/demo_handle_modules');
+    expect(handlerInfo.name).to.equal("demo_handle_modules");
+  });
+
+});
+
 describe('handler-parser.js getHandleModule()', () => {
   let handlerParser;
 
