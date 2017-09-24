@@ -49,7 +49,7 @@ export default class HandlerParser {
     // 1. 获取所有的 handler name
     let handlerNameArr = [];
 
-    util.file.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
+    util.file.getAll(this.basePath, {globs: ['*']}).forEach((item) => {
       /**
        * 限制只处理文件夹类型的
        * 在根目录下，每个子文件夹就是一个 handler 单位，其名字即为文件夹名字
@@ -91,7 +91,7 @@ export default class HandlerParser {
     //===============================================================
     // 1. 从缓存数据库中获取 handler 数据
     //===============================================================
-    let cacheData = this.db.get('data').find({ name: handlerName }).value();
+    let cacheData = this.db.get('data').find({name: handlerName}).value();
 
     // 如果是优先缓存，则直接返回。
     if (!isReset) {
@@ -133,7 +133,7 @@ export default class HandlerParser {
 
     let modules = [];
 
-    util.file.getAll(CUR_HANDLE_MODULE_PATH, { globs: ['*'] }).forEach((item) => {
+    util.file.getAll(CUR_HANDLE_MODULE_PATH, {globs: ['*']}).forEach((item) => {
       // 获取各个 handle_module 中 config.json 的数据
       let handleModuleConfigDBState = {};
       let curHandleModuleName = '';
@@ -188,5 +188,33 @@ export default class HandlerParser {
    */
   getHandlerByRoute(route, params = {}) {
     return parserUtil.getMatchedHandler(this.getAllHandler(), route, params);
+  }
+
+  /**
+   * 通过名字获取 handle_module 的信息
+   *
+   * @param {String} handlerName 指定的 handler 的名字
+   * @param {String} handleModuleName 指定的 handle_module 的名字
+   * @param {Boolean} [isReset] 是否为重置，如果为true，则将忽略缓存数据
+   * @return {Object}
+   */
+  getHandleModule(handlerName, handleModuleName, isReset) {
+    // 首先获取相应的 handler 信息
+    let handlerInfo = this.getHandler(handlerName, isReset);
+
+    // 如果不存在则直接返回 null
+    if (!handlerInfo || !handlerInfo.modules || !handlerInfo.modules.length) {
+      return null;
+    }
+
+    let data = null;
+
+    handlerInfo.modules.forEach((item) => {
+      if (!data && (item.name === handleModuleName)) {
+        data = item;
+      }
+    });
+
+    return data;
   }
 }

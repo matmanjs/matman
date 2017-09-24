@@ -1,5 +1,5 @@
 import path from 'path';
-import { expect } from 'chai';
+import {expect} from 'chai';
 import fse from 'fs-extra';
 import HandlerParser from '../../../src/parser/handler-parser';
 
@@ -204,6 +204,51 @@ describe('handler-parser.js getHandler("demo_simple", true)', () => {
       "priority": 0,
       "route": "/cgi-bin/a/b/demo_simple",
       "activeModule": "error"
+    });
+  });
+
+});
+
+describe('handler-parser.js getHandleModule()', () => {
+  let handlerParser;
+
+  before(() => {
+    handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
+  });
+
+  it('getHandleModule("demo_simple","success") should return [success]', () => {
+    let data = handlerParser.getHandleModule('demo_simple', 'success');
+
+    expect(data).to.include({
+      "description": "success",
+      "priority": 0,
+      "name": "success",
+    });
+  });
+
+  it('getHandleModule("demo_simple","success", true) should return [success]', () => {
+    let data = handlerParser.getHandleModule('demo_simple', 'success', true);
+
+    expect(data).to.include({
+      "description": "success",
+      "priority": 0,
+      "name": "success",
+    });
+  });
+
+  it('getHandleModule("demo_simple","other") should return null', () => {
+    let data = handlerParser.getHandleModule('demo_handle_modules', 'other');
+
+    expect(data).to.be.null;
+  });
+
+  it('getHandleModule("demo_handle_modules","success_3") should return [success_3]', () => {
+    let data = handlerParser.getHandleModule('demo_handle_modules', 'success_3');
+
+    expect(data).to.include({
+      "description": "description_success_3",
+      "priority": 100,
+      "name": "success_3"
     });
   });
 
