@@ -1,3 +1,6 @@
 {
-  "priority": 10
+  "priority": 10,
+  "query": {
+    "type": 1
+  }
 }

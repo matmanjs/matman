@@ -16,7 +16,7 @@ export default class HandlerParser {
     this.handleModulesFolderName = 'handle_modules';
     this.handlerConfigName = 'config.json';
     this.handleModuleConfigName = 'config.json';
-    this.targetField = 'mat_module';
+    this.targetField = '_m_target';
 
     // 注意此处一定要保证存储数据的地址是可存在的，否则会保存。
     util.fse.ensureDirSync(this.dataPath);
@@ -206,36 +206,41 @@ export default class HandlerParser {
   }
 
   /**
-   * 通过名字获取 handle_module 的信息
+   * 通过路由匹配获取到本地模块路径和完整的请求信息
    *
-   * @param {String} handlerName 指定的 handler 的名字
-   * @param {String} handleModuleName 指定的 handle_module 的名字
-   * @param {Object} req 请求对象
+   * @param {String} route 路由规则
+   * @param {Object} [params] 请求的参数
    * @return {Object}
    */
-  getHandleModuleResult(route, params, req) {
+  getReqInfoByRoute(route, params = {}) {
     // 获得当前的 handler 信息
     let handlerInfo = this.getHandlerByRoute(route, params);
 
     if (!handlerInfo) {
-      return Promise.reject('UNKNOWN_CGI');
+      return null;
     }
 
     // 优先获取 param 中请求的指定 handle_module，其次是 handerInfo.activeModule
-    let handleModuleName = params[this.targetField] ? params[this.targetField] : handlerInfo.activeModule;
+    let handleModuleName = params[this.targetField] || handlerInfo.activeModule;
 
     let handleModuleInfo = this._getHandleModuleByHandler(handlerInfo, handleModuleName);
 
-    if (handleModuleInfo) {
-      return Promise.reject('UNKNOWN_HANDLE_MODULE');
+    if (!handleModuleInfo) {
+      return null;
     }
 
     // 目标模块的路径
-    const HANDLE_MODULE_PATH = path.join(this.basePath, handlerInfo.name, this.handleModulesFolderName, handleModuleName);
+    let moduleFullPath = path.join(this.basePath, handlerInfo.name, this.handleModulesFolderName, handleModuleName);
 
     // 还有部分参数在 handle_module 的 query 字段中，需要合并请求
-    params = _.merge({}, handleModuleInfo.query, params);
+    let reqParams = _.merge({}, handleModuleInfo.query, params);
 
+    return {
+      handlerInfo: handlerInfo,
+      handleModuleInfo: handleModuleInfo,
+      fullPath: moduleFullPath,
+      params: reqParams
+    }
   }
 
   /**
@@ -257,7 +262,7 @@ export default class HandlerParser {
       let mockModuleItem = handlerInfo.modules[i];
 
       if (handleModuleName === mockModuleItem.name) {
-        handleModuleInfo = handlerInfo.modules[i];
+        handleModuleInfo = mockModuleItem;
         break;
       }
     }

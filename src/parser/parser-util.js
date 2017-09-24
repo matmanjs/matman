@@ -63,7 +63,7 @@ function getMixinHandleModuleData(handleModuleName, handleModuleConfigData) {
 }
 
 /**
- * 获取 handle_module 信息
+ * 获取匹配路由的 Handler 信息
  *
  * @param {Array} allHandlerList 所有的 handler 列表
  * @param {String} route 路由规则

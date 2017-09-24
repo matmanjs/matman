@@ -272,3 +272,54 @@ describe('handler-parser.js getHandleModule()', () => {
   });
 
 });
+
+describe('handler-parser.js getReqInfoByRoute()', () => {
+  let handlerParser;
+
+  before(() => {
+    handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
+  });
+
+  describe('demo_handle_modules >> null', () => {
+    let result;
+
+    before(() => {
+      result = handlerParser.getReqInfoByRoute('/cgi-bin/a/b/demo_handle_modules');
+    });
+
+    it('should return object', () => {
+      expect(result).to.be.an('object')
+        .that.include.all.keys('handlerInfo', 'handleModuleInfo', 'fullPath', 'params');
+    });
+
+    it('result.params should return object', () => {
+      expect(result.params).to.include({
+        _m_target: 'success_1'
+      });
+    });
+  });
+
+  describe('demo_handle_modules >> a=1&_m_target=success_4', () => {
+    let result;
+
+    before(() => {
+      result = handlerParser.getReqInfoByRoute('/cgi-bin/a/b/demo_handle_modules', {
+        a: 1,
+        _m_target: 'success_4'
+      });
+    });
+
+    it('should return object', () => {
+      expect(result).to.be.an('object')
+        .that.include.all.keys('handlerInfo', 'handleModuleInfo', 'fullPath', 'params');
+    });
+
+    it('result.params should return object and got type=1', () => {
+      expect(result.params).to.include({
+        _m_target: 'success_4',
+        type: 1,
+        a: 1
+      });
+    });
+  });
+});
