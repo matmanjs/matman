@@ -59,6 +59,24 @@ describe('util/handle.js save() and saveJSON()', () => {
     fse.removeSync(BASE_PATH_TMP);
   });
 
+  describe('saveJSON()', () => {
+    it('save plain object as .json file', () => {
+      const TMP_SAVE_FILE = path.join(BASE_PATH_TMP, 'saveJSON-1.json');
+
+      let data = {
+        name: 'saveJSON-1',
+        age: 1
+      };
+
+      return handleUtil.saveJSON(data, TMP_SAVE_FILE)
+        .then(() => {
+          const newSavedFile = fse.readJsonSync(TMP_SAVE_FILE);
+
+          expect(newSavedFile).to.deep.equal(data);
+        });
+    });
+  });
+
   describe('save()', () => {
     it('save plain object as .json file', () => {
       const SRC_FILE = path.join(BASE_PATH_FIXTURES, 'return-plain-object.js');
