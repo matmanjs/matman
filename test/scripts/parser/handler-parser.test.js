@@ -50,11 +50,11 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
     });
   });
 
-  describe('check cache: getHandlerInfo("demo_simple")', () => {
+  describe('check cache: getHandler("demo_simple")', () => {
     let cacheHandlerInfo;
 
     before(() => {
-      cacheHandlerInfo = handlerParser.getHandlerInfo('demo_simple');
+      cacheHandlerInfo = handlerParser.getHandler('demo_simple');
     });
 
     it('should return an object and correct', () => {
@@ -186,13 +186,13 @@ describe('handler-parser.js getAllHandler(true)', () => {
 
 });
 
-describe('handler-parser.js getHandlerInfo("demo_simple", true)', () => {
+describe('handler-parser.js getHandler("demo_simple", true)', () => {
   let handlerInfo;
 
   before(() => {
     let handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
 
-    handlerInfo = handlerParser.getHandlerInfo('demo_simple', true);
+    handlerInfo = handlerParser.getHandler('demo_simple', true);
   });
 
   it('should return an object and correct', () => {

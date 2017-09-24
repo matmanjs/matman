@@ -69,7 +69,7 @@ export default class HandlerParser {
     let handlerArr = [];
 
     handlerNameArr.forEach((handlerName) => {
-      let handlerInfo = this.getHandlerInfo(handlerName, true);
+      let handlerInfo = this.getHandler(handlerName, true);
 
       // 有可能该 handler 不合法，只有合法的 handler 才进行处理
       if (handlerInfo) {
@@ -87,7 +87,7 @@ export default class HandlerParser {
    * @param {Boolean} [isReset] 是否为重置，如果为true，则将忽略缓存数据
    * @return {Object}
    */
-  getHandlerInfo(handlerName, isReset) {
+  getHandler(handlerName, isReset) {
     //===============================================================
     // 1. 从缓存数据库中获取 handler 数据
     //===============================================================
@@ -186,7 +186,7 @@ export default class HandlerParser {
    * @param {Object} [params] 请求的参数
    * @return {Object}
    */
-  getHandlerInfoByRoute(route, params = {}) {
+  getHandlerByRoute(route, params = {}) {
     return parserUtil.getMatchedHandler(this.getAllHandler(), route, params);
   }
 }
