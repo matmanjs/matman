@@ -188,25 +188,25 @@ describe('parser-util.js getMixinHandleModuleData()', () => {
 
 describe('parser-util.js getMatchedHandler()', () => {
   const ALL_HANDLER_LIST = [{
-    "name": "name",
+    "name": "route1",
     "route": "/cgi-bin/a/route1"
   }, {
-    "name": "name1",
+    "name": "route2-1",
     "route": "/cgi-bin/a/route2"
   }, {
-    "name": "name2",
+    "name": "route2-2",
     "route": "/cgi-bin/a/route2",
     "routeExtra": {
       "a": 1
     }
   }, {
-    "name": "name3",
+    "name": "route2-3",
     "route": "/cgi-bin/a/route2",
     "routeExtra": {
       "a": 2
     }
   }, {
-    "name": "name4",
+    "name": "route2-4",
     "route": "/cgi-bin/a/route2",
     "routeExtra": {
       "a": 1,
@@ -214,72 +214,78 @@ describe('parser-util.js getMatchedHandler()', () => {
     }
   }];
 
-  it('route1 >> null should return [name]', () => {
+  it('route1 >> null should return [route1]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route1');
-    expect(handlerInfo.name).to.equal("name");
+    expect(handlerInfo.name).to.equal("route1");
   });
 
-  it('route1 >> a=1 should return [name]', () => {
+  it('route1 >> a=1 should return [route1]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route1', {
       "a": 1
     });
-    expect(handlerInfo.name).to.equal("name");
+    expect(handlerInfo.name).to.equal("route1");
   });
 
-  it('null >> null should return [name1]', () => {
+  it('route2 >> null should return [route2-1]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route2');
-    expect(handlerInfo.name).to.equal("name1");
+    expect(handlerInfo.name).to.equal("route2-1");
   });
 
-  it('a=1 >> a=1 should return [name2]', () => {
+  it('route2 >> a=1 should return [route2-2]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route2', {
       "a": 1
     });
-    expect(handlerInfo.name).to.equal("name2");
+    expect(handlerInfo.name).to.equal("route2-2");
   });
 
-  it('a=1 >> b=1 should return null', () => {
+  it('route2 >> b=1 should return [route2-1]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route2', {
       "b": 1
     });
-    expect(handlerInfo).to.be.null;
+    expect(handlerInfo.name).to.equal("route2-1");
   });
 
-  it('a=1 >> c=1 should return null', () => {
+  it('route2 >> c=1 should return [route2-1]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route2', {
       "c": 1
     });
-    expect(handlerInfo).to.be.null;
+    expect(handlerInfo.name).to.equal("route2-1");
   });
 
-  it('a=2 >> a=2 should return [name3]', () => {
+  it('route2 >> a=2 should return [route2-3]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route2', {
       "a": 2
     });
-    expect(handlerInfo.name).to.equal("name3");
+    expect(handlerInfo.name).to.equal("route2-3");
   });
 
-  it('a=2 >> a=2 return null', () => {
+  it('route2 >> a=3 return [route2-1]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route2', {
       "a": 3
     });
-    expect(handlerInfo).to.be.null;
+    expect(handlerInfo.name).to.equal("route2-1");
   });
 
-  it('should return [name4]', () => {
+  it('route2 >> a=1&b=1 should return [route2-4]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route2', {
       "a": 1,
       "b": 1
     });
-    expect(handlerInfo.name).to.equal("name4");
+    expect(handlerInfo.name).to.equal("route2-4");
   });
 
-  it('should return null', () => {
+  it('route2 >> a=1&b=2 should return [route2-2]', () => {
     let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route2', {
       "a": 1,
       "b": 2
     });
-    expect(handlerInfo).to.be.null;
+    expect(handlerInfo.name).to.equal("route2-2");
   });
 
+  it('route3 >> a=1 should return null', () => {
+    let handlerInfo = parserUtil.getMatchedHandler(ALL_HANDLER_LIST, '/cgi-bin/a/route3', {
+      "a": 1
+    });
+    expect(handlerInfo).to.be.null;
+  });
 });
