@@ -13,9 +13,10 @@ export default class HandlerParser {
     this.basePath = basePath;
 
     this.dataPath = dataPath || basePath;
-    this.handleModulesName = 'handle_modules';
+    this.handleModulesFolderName = 'handle_modules';
     this.handlerConfigName = 'config.json';
     this.handleModuleConfigName = 'config.json';
+    this.targetField = 'mat_module';
 
     // 注意此处一定要保证存储数据的地址是可存在的，否则会保存。
     util.fse.ensureDirSync(this.dataPath);
@@ -129,7 +130,7 @@ export default class HandlerParser {
     //===============================================================
     // 4. 获取当前的 handler 下的 handle_modules 列表
     //===============================================================
-    const CUR_HANDLE_MODULE_PATH = path.join(CUR_HANDLER_PATH, this.handleModulesName);
+    const CUR_HANDLE_MODULE_PATH = path.join(CUR_HANDLER_PATH, this.handleModulesFolderName);
 
     let modules = [];
 
@@ -199,22 +200,68 @@ export default class HandlerParser {
    * @return {Object}
    */
   getHandleModule(handlerName, handleModuleName, isReset) {
-    // 首先获取相应的 handler 信息
     let handlerInfo = this.getHandler(handlerName, isReset);
 
-    // 如果不存在则直接返回 null
-    if (!handlerInfo || !handlerInfo.modules || !handlerInfo.modules.length) {
+    return this._getHandleModuleByHandler(handlerInfo, handleModuleName);
+  }
+
+  /**
+   * 通过名字获取 handle_module 的信息
+   *
+   * @param {String} handlerName 指定的 handler 的名字
+   * @param {String} handleModuleName 指定的 handle_module 的名字
+   * @param {Object} req 请求对象
+   * @return {Object}
+   */
+  getHandleModuleResult(route, params, req) {
+    // 获得当前的 handler 信息
+    let handlerInfo = this.getHandlerByRoute(route, params);
+
+    if (!handlerInfo) {
+      return Promise.reject('UNKNOWN_CGI');
+    }
+
+    // 优先获取 param 中请求的指定 handle_module，其次是 handerInfo.activeModule
+    let handleModuleName = params[this.targetField] ? params[this.targetField] : handlerInfo.activeModule;
+
+    let handleModuleInfo = this._getHandleModuleByHandler(handlerInfo, handleModuleName);
+
+    if (handleModuleInfo) {
+      return Promise.reject('UNKNOWN_HANDLE_MODULE');
+    }
+
+    // 目标模块的路径
+    const HANDLE_MODULE_PATH = path.join(this.basePath, handlerInfo.name, this.handleModulesFolderName, handleModuleName);
+
+    // 还有部分参数在 handle_module 的 query 字段中，需要合并请求
+    params = _.merge({}, handleModuleInfo.query, params);
+
+  }
+
+  /**
+   * 从 handlerInfo 对象中获得指定的 handle_module 信息
+   *
+   * @param {Object} handlerInfo
+   * @param {String} handleModuleName
+   * @return {Object}
+   * @private
+   */
+  _getHandleModuleByHandler(handlerInfo, handleModuleName) {
+    if (!handlerInfo || !handlerInfo.modules || !handlerInfo.modules.length || !handleModuleName) {
       return null;
     }
 
-    let data = null;
+    let handleModuleInfo = null;
 
-    handlerInfo.modules.forEach((item) => {
-      if (!data && (item.name === handleModuleName)) {
-        data = item;
+    for (let i = 0, length = handlerInfo.modules.length; i < length; i++) {
+      let mockModuleItem = handlerInfo.modules[i];
+
+      if (handleModuleName === mockModuleItem.name) {
+        handleModuleInfo = handlerInfo.modules[i];
+        break;
       }
-    });
+    }
 
-    return data;
+    return handleModuleInfo;
   }
 }

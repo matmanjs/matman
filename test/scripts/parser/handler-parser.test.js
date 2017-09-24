@@ -209,7 +209,6 @@ describe('handler-parser.js getHandler("demo_simple", true)', () => {
 
 });
 
-
 describe('parser-util.js getHandlerByRoute()', () => {
   let handlerParser;
 
