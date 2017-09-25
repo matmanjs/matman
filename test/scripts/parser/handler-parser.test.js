@@ -365,13 +365,36 @@ describe('handler-parser.js getHandleModuleResult()', () => {
     });
 
     it('should return object', () => {
-      console.log(result)
       expect(result).to.be.an('object')
         .that.include.all.keys('data', 'extra');
     });
 
     it('module result is from_param_1', () => {
       expect(result.data).is.equal('from_param_1');
+    });
+  });
+});
+
+describe('handler-parser.js updateHandler()', () => {
+  let handlerParser;
+
+  before(() => {
+    handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
+  });
+
+  it('demo_simple change disable and priority should success', () => {
+    let data = handlerParser.updateHandler('demo_simple', { disable: true, priority: 66 });
+    expect(data).to.include({
+      disable: true,
+      priority: 66
+    });
+  });
+
+  it('demo_simple reset should success', () => {
+    let data = handlerParser.updateHandler('demo_simple', { disable: false, priority: 0 });
+    expect(data).to.include({
+      disable: false,
+      priority: 0
     });
   });
 });

@@ -50,7 +50,7 @@ export default class HandlerParser {
     // 1. 获取所有的 handler name
     let handlerNameArr = [];
 
-    util.file.getAll(this.basePath, {globs: ['*']}).forEach((item) => {
+    util.file.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
       /**
        * 限制只处理文件夹类型的
        * 在根目录下，每个子文件夹就是一个 handler 单位，其名字即为文件夹名字
@@ -92,7 +92,7 @@ export default class HandlerParser {
     //===============================================================
     // 1. 从缓存数据库中获取 handler 数据
     //===============================================================
-    let cacheData = this.db.get('data').find({name: handlerName}).value();
+    let cacheData = this.db.get('data').find({ name: handlerName }).value();
 
     // 如果是优先缓存，则直接返回。
     if (!isReset) {
@@ -134,7 +134,7 @@ export default class HandlerParser {
 
     let modules = [];
 
-    util.file.getAll(CUR_HANDLE_MODULE_PATH, {globs: ['*']}).forEach((item) => {
+    util.file.getAll(CUR_HANDLE_MODULE_PATH, { globs: ['*'] }).forEach((item) => {
       // 获取各个 handle_module 中 config.json 的数据
       let handleModuleConfigDBState = {};
       let curHandleModuleName = '';
@@ -264,6 +264,23 @@ export default class HandlerParser {
       fullPath: moduleFullPath,
       params: reqParams
     }
+  }
+
+  /**
+   * 更新 handler 的 信息
+   *
+   * @param {String} handlerName handler 名字
+   * @param {Object} [updateData] 要更新的数据
+   */
+  updateHandler(handlerName, updateData) {
+    // 更新数据
+    this.db.get('data')
+      .find({ name: handlerName })
+      .assign(updateData)
+      .write();
+
+    // 返回新的结果
+    return this.getHandler(handlerName);
   }
 
   /**
