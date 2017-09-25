@@ -206,6 +206,29 @@ export default class HandlerParser {
   }
 
   /**
+   * 根据路由和请求参数，获得目标的执行结果
+   * @param {String} route 路由规则
+   * @param {Object} [params] 请求的参数
+   * @param {Object} [req] 请求对象
+   * @return {Promise}
+   */
+  getHandleModuleResult(route, params = {}, req) {
+    let reqInfoByRoute = this.getReqInfoByRoute(route, params);
+
+    if (!reqInfoByRoute) {
+      return Promise.reject();
+    }
+
+    return util.handle.getResult(reqInfoByRoute.fullPath, reqInfoByRoute.params, req)
+      .then((data) => {
+        return {
+          data: data,
+          extra: reqInfoByRoute
+        }
+      });
+  }
+
+  /**
    * 通过路由匹配获取到本地模块路径和完整的请求信息
    *
    * @param {String} route 路由规则
