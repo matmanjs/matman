@@ -28,11 +28,15 @@ export default class HandlerParser {
    * 分析并保存数据到本地
    */
   parseAndSave() {
+    let allHandler = this.getAllHandler(true);
+
     this.db.setState({
       basePath: this.basePath,
       dataPath: this.dataPath,
-      data: this.getAllHandler(true)
+      data: allHandler
     }).write();
+
+    return allHandler;
   }
 
   /**
