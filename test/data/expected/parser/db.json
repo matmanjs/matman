@@ -50,10 +50,40 @@
         {
           "description": "success_4",
           "priority": 10,
-          "name": "success_4",
           "query": {
-            "_m_target": "success_4",
-            "type": 1
+            "type": 1,
+            "_m_target": "success_4"
+          },
+          "name": "success_4"
+        }
+      ]
+    },
+    {
+      "description": "demo_readme",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "route": "/cgi-bin/a/b/demo_readme",
+      "name": "demo_readme",
+      "activeModule": "error",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success_1",
+          "priority": 0,
+          "name": "success_1",
+          "query": {
+            "_m_target": "success_1"
           }
         }
       ]

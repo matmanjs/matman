@@ -44,9 +44,9 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
       cacheAllHandlerList = handlerParser.getAllHandler();
     });
 
-    it('should return an array and length is 3', () => {
+    it('should return an array and length is 4', () => {
       expect(cacheAllHandlerList).to.be.an('array')
-        .and.have.lengthOf(3);
+        .and.have.lengthOf(4);
     });
   });
 
@@ -396,5 +396,18 @@ describe('handler-parser.js updateHandler()', () => {
       disable: false,
       priority: 0
     });
+  });
+});
+
+describe('handler-parser.js getReadMeContent()', () => {
+  let handlerParser;
+
+  before(() => {
+    handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
+  });
+
+  it('demo_readme should exist readme.md', () => {
+    let data = handlerParser.getReadMeContent('demo_readme');
+    expect(data).to.equal('<p>你好！ <code>MatMan</code> 是个很好用的工具！</p>\n');
   });
 });

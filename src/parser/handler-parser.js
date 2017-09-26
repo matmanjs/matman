@@ -284,6 +284,48 @@ export default class HandlerParser {
   }
 
   /**
+   * 获取指定 handler 的 README 信息
+   */
+  getReadMeContent(handlerName) {
+    let curMockerPath = path.join(this.basePath, handlerName);
+
+    let handlerReadMeFile = path.join(curMockerPath, 'readme.md');
+    if (!fs.existsSync(handlerReadMeFile)) {
+      handlerReadMeFile = path.join(curMockerPath, 'readme.MD');
+      if (!fs.existsSync(handlerReadMeFile)) {
+        handlerReadMeFile = path.join(curMockerPath, 'README.md');
+        if (!fs.existsSync(handlerReadMeFile)) {
+          handlerReadMeFile = path.join(curMockerPath, 'README.MD');
+          if (!fs.existsSync(handlerReadMeFile)) {
+            return '';
+          }
+        }
+      }
+    }
+
+    marked.setOptions({
+      renderer: new marked.Renderer(),
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: false,
+      smartLists: true,
+      smartypants: false
+    });
+
+    try {
+      let content = fs.readFileSync(handlerReadMeFile, 'utf8');
+
+      content = content.replace(/__HANDLER_PATH__/g, handlerName);
+
+      return marked(content);
+    } catch (e) {
+      return e.stack;
+    }
+  }
+
+  /**
    * 从 handlerInfo 对象中获得指定的 handle_module 信息
    *
    * @param {Object} handlerInfo
