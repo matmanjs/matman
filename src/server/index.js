@@ -3,9 +3,9 @@ const express = require('express');
 module.exports = {
   create: () => express().set('json spaces', 2),
   defaults: require('./defaults'),
-  mockServer: require('./mock-server'),
-  router: require('./router'),
-  routerMocker: require('./router-mocker'),
+  handlerServer: require('./handler-server'),
+  // router: require('./router'),
+  routerHandler: require('./router-handler'),
   rewriter: require('./rewriter'),
   bodyParser: require('./body-parser')
 };
