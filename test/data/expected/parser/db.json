@@ -59,6 +59,28 @@
       ]
     },
     {
+      "description": "demo_no_modules",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "route": "/cgi-bin/a/b/demo_no_modules",
+      "name": "demo_no_modules",
+      "activeModule": "index_module",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "name": "index_module",
+          "description": "default module",
+          "priority": 0,
+          "query": {
+            "_m_target": "index_module"
+          }
+        }
+      ]
+    },
+    {
       "description": "demo_readme",
       "disable": false,
       "method": "get",

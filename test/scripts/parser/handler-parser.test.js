@@ -44,9 +44,9 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
       cacheAllHandlerList = handlerParser.getAllHandler();
     });
 
-    it('should return an array and length is 4', () => {
+    it('should return an array and length is 5', () => {
       expect(cacheAllHandlerList).to.be.an('array')
-        .and.have.lengthOf(4);
+        .and.have.lengthOf(5);
     });
   });
 
@@ -68,6 +68,39 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
         "activeModule": "error"
       });
     });
+  });
+
+  describe('check cache: getHandler("demo_no_modules")', () => {
+    let cacheHandlerInfo;
+
+    before(() => {
+      cacheHandlerInfo = handlerParser.getHandler('demo_no_modules');
+    });
+
+    it('should return an object and correct', () => {
+      expect(cacheHandlerInfo).to.include({
+        "name": "demo_no_modules",
+        "description": "demo_no_modules",
+        "disable": false,
+        "method": "get",
+        "priority": 0,
+        "route": "/cgi-bin/a/b/demo_no_modules",
+        "activeModule": "index_module",
+      });
+    });
+
+    it('modules should only exist one', () => {
+      expect(cacheHandlerInfo.modules).to.have.lengthOf(1);
+    });
+
+    it('the only module should be correct', () => {
+      expect(cacheHandlerInfo.modules[0]).to.include({
+        "name": "index_module",
+        "description": "default module",
+        "priority": 0
+      });
+    });
+
   });
 
 });
