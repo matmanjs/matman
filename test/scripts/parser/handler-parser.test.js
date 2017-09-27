@@ -276,10 +276,10 @@ describe('parser-util.js getHandlerListByPlugin()', () => {
   });
 
   it('pluginName is "report" should return one result', () => {
-    let result = handlerParser.getHandlerListByPlugin('report');
+    let result = handlerParser.getHandlerListByPlugin('reporter');
     expect(result[0]).to.include({
       name: 'demo_plugin_report',
-      plugin: 'report'
+      plugin: 'reporter'
     });
   });
 });

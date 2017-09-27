@@ -4,6 +4,7 @@ const _ = require('lodash');
 const request = require('request');
 const bodyParser = require('../body-parser');
 const HandlerParser = require('../../parser/handler-parser').default;
+const initPlugins = require('./plugins');
 
 module.exports = (entry) => {
   const handlerParser = new HandlerParser(entry.HANDLER_PATH, entry.DATA_PATH);
@@ -23,35 +24,7 @@ module.exports = (entry) => {
     res.jsonp(res.locals.data)
   };
 
-  // GET /sys-cgi/handler 所有的 handler 列表信息
-  router.get('/sys-cgi/handler', (req, res) => {
-    handlerList = handlerParser.getAllHandler();
-
-    res.jsonp(handlerList);
-  });
-
-  // GET /sys-cgi/handler/:handlerName 获得这个 handler 的信息
-  router.get('/sys-cgi/handler/:handlerName', (req, res) => {
-    let result = handlerParser.getHandler(req.params.handlerName);
-
-    res.jsonp(result);
-  });
-
-  // GET /sys-cgi/handler/:handlerName/readme 获得这个 handler 的readme信息
-  router.get('/sys-cgi/handler/:handlerName/readme', (req, res) => {
-    // res.send(business.getMockerReadme(entry.HANDLER_PATH, req.params.handlerName));
-    // res.send(business.getMockerReadme(entry.HANDLER_PATH, req.params.handlerName));
-    res.jsonp({
-      html: handlerParser.getReadMeContent(req.params.handlerName)
-    });
-  });
-
-  // POST /sys-cgi/handler/:handlerName 设置这个handler的信息
-  router.post('/sys-cgi/handler/:handlerName', (req, res) => {
-    let result = handlerParser.updateHandler(req.params.handlerName, req.body);
-
-    res.jsonp(result);
-  });
+  initPlugins(router, handlerParser);
 
   // 所有的请求都会经过这里，可以做一些类似权限控制的事情
   router.all('*', function (req, res, next) {
@@ -101,14 +74,12 @@ module.exports = (entry) => {
       // req.query.activeModule = "error_not_login"
       // req.params.id = "1"
 
-      let handlerBasePath = entry.HANDLER_PATH;
-
       // 从请求 req 或者 config.json 文件中检查当前请求是否需要禁用 handle 服务
       let isDisable = req.query._m_disable || req.body._m_disable;
       if (!isDisable) {
         // 此处要重新获取新的数据，以便取到缓存的。
         // TODO 此处还可以优化，比如及时更新缓存中的数据，而不需要每次都去获取
-        let curMockerData = handlerParser.getHandler(handlerData.name);
+        let curMockerData = handlerParser.getHandler(handlerData.name, true);
 
         isDisable = curMockerData.disable;
       }

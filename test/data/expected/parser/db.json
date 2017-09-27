@@ -85,13 +85,13 @@
       ]
     },
     {
-      "description": "demo_plugin_report",
+      "description": "demo_plugin_reporter",
       "disable": false,
       "method": "get",
       "priority": 0,
-      "plugin": "report",
-      "route": "/cgi-bin/a/b/demo_plugin_report",
-      "name": "demo_plugin_report",
+      "plugin": "reporter",
+      "route": "/cgi-bin/a/b/demo_plugin_reporter",
+      "name": "demo_plugin_reporter",
       "activeModule": "error",
       "tags": [
         "全部"
