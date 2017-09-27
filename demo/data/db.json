@@ -1,0 +1,36 @@
+{
+  "basePath": "D:\\gitprojects\\matman\\demo\\src\\mocker",
+  "dataPath": "D:\\gitprojects\\matman\\demo\\data",
+  "data": [
+    {
+      "description": "demo_simple",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "route": "/cgi-bin/a/b/demo_simple",
+      "name": "demo_simple",
+      "activeModule": "error",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success",
+          "priority": 0,
+          "name": "success",
+          "query": {
+            "_m_target": "success"
+          }
+        }
+      ]
+    }
+  ]
+}

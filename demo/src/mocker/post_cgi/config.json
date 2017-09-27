@@ -1,7 +1,0 @@
-{
-  "version": "0.0.1",
-  "description": "POST 类型的CGI",
-  "author": "helinjiang",
-  "route": "/cgi-bin/a/b/post_cgi",
-  "method": "post"
-}
