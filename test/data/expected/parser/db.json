@@ -7,6 +7,7 @@
       "disable": false,
       "method": "get",
       "priority": 0,
+      "plugin": "mocker",
       "name": "demo_handle_modules",
       "route": "/cgi-bin/a/b/demo_handle_modules",
       "defaultModule": "success_1",
@@ -63,6 +64,7 @@
       "disable": false,
       "method": "get",
       "priority": 0,
+      "plugin": "mocker",
       "route": "/cgi-bin/a/b/demo_no_modules",
       "name": "demo_no_modules",
       "activeModule": "index_module",
@@ -75,9 +77,40 @@
           "description": "default module",
           "priority": 0,
           "type": "noModule",
-          "fileName": "index.js",
           "query": {
             "_m_target": "index_module"
+          },
+          "fileName": "index.js"
+        }
+      ]
+    },
+    {
+      "description": "demo_plugin_report",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "plugin": "report",
+      "route": "/cgi-bin/a/b/demo_plugin_report",
+      "name": "demo_plugin_report",
+      "activeModule": "error",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success",
+          "priority": 0,
+          "name": "success",
+          "query": {
+            "_m_target": "success"
           }
         }
       ]
@@ -87,6 +120,7 @@
       "disable": false,
       "method": "get",
       "priority": 0,
+      "plugin": "mocker",
       "route": "/cgi-bin/a/b/demo_readme",
       "name": "demo_readme",
       "activeModule": "error",
@@ -117,6 +151,7 @@
       "disable": false,
       "method": "get",
       "priority": 0,
+      "plugin": "mocker",
       "route": "/cgi-bin/a/b/demo_simple",
       "name": "demo_simple",
       "activeModule": "error",
@@ -147,6 +182,7 @@
       "disable": false,
       "method": "get",
       "priority": 0,
+      "plugin": "mocker",
       "route": "/cgi-bin/a/b/simple_cgi",
       "name": "simple_cgi",
       "activeModule": "error_not_login",

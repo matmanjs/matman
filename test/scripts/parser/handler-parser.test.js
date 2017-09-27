@@ -14,6 +14,8 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
   let handlerParser, data;
 
   before(() => {
+    fse.removeSync(BASE_PATH_TMP);
+
     handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_TMP);
 
     handlerParser.parseAndSave();
@@ -22,7 +24,7 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
   });
 
   after(() => {
-    fse.removeSync(BASE_PATH_TMP);
+    // fse.removeSync(BASE_PATH_TMP);
   });
 
   describe('check exist and correct', () => {
@@ -44,9 +46,9 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
       cacheAllHandlerList = handlerParser.getAllHandler();
     });
 
-    it('should return an array and length is 5', () => {
+    it('should return an array and length is 6', () => {
       expect(cacheAllHandlerList).to.be.an('array')
-        .and.have.lengthOf(5);
+        .and.have.lengthOf(6);
     });
   });
 
@@ -64,6 +66,7 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
         "disable": false,
         "method": "get",
         "priority": 0,
+        "plugin": "mocker",
         "route": "/cgi-bin/a/b/demo_simple",
         "activeModule": "error"
       });
@@ -84,6 +87,7 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
         "disable": false,
         "method": "get",
         "priority": 0,
+        "plugin": "mocker",
         "route": "/cgi-bin/a/b/demo_no_modules",
         "activeModule": "index_module",
       });
@@ -136,6 +140,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
         "disable": false,
         "method": "get",
         "priority": 0,
+        "plugin": "mocker",
         "route": "/cgi-bin/a/b/demo_simple",
         "activeModule": "error"
       });
@@ -173,6 +178,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
         "disable": false,
         "method": "get",
         "priority": 0,
+        "plugin": "mocker",
         "route": "/cgi-bin/a/b/demo_handle_modules",
         "activeModule": "success_1",
         "defaultModule": "success_1",
@@ -235,6 +241,7 @@ describe('handler-parser.js getHandler("demo_simple", true)', () => {
       "disable": false,
       "method": "get",
       "priority": 0,
+      "plugin": "mocker",
       "route": "/cgi-bin/a/b/demo_simple",
       "activeModule": "error"
     });

@@ -37,6 +37,7 @@ describe('parser-util.js getMixinHandlerData()', () => {
         description: 'default_value',
         disable: false,
         method: 'get',
+        plugin: 'mocker',
         priority: 0,
       });
     });
@@ -57,6 +58,7 @@ describe('parser-util.js getMixinHandlerData()', () => {
         disable: true,
         method: 'post',
         priority: 99,
+        plugin: 'mocker',
         defaultModule: 'default_module',
         tags: ['tag1', 'tag2'],
       }, null);
@@ -74,6 +76,7 @@ describe('parser-util.js getMixinHandlerData()', () => {
         disable: true,
         method: 'post',
         priority: 99,
+        plugin: 'mocker',
         activeModule: 'default_module',
       });
     });
@@ -99,6 +102,7 @@ describe('parser-util.js getMixinHandlerData()', () => {
         disable: true,
         method: 'post',
         priority: 99,
+        plugin: 'mocker',
         activeModule: 'default_module',
         tags: ['全部', 'tag1', 'tag2'],
       });
@@ -116,6 +120,7 @@ describe('parser-util.js getMixinHandlerData()', () => {
         disable: true,
         method: 'post',
         priority: 1,
+        plugin: 'mocker',
         activeModule: 'default_module',
       });
     });
