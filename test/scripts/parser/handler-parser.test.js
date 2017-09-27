@@ -406,6 +406,26 @@ describe('handler-parser.js getHandleModuleResult()', () => {
       expect(result.data).is.equal('from_param_1');
     });
   });
+
+  describe('demo_no_modules >> null', () => {
+    let result;
+
+    before(() => {
+      return handlerParser.getHandleModuleResult('/cgi-bin/a/b/demo_no_modules')
+        .then((data) => {
+          result = data;
+        });
+    });
+
+    it('should return object', () => {
+      expect(result).to.be.an('object')
+        .that.include.all.keys('data', 'extra');
+    });
+
+    it('module result is 1', () => {
+      expect(result.data.result).is.equal(1);
+    });
+  });
 });
 
 describe('handler-parser.js updateHandler()', () => {

@@ -74,6 +74,8 @@
           "name": "index_module",
           "description": "default module",
           "priority": 0,
+          "type": "noModule",
+          "fileName": "index.js",
           "query": {
             "_m_target": "index_module"
           }

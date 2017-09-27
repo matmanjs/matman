@@ -132,19 +132,32 @@ export default class HandlerParser {
     }
 
     //===============================================================
-    // 4. 获取当前的 handler 下的 handle_modules 列表，或者 index.js
+    // 4. 获取当前的 handler 下的 handle_modules 列表，或者 index.js/index.json
     //===============================================================
     const CUR_HANDLE_MODULE_PATH = path.join(CUR_HANDLER_PATH, this.handleModulesFolderName);
 
     let modules = [];
     if (!fs.existsSync(CUR_HANDLE_MODULE_PATH)) {
-      // 如果没有 handle_modules 文件夹，则使用 index.js，且将其设置为默认
-      modules.push({
+      // 如果没有 handle_modules 文件夹，则使用 index.js 或者 index.json，且将其设置为默认
+      let indexModule = {
         name: 'index_module',
         description: 'default module',
         priority: 0,
-        query: { _m_target: 'index_module' }
-      })
+        type: 'noModule',
+      };
+
+      indexModule.query = { _m_target: indexModule.name };
+
+      if (fs.existsSync(path.join(CUR_HANDLER_PATH, 'index.js'))) {
+        indexModule.fileName = 'index.js';
+      } else if (fs.existsSync(path.join(CUR_HANDLER_PATH, 'index.json'))) {
+        indexModule.fileName = 'index.json';
+      } else {
+        return null;
+      }
+
+      modules.push(indexModule);
+
     } else {
       util.file.getAll(CUR_HANDLE_MODULE_PATH, { globs: ['*'] }).forEach((item) => {
         // 获取各个 handle_module 中 config.json 的数据
@@ -265,8 +278,11 @@ export default class HandlerParser {
       return null;
     }
 
-    // 目标模块的路径
-    let moduleFullPath = path.join(this.basePath, handlerInfo.name, this.handleModulesFolderName, handleModuleName);
+    // 目标模块的路径，需要注意下 no module 的场景
+
+    let moduleRelativePath = (handleModuleInfo.type && handleModuleInfo.type === 'noModule') ? handleModuleInfo.fileName : path.join(this.handleModulesFolderName, handleModuleName);
+
+    let moduleFullPath = path.join(this.basePath, handlerInfo.name, moduleRelativePath);
 
     // 还有部分参数在 handle_module 的 query 字段中，需要合并请求
     let reqParams = _.merge({}, handleModuleInfo.query, params);
