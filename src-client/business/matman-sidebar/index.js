@@ -13,6 +13,12 @@ export const SIDEBAR_MENU_DATA = {
       url: '/admin/mockers',
       icon: 'desktop',
       title: 'Mockers'
+    },
+    {
+      id: 'reporters',
+      url: '/admin/reporters',
+      icon: 'line-chart',
+      title: 'Reporters'
     }
   ]
 };

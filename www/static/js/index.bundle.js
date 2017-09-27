@@ -14414,13 +14414,23 @@ webpackJsonp([0],[
 	
 	var _reducer6 = _interopRequireDefault(_reducer5);
 	
+	var _reducer7 = __webpack_require__(1262);
+	
+	var _reducer8 = _interopRequireDefault(_reducer7);
+	
+	var _reducer9 = __webpack_require__(1264);
+	
+	var _reducer10 = _interopRequireDefault(_reducer9);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var rootReducer = (0, _redux.combineReducers)({
 	  routing: _reactRouterRedux.routerReducer, // 用于路由控制
 	  sidebarInfo: _reducer2.default,
 	  mockerInfo: _reducer4.default,
-	  mockerListInfo: _reducer6.default
+	  mockerListInfo: _reducer6.default,
+	  reporterInfo: _reducer8.default,
+	  reporterListInfo: _reducer10.default
 	});
 	
 	exports.default = rootReducer;
@@ -14548,6 +14558,11 @@ webpackJsonp([0],[
 	    url: '/admin/mockers',
 	    icon: 'desktop',
 	    title: 'Mockers'
+	  }, {
+	    id: 'reporters',
+	    url: '/admin/reporters',
+	    icon: 'line-chart',
+	    title: 'Reporters'
 	  }]
 	};
 
@@ -48131,7 +48146,7 @@ webpackJsonp([0],[
 	        return replace('/admin/home');
 	      }
 	    },
-	    childRoutes: [__webpack_require__(1077).default, __webpack_require__(1081).default]
+	    childRoutes: [__webpack_require__(1077).default, __webpack_require__(1081).default, __webpack_require__(1266).default]
 	  }]
 	};
 
@@ -58139,6 +58154,294 @@ webpackJsonp([0],[
 	
 	// exports
 
+
+/***/ }),
+/* 1262 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	var _assign = __webpack_require__(667);
+	
+	var _assign2 = _interopRequireDefault(_assign);
+	
+	var _keys = __webpack_require__(685);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _lodash = __webpack_require__(689);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	var _action = __webpack_require__(1263);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var initialState = {
+	  isLoaded: false,
+	  data: {},
+	  readme: ''
+	};
+	
+	function reporterInfo() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	  var type = action.type,
+	      data = action.data,
+	      update = {};
+	
+	
+	  switch (type) {
+	    case _action.REPORTER_REQUEST:
+	      update = {
+	        isLoaded: false
+	      };
+	      break;
+	    case _action.REPORTER_REQUEST_SUCCESS:
+	      update = {
+	        isLoaded: true,
+	        data: _lodash2.default.merge({}, data, {
+	          modules: (data.modules || []).sort(function (a, b) {
+	            return b.priority - a.priority;
+	          })
+	        })
+	      };
+	      break;
+	    case _action.REPORTER_REQUEST_FAIL:
+	      update = {
+	        isLoaded: true
+	      };
+	      break;
+	
+	    case _action.REPORTER_README_REQUEST_SUCCESS:
+	      update = {
+	        readme: data.html
+	      };
+	      break;
+	
+	    case _action.REPORTER_SET_ACTIVE_MODULE_REQUEST_SUCCESS:
+	      update.data = _lodash2.default.merge({}, state.data, data);
+	      break;
+	  }
+	
+	  return (0, _keys2.default)(update).length ? (0, _assign2.default)({}, state, update) : state;
+	}
+	
+	exports.default = reporterInfo;
+
+/***/ }),
+/* 1263 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports.REPORTER_SET_ACTIVE_MODULE_REQUEST_FAIL = exports.REPORTER_SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.REPORTER_SET_ACTIVE_MODULE_REQUEST = exports.REPORTER_README_REQUEST_FAIL = exports.REPORTER_README_REQUEST_SUCCESS = exports.REPORTER_README_REQUEST = exports.REPORTER_REQUEST_FAIL = exports.REPORTER_REQUEST_SUCCESS = exports.REPORTER_REQUEST = undefined;
+	exports.loadReporter = loadReporter;
+	exports.loadReporterReadme = loadReporterReadme;
+	exports.setReporterActiveModule = setReporterActiveModule;
+	exports.setReporterDisable = setReporterDisable;
+	
+	var _api = __webpack_require__(596);
+	
+	var REPORTER_REQUEST = exports.REPORTER_REQUEST = 'REPORTER_REQUEST';
+	var REPORTER_REQUEST_SUCCESS = exports.REPORTER_REQUEST_SUCCESS = 'REPORTER_REQUEST_SUCCESS';
+	var REPORTER_REQUEST_FAIL = exports.REPORTER_REQUEST_FAIL = 'REPORTER_REQUEST_FAIL';
+	
+	var REPORTER_README_REQUEST = exports.REPORTER_README_REQUEST = 'REPORTER_README_REQUEST';
+	var REPORTER_README_REQUEST_SUCCESS = exports.REPORTER_README_REQUEST_SUCCESS = 'REPORTER_README_REQUEST_SUCCESS';
+	var REPORTER_README_REQUEST_FAIL = exports.REPORTER_README_REQUEST_FAIL = 'REPORTER_README_REQUEST_FAIL';
+	
+	var REPORTER_SET_ACTIVE_MODULE_REQUEST = exports.REPORTER_SET_ACTIVE_MODULE_REQUEST = 'REPORTER_SET_ACTIVE_MODULE_REQUEST';
+	var REPORTER_SET_ACTIVE_MODULE_REQUEST_SUCCESS = exports.REPORTER_SET_ACTIVE_MODULE_REQUEST_SUCCESS = 'REPORTER_SET_ACTIVE_MODULE_REQUEST_SUCCESS';
+	var REPORTER_SET_ACTIVE_MODULE_REQUEST_FAIL = exports.REPORTER_SET_ACTIVE_MODULE_REQUEST_FAIL = 'REPORTER_SET_ACTIVE_MODULE_REQUEST_FAIL';
+	
+	function fetchReporter(reporterName) {
+	  var _ref;
+	
+	  return _ref = {}, _ref[_api.CALL_API] = {
+	    types: [REPORTER_REQUEST, REPORTER_REQUEST_SUCCESS, REPORTER_REQUEST_FAIL],
+	    url: '/sys-cgi/reporter/' + reporterName
+	  }, _ref;
+	}
+	
+	function loadReporter(reporterName) {
+	  return function (dispatch, getState) {
+	    return dispatch(fetchReporter(reporterName));
+	  };
+	}
+	
+	function fetchReporterReadme(reporterName) {
+	  var _ref2;
+	
+	  return _ref2 = {}, _ref2[_api.CALL_API] = {
+	    types: [REPORTER_README_REQUEST, REPORTER_README_REQUEST_SUCCESS, REPORTER_README_REQUEST_FAIL],
+	    url: '/sys-cgi/reporter/' + reporterName + '/readme'
+	  }, _ref2;
+	}
+	
+	function loadReporterReadme(reporterName) {
+	  return function (dispatch, getState) {
+	    return dispatch(fetchReporterReadme(reporterName));
+	  };
+	}
+	
+	function requestUpdateReporter(reporterName, newReporterState) {
+	  var _ref3;
+	
+	  return _ref3 = {}, _ref3[_api.CALL_API] = {
+	    types: [REPORTER_SET_ACTIVE_MODULE_REQUEST, REPORTER_SET_ACTIVE_MODULE_REQUEST_SUCCESS, REPORTER_SET_ACTIVE_MODULE_REQUEST_FAIL],
+	    url: '/sys-cgi/reporter/' + reporterName,
+	    type: 'POST',
+	    data: newReporterState
+	  }, _ref3;
+	}
+	
+	function setReporterActiveModule(reporterName, reportModuleName) {
+	  return function (dispatch, getState) {
+	    return dispatch(requestUpdateReporter(reporterName, {
+	      activeModule: reportModuleName
+	    }));
+	  };
+	}
+	
+	function setReporterDisable(reporterName, value) {
+	  return function (dispatch, getState) {
+	    return dispatch(requestUpdateReporter(reporterName, {
+	      disable: value
+	    }));
+	  };
+	}
+
+/***/ }),
+/* 1264 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	var _assign = __webpack_require__(667);
+	
+	var _assign2 = _interopRequireDefault(_assign);
+	
+	var _keys = __webpack_require__(685);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _lodash = __webpack_require__(689);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	var _action = __webpack_require__(1265);
+	
+	var _action2 = __webpack_require__(1263);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var initialState = {
+	  isLoaded: false,
+	  list: []
+	};
+	
+	function reporterListInfo() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+	  var type = action.type,
+	      data = action.data,
+	      update = {};
+	
+	
+	  switch (type) {
+	    case _action.REPORTER_LIST_REQUEST_SUCCESS:
+	      update = {
+	        isLoaded: true,
+	        list: (data || []).sort(function (a, b) {
+	          return b.priority - a.priority;
+	        })
+	      };
+	      break;
+	    case _action.REPORTER_LIST_REQUEST_FAIL:
+	      update = {
+	        isLoaded: true
+	      };
+	      break;
+	
+	    case _action2.REPORTER_SET_ACTIVE_MODULE_REQUEST_SUCCESS:
+	      update.list = state.list.map(function (item) {
+	        if (item.name === data.name) {
+	          item = _lodash2.default.merge({}, item, data);
+	        }
+	        return item;
+	      });
+	      break;
+	  }
+	
+	  return (0, _keys2.default)(update).length ? (0, _assign2.default)({}, state, update) : state;
+	}
+	
+	exports.default = reporterListInfo;
+
+/***/ }),
+/* 1265 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports.REPORTER_LIST_REQUEST_FAIL = exports.REPORTER_LIST_REQUEST_SUCCESS = exports.REPORTER_LIST_REQUEST = undefined;
+	exports.loadReporterList = loadReporterList;
+	
+	var _api = __webpack_require__(596);
+	
+	var REPORTER_LIST_REQUEST = exports.REPORTER_LIST_REQUEST = 'REPORTER_LIST_REQUEST';
+	var REPORTER_LIST_REQUEST_SUCCESS = exports.REPORTER_LIST_REQUEST_SUCCESS = 'REPORTER_LIST_REQUEST_SUCCESS';
+	var REPORTER_LIST_REQUEST_FAIL = exports.REPORTER_LIST_REQUEST_FAIL = 'REPORTER_LIST_REQUEST_FAIL';
+	
+	function fetchReporterList() {
+	  var _ref;
+	
+	  return _ref = {}, _ref[_api.CALL_API] = {
+	    types: [REPORTER_LIST_REQUEST, REPORTER_LIST_REQUEST_SUCCESS, REPORTER_LIST_REQUEST_FAIL],
+	    url: '/sys-cgi/reporter'
+	  }, _ref;
+	}
+	
+	function loadReporterList() {
+	  return function (dispatch, getState) {
+	    return dispatch(fetchReporterList());
+	  };
+	}
+
+/***/ }),
+/* 1266 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports.default = {
+	  path: '/admin/reporters',
+	
+	  indexRoute: {
+	    onEnter: function onEnter(nextState, replace) {
+	      return replace('/admin/reporters/list');
+	    }
+	  },
+	
+	  getComponent: function getComponent(nextState, cb) {
+	    __webpack_require__.e/* nsure */(7, function (require) {
+	      cb(null, __webpack_require__(1267).default);
+	    });
+	  },
+	  getChildRoutes: function getChildRoutes(partialNextState, cb) {
+	    __webpack_require__.e/* nsure */(8, function (require) {
+	      cb(null, [__webpack_require__(1268).default, __webpack_require__(1272).default]);
+	    });
+	  }
+	};
 
 /***/ })
 ]);
