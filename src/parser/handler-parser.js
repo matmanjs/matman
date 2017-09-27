@@ -218,6 +218,16 @@ export default class HandlerParser {
   }
 
   /**
+   * 获取某个 plugin 所有的 handler 信息
+   *
+   * @param {String} [pluginName] 插件名字
+   * @return {Array}
+   */
+  getHandlerListByPlugin(pluginName = 'mocker') {
+    return this.db.get('data').filter({ plugin: pluginName }).value() || [];
+  }
+
+  /**
    * 通过名字获取 handle_module 的信息
    *
    * @param {String} handlerName 指定的 handler 的名字

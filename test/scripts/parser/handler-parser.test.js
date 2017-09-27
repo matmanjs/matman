@@ -200,7 +200,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
     });
 
     it('data.modules has success_1', () => {
-      expect(data.modules).to.include({
+      expect(data.modules).to.deep.include({
         "name": "success_1",
         "description": "success_1",
         "priority": 0,
@@ -211,7 +211,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
     });
 
     it('data.modules has name_success_3', () => {
-      expect(data.modules).to.include({
+      expect(data.modules).to.deep.include({
         "name": "success_3",
         "description": "description_success_3",
         "priority": 100,
@@ -266,6 +266,22 @@ describe('parser-util.js getHandlerByRoute()', () => {
     expect(handlerInfo.name).to.equal("demo_handle_modules");
   });
 
+});
+
+describe('parser-util.js getHandlerListByPlugin()', () => {
+  let handlerParser;
+
+  before(() => {
+    handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
+  });
+
+  it('pluginName is "report" should return one result', () => {
+    let result = handlerParser.getHandlerListByPlugin('report');
+    expect(result[0]).to.include({
+      name: 'demo_plugin_report',
+      plugin: 'report'
+    });
+  });
 });
 
 describe('handler-parser.js getHandleModule()', () => {
