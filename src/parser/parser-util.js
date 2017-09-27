@@ -24,6 +24,7 @@ function getMixinHandlerData(handlerName, handlerConfigData, cacheData) {
     disable: false,
     method: 'get',
     priority: 0,
+    plugin: "mocker"
   }, cacheData, handlerConfigData);
 
   // 名字不能够再被修改，默认为文件夹名字
