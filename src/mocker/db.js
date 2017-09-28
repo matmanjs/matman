@@ -1,10 +1,10 @@
 const low = require('lowdb');
-const fileAsync = require('lowdb/lib/storages/file-async');
+const FileSync = require('lowdb/adapters/FileSync');
 
 const ACTIVE_MODULE = 'activeModule';
 
 function getDB(fullPath) {
-  return low(fullPath, { storage: fileAsync });
+  return low(new FileSync(fullPath));
 }
 
 function getValue(db, key) {

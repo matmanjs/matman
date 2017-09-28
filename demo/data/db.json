@@ -1,0 +1,125 @@
+{
+  "basePath": "D:\\gitprojects\\matman\\demo\\src\\mocker",
+  "dataPath": "D:\\gitprojects\\matman\\demo\\data",
+  "data": [
+    {
+      "description": "description_demo_handle_modules",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "plugin": "mocker",
+      "name": "demo_plugin_mocker",
+      "route": "/cgi-bin/a/b/demo_handle_modules",
+      "defaultModule": "success_1",
+      "activeModule": "success_1",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success_1",
+          "priority": 0,
+          "name": "success_1",
+          "query": {
+            "_m_target": "success_1"
+          }
+        },
+        {
+          "description": "success_2",
+          "priority": 0,
+          "name": "success_2",
+          "query": {
+            "_m_target": "success_2"
+          }
+        },
+        {
+          "description": "description_success_3",
+          "priority": 100,
+          "name": "success_3",
+          "query": {
+            "_m_target": "success_3"
+          }
+        },
+        {
+          "description": "success_4",
+          "priority": 10,
+          "query": {
+            "type": 1,
+            "_m_target": "success_4"
+          },
+          "name": "success_4"
+        }
+      ]
+    },
+    {
+      "description": "demo_plugin_reporter",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "plugin": "reporter",
+      "route": "/cgi-bin/a/b/demo_plugin_reporter",
+      "name": "demo_plugin_reporter",
+      "activeModule": "error",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success",
+          "priority": 0,
+          "name": "success",
+          "query": {
+            "_m_target": "success"
+          }
+        }
+      ]
+    },
+    {
+      "description": "demo_simple",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "plugin": "mocker",
+      "route": "/cgi-bin/a/b/demo_simple",
+      "name": "demo_simple",
+      "activeModule": "error",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success",
+          "priority": 0,
+          "name": "success",
+          "query": {
+            "_m_target": "success"
+          }
+        }
+      ]
+    }
+  ]
+}

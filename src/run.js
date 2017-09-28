@@ -5,7 +5,7 @@ const path = require('path');
 require('babel-runtime/core-js/promise').default = require('bluebird');
 global.Promise = require('bluebird');
 
-const babelCompileDirectory = require('babel-d');
+// const babelCompileDirectory = require('babel-d');
 
 const matmanServer = require('./server');
 
@@ -32,27 +32,28 @@ module.exports = (opts) => {
   // 设置默认值
   configOpts.SRC_PATH = configOpts.SRC_PATH || path.join(configOpts.ROOT_PATH, './src');
   configOpts.APP_PATH = configOpts.APP_PATH || path.join(configOpts.ROOT_PATH, './app');
-  configOpts.MOCKER_RELATIVE_PATH = configOpts.MOCKER_RELATIVE_PATH || './mocker';
+  configOpts.HANDLER_RELATIVE_PATH = configOpts.HANDLER_RELATIVE_PATH || './handler';
   configOpts.LOG_PATH = configOpts.LOG_PATH || path.join(configOpts.ROOT_PATH, 'logs');
   configOpts.port = configOpts.port || 3000;
 
-  // 确认 MOCKER_PATH 的值
-  if (configOpts.SRC_PATH === configOpts.APP_PATH) {
+  // 确认 HANDLER_PATH 的值
+  // if (configOpts.SRC_PATH === configOpts.APP_PATH) {
     // 如果源文件目录和运行目录一致，就不进行babel编译了
-    configOpts.MOCKER_PATH = path.join(configOpts.SRC_PATH, configOpts.MOCKER_RELATIVE_PATH);
-  } else {
-    // babel 编译
-    babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
-    configOpts.MOCKER_PATH = path.join(configOpts.APP_PATH, configOpts.MOCKER_RELATIVE_PATH);
-  }
+    configOpts.HANDLER_PATH = path.join(configOpts.SRC_PATH, configOpts.HANDLER_RELATIVE_PATH);
+  // } else {
+  //   // babel 编译
+  //   babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
+  //   configOpts.HANDLER_PATH = path.join(configOpts.APP_PATH, configOpts.HANDLER_RELATIVE_PATH);
+  // }
 
+  // 初始化日志打印
   logger.init(configOpts.LOG_PATH);
-
   matmanLogger.info(configOpts);
 
-  const routerMocker = matmanServer.routerMocker(configOpts);
+  // 创建服务，并加入 handler 路由
+  const routerHandler = matmanServer.routerHandler(configOpts);
   const server = matmanServer.create();
-  const middlewares = matmanServer.mockServer();
+  const middlewares = matmanServer.handlerServer();
 
   // Set default middlewares (logger, static, cors and no-cache)
   server.use(middlewares);
@@ -62,12 +63,12 @@ module.exports = (opts) => {
     res.redirect('/');
   });
 
-  // GET /admin/mockers/mocker/:mockerName/static/* 静态资源
-  // http://localhost:3000/admin/mockers/mocker/standard_cgi/static/1.png
-  server.get('/admin/mockers/mocker/:mockerName/static/*', (req, res) => {
+  // GET /admin/handlers/handler/:handlerName/static/* 静态资源
+  // http://localhost:3000/admin/handlers/handler/standard_cgi/static/1.png
+  server.get('/admin/handlers/handler/:handlerName/static/*', (req, res) => {
     // req.params[0] = 'subdir/3.png'
-    // req.params.mockerName = 'standard_cgi'
-    let imageFilePath = path.join(configOpts.MOCKER_PATH, req.params.mockerName, 'static', req.params[0]);
+    // req.params.handlerName = 'standard_cgi'
+    let imageFilePath = path.join(configOpts.HANDLER_PATH, req.params.handlerName, 'static', req.params[0]);
     res.sendfile(imageFilePath);
   });
 
@@ -90,8 +91,8 @@ module.exports = (opts) => {
     next();
   });
 
-  // Use default router
-  server.use(routerMocker);
+  // Use handler router
+  server.use(routerHandler);
 
   server.listen(configOpts.port || 3000, () => {
     console.log('matman server is running');

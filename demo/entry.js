@@ -1,6 +1,6 @@
 const path = require('path');
 
-const matman = require('../lib/index');
+const matman = require('../src/index');
 
 let options = {};
 
@@ -15,14 +15,19 @@ options.ROOT_PATH = __dirname;
 options.SRC_PATH = path.join(options.ROOT_PATH, './src');
 
 /**
- * 编译之后的文件目录，是最终运行的目录，非必填，默认值为 ROOT_PATH/src
+ * src 源文件的目录，非必填，默认值为 ROOT_PATH/src
  */
-options.APP_PATH = path.join(options.ROOT_PATH, './app');
+options.DATA_PATH = path.join(options.ROOT_PATH, './data');
 
 /**
- * mocker 相对源文件目录的相对路径，非必填，默认值为 './mocker'
+ * 编译之后的文件目录，是最终运行的目录，非必填，默认值为 ROOT_PATH/src
  */
-options.MOCKER_RELATIVE_PATH = './mocker';
+options.APP_PATH = path.join(options.ROOT_PATH, './src');
+
+/**
+ * handler 相对源文件目录的相对路径，非必填，默认值为 './handler'
+ */
+options.HANDLER_RELATIVE_PATH = './mocker';
 
 /**
  * log文件的本地路径，必须是绝对路径，非必填，默认值为 ROOT_PATH/logs

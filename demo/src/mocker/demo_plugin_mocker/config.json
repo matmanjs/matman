@@ -1,0 +1,6 @@
+{
+  "name": "name_demo_handle_modules",
+  "description": "description_demo_handle_modules",
+  "route": "/cgi-bin/a/b/demo_handle_modules",
+  "defaultModule": "success_1"
+}
