@@ -32,6 +32,7 @@ module.exports = (opts) => {
   // 设置默认值
   configOpts.SRC_PATH = configOpts.SRC_PATH || path.join(configOpts.ROOT_PATH, './src');
   configOpts.APP_PATH = configOpts.APP_PATH || path.join(configOpts.ROOT_PATH, './app');
+  configOpts.DATA_PATH = configOpts.DATA_PATH || path.join(configOpts.ROOT_PATH, './data');
   configOpts.HANDLER_RELATIVE_PATH = configOpts.HANDLER_RELATIVE_PATH || './handler';
   configOpts.LOG_PATH = configOpts.LOG_PATH || path.join(configOpts.ROOT_PATH, 'logs');
   configOpts.port = configOpts.port || 3000;
