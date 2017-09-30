@@ -11,9 +11,11 @@ const matmanServer = require('./server');
 
 const logger = require('./server/logger');
 const matmanLogger = logger.matmanLogger();
+const attentionLogger = logger.attentionLogger();
 
 // 暴露一个全局log变量
 global.matmanLogger = matmanLogger;
+global.attentionLogger = attentionLogger;
 
 module.exports = (opts) => {
   let configOpts;
