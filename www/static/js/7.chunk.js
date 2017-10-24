@@ -1,26 +1,36 @@
 webpackJsonp([7],{
 
+/***/ 1263:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	exports.default = {
+	  path: '/admin/reporters/list',
+	  getComponent: function getComponent(nextState, cb) {
+	    __webpack_require__.e/* nsure */(8, function (require) {
+	      cb(null, __webpack_require__(1264).default);
+	    });
+	  }
+	};
+
+/***/ }),
+
 /***/ 1267:
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	exports.__esModule = true;
-	exports.default = Reporters;
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function Reporters(props) {
-	  return _react2.default.createElement(
-	    "div",
-	    { className: "reporters-wrapper" },
-	    props.children
-	  );
-	}
+	exports.default = {
+	  path: '/admin/reporters/reporter/:reporterName',
+	  getComponent: function getComponent(nextState, cb) {
+	    __webpack_require__.e/* nsure */(9, function (require) {
+	      cb(null, __webpack_require__(1268).default);
+	    });
+	  }
+	};
 
 /***/ })
 
