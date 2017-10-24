@@ -22,6 +22,14 @@ exports.init = function (logPath) {
         // backups: 1,
         category: 'matman',
         absolute: isAbsolute
+      },
+      {
+        type: 'file', //文件输出
+        filename: isAbsolute ? path.join(logPath, 'attention.log') : 'logs/attention.log',
+        maxLogSize: 1024 * 1024 * 50, // 50MB
+        // backups: 1,
+        category: 'attention',
+        absolute: isAbsolute
       }
     ],
     replaceConsole: true
@@ -44,4 +52,8 @@ exports.logger = function (name) {
 
 exports.matmanLogger = function () {
   return this.logger('matman');
+};
+
+exports.attentionLogger = function () {
+  return this.logger('attention');
 };

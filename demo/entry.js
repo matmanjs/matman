@@ -27,7 +27,7 @@ options.APP_PATH = path.join(options.ROOT_PATH, './src');
 /**
  * handler 相对源文件目录的相对路径，非必填，默认值为 './handler'
  */
-options.HANDLER_RELATIVE_PATH = './mocker';
+options.HANDLER_RELATIVE_PATH = './handler';
 
 /**
  * log文件的本地路径，必须是绝对路径，非必填，默认值为 ROOT_PATH/logs
