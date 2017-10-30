@@ -4,7 +4,7 @@ const path = require('path');
 const marked = require('marked');
 
 const util = require('../util');
-const mocker = require('../mocker');
+const store = require('../store');
 
 const parserUtil = require('./parser-util');
 
@@ -21,7 +21,7 @@ export default class HandlerParser {
     // 注意此处一定要保证存储数据的地址是可存在的，否则会保存。
     util.fse.ensureDirSync(this.dataPath);
 
-    this.db = mocker.db.getDB(path.join(this.dataPath, 'db.json'));
+    this.db = store.getDB(path.join(this.dataPath, 'db.json'));
   }
 
   /**
@@ -119,7 +119,7 @@ export default class HandlerParser {
       return null;
     }
 
-    let handlerConfigData = mocker.db.getDB(CUR_HANDLER_CONFIG).getState();
+    let handlerConfigData = store.getDB(CUR_HANDLER_CONFIG).getState();
 
     //===============================================================
     // 3. 以一定的方式， 获取 handler 模块最终信息
@@ -173,7 +173,7 @@ export default class HandlerParser {
           let CUR_HANDLE_MODULE_CONFIG = path.join(CUR_HANDLE_MODULE_PATH, curHandleModuleName, this.handleModuleConfigName);
 
           if (fs.existsSync(CUR_HANDLE_MODULE_CONFIG)) {
-            handleModuleConfigDBState = mocker.db.getDB(CUR_HANDLE_MODULE_CONFIG).getState();
+            handleModuleConfigDBState = store.getDB(CUR_HANDLE_MODULE_CONFIG).getState();
           }
         } else {
           // 获取模块名

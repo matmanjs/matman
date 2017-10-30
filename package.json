@@ -43,6 +43,7 @@
     "express": "^4.15.3",
     "faker": "^4.1.0",
     "fs-extra": "^3.0.1",
+    "fs-handler": "0.0.3",
     "husky": "^0.13.3",
     "json-parse-helpfulerror": "^1.0.3",
     "lodash": "^4.17.4",
