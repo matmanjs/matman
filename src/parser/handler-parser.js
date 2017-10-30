@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fse = require('fs-extra');
 const _ = require('lodash');
 const path = require('path');
 const marked = require('marked');
@@ -20,7 +21,7 @@ export default class HandlerParser {
     this.targetField = '_m_target';
 
     // 注意此处一定要保证存储数据的地址是可存在的，否则会保存。
-    util.fse.ensureDirSync(this.dataPath);
+    fse.ensureDirSync(this.dataPath);
 
     this.db = store.getDB(path.join(this.dataPath, 'db.json'));
   }
