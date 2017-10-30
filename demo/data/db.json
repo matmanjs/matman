@@ -91,6 +91,37 @@
       ]
     },
     {
+      "description": "demo_plugin_stub",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "plugin": "stub",
+      "route": "/cgi-bin/a/b/demo_plugin_stub",
+      "name": "demo_plugin_stub",
+      "activeModule": "error",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success",
+          "priority": 0,
+          "name": "success",
+          "query": {
+            "_m_target": "success"
+          }
+        }
+      ]
+    },
+    {
       "description": "demo_simple",
       "disable": false,
       "method": "get",
