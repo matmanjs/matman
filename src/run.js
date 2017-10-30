@@ -56,8 +56,6 @@ module.exports = (opts) => {
   // 创建服务，并加入 handler 路由
   const routerHandler = matmanServer.routerHandler(configOpts);
   const app = matmanServer.create();
-  const server = require('http').createServer(app);
-  const io = require('socket.io')(server);
   const middlewares = matmanServer.handlerServer();
 
   // Set default middlewares (logger, static, cors and no-cache)
@@ -100,22 +98,7 @@ module.exports = (opts) => {
   app.use(routerHandler);
 
   // 触发 onBeforeServerListen 事件
-
-  io.on('connection', function (socket) {
-    console.log('connection');
-
-    // when the client emits 'typing', we broadcast it to others
-    socket.on('typing', function (data) {
-      socket.emit('typing', {
-        username: data
-      });
-    });
-
-    // when the user disconnects.. perform this
-    socket.on('disconnect', function () {
-      console.log('disconnect');
-    });
-  });
+  const server = require('./plugins/stub/websocket')(configOpts, app);
 
   server.listen(configOpts.port || 3000, () => {
     console.log('matman server is running');

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TEST socket</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="msgId">输入消息</label>
+            <input type="text" class="form-control" id="msgId">
+        </div>
+        <button type="button" class="btn btn-default" id="subBtn" }>Submit</button>
+    </form>
+
+    <hr>
+
+    <textarea class="form-control" rows="3" id="log"></textarea>
+</div>
+
+
+<script src="//cdn.bootcss.com/socket.io/2.0.3/socket.io.slim.js"></script>
+<script>
+  $(function () {
+    var socket = io('http://localhost:3000');
+
+    $('#subBtn').on('click', function () {
+//      showLog($('#msgId').val());
+
+      socket.emit('typing', $('#msgId').val());
+    });
+
+    socket.on('typing', function (data) {
+      showLog(data);
+    });
+  });
+
+  function showLog(msg) {
+    var str = (typeof msg === 'object') ? JSON.stringify(msg, null, 2) : msg;
+    $('#log').val(str);
+  }
+
+</script>
+</body>
+</html>
