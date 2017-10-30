@@ -2,6 +2,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 const marked = require('marked');
+const fsHandler = require('fs-handler');
 
 const util = require('../util');
 const store = require('../store');
@@ -54,7 +55,7 @@ export default class HandlerParser {
     // 1. 获取所有的 handler name
     let handlerNameArr = [];
 
-    util.file.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
+    fsHandler.search.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
       /**
        * 限制只处理文件夹类型的
        * 在根目录下，每个子文件夹就是一个 handler 单位，其名字即为文件夹名字
@@ -159,7 +160,7 @@ export default class HandlerParser {
       modules.push(indexModule);
 
     } else {
-      util.file.getAll(CUR_HANDLE_MODULE_PATH, { globs: ['*'] }).forEach((item) => {
+      fsHandler.search.getAll(CUR_HANDLE_MODULE_PATH, { globs: ['*'] }).forEach((item) => {
         // 获取各个 handle_module 中 config.json 的数据
         let handleModuleConfigDBState = {};
         let curHandleModuleName = '';
