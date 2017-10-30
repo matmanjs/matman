@@ -256,7 +256,7 @@ export default class HandlerParser {
       return Promise.reject();
     }
 
-    return util.handle.getResult(reqInfoByRoute.fullPath, reqInfoByRoute.params, req)
+    return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, reqInfoByRoute.params, req)
       .then((data) => {
         return {
           data: data,

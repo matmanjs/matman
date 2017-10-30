@@ -11,7 +11,7 @@
       "name": "demo_plugin_mocker",
       "route": "/cgi-bin/a/b/demo_handle_modules",
       "defaultModule": "success_1",
-      "activeModule": "success_1",
+      "activeModule": "error",
       "tags": [
         "全部"
       ],
@@ -57,7 +57,8 @@
           },
           "name": "success_4"
         }
-      ]
+      ],
+      "createdAt": 1509367794288
     },
     {
       "description": "demo_plugin_reporter",
