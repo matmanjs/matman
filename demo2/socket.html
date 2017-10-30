@@ -20,7 +20,18 @@
 
     <hr>
 
-    <textarea class="form-control" rows="3" id="log"></textarea>
+    <form>
+        <div class="form-group">
+            <label for="nameId">输入模块名字</label>
+            <input type="text" class="form-control" id="nameId">
+        </div>
+        <button type="button" class="btn btn-default" id="subBtn2" }>Submit2</button>
+    </form>
+
+    <hr>
+
+
+    <textarea class="form-control" rows="33" id="log"></textarea>
 </div>
 
 
@@ -30,14 +41,26 @@
     var socket = io('http://localhost:3000');
 
     $('#subBtn').on('click', function () {
-//      showLog($('#msgId').val());
-
       socket.emit('typing', $('#msgId').val());
+    });
+
+    $('#subBtn2').on('click', function () {
+//      socket.emit('demo_plugin_stub', $('#nameId').val());
+      socket.emit('/cgi-bin/a/b/demo_plugin_stub', $('#nameId').val());
     });
 
     socket.on('typing', function (data) {
       showLog(data);
     });
+
+    socket.on('demo_plugin_stub', function (data) {
+      showLog(data);
+    });
+
+    socket.on('/cgi-bin/a/b/demo_plugin_stub', function (data) {
+      showLog(data);
+    });
+
   });
 
   function showLog(msg) {

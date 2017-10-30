@@ -98,7 +98,7 @@ module.exports = (opts) => {
   app.use(routerHandler);
 
   // 触发 onBeforeServerListen 事件
-  const server = require('./plugins/stub/websocket')(configOpts, app);
+  const server = require('./plugins/stub/websocket')(configOpts, app, routerHandler._handlerParser);
 
   server.listen(configOpts.port || 3000, () => {
     console.log('matman server is running');
