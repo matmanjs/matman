@@ -41,8 +41,8 @@ module.exports = (opts) => {
 
   // 确认 HANDLER_PATH 的值
   // if (configOpts.SRC_PATH === configOpts.APP_PATH) {
-    // 如果源文件目录和运行目录一致，就不进行babel编译了
-    configOpts.HANDLER_PATH = path.join(configOpts.SRC_PATH, configOpts.HANDLER_RELATIVE_PATH);
+  // 如果源文件目录和运行目录一致，就不进行babel编译了
+  configOpts.HANDLER_PATH = path.join(configOpts.SRC_PATH, configOpts.HANDLER_RELATIVE_PATH);
   // } else {
   //   // babel 编译
   //   babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
@@ -55,20 +55,22 @@ module.exports = (opts) => {
 
   // 创建服务，并加入 handler 路由
   const routerHandler = matmanServer.routerHandler(configOpts);
-  const server = matmanServer.create();
+  const app = matmanServer.create();
+  const server = require('http').createServer(app);
+  const io = require('socket.io')(server);
   const middlewares = matmanServer.handlerServer();
 
   // Set default middlewares (logger, static, cors and no-cache)
-  server.use(middlewares);
+  app.use(middlewares);
 
   // GET /admin，跳转到 /
-  server.get('/admin', function (req, res) {
+  app.get('/admin', function (req, res) {
     res.redirect('/');
   });
 
   // GET /admin/handlers/handler/:handlerName/static/* 静态资源
   // http://localhost:3000/admin/handlers/handler/standard_cgi/static/1.png
-  server.get('/admin/handlers/handler/:handlerName/static/*', (req, res) => {
+  app.get('/admin/handlers/handler/:handlerName/static/*', (req, res) => {
     // req.params[0] = 'subdir/3.png'
     // req.params.handlerName = 'standard_cgi'
     let imageFilePath = path.join(configOpts.HANDLER_PATH, req.params.handlerName, 'static', req.params[0]);
@@ -76,26 +78,44 @@ module.exports = (opts) => {
   });
 
   // GET /admin/*
-  server.get('/admin/*', function (req, res) {
+  app.get('/admin/*', function (req, res) {
     // res.jsonp({ url2: req.url });
     res.sendFile(path.join(__dirname, '../www/static', 'index.html'));
   });
 
-  server.use(logger.connectLogger());
+  app.use(logger.connectLogger());
 
   // To handle POST, PUT and PATCH you need to use a body-parser
   // You can use the one used by JSON Server
-  server.use(matmanServer.bodyParser);
-  server.use((req, res, next) => {
+  app.use(matmanServer.bodyParser);
+  app.use((req, res, next) => {
     if (req.method === 'POST') {
-      req.body.createdAt = Date.now()
+      req.body.createdAt = Date.now();
     }
     // Continue to JSON Server router
     next();
   });
 
   // Use handler router
-  server.use(routerHandler);
+  app.use(routerHandler);
+
+  // 触发 onBeforeServerListen 事件
+
+  io.on('connection', function (socket) {
+    console.log('connection');
+
+    // when the client emits 'typing', we broadcast it to others
+    socket.on('typing', function (data) {
+      socket.emit('typing', {
+        username: data
+      });
+    });
+
+    // when the user disconnects.. perform this
+    socket.on('disconnect', function () {
+      console.log('disconnect');
+    });
+  });
 
   server.listen(configOpts.port || 3000, () => {
     console.log('matman server is running');

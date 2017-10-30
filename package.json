@@ -68,6 +68,7 @@
     "request": "^2.81.0",
     "server-destroy": "^1.0.1",
     "shortid": "^2.2.8",
+    "socket.io": "^2.0.4",
     "superagent": "^3.5.2",
     "update-notifier": "^2.2.0",
     "url": "^0.11.0",
