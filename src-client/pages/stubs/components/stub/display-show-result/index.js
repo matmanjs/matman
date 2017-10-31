@@ -3,7 +3,7 @@ import { Modal, Button } from 'antd';
 
 import './index.less';
 
-export default function MockerShowResult(props) {
+export default function StubShowResult(props) {
   const { isShow, data, onHide } = props;
 
   return (

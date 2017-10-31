@@ -3,7 +3,7 @@ import { Button, Alert } from 'antd';
 
 import './index.less';
 
-export default function MockerSwitcher(props) {
+export default function StubSwitcher(props) {
   const { isDisabled, updateDisable } = props;
 
   return (

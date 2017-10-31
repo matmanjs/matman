@@ -3,7 +3,7 @@ import { Row, Col, Card, Button, Input } from 'antd';
 
 import './index.less';
 
-export default function MockerDetail(props) {
+export default function StubDetail(props) {
   const { stubData, actualURL, onShowResult, onParamsChange } = props;
 
   let curUrl = actualURL;

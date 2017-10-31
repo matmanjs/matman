@@ -5,7 +5,7 @@ import { IndexLink, Link } from 'react-router';
 
 import './index.less';
 
-export default function MockerSwitcher(props) {
+export default function StubSwitcher(props) {
   const { name } = props;
 
   return (

@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import superagent from 'superagent';
 
-import { loadMocker, loadMockerReadme, setMockerActiveModule, setMockerDisable } from '../../business/stub/action';
+import { loadStub, loadStubReadme, setStubActiveModule, setStubDisable } from '../../business/stub/action';
 
-import MockerBreadcrumb from './display-breadcrumb';
-import MockerDetail from './display-detail';
-import MockerShowResult from './display-show-result';
-import MockerSwitcher from './display-switcher';
-import MockerMockModuleList from './display-mock-module-list';
-import MockerReadme from './display-readme';
+import StubBreadcrumb from './display-breadcrumb';
+import StubDetail from './display-detail';
+import StubShowResult from './display-show-result';
+import StubSwitcher from './display-switcher';
+import StubMockModuleList from './display-mock-module-list';
+import StubReadme from './display-readme';
 
 import './index.less';
 
-class Mocker extends Component {
+class Stub extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -54,11 +54,11 @@ class Mocker extends Component {
   }
 
   componentDidMount() {
-    console.log('Mocker componentDidMount', this.props);
+    console.log('Stub componentDidMount', this.props);
 
     // 加载这个 stub 的信息
-    this.props.loadMocker(this.props.routeParams.stubName);
-    this.props.loadMockerReadme(this.props.routeParams.stubName);
+    this.props.loadStub(this.props.routeParams.stubName);
+    this.props.loadStubReadme(this.props.routeParams.stubName);
   }
 
   getMockModuleByPost(url, data) {
@@ -93,7 +93,7 @@ class Mocker extends Component {
   }
 
   handleActive(name) {
-    this.props.setMockerActiveModule(this.props.stubData.name, name);
+    this.props.setStubActiveModule(this.props.stubData.name, name);
   }
 
   handleModalHide() {
@@ -153,7 +153,7 @@ class Mocker extends Component {
 
   handleDisable() {
     // console.log('handleDisable', this.props.stubData.disable);
-    this.props.setMockerDisable(this.props.stubData.name, !this.props.stubData.disable);
+    this.props.setStubDisable(this.props.stubData.name, !this.props.stubData.disable);
   }
 
   getActualURL(stubData, cgiParams) {
@@ -176,37 +176,37 @@ class Mocker extends Component {
     return (
       <div className="stubs-stub">
 
-        <MockerBreadcrumb name={stubData.name} />
+        <StubBreadcrumb name={stubData.name} />
 
         {
           isLoaded ? (
             <div>
-              <MockerSwitcher
+              <StubSwitcher
                 isDisabled={stubData.disable}
                 updateDisable={this.handleDisable}
               />
 
-              <MockerDetail
+              <StubDetail
                 stubData={stubData}
                 actualURL={actualURL}
                 onParamsChange={this.handleParamsChange}
                 onShowResult={this.handleShowResult}
               />
 
-              <MockerMockModuleList
+              <StubMockModuleList
                 isLoaded={isLoaded}
                 stubData={stubData}
                 onShowResult={this.handleShowResult}
                 updateActive={this.handleActive}
               />
 
-              <MockerShowResult
+              <StubShowResult
                 isShow={showModal}
                 data={modalShowData}
                 onHide={this.handleModalHide}
               />
 
-              <MockerReadme htmlContent={readme} />
+              <StubReadme htmlContent={readme} />
 
             </div>
           ) : (
@@ -230,24 +230,24 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadMocker(stubName){
-      return dispatch(loadMocker(stubName));
+    loadStub(stubName){
+      return dispatch(loadStub(stubName));
     },
 
-    loadMockerReadme(stubName){
-      return dispatch(loadMockerReadme(stubName));
+    loadStubReadme(stubName){
+      return dispatch(loadStubReadme(stubName));
     },
 
-    setMockerActiveModule(stubName, mockModuleName){
-      return dispatch(setMockerActiveModule(stubName, mockModuleName));
+    setStubActiveModule(stubName, mockModuleName){
+      return dispatch(setStubActiveModule(stubName, mockModuleName));
     },
 
-    setMockerDisable(stubName, value){
-      return dispatch(setMockerDisable(stubName, value));
+    setStubDisable(stubName, value){
+      return dispatch(setStubDisable(stubName, value));
     }
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Mocker);
+export default connect(mapStateToProps, mapDispatchToProps)(Stub);
 
 

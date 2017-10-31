@@ -3,7 +3,7 @@ import { Card } from 'antd';
 
 import './index.less';
 
-export default function MockerReadme(props) {
+export default function StubReadme(props) {
   const { htmlContent } = props;
 
   if (!htmlContent) {

@@ -3,7 +3,7 @@ import { Table, Button } from 'antd';
 
 import './index.less';
 
-export default function MockerMockModuleList(props) {
+export default function StubMockModuleList(props) {
   const { isLoaded, stubData, onShowResult, updateActive } = props;
 
   const activeModule = stubData.activeModule || '';
