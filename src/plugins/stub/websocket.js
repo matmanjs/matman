@@ -20,16 +20,12 @@ module.exports = function (opts, app, handlerParser) {
     });
 
     socket.on('emitStub', function (data) {
-      console.log('------typing-----', data);
-      socket.broadcast.emit('typing', {
-        username: data
-      });
+      console.log('------typing222-----', data);
 
-      socket.emit('typing', {
-        username2: data
-      });
+      socket.broadcast.emit('typing', data);
+
+      socket.emit('typing', data);
     });
-
 
     let stubList = handlerParser.getHandlerListByPlugin(PLUGIN_NAME);
     console.log('--stubList--', stubList);

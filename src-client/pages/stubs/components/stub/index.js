@@ -159,12 +159,9 @@ class Stub extends Component {
     this.props.setStubDisable(this.props.stubData.name, !this.props.stubData.disable);
   }
 
-  handleEmitStub(query = {}, host) {
-    console.log('handleEmitStub', query, host, typeof io);
-    // var io = require('io');
-    // var socket = io('http://localhost:3000');
-    // socket.emit('typing', 'helloworld');
-    socket.emit('typing', 'hello,matman');
+  handleEmitStub(data) {
+    console.log('handleEmitStub', data);
+    socket.emit('emitStub', data);
 
   }
 
@@ -203,7 +200,6 @@ class Stub extends Component {
                 actualURL={actualURL}
                 onParamsChange={this.handleParamsChange}
                 onShowResult={this.handleShowResult}
-                onEmitStub={this.handleEmitStub}
               />
 
               <StubMockModuleList
@@ -217,6 +213,7 @@ class Stub extends Component {
                 isShow={showModal}
                 data={modalShowData}
                 onHide={this.handleModalHide}
+                onEmitStub={this.handleEmitStub}
               />
 
               <StubReadme htmlContent={readme} />

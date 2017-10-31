@@ -4,7 +4,7 @@ import { Modal, Button } from 'antd';
 import './index.less';
 
 export default function StubShowResult(props) {
-  const { isShow, data, onHide } = props;
+  const { isShow, data, onHide, onEmitStub } = props;
 
   return (
     <div className="stub-show-result">
@@ -15,9 +15,13 @@ export default function StubShowResult(props) {
         onCancel={onHide}
         onOk={onHide}
         footer={[
-          <Button key="submit" type="primary" size="large" onClick={onHide}>
-            知道了
+          <Button key="stub" type="primary" size="large" onClick={onEmitStub.bind(this, data)}>
+            执行打桩操作
           </Button>,
+
+          <Button key="cancel" size="large" onClick={onHide}>
+            知道了
+          </Button>
         ]}
       >
 
