@@ -7,7 +7,7 @@ export default function MockerSwitcher(props) {
   const { isDisabled, updateDisable } = props;
 
   return (
-    <div className="mocker-switcher">
+    <div className="stub-switcher">
       {
         isDisabled ? (
           <Alert

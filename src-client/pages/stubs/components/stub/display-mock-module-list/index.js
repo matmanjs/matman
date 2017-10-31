@@ -4,17 +4,17 @@ import { Table, Button } from 'antd';
 import './index.less';
 
 export default function MockerMockModuleList(props) {
-  const { isLoaded, mockerData, onShowResult, updateActive } = props;
+  const { isLoaded, stubData, onShowResult, updateActive } = props;
 
-  const activeModule = mockerData.activeModule || '';
-  const mockModuleList = mockerData.modules || [];
+  const activeModule = stubData.activeModule || '';
+  const mockModuleList = stubData.modules || [];
 
   const tableColumns = [{
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
     render: (text, record) => (
-      <Button type={mockerData.disable ? 'default' : 'primary'} onClick={onShowResult.bind(this, record.query, record.host)}>
+      <Button type={stubData.disable ? 'default' : 'primary'} onClick={onShowResult.bind(this, record.query, record.host)}>
         {text}
       </Button>
     ),
@@ -41,7 +41,7 @@ export default function MockerMockModuleList(props) {
       <div>
         {
           (record.name !== activeModule) ?
-            <Button type={mockerData.disable ? 'default' : 'primary'} onClick={updateActive.bind(this, record.name)}>
+            <Button type={stubData.disable ? 'default' : 'primary'} onClick={updateActive.bind(this, record.name)}>
               Active It
             </Button>
             : <span>Aready active</span>
@@ -57,7 +57,7 @@ export default function MockerMockModuleList(props) {
   }];
 
   return (
-    <div className="mocker-mock-module-list">
+    <div className="stub-mock-module-list">
 
       < Table loading={!isLoaded} rowKey="name" columns={tableColumns} dataSource={mockModuleList} />
 

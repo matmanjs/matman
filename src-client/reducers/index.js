@@ -9,6 +9,9 @@ import mockerListInfo from '../pages/mockers/business/mocker-list/reducer';
 import reporterInfo from '../pages/reporters/business/reporter/reducer';
 import reporterListInfo from '../pages/reporters/business/reporter-list/reducer';
 
+import stubInfo from '../pages/stubs/business/stub/reducer';
+import stubListInfo from '../pages/stubs/business/stub-list/reducer';
+
 const rootReducer = combineReducers({
   routing, // 用于路由控制
   sidebarInfo,
@@ -16,6 +19,8 @@ const rootReducer = combineReducers({
   mockerListInfo,
   reporterInfo,
   reporterListInfo,
+  stubInfo,
+  stubListInfo
 });
 
-export default rootReducer
+export default rootReducer;

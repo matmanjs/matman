@@ -7,7 +7,7 @@ export default function MockerShowResult(props) {
   const { isShow, data, onHide } = props;
 
   return (
-    <div className="mocker-show-result">
+    <div className="stub-show-result">
 
       <Modal
         title="结果"

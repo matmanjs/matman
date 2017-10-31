@@ -33,13 +33,13 @@ class Mocker extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isLoaded && (this.props.isLoaded !== nextProps.isLoaded)) {
-      // 加载完 mocker 信息之后，要初始化填写的参数
-      const { mockerData } = nextProps;
-      let mockerParams = mockerData.params || [];
+      // 加载完 stub 信息之后，要初始化填写的参数
+      const { stubData } = nextProps;
+      let stubParams = stubData.params || [];
       let { cgiParams } = this.state;
 
-      if (mockerParams.length) {
-        mockerParams.forEach((item) => {
+      if (stubParams.length) {
+        stubParams.forEach((item) => {
           if (item.defaultValue) {
             cgiParams[item.name] = item.defaultValue;
           }
@@ -48,7 +48,7 @@ class Mocker extends Component {
 
       this.setState({
         cgiParams: cgiParams,
-        actualURL: this.getActualURL(mockerData, cgiParams)
+        actualURL: this.getActualURL(stubData, cgiParams)
       });
     }
   }
@@ -56,7 +56,7 @@ class Mocker extends Component {
   componentDidMount() {
     console.log('Mocker componentDidMount', this.props);
 
-    // 加载这个 mocker 的信息
+    // 加载这个 stub 的信息
     this.props.loadMocker(this.props.routeParams.stubName);
     this.props.loadMockerReadme(this.props.routeParams.stubName);
   }
@@ -93,7 +93,7 @@ class Mocker extends Component {
   }
 
   handleActive(name) {
-    this.props.setMockerActiveModule(this.props.mockerData.name, name);
+    this.props.setMockerActiveModule(this.props.stubData.name, name);
   }
 
   handleModalHide() {
@@ -104,7 +104,7 @@ class Mocker extends Component {
   }
 
   handleShowResult(query = {}, host) {
-    const { mockerData } = this.props;
+    const { stubData } = this.props;
     let { actualURL } = this.state;
 
     // 如果有指定的host，则使用指定的host
@@ -112,7 +112,7 @@ class Mocker extends Component {
       actualURL = `http://${host}${actualURL}`;
     }
 
-    if (mockerData.method === 'post') {
+    if (stubData.method === 'post') {
       this.getMockModuleByPost(actualURL, query)
         .then((data) => {
           console.log(data);
@@ -140,24 +140,24 @@ class Mocker extends Component {
   }
 
   handleParamsChange(fieldName, event) {
-    let { mockerData } = this.props;
+    let { stubData } = this.props;
     let { cgiParams } = this.state;
 
     cgiParams[fieldName] = event.target.value;
 
     this.setState({
       cgiParams: cgiParams,
-      actualURL: this.getActualURL(mockerData, cgiParams)
+      actualURL: this.getActualURL(stubData, cgiParams)
     });
   }
 
   handleDisable() {
-    // console.log('handleDisable', this.props.mockerData.disable);
-    this.props.setMockerDisable(this.props.mockerData.name, !this.props.mockerData.disable);
+    // console.log('handleDisable', this.props.stubData.disable);
+    this.props.setMockerDisable(this.props.stubData.name, !this.props.stubData.disable);
   }
 
-  getActualURL(mockerData, cgiParams) {
-    let curUrl = mockerData.route;
+  getActualURL(stubData, cgiParams) {
+    let curUrl = stubData.route;
 
     if (Object.keys(cgiParams).length) {
       Object.keys(cgiParams).forEach((key) => {
@@ -170,24 +170,24 @@ class Mocker extends Component {
   }
 
   render() {
-    const { isLoaded, mockerData, readme } = this.props;
+    const { isLoaded, stubData, readme } = this.props;
     const { showModal, modalShowData, actualURL } = this.state;
 
     return (
-      <div className="mockers-mocker">
+      <div className="stubs-stub">
 
-        <MockerBreadcrumb name={mockerData.name} />
+        <MockerBreadcrumb name={stubData.name} />
 
         {
           isLoaded ? (
             <div>
               <MockerSwitcher
-                isDisabled={mockerData.disable}
+                isDisabled={stubData.disable}
                 updateDisable={this.handleDisable}
               />
 
               <MockerDetail
-                mockerData={mockerData}
+                stubData={stubData}
                 actualURL={actualURL}
                 onParamsChange={this.handleParamsChange}
                 onShowResult={this.handleShowResult}
@@ -195,7 +195,7 @@ class Mocker extends Component {
 
               <MockerMockModuleList
                 isLoaded={isLoaded}
-                mockerData={mockerData}
+                stubData={stubData}
                 onShowResult={this.handleShowResult}
                 updateActive={this.handleActive}
               />
@@ -219,12 +219,12 @@ class Mocker extends Component {
 }
 
 function mapStateToProps(state) {
-  const { mockerInfo } = state;
+  const { stubInfo } = state;
 
   return {
-    isLoaded: mockerInfo.isLoaded,
-    mockerData: mockerInfo.data,
-    readme: mockerInfo.readme,
+    isLoaded: stubInfo.isLoaded,
+    stubData: stubInfo.data,
+    readme: stubInfo.readme,
   };
 }
 
