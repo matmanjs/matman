@@ -14,26 +14,29 @@ export default function StubMockModuleList(props) {
     dataIndex: 'name',
     key: 'name',
     render: (text, record) => (
-      <Button type={stubData.disable ? 'default' : 'primary'} onClick={onShowResult.bind(this, record.query, record.host)}>
+      <Button type={stubData.disable ? 'default' : 'primary'}
+              disabled={stubData.disable ? 'disable' : ''}
+              onClick={onShowResult.bind(this, record.query, record.host)}
+      >
         {text}
       </Button>
-    ),
+    )
   }, {
     title: 'Version',
     dataIndex: 'version',
-    key: 'version',
+    key: 'version'
   }, {
     title: 'Author',
     dataIndex: 'author',
-    key: 'author',
+    key: 'author'
   }, {
     title: 'Host',
     dataIndex: 'host',
-    key: 'host',
+    key: 'host'
   }, {
     title: 'Description',
     dataIndex: 'description',
-    key: 'description',
+    key: 'description'
   }, {
     title: 'Action',
     key: 'action',
@@ -41,7 +44,10 @@ export default function StubMockModuleList(props) {
       <div>
         {
           (record.name !== activeModule) ?
-            <Button type={stubData.disable ? 'default' : 'primary'} onClick={updateActive.bind(this, record.name)}>
+            <Button type={stubData.disable ? 'default' : 'primary'}
+                    disabled={stubData.disable ? 'disable' : ''}
+                    onClick={updateActive.bind(this, record.name)}
+            >
               Active It
             </Button>
             : <span>Aready active</span>
@@ -53,7 +59,7 @@ export default function StubMockModuleList(props) {
         <span className="ant-divider" />
         <Button disabled> 删除 </Button>
       </div>
-    ),
+    )
   }];
 
   return (
