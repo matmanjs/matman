@@ -11,13 +11,13 @@ export default function StubSwitcher(props) {
       {
         isDisabled ? (
           <Alert
-            message="当前 mock 服务已被禁用，您可请点击“启用”按钮开始 mock 服务！"
+            message="当前打桩服务已被禁用，您可请点击“启用”按钮开始 mock 服务！"
             type="warning"
             showIcon
           />
         ) : (
           <Alert
-            message="mock 服务启用中..."
+            message="打桩服务已开始生效！"
             type="success"
             showIcon
           />

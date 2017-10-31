@@ -93,7 +93,7 @@
     },
     {
       "description": "demo_plugin_stub",
-      "disable": false,
+      "disable": true,
       "method": "get",
       "priority": 0,
       "plugin": "stub",
@@ -120,7 +120,8 @@
             "_m_target": "success"
           }
         }
-      ]
+      ],
+      "createdAt": 1509438630282
     },
     {
       "description": "demo_simple",
