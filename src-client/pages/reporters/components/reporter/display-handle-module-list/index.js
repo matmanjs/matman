@@ -15,7 +15,7 @@ export default function ReporterMockModuleList(props) {
     key: 'name',
     render: (text, record) => (
       <Button
-        type={reporterData.disable ? 'default' : 'primary'}
+        type="primary"
         disabled={reporterData.disable ? 'disable' : ''}
         onClick={onShowResult.bind(this, record.query, record.host)}
       >
@@ -46,7 +46,7 @@ export default function ReporterMockModuleList(props) {
         {
           (record.name !== activeModule) ?
             <Button
-              type={reporterData.disable ? 'default' : 'primary'}
+              type="primary"
               disabled={reporterData.disable ? 'disable' : ''}
               onClick={updateActive.bind(this, record.name)}
             >

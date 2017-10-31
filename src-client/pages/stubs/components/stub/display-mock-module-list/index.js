@@ -14,7 +14,7 @@ export default function StubMockModuleList(props) {
     dataIndex: 'name',
     key: 'name',
     render: (text, record) => (
-      <Button type={stubData.disable ? 'default' : 'primary'}
+      <Button type="primary"
               disabled={stubData.disable ? 'disable' : ''}
               onClick={onShowResult.bind(this, record.query, record.host)}
       >
@@ -44,7 +44,7 @@ export default function StubMockModuleList(props) {
       <div>
         {
           (record.name !== activeModule) ?
-            <Button type={stubData.disable ? 'default' : 'primary'}
+            <Button type="primary"
                     disabled={stubData.disable ? 'disable' : ''}
                     onClick={updateActive.bind(this, record.name)}
             >

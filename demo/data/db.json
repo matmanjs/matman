@@ -58,7 +58,7 @@
           "name": "success_4"
         }
       ],
-      "createdAt": 1509367794288
+      "createdAt": 1509440000748
     },
     {
       "description": "demo_plugin_reporter",
@@ -93,7 +93,7 @@
     },
     {
       "description": "demo_plugin_stub",
-      "disable": true,
+      "disable": false,
       "method": "get",
       "priority": 0,
       "plugin": "stub",
@@ -121,7 +121,7 @@
           }
         }
       ],
-      "createdAt": 1509439425369
+      "createdAt": 1509439876651
     },
     {
       "description": "demo_simple",

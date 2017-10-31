@@ -15874,7 +15874,7 @@ webpackJsonp([9],{
 	          _react2.default.createElement(
 	            _button2.default,
 	            {
-	              type: reporterData.disable ? 'default' : 'primary',
+	              type: 'primary',
 	              disabled: reporterData.disable ? 'disable' : '',
 	              size: 'large',
 	              icon: 'link',
@@ -16248,7 +16248,7 @@ webpackJsonp([9],{
 	      return _react2.default.createElement(
 	        _button2.default,
 	        {
-	          type: reporterData.disable ? 'default' : 'primary',
+	          type: 'primary',
 	          disabled: reporterData.disable ? 'disable' : '',
 	          onClick: onShowResult.bind(_this, record.query, record.host)
 	        },
@@ -16281,7 +16281,7 @@ webpackJsonp([9],{
 	        record.name !== activeModule ? _react2.default.createElement(
 	          _button2.default,
 	          {
-	            type: reporterData.disable ? 'default' : 'primary',
+	            type: 'primary',
 	            disabled: reporterData.disable ? 'disable' : '',
 	            onClick: updateActive.bind(_this, record.name)
 	          },

@@ -2095,7 +2095,7 @@ webpackJsonp([5],{
 	          _react2.default.createElement(
 	            _button2.default,
 	            {
-	              type: mockerData.disable ? 'default' : 'primary',
+	              type: 'primary',
 	              disabled: mockerData.disable ? 'disable' : '',
 	              size: 'large',
 	              icon: 'link',
@@ -4608,7 +4608,7 @@ webpackJsonp([5],{
 	      return _react2.default.createElement(
 	        _button2.default,
 	        {
-	          type: mockerData.disable ? 'default' : 'primary',
+	          type: 'primary',
 	          disabled: mockerData.disable ? 'disable' : '',
 	          onClick: onShowResult.bind(_this, record.query, record.host)
 	        },
@@ -4641,7 +4641,7 @@ webpackJsonp([5],{
 	        record.name !== activeModule ? _react2.default.createElement(
 	          _button2.default,
 	          {
-	            type: mockerData.disable ? 'default' : 'primary',
+	            type: 'primary',
 	            disabled: mockerData.disable ? 'disable' : '',
 	            onClick: updateActive.bind(_this, record.name)
 	          },

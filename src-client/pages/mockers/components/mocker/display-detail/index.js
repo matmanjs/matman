@@ -32,7 +32,7 @@ export default function MockerDetail(props) {
           <Card>
 
             <Button
-              type={mockerData.disable ? 'default' : 'primary'}
+              type="primary"
               disabled={mockerData.disable ? 'disable' : ''}
               size="large"
               icon="link"
