@@ -33,6 +33,7 @@ export default function MockerDetail(props) {
 
             <Button
               type={mockerData.disable ? 'default' : 'primary'}
+              disabled={mockerData.disable ? 'disable' : ''}
               size="large"
               icon="link"
               onClick={onShowResult.bind(this, mockModuleData.query, mockModuleData.host)}>

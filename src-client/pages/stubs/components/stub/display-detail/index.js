@@ -33,11 +33,20 @@ export default function StubDetail(props) {
 
             <Button
               type={stubData.disable ? 'default' : 'primary'}
+              disabled={stubData.disable ? 'disable' : ''}
+              size="large"
+              onClick={onShowResult.bind(this, mockModuleData.query, mockModuleData.host)}>
+              获取当前的打桩数据结果
+            </Button>
+
+            <Button
+              type={stubData.disable ? 'default' : 'primary'}
+              disabled={stubData.disable ? 'disable' : ''}
               size="large"
               icon="link"
               onClick={onShowResult.bind(this, mockModuleData.query, mockModuleData.host)}>
 
-              {stubData.method} : {curUrl}
+              执行打桩操作
 
             </Button>
 

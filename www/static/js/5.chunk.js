@@ -2096,6 +2096,7 @@ webpackJsonp([5],{
 	            _button2.default,
 	            {
 	              type: mockerData.disable ? 'default' : 'primary',
+	              disabled: mockerData.disable ? 'disable' : '',
 	              size: 'large',
 	              icon: 'link',
 	              onClick: onShowResult.bind(this, mockModuleData.query, mockModuleData.host) },
@@ -4278,7 +4279,7 @@ webpackJsonp([5],{
 	      type: 'warning',
 	      showIcon: true
 	    }) : _react2.default.createElement(_alert2.default, {
-	      message: 'mock \u670D\u52A1\u542F\u7528\u4E2D...',
+	      message: 'mock \u670D\u52A1\u5DF2\u5F00\u59CB\u751F\u6548\uFF01',
 	      type: 'success',
 	      showIcon: true
 	    }),
@@ -4606,7 +4607,11 @@ webpackJsonp([5],{
 	    render: function render(text, record) {
 	      return _react2.default.createElement(
 	        _button2.default,
-	        { type: mockerData.disable ? 'default' : 'primary', onClick: onShowResult.bind(_this, record.query, record.host) },
+	        {
+	          type: mockerData.disable ? 'default' : 'primary',
+	          disabled: mockerData.disable ? 'disable' : '',
+	          onClick: onShowResult.bind(_this, record.query, record.host)
+	        },
 	        text
 	      );
 	    }
@@ -4635,7 +4640,11 @@ webpackJsonp([5],{
 	        null,
 	        record.name !== activeModule ? _react2.default.createElement(
 	          _button2.default,
-	          { type: mockerData.disable ? 'default' : 'primary', onClick: updateActive.bind(_this, record.name) },
+	          {
+	            type: mockerData.disable ? 'default' : 'primary',
+	            disabled: mockerData.disable ? 'disable' : '',
+	            onClick: updateActive.bind(_this, record.name)
+	          },
 	          'Active It'
 	        ) : _react2.default.createElement(
 	          'span',

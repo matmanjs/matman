@@ -14,7 +14,11 @@ export default function MockerMockModuleList(props) {
     dataIndex: 'name',
     key: 'name',
     render: (text, record) => (
-      <Button type={mockerData.disable ? 'default' : 'primary'} onClick={onShowResult.bind(this, record.query, record.host)}>
+      <Button
+        type={mockerData.disable ? 'default' : 'primary'}
+        disabled={mockerData.disable ? 'disable' : ''}
+        onClick={onShowResult.bind(this, record.query, record.host)}
+      >
         {text}
       </Button>
     ),
@@ -41,7 +45,11 @@ export default function MockerMockModuleList(props) {
       <div>
         {
           (record.name !== activeModule) ?
-            <Button type={mockerData.disable ? 'default' : 'primary'} onClick={updateActive.bind(this, record.name)}>
+            <Button
+              type={mockerData.disable ? 'default' : 'primary'}
+              disabled={mockerData.disable ? 'disable' : ''}
+              onClick={updateActive.bind(this, record.name)}
+            >
               Active It
             </Button>
             : <span>Aready active</span>

@@ -25,7 +25,7 @@ export default function StubSwitcher(props) {
       }
 
       <Button type={isDisabled ? 'primary' : 'default'} icon="setting" onClick={updateDisable}>
-        {isDisabled ? '启用' : '禁用'} mock 服务
+        {isDisabled ? '启用' : '禁用'}打桩服务
       </Button>
 
     </div>

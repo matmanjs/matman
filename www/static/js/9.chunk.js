@@ -15875,6 +15875,7 @@ webpackJsonp([9],{
 	            _button2.default,
 	            {
 	              type: reporterData.disable ? 'default' : 'primary',
+	              disabled: reporterData.disable ? 'disable' : '',
 	              size: 'large',
 	              icon: 'link',
 	              onClick: onShowResult.bind(this, mockModuleData.query, mockModuleData.host) },
@@ -16137,11 +16138,11 @@ webpackJsonp([9],{
 	    'div',
 	    { className: 'reporter-switcher' },
 	    isDisabled ? _react2.default.createElement(_alert2.default, {
-	      message: '\u5F53\u524D mock \u670D\u52A1\u5DF2\u88AB\u7981\u7528\uFF0C\u60A8\u53EF\u8BF7\u70B9\u51FB\u201C\u542F\u7528\u201D\u6309\u94AE\u5F00\u59CB mock \u670D\u52A1\uFF01',
+	      message: '\u5F53\u524D reporter \u670D\u52A1\u5DF2\u88AB\u7981\u7528\uFF0C\u60A8\u53EF\u8BF7\u70B9\u51FB\u201C\u542F\u7528\u201D\u6309\u94AE\u5F00\u59CB mock \u670D\u52A1\uFF01',
 	      type: 'warning',
 	      showIcon: true
 	    }) : _react2.default.createElement(_alert2.default, {
-	      message: 'mock \u670D\u52A1\u542F\u7528\u4E2D...',
+	      message: 'reporter \u670D\u52A1\u5DF2\u5F00\u59CB\u751F\u6548\uFF01',
 	      type: 'success',
 	      showIcon: true
 	    }),
@@ -16246,7 +16247,11 @@ webpackJsonp([9],{
 	    render: function render(text, record) {
 	      return _react2.default.createElement(
 	        _button2.default,
-	        { type: reporterData.disable ? 'default' : 'primary', onClick: onShowResult.bind(_this, record.query, record.host) },
+	        {
+	          type: reporterData.disable ? 'default' : 'primary',
+	          disabled: reporterData.disable ? 'disable' : '',
+	          onClick: onShowResult.bind(_this, record.query, record.host)
+	        },
 	        text
 	      );
 	    }
@@ -16275,7 +16280,11 @@ webpackJsonp([9],{
 	        null,
 	        record.name !== activeModule ? _react2.default.createElement(
 	          _button2.default,
-	          { type: reporterData.disable ? 'default' : 'primary', onClick: updateActive.bind(_this, record.name) },
+	          {
+	            type: reporterData.disable ? 'default' : 'primary',
+	            disabled: reporterData.disable ? 'disable' : '',
+	            onClick: updateActive.bind(_this, record.name)
+	          },
 	          'Active It'
 	        ) : _react2.default.createElement(
 	          'span',
