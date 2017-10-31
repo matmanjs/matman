@@ -9,10 +9,27 @@ module.exports = function (opts, app, handlerParser) {
 
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', function (data) {
-      socket.emit('typing', {
+      console.log('------typing-----', data);
+      socket.broadcast.emit('typing', {
         username: data
       });
+
+      socket.emit('typing', {
+        username2: data
+      });
     });
+
+    socket.on('emitStub', function (data) {
+      console.log('------typing-----', data);
+      socket.broadcast.emit('typing', {
+        username: data
+      });
+
+      socket.emit('typing', {
+        username2: data
+      });
+    });
+
 
     let stubList = handlerParser.getHandlerListByPlugin(PLUGIN_NAME);
     console.log('--stubList--', stubList);

@@ -13,6 +13,8 @@ import StubReadme from './display-readme';
 
 import './index.less';
 
+const socket = io();
+
 class Stub extends Component {
   constructor(props, context) {
     super(props, context);
@@ -27,6 +29,7 @@ class Stub extends Component {
     this.handleActive = this.handleActive.bind(this);
     this.handleModalHide = this.handleModalHide.bind(this);
     this.handleShowResult = this.handleShowResult.bind(this);
+    this.handleEmitStub = this.handleEmitStub.bind(this);
     this.handleParamsChange = this.handleParamsChange.bind(this);
     this.handleDisable = this.handleDisable.bind(this);
   }
@@ -99,7 +102,7 @@ class Stub extends Component {
   handleModalHide() {
     this.setState({
       showModal: false,
-      modalShowData: {},
+      modalShowData: {}
     });
   }
 
@@ -118,11 +121,11 @@ class Stub extends Component {
           console.log(data);
           this.setState({
             showModal: true,
-            modalShowData: data,
-          })
+            modalShowData: data
+          });
         })
         .catch((err) => {
-          console.error(err)
+          console.error(err);
         });
     } else {
       this.getMockModuleByGet(actualURL, query)
@@ -130,11 +133,11 @@ class Stub extends Component {
           console.log(data);
           this.setState({
             showModal: true,
-            modalShowData: data,
-          })
+            modalShowData: data
+          });
         })
         .catch((err) => {
-          console.error(err)
+          console.error(err);
         });
     }
   }
@@ -156,13 +159,22 @@ class Stub extends Component {
     this.props.setStubDisable(this.props.stubData.name, !this.props.stubData.disable);
   }
 
+  handleEmitStub(query = {}, host) {
+    console.log('handleEmitStub', query, host, typeof io);
+    // var io = require('io');
+    // var socket = io('http://localhost:3000');
+    // socket.emit('typing', 'helloworld');
+    socket.emit('typing', 'hello,matman');
+
+  }
+
   getActualURL(stubData, cgiParams) {
     let curUrl = stubData.route;
 
     if (Object.keys(cgiParams).length) {
       Object.keys(cgiParams).forEach((key) => {
         curUrl = curUrl.replace(':' + key, cgiParams[key]);
-      })
+      });
     }
 
     console.log('curUrl', curUrl);
@@ -191,6 +203,7 @@ class Stub extends Component {
                 actualURL={actualURL}
                 onParamsChange={this.handleParamsChange}
                 onShowResult={this.handleShowResult}
+                onEmitStub={this.handleEmitStub}
               />
 
               <StubMockModuleList
@@ -214,7 +227,7 @@ class Stub extends Component {
           )
         }
       </div>
-    )
+    );
   }
 }
 
@@ -224,25 +237,25 @@ function mapStateToProps(state) {
   return {
     isLoaded: stubInfo.isLoaded,
     stubData: stubInfo.data,
-    readme: stubInfo.readme,
+    readme: stubInfo.readme
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadStub(stubName){
+    loadStub(stubName) {
       return dispatch(loadStub(stubName));
     },
 
-    loadStubReadme(stubName){
+    loadStubReadme(stubName) {
       return dispatch(loadStubReadme(stubName));
     },
 
-    setStubActiveModule(stubName, mockModuleName){
+    setStubActiveModule(stubName, mockModuleName) {
       return dispatch(setStubActiveModule(stubName, mockModuleName));
     },
 
-    setStubDisable(stubName, value){
+    setStubDisable(stubName, value) {
       return dispatch(setStubDisable(stubName, value));
     }
   };

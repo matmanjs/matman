@@ -4,7 +4,7 @@ import { Row, Col, Card, Button, Input } from 'antd';
 import './index.less';
 
 export default function StubDetail(props) {
-  const { stubData, actualURL, onShowResult, onParamsChange } = props;
+  const { stubData, actualURL, onShowResult, onParamsChange, onEmitStub } = props;
 
   let curUrl = actualURL;
 
@@ -44,7 +44,7 @@ export default function StubDetail(props) {
                 disabled={stubData.disable ? 'disable' : ''}
                 size="large"
                 icon="link"
-                onClick={onShowResult.bind(this, mockModuleData.query, mockModuleData.host)}>
+                onClick={onEmitStub.bind(this, mockModuleData.query, mockModuleData.host)}>
 
                 执行打桩操作
 
