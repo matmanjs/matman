@@ -19,6 +19,12 @@ export const SIDEBAR_MENU_DATA = {
       url: '/admin/reporters',
       icon: 'line-chart',
       title: 'Reporters'
+    },
+    {
+      id: 'stubs',
+      url: '/admin/stubs',
+      icon: 'api',
+      title: 'Stubs'
     }
   ]
 };

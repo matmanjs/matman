@@ -5,15 +5,15 @@ import { IndexLink, Link } from 'react-router';
 
 import './index.less';
 
-export default function MockerSwitcher(props) {
+export default function StubSwitcher(props) {
   const { name } = props;
 
   return (
-    <div className="mocker-breadcrumb">
+    <div className="stub-breadcrumb">
 
       <Breadcrumb>
         <Breadcrumb.Item><IndexLink to='/'> 首页 </IndexLink ></Breadcrumb.Item>
-        <Breadcrumb.Item><Link to="/admin/mockers/list"> mocker 列表 </Link></Breadcrumb.Item>
+        <Breadcrumb.Item><Link to="/admin/stubs/list"> stub 列表 </Link></Breadcrumb.Item>
         <Breadcrumb.Item> {name} </Breadcrumb.Item>
       </Breadcrumb>
 

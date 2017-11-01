@@ -11,7 +11,7 @@
       "name": "demo_plugin_mocker",
       "route": "/cgi-bin/a/b/demo_handle_modules",
       "defaultModule": "success_1",
-      "activeModule": "success_1",
+      "activeModule": "error",
       "tags": [
         "全部"
       ],
@@ -57,7 +57,8 @@
           },
           "name": "success_4"
         }
-      ]
+      ],
+      "createdAt": 1509440000748
     },
     {
       "description": "demo_plugin_reporter",
@@ -89,6 +90,38 @@
           }
         }
       ]
+    },
+    {
+      "description": "demo_plugin_stub",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "plugin": "stub",
+      "route": "/cgi-bin/a/b/demo_plugin_stub",
+      "name": "demo_plugin_stub",
+      "activeModule": "error",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success",
+          "priority": 0,
+          "name": "success",
+          "query": {
+            "_m_target": "success"
+          }
+        }
+      ],
+      "createdAt": 1509439876651
     },
     {
       "description": "demo_simple",

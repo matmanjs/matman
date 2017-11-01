@@ -17,7 +17,7 @@ export default function MockerSwitcher(props) {
           />
         ) : (
           <Alert
-            message="mock 服务启用中..."
+            message="mock 服务已开始生效！"
             type="success"
             showIcon
           />

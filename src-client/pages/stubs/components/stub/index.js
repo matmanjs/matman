@@ -2,18 +2,20 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import superagent from 'superagent';
 
-import { loadMocker, loadMockerReadme, setMockerActiveModule, setMockerDisable } from '../../business/stub/action';
+import { loadStub, loadStubReadme, setStubActiveModule, setStubDisable } from '../../business/stub/action';
 
-import MockerBreadcrumb from './display-breadcrumb';
-import MockerDetail from './display-detail';
-import MockerShowResult from './display-show-result';
-import MockerSwitcher from './display-switcher';
-import MockerMockModuleList from './display-mock-module-list';
-import MockerReadme from './display-readme';
+import StubBreadcrumb from './display-breadcrumb';
+import StubDetail from './display-detail';
+import StubShowResult from './display-show-result';
+import StubSwitcher from './display-switcher';
+import StubMockModuleList from './display-mock-module-list';
+import StubReadme from './display-readme';
 
 import './index.less';
 
-class Mocker extends Component {
+const socket = io();
+
+class Stub extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -27,19 +29,20 @@ class Mocker extends Component {
     this.handleActive = this.handleActive.bind(this);
     this.handleModalHide = this.handleModalHide.bind(this);
     this.handleShowResult = this.handleShowResult.bind(this);
+    this.handleEmitStub = this.handleEmitStub.bind(this);
     this.handleParamsChange = this.handleParamsChange.bind(this);
     this.handleDisable = this.handleDisable.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isLoaded && (this.props.isLoaded !== nextProps.isLoaded)) {
-      // 加载完 mocker 信息之后，要初始化填写的参数
-      const { mockerData } = nextProps;
-      let mockerParams = mockerData.params || [];
+      // 加载完 stub 信息之后，要初始化填写的参数
+      const { stubData } = nextProps;
+      let stubParams = stubData.params || [];
       let { cgiParams } = this.state;
 
-      if (mockerParams.length) {
-        mockerParams.forEach((item) => {
+      if (stubParams.length) {
+        stubParams.forEach((item) => {
           if (item.defaultValue) {
             cgiParams[item.name] = item.defaultValue;
           }
@@ -48,17 +51,17 @@ class Mocker extends Component {
 
       this.setState({
         cgiParams: cgiParams,
-        actualURL: this.getActualURL(mockerData, cgiParams)
+        actualURL: this.getActualURL(stubData, cgiParams)
       });
     }
   }
 
   componentDidMount() {
-    console.log('Mocker componentDidMount', this.props);
+    console.log('Stub componentDidMount', this.props);
 
-    // 加载这个 mocker 的信息
-    this.props.loadMocker(this.props.routeParams.stubName);
-    this.props.loadMockerReadme(this.props.routeParams.stubName);
+    // 加载这个 stub 的信息
+    this.props.loadStub(this.props.routeParams.stubName);
+    this.props.loadStubReadme(this.props.routeParams.stubName);
   }
 
   getMockModuleByPost(url, data) {
@@ -93,18 +96,18 @@ class Mocker extends Component {
   }
 
   handleActive(name) {
-    this.props.setMockerActiveModule(this.props.mockerData.name, name);
+    this.props.setStubActiveModule(this.props.stubData.name, name);
   }
 
   handleModalHide() {
     this.setState({
       showModal: false,
-      modalShowData: {},
+      modalShowData: {}
     });
   }
 
   handleShowResult(query = {}, host) {
-    const { mockerData } = this.props;
+    const { stubData } = this.props;
     let { actualURL } = this.state;
 
     // 如果有指定的host，则使用指定的host
@@ -112,17 +115,17 @@ class Mocker extends Component {
       actualURL = `http://${host}${actualURL}`;
     }
 
-    if (mockerData.method === 'post') {
+    if (stubData.method === 'post') {
       this.getMockModuleByPost(actualURL, query)
         .then((data) => {
           console.log(data);
           this.setState({
             showModal: true,
-            modalShowData: data,
-          })
+            modalShowData: data
+          });
         })
         .catch((err) => {
-          console.error(err)
+          console.error(err);
         });
     } else {
       this.getMockModuleByGet(actualURL, query)
@@ -130,39 +133,49 @@ class Mocker extends Component {
           console.log(data);
           this.setState({
             showModal: true,
-            modalShowData: data,
-          })
+            modalShowData: data
+          });
         })
         .catch((err) => {
-          console.error(err)
+          console.error(err);
         });
     }
   }
 
   handleParamsChange(fieldName, event) {
-    let { mockerData } = this.props;
+    let { stubData } = this.props;
     let { cgiParams } = this.state;
 
     cgiParams[fieldName] = event.target.value;
 
     this.setState({
       cgiParams: cgiParams,
-      actualURL: this.getActualURL(mockerData, cgiParams)
+      actualURL: this.getActualURL(stubData, cgiParams)
     });
   }
 
   handleDisable() {
-    // console.log('handleDisable', this.props.mockerData.disable);
-    this.props.setMockerDisable(this.props.mockerData.name, !this.props.mockerData.disable);
+    // console.log('handleDisable', this.props.stubData.disable);
+    this.props.setStubDisable(this.props.stubData.name, !this.props.stubData.disable);
   }
 
-  getActualURL(mockerData, cgiParams) {
-    let curUrl = mockerData.route;
+  handleEmitStub(data) {
+    console.log('handleEmitStub', data);
+    socket.emit('emitStub', {
+      route: this.props.stubData.route,
+      name: this.props.stubData.name,
+      activeModule: this.props.stubData.activeModule,
+      result: data
+    });
+  }
+
+  getActualURL(stubData, cgiParams) {
+    let curUrl = stubData.route;
 
     if (Object.keys(cgiParams).length) {
       Object.keys(cgiParams).forEach((key) => {
         curUrl = curUrl.replace(':' + key, cgiParams[key]);
-      })
+      });
     }
 
     console.log('curUrl', curUrl);
@@ -170,43 +183,44 @@ class Mocker extends Component {
   }
 
   render() {
-    const { isLoaded, mockerData, readme } = this.props;
+    const { isLoaded, stubData, readme } = this.props;
     const { showModal, modalShowData, actualURL } = this.state;
 
     return (
-      <div className="mockers-mocker">
+      <div className="stubs-stub">
 
-        <MockerBreadcrumb name={mockerData.name} />
+        <StubBreadcrumb name={stubData.name} />
 
         {
           isLoaded ? (
             <div>
-              <MockerSwitcher
-                isDisabled={mockerData.disable}
+              <StubSwitcher
+                isDisabled={stubData.disable}
                 updateDisable={this.handleDisable}
               />
 
-              <MockerDetail
-                mockerData={mockerData}
+              <StubDetail
+                stubData={stubData}
                 actualURL={actualURL}
                 onParamsChange={this.handleParamsChange}
                 onShowResult={this.handleShowResult}
               />
 
-              <MockerMockModuleList
+              <StubMockModuleList
                 isLoaded={isLoaded}
-                mockerData={mockerData}
+                stubData={stubData}
                 onShowResult={this.handleShowResult}
                 updateActive={this.handleActive}
               />
 
-              <MockerShowResult
+              <StubShowResult
                 isShow={showModal}
                 data={modalShowData}
                 onHide={this.handleModalHide}
+                onEmitStub={this.handleEmitStub}
               />
 
-              <MockerReadme htmlContent={readme} />
+              <StubReadme htmlContent={readme} />
 
             </div>
           ) : (
@@ -214,40 +228,40 @@ class Mocker extends Component {
           )
         }
       </div>
-    )
+    );
   }
 }
 
 function mapStateToProps(state) {
-  const { mockerInfo } = state;
+  const { stubInfo } = state;
 
   return {
-    isLoaded: mockerInfo.isLoaded,
-    mockerData: mockerInfo.data,
-    readme: mockerInfo.readme,
+    isLoaded: stubInfo.isLoaded,
+    stubData: stubInfo.data,
+    readme: stubInfo.readme
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadMocker(stubName){
-      return dispatch(loadMocker(stubName));
+    loadStub(stubName) {
+      return dispatch(loadStub(stubName));
     },
 
-    loadMockerReadme(stubName){
-      return dispatch(loadMockerReadme(stubName));
+    loadStubReadme(stubName) {
+      return dispatch(loadStubReadme(stubName));
     },
 
-    setMockerActiveModule(stubName, mockModuleName){
-      return dispatch(setMockerActiveModule(stubName, mockModuleName));
+    setStubActiveModule(stubName, mockModuleName) {
+      return dispatch(setStubActiveModule(stubName, mockModuleName));
     },
 
-    setMockerDisable(stubName, value){
-      return dispatch(setMockerDisable(stubName, value));
+    setStubDisable(stubName, value) {
+      return dispatch(setStubDisable(stubName, value));
     }
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Mocker);
+export default connect(mapStateToProps, mapDispatchToProps)(Stub);
 
 

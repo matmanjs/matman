@@ -32,7 +32,8 @@ export default function ReporterDetail(props) {
           <Card>
 
             <Button
-              type={reporterData.disable ? 'default' : 'primary'}
+              type="primary"
+              disabled={reporterData.disable ? 'disable' : ''}
               size="large"
               icon="link"
               onClick={onShowResult.bind(this, mockModuleData.query, mockModuleData.host)}>
