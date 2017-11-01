@@ -161,8 +161,12 @@ class Stub extends Component {
 
   handleEmitStub(data) {
     console.log('handleEmitStub', data);
-    socket.emit('emitStub', data);
-
+    socket.emit('emitStub', {
+      route: this.props.stubData.route,
+      name: this.props.stubData.name,
+      activeModule: this.props.stubData.activeModule,
+      result: data
+    });
   }
 
   getActualURL(stubData, cgiParams) {
