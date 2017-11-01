@@ -18,13 +18,18 @@ function getMixinHandlerData(handlerName, handlerConfigData, cacheData) {
     return null;
   }
 
+  // #57 可能route中不以 / 开头
+  if (handlerConfigData.route.indexOf('/') !== 0) {
+    handlerConfigData.route = '/' + handlerConfigData.route;
+  }
+
   // 始终以 config.json 中定义的为最高优先级（除了defaultModule字段），如果没定义，则使用 cache 值，最后才是默认值
   let data = _.merge({
     description: handlerName,
     disable: false,
     method: 'get',
     priority: 0,
-    plugin: "mocker"
+    plugin: 'mocker'
   }, cacheData, handlerConfigData);
 
   // 名字不能够再被修改，默认为文件夹名字
@@ -51,7 +56,7 @@ function getMixinHandleModuleData(handleModuleName, handleModuleConfigData) {
   // 始终以 config.json 中定义的为最高优先级（除了defaultModule字段），如果没定义，则使用 cache 值，最后才是默认值
   let data = _.merge({
     description: handleModuleName,
-    priority: 0,
+    priority: 0
   }, handleModuleConfigData);
 
   // 名字不能够再被修改，默认为文件夹名字
@@ -121,7 +126,7 @@ function getMatchedHandler(allHandlerList, route, params = {}) {
   });
 
   return matchedArr.length ? matchedArr.sort((a, b) => {
-    return b.match - a.match
+    return b.match - a.match;
   })[0].data : null;
 
 }
@@ -129,5 +134,5 @@ function getMatchedHandler(allHandlerList, route, params = {}) {
 module.exports = {
   getMixinHandlerData: getMixinHandlerData,
   getMixinHandleModuleData: getMixinHandleModuleData,
-  getMatchedHandler: getMatchedHandler,
+  getMatchedHandler: getMatchedHandler
 };

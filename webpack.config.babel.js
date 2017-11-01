@@ -10,7 +10,7 @@ const srcRootPath = path.join(__dirname, 'src-client');
 const wwwStaticRoot = 'static';
 
 // index.html 模版的根目录
-const appHtmlPath = path.join(__dirname, 'public','index.html');
+const appHtmlPath = path.join(__dirname, 'public', 'index.html');
 
 // 编译后的根目录
 const distRootPath = path.join(__dirname, 'www', wwwStaticRoot);
@@ -23,7 +23,7 @@ export default {
       'react',
       'react-dom',
       'classnames',
-      'react-router',
+      'react-router'
     ]
   },
   output: {
@@ -32,7 +32,7 @@ export default {
     chunkFilename: 'js/[id].chunk.js',
     publicPath: `/`
   },
-  externals: {jquery: "jQuery"},
+  externals: { jquery: 'jQuery' },
   resolve: {
     extensions: ['', '.js', '.jsx'],
     alias: {
@@ -49,9 +49,9 @@ export default {
         cacheDirectory: true,
         query: {
           presets: ['react', 'es2015-loose', 'stage-0'],
-          plugins: ['transform-runtime', 'transform-decorators-legacy', ["import", [{
-            "libraryName": "antd",
-            "style": "css"
+          plugins: ['transform-runtime', 'transform-decorators-legacy', ['import', [{
+            'libraryName': 'antd',
+            'style': 'css'
           }]]]
         },
         exclude: /node_modules/
@@ -63,11 +63,11 @@ export default {
       {
         test: /\.less$/,
         loader: 'style!css!less'
-      },
+      }
     ]
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor', filename: 'js/common.js'}),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'js/common.js' }),
     //new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
     new HtmlWebpackPlugin({
       inject: true,
@@ -82,8 +82,8 @@ export default {
         keepClosingSlash: true,
         minifyJS: true,
         minifyCSS: true,
-        minifyURLs: true,
-      },
-    }),
+        minifyURLs: true
+      }
+    })
   ]
 };

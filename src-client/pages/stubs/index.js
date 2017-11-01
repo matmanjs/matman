@@ -1,8 +1,8 @@
 import React from 'react';
 
-export default function Mockers(props) {
+export default function Stubs(props) {
   return (
-    <div className="mockers-wrapper">
+    <div className="stubs-wrapper">
       {props.children}
     </div>
   )

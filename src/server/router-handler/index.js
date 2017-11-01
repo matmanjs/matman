@@ -200,5 +200,8 @@ module.exports = (entry) => {
     res.status(500).send(err.stack);
   });
 
+  // 携带变量出去
+  router._handlerParser = handlerParser;
+
   return router;
 };
