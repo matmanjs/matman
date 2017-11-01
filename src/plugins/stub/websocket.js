@@ -7,28 +7,17 @@ module.exports = function (opts, app, handlerParser) {
   io.on('connection', function (socket) {
     console.log('connection ' + socket.id);
 
-    // when the client emits 'typing', we broadcast it to others
-    socket.on('typing', function (data) {
-      console.log('------typing-----', data);
-      socket.broadcast.emit('typing', {
-        username: data
-      });
-
-      socket.emit('typing', {
-        username2: data
-      });
-    });
-
     socket.on('emitStub', function (data) {
-      console.log('------typing222-----', data);
-
-      socket.broadcast.emit('typing', data);
-
-      socket.emit('typing', data);
+      // broadcast.emit 会广播给其他连接了 websocket 的用户，但是不会广播给自己
+      // 因此需要额外的 emit 发给自己以便校验
+      // 必须要一次 broadcast.emit，因为我们是在 matman 系统进行操作然后广播给其他服务的
+      // 必须要一次 emit，因为要进行校验
+      socket.broadcast.emit(data.route, data.result);
+      socket.emit(data.route, data.result);
     });
 
     let stubList = handlerParser.getHandlerListByPlugin(PLUGIN_NAME);
-    console.log('--stubList--', stubList);
+    // console.log('--stubList--', stubList);
 
     stubList.forEach((stubItem) => {
       const SOCKET_ROUTE = stubItem.route;
