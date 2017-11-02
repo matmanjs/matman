@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import superagent from 'superagent';
+import io from 'socket.io-client';
 
 import { loadStub, loadStubReadme, setStubActiveModule, setStubDisable } from '../../business/stub/action';
 
