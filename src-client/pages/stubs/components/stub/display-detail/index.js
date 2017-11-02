@@ -52,7 +52,7 @@ export default function StubDetail(props) {
               {stubData.author ? ` by ${stubData.author}` : ''}
             </p>
             <p>{stubData.description}</p>
-            <p>本地路径：{stubData._fullPath}</p>
+            <p>本地路径：{stubData._localPath}</p>
             <p>配置的路由: {stubData.route}</p>
           </Card>
         </Col>

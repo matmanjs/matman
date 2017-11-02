@@ -15915,7 +15915,7 @@ webpackJsonp([13],{
 	            'p',
 	            null,
 	            '\u672C\u5730\u8DEF\u5F84\uFF1A',
-	            stubData._fullPath
+	            stubData._localPath
 	          ),
 	          _react2.default.createElement(
 	            'p',
