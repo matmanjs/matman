@@ -15821,10 +15821,6 @@ webpackJsonp([13],{
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	var _button = __webpack_require__(1106);
-	
-	var _button2 = _interopRequireDefault(_button);
-	
 	exports.default = StubDetail;
 	
 	__webpack_require__(1109);
@@ -15834,8 +15830,6 @@ webpackJsonp([13],{
 	__webpack_require__(1113);
 	
 	__webpack_require__(1141);
-	
-	__webpack_require__(1116);
 	
 	var _react = __webpack_require__(1);
 	
@@ -15885,15 +15879,6 @@ webpackJsonp([13],{
 	        _react2.default.createElement(
 	          _card2.default,
 	          null,
-	          _react2.default.createElement(
-	            _button2.default,
-	            {
-	              type: 'primary',
-	              disabled: stubData.disable ? 'disable' : '',
-	              size: 'large',
-	              onClick: onShowResult.bind(this, mockModuleData.query, mockModuleData.host) },
-	            '\u83B7\u53D6\u5F53\u524D\u7684\u6253\u6869\u6570\u636E\u7ED3\u679C'
-	          ),
 	          _react2.default.createElement(
 	            'div',
 	            null,
@@ -16330,54 +16315,13 @@ webpackJsonp([13],{
 	      );
 	    }
 	  }, {
-	    title: 'Version',
-	    dataIndex: 'version',
-	    key: 'version'
-	  }, {
-	    title: 'Author',
-	    dataIndex: 'author',
-	    key: 'author'
-	  }, {
-	    title: 'Host',
-	    dataIndex: 'host',
-	    key: 'host'
-	  }, {
 	    title: 'Description',
 	    dataIndex: 'description',
 	    key: 'description'
 	  }, {
-	    title: 'Action',
-	    key: 'action',
-	    render: function render(text, record) {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        record.name !== activeModule ? _react2.default.createElement(
-	          _button2.default,
-	          { type: 'primary',
-	            disabled: stubData.disable ? 'disable' : '',
-	            onClick: updateActive.bind(_this, record.name)
-	          },
-	          'Active It'
-	        ) : _react2.default.createElement(
-	          'span',
-	          null,
-	          'Aready active'
-	        ),
-	        _react2.default.createElement('span', { className: 'ant-divider' }),
-	        _react2.default.createElement(
-	          _button2.default,
-	          { disabled: true },
-	          ' \u7F16\u8F91 '
-	        ),
-	        _react2.default.createElement('span', { className: 'ant-divider' }),
-	        _react2.default.createElement(
-	          _button2.default,
-	          { disabled: true },
-	          ' \u5220\u9664 '
-	        )
-	      );
-	    }
+	    title: 'Author',
+	    dataIndex: 'author',
+	    key: 'author'
 	  }];
 	
 	  return _react2.default.createElement(
