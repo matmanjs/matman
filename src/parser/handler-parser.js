@@ -65,7 +65,7 @@ export default class HandlerParser {
         handlerNameArr.push(path.basename(item.relativePath));
       } else {
         // 正常情况下不允许在根目录下有非文件夹的存在，因此此处需要增加错误展示
-        console.error(`${path.join(item.basePath, item.relativePath)} SHOULD BE Directory!`)
+        console.error(`${path.join(item.basePath, item.relativePath)} SHOULD BE Directory!`);
       }
     });
 
@@ -145,7 +145,7 @@ export default class HandlerParser {
         name: 'index_module',
         description: 'default module',
         priority: 0,
-        type: 'noModule',
+        type: 'noModule'
       };
 
       indexModule.query = { _m_target: indexModule.name };
@@ -196,8 +196,8 @@ export default class HandlerParser {
     // 5. 其他默认处理
     //===============================================================
 
-    // 如果不存在默认的 activeModule，则设置第一个 handle_module 为默认
-    if (!handlerData.activeModule && modules.length) {
+    // 如果不存在默认的 activeModule，或者存在默认的 activeModule，但是它是一个非法值，则设置第一个 handle_module 为默认
+    if ((!handlerData.activeModule || (modules.map(item => item.name).indexOf(handlerData.activeModule) < 0)) && modules.length) {
       handlerData.activeModule = modules[0].name;
     }
 
@@ -262,7 +262,7 @@ export default class HandlerParser {
         return {
           data: data,
           extra: reqInfoByRoute
-        }
+        };
       });
   }
 
@@ -304,7 +304,7 @@ export default class HandlerParser {
       handleModuleInfo: handleModuleInfo,
       fullPath: moduleFullPath,
       params: reqParams
-    }
+    };
   }
 
   /**
