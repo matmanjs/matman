@@ -1,3 +1,4 @@
+const path = require('path');
 const baseRouter = require('../../server/router-handler/base-router');
 
 const PLUGIN_NAME = 'stub';
@@ -15,6 +16,11 @@ module.exports = (router, handlerParser) => {
   // GET /sys-cgi/stub/:stubName 获得这个 stub 的信息
   baseRouter.initGetOne(router, PLUGIN_NAME, HANDLER_NAME_FIELD, (req, res) => {
     let result = handlerParser.getHandler(req.params[HANDLER_NAME_FIELD]);
+
+    // 附加一下本地的路径
+    if (result) {
+      result._localPath = path.join(handlerParser.basePath, result.name);
+    }
 
     res.jsonp(result);
   });

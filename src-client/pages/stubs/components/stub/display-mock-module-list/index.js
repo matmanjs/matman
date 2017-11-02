@@ -22,44 +22,13 @@ export default function StubMockModuleList(props) {
       </Button>
     )
   }, {
-    title: 'Version',
-    dataIndex: 'version',
-    key: 'version'
-  }, {
-    title: 'Author',
-    dataIndex: 'author',
-    key: 'author'
-  }, {
-    title: 'Host',
-    dataIndex: 'host',
-    key: 'host'
-  }, {
     title: 'Description',
     dataIndex: 'description',
     key: 'description'
   }, {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <div>
-        {
-          (record.name !== activeModule) ?
-            <Button type="primary"
-                    disabled={stubData.disable ? 'disable' : ''}
-                    onClick={updateActive.bind(this, record.name)}
-            >
-              Active It
-            </Button>
-            : <span>Aready active</span>
-        }
-
-        <span className="ant-divider" />
-        <Button disabled> 编辑 </Button>
-
-        <span className="ant-divider" />
-        <Button disabled> 删除 </Button>
-      </div>
-    )
+      title: 'Author',
+      dataIndex: 'author',
+      key: 'author'
   }];
 
   return (
