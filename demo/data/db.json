@@ -121,7 +121,8 @@
           }
         }
       ],
-      "createdAt": 1509439876651
+      "createdAt": 1509599720758,
+      "_localPath": "D:\\gitprojects\\matman\\demo\\src\\handler\\demo_plugin_stub"
     },
     {
       "description": "demo_simple",
