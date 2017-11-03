@@ -29,7 +29,7 @@ module.exports = function (opts, app, handlerParser) {
         console.log(Date.now(), SOCKET_ROUTE, socket.id, args);
 
         // TODO 此处应该可以支持任意的参数
-        handlerParser.getHandleModuleResult(SOCKET_ROUTE, args)
+        handlerParser.getHandleModuleResult(SOCKET_ROUTE, ...args)
           .then((result) => {
             socket.emit(SOCKET_ROUTE, result);
           })
