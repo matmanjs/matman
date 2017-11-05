@@ -30,6 +30,14 @@ export default function StubDetail(props) {
       <Row>
         <Col span={12}>
           <Card>
+            <Button
+              type="primary"
+              disabled={stubData.disable ? 'disable' : ''}
+              size="large"
+              onClick={onShowResult.bind(this, mockModuleData.query, mockModuleData.host)}>
+              获取当前的打桩数据结果
+            </Button>
+
             <div>
               {
                 stubData.params && stubData.params.length ? (
