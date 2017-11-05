@@ -279,13 +279,7 @@ export default class HandlerParser {
       return Promise.reject();
     }
 
-    return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, ...props)
-      .then((data) => {
-        return {
-          data: data,
-          extra: reqInfoByRoute
-        };
-      });
+    return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, ...props);
   }
 
   /**
