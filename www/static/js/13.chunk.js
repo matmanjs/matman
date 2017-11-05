@@ -22038,6 +22038,10 @@ webpackJsonp([13],{
 	
 	var _input2 = _interopRequireDefault(_input);
 	
+	var _button = __webpack_require__(1106);
+	
+	var _button2 = _interopRequireDefault(_button);
+	
 	exports.default = StubDetail;
 	
 	__webpack_require__(1109);
@@ -22047,6 +22051,8 @@ webpackJsonp([13],{
 	__webpack_require__(1113);
 	
 	__webpack_require__(1141);
+	
+	__webpack_require__(1116);
 	
 	var _react = __webpack_require__(1);
 	
@@ -22096,6 +22102,15 @@ webpackJsonp([13],{
 	        _react2.default.createElement(
 	          _card2.default,
 	          null,
+	          _react2.default.createElement(
+	            _button2.default,
+	            {
+	              type: 'primary',
+	              disabled: stubData.disable ? 'disable' : '',
+	              size: 'large',
+	              onClick: onShowResult.bind(this, mockModuleData.query, mockModuleData.host) },
+	            '\u83B7\u53D6\u5F53\u524D\u7684\u6253\u6869\u6570\u636E\u7ED3\u679C'
+	          ),
 	          _react2.default.createElement(
 	            'div',
 	            null,
@@ -22384,11 +22399,17 @@ webpackJsonp([13],{
 	
 	exports.__esModule = true;
 	
+	var _button = __webpack_require__(1106);
+	
+	var _button2 = _interopRequireDefault(_button);
+	
 	var _alert = __webpack_require__(1162);
 	
 	var _alert2 = _interopRequireDefault(_alert);
 	
 	exports.default = StubSwitcher;
+	
+	__webpack_require__(1116);
 	
 	__webpack_require__(1163);
 	
@@ -22400,7 +22421,10 @@ webpackJsonp([13],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function StubSwitcher() {
+	function StubSwitcher(props) {
+	  var isDisabled = props.isDisabled,
+	      updateDisable = props.updateDisable;
+	
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'stub-switcher' },
@@ -22408,7 +22432,22 @@ webpackJsonp([13],{
 	      message: '\u4F7F\u7528\u8BF4\u660E',
 	      description: '\u70B9\u51FB\u5217\u8868\u4E2D\u6309\u94AE\u4F1A\u5F39\u51FA\u5BF9\u5E94\u7684\u6253\u6869\u6570\u636E\uFF0C\u5728\u5BF9\u8BDD\u6846\u4E2D\u9009\u62E9\u3010\u6267\u884C\u6253\u6869\u64CD\u4F5C\u3011\u3002\uFF08\u53EF\u4EE5\u4FEE\u6539\u6570\u636E\u4E4B\u540E\u518D\u6267\u884C\uFF0C\u4F46\u662F\u8BE5\u4FEE\u6539\u540E\u7684\u6570\u636E\u4E0D\u4F1A\u4FDD\u5B58\uFF0C\u5173\u95ED\u5BF9\u8BDD\u6846\u540E\u4F1A\u6062\u590D\uFF09',
 	      type: 'info'
-	    })
+	    }),
+	    isDisabled ? _react2.default.createElement(_alert2.default, {
+	      message: '\u5F53\u524D\u6253\u6869\u670D\u52A1\u5DF2\u88AB\u7981\u7528\uFF0C\u60A8\u53EF\u8BF7\u70B9\u51FB\u201C\u542F\u7528\u201D\u6309\u94AE\u5F00\u59CB mock \u670D\u52A1\uFF01',
+	      type: 'warning',
+	      showIcon: true
+	    }) : _react2.default.createElement(_alert2.default, {
+	      message: '\u6253\u6869\u670D\u52A1\u5DF2\u5F00\u59CB\u751F\u6548\uFF01',
+	      type: 'success',
+	      showIcon: true
+	    }),
+	    _react2.default.createElement(
+	      _button2.default,
+	      { type: isDisabled ? 'primary' : 'default', icon: 'setting', onClick: updateDisable },
+	      isDisabled ? '启用' : '禁用',
+	      '\u6253\u6869\u670D\u52A1'
+	    )
 	  );
 	}
 
@@ -22519,6 +22558,39 @@ webpackJsonp([13],{
 	    title: 'Author',
 	    dataIndex: 'author',
 	    key: 'author'
+	  }, {
+	    title: 'Action',
+	    key: 'action',
+	    render: function render(text, record) {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        record.name !== activeModule ? _react2.default.createElement(
+	          _button2.default,
+	          { type: 'primary',
+	            disabled: stubData.disable ? 'disable' : '',
+	            onClick: updateActive.bind(_this, record.name)
+	          },
+	          'Active It'
+	        ) : _react2.default.createElement(
+	          'span',
+	          null,
+	          'Aready active'
+	        ),
+	        _react2.default.createElement('span', { className: 'ant-divider' }),
+	        _react2.default.createElement(
+	          _button2.default,
+	          { disabled: true },
+	          ' \u7F16\u8F91 '
+	        ),
+	        _react2.default.createElement('span', { className: 'ant-divider' }),
+	        _react2.default.createElement(
+	          _button2.default,
+	          { disabled: true },
+	          ' \u5220\u9664 '
+	        )
+	      );
+	    }
 	  }];
 	
 	  return _react2.default.createElement(
