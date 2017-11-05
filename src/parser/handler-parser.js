@@ -244,13 +244,13 @@ export default class HandlerParser {
   }
 
   /**
-   * 根据路由和请求参数，获得目标的执行结果
+   * 根据路由和请求参数，获得目标的执行结果，专为 http 请求
    * @param {String} route 路由规则
    * @param {Object} [params] 请求的参数
    * @param {Object} [req] 请求对象
    * @return {Promise}
    */
-  getHandleModuleResult(route, params = {}, req) {
+  getHandleModuleResultForHttp(route, params = {}, req) {
     let reqInfoByRoute = this.getReqInfoByRoute(route, params);
 
     if (!reqInfoByRoute) {
@@ -264,6 +264,22 @@ export default class HandlerParser {
           extra: reqInfoByRoute
         };
       });
+  }
+
+  /**
+   * 根据路由，获得目标的执行结果
+   * @param route
+   * @param props
+   * @return {Promise}
+   */
+  getHandleModuleResult(route, ...props) {
+    let reqInfoByRoute = this.getReqInfoByRoute(route);
+
+    if (!reqInfoByRoute) {
+      return Promise.reject();
+    }
+
+    return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, ...props);
   }
 
   /**
