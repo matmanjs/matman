@@ -21,12 +21,17 @@ module.exports = function (opts, app, handlerParser) {
 
     stubList.forEach((stubItem) => {
       const SOCKET_ROUTE = stubItem.route;
-      console.log('==========SOCKET_ROUTE===========', SOCKET_ROUTE);
+      // console.log('==========SOCKET_ROUTE===========', SOCKET_ROUTE);
 
       // 每一个 stub 都监听其特定的消息
       // TODO 此处需要确认如果有多个同样的 SOCKET_ROUTE，则会发生什么事情，是否需要程序进行提示？
       socket.on(SOCKET_ROUTE, function (...args) {
-        console.log(Date.now(), SOCKET_ROUTE, socket.id, args);
+        console.log(Date.now(), stubItem.disable, SOCKET_ROUTE, socket.id, args);
+
+        // 如果该项打桩为 disable，则不做任何处理
+        if (stubItem.disable) {
+          return;
+        }
 
         // TODO 此处应该可以支持任意的参数
         handlerParser.getHandleModuleResult(SOCKET_ROUTE, ...args)
