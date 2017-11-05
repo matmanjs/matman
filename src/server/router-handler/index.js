@@ -98,7 +98,7 @@ module.exports = (entry) => {
         params = _.merge({}, params, req.params);
 
         // 请求
-        handlerParser.getHandleModuleResult(url, params, req)
+        handlerParser.getHandleModuleResultForHttp(url, params, req)
           .then((result) => {
             res.append('matman-handler', result.extra.handlerInfo.name);
             res.append('matman-handle-module', result.extra.handleModuleInfo.name);
