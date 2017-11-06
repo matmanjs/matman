@@ -25,8 +25,8 @@ module.exports = function (opts, app, handlerParser) {
 
       // 每一个 stub 都监听其特定的消息
       // TODO 此处需要确认如果有多个同样的 SOCKET_ROUTE，则会发生什么事情，是否需要程序进行提示？
-      socket.on(SOCKET_ROUTE, function (...args) {
-        console.log(Date.now(), stubItem.disable, SOCKET_ROUTE, socket.id, args);
+      socket.on(SOCKET_ROUTE, function (params, opts = {}) {
+        console.log(Date.now(), stubItem.disable, SOCKET_ROUTE, socket.id, params, opts);
 
         // 如果该项打桩为 disable，则不做任何处理
         if (stubItem.disable) {
@@ -34,12 +34,12 @@ module.exports = function (opts, app, handlerParser) {
         }
 
         // TODO 此处应该可以支持任意的参数
-        handlerParser.getHandleModuleResult(SOCKET_ROUTE, ...args)
+        handlerParser.getHandleModuleResult(SOCKET_ROUTE, params)
           .then((result) => {
-            socket.emit(SOCKET_ROUTE, result);
+            socket.emit(opts.eventName || SOCKET_ROUTE, result);
           })
           .catch((err) => {
-            socket.emit('stub_error!', err);
+            socket.emit('stub_error', err);
           });
       });
     });
