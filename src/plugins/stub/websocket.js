@@ -4,6 +4,9 @@ module.exports = function (opts, app, handlerParser) {
   const server = require('http').createServer(app);
   const io = require('socket.io')(server);
 
+  // io.set('transports', ['websocket', 'xhr-polling', 'jsonp-polling', 'htmlfile', 'flashsocket']);
+  io.set('origins', '*:*');
+
   io.on('connection', function (socket) {
     console.log('connection ' + socket.id);
 
