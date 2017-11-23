@@ -31,15 +31,19 @@ module.exports = function (opts, app, handlerParser) {
       socket.on(SOCKET_ROUTE, function (params, opts = {}) {
         console.log(Date.now(), stubItem.disable, SOCKET_ROUTE, socket.id, params, opts);
 
+        // websocket 名字可以通过传递参数来指定回调结果
+        let emitEventName = opts.eventName || SOCKET_ROUTE;
+
         // 如果该项打桩为 disable，则不做任何处理
         if (stubItem.disable) {
+          socket.emit(emitEventName, { _disable: true });
           return;
         }
 
         // TODO 此处应该可以支持任意的参数
         handlerParser.getHandleModuleResult(SOCKET_ROUTE, params)
           .then((result) => {
-            socket.emit(opts.eventName || SOCKET_ROUTE, result);
+            socket.emit(emitEventName, result);
           })
           .catch((err) => {
             socket.emit('stub_error', err);
