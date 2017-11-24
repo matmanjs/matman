@@ -10,6 +10,7 @@ module.exports = function (opts, app, handlerParser) {
   io.on('connection', function (socket) {
     console.log('connection ' + socket.id);
 
+    // 监听 emitStub，传递特殊的值，然后再将指定的数据发送给客户端的特定事件
     socket.on('emitStub', function (data) {
       // broadcast.emit 会广播给其他连接了 websocket 的用户，但是不会广播给自己
       // 因此需要额外的 emit 发给自己以便校验
