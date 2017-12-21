@@ -61,14 +61,14 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
 
     it('should return an object and correct', () => {
       expect(cacheHandlerInfo).to.include({
-        "name": "demo_simple",
-        "description": "demo_simple",
-        "disable": false,
-        "method": "get",
-        "priority": 0,
-        "plugin": "mocker",
-        "route": "/cgi-bin/a/b/demo_simple",
-        "activeModule": "error"
+        'name': 'demo_simple',
+        'description': 'demo_simple',
+        'disable': false,
+        'method': 'get',
+        'priority': 0,
+        'plugin': 'mocker',
+        'route': '/cgi-bin/a/b/demo_simple',
+        'activeModule': 'error'
       });
     });
   });
@@ -82,14 +82,14 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
 
     it('should return an object and correct', () => {
       expect(cacheHandlerInfo).to.include({
-        "name": "demo_no_modules",
-        "description": "demo_no_modules",
-        "disable": false,
-        "method": "get",
-        "priority": 0,
-        "plugin": "mocker",
-        "route": "/cgi-bin/a/b/demo_no_modules",
-        "activeModule": "index_module",
+        'name': 'demo_no_modules',
+        'description': 'demo_no_modules',
+        'disable': false,
+        'method': 'get',
+        'priority': 0,
+        'plugin': 'mocker',
+        'route': '/cgi-bin/a/b/demo_no_modules',
+        'activeModule': 'index_module'
       });
     });
 
@@ -99,9 +99,9 @@ describe('handler-parser.js parseAndSave() and get data from cache', () => {
 
     it('the only module should be correct', () => {
       expect(cacheHandlerInfo.modules[0]).to.include({
-        "name": "index_module",
-        "description": "default module",
-        "priority": 0
+        'name': 'index_module',
+        'description': 'default module',
+        'priority': 0
       });
     });
 
@@ -126,7 +126,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
         if (!data && (item.name === 'demo_simple')) {
           data = item;
         }
-      })
+      });
     });
 
     it('should return an object', () => {
@@ -135,14 +135,14 @@ describe('handler-parser.js getAllHandler(true)', () => {
 
     it('should have some properties', () => {
       expect(data).to.include({
-        "name": "demo_simple",
-        "description": "demo_simple",
-        "disable": false,
-        "method": "get",
-        "priority": 0,
-        "plugin": "mocker",
-        "route": "/cgi-bin/a/b/demo_simple",
-        "activeModule": "error"
+        'name': 'demo_simple',
+        'description': 'demo_simple',
+        'disable': false,
+        'method': 'get',
+        'priority': 0,
+        'plugin': 'mocker',
+        'route': '/cgi-bin/a/b/demo_simple',
+        'activeModule': 'error'
       });
     });
 
@@ -164,7 +164,7 @@ describe('handler-parser.js getAllHandler(true)', () => {
         if (!data && (item.name === 'demo_handle_modules')) {
           data = item;
         }
-      })
+      });
     });
 
     it('should return an object', () => {
@@ -173,15 +173,15 @@ describe('handler-parser.js getAllHandler(true)', () => {
 
     it('should have some properties', () => {
       expect(data).to.include({
-        "name": "demo_handle_modules",
-        "description": "description_demo_handle_modules",
-        "disable": false,
-        "method": "get",
-        "priority": 0,
-        "plugin": "mocker",
-        "route": "/cgi-bin/a/b/demo_handle_modules",
-        "activeModule": "success_1",
-        "defaultModule": "success_1",
+        'name': 'demo_handle_modules',
+        'description': 'description_demo_handle_modules',
+        'disable': false,
+        'method': 'get',
+        'priority': 0,
+        'plugin': 'mocker',
+        'route': '/cgi-bin/a/b/demo_handle_modules',
+        'activeModule': 'success_1',
+        'defaultModule': 'success_1'
       });
     });
 
@@ -201,22 +201,22 @@ describe('handler-parser.js getAllHandler(true)', () => {
 
     it('data.modules has success_1', () => {
       expect(data.modules).to.deep.include({
-        "name": "success_1",
-        "description": "success_1",
-        "priority": 0,
-        "query": {
-          "_m_target": "success_1"
+        'name': 'success_1',
+        'description': 'success_1',
+        'priority': 0,
+        'query': {
+          '_m_target': 'success_1'
         }
       });
     });
 
     it('data.modules has name_success_3', () => {
       expect(data.modules).to.deep.include({
-        "name": "success_3",
-        "description": "description_success_3",
-        "priority": 100,
-        "query": {
-          "_m_target": "success_3"
+        'name': 'success_3',
+        'description': 'description_success_3',
+        'priority': 100,
+        'query': {
+          '_m_target': 'success_3'
         }
       });
     });
@@ -236,14 +236,14 @@ describe('handler-parser.js getHandler("demo_simple", true)', () => {
 
   it('should return an object and correct', () => {
     expect(handlerInfo).to.include({
-      "name": "demo_simple",
-      "description": "demo_simple",
-      "disable": false,
-      "method": "get",
-      "priority": 0,
-      "plugin": "mocker",
-      "route": "/cgi-bin/a/b/demo_simple",
-      "activeModule": "error"
+      'name': 'demo_simple',
+      'description': 'demo_simple',
+      'disable': false,
+      'method': 'get',
+      'priority': 0,
+      'plugin': 'mocker',
+      'route': '/cgi-bin/a/b/demo_simple',
+      'activeModule': 'error'
     });
   });
 
@@ -258,12 +258,12 @@ describe('parser-util.js getHandlerByRoute()', () => {
 
   it('demo_simple >> null should return [demo_simple]', () => {
     let handlerInfo = handlerParser.getHandlerByRoute('/cgi-bin/a/b/demo_simple');
-    expect(handlerInfo.name).to.equal("demo_simple");
+    expect(handlerInfo.name).to.equal('demo_simple');
   });
 
   it('demo_handle_modules >> null should return [demo_handle_modules]', () => {
     let handlerInfo = handlerParser.getHandlerByRoute('/cgi-bin/a/b/demo_handle_modules');
-    expect(handlerInfo.name).to.equal("demo_handle_modules");
+    expect(handlerInfo.name).to.equal('demo_handle_modules');
   });
 
 });
@@ -295,9 +295,9 @@ describe('handler-parser.js getHandleModule()', () => {
     let data = handlerParser.getHandleModule('demo_simple', 'success');
 
     expect(data).to.include({
-      "description": "success",
-      "priority": 0,
-      "name": "success",
+      'description': 'success',
+      'priority': 0,
+      'name': 'success'
     });
   });
 
@@ -305,9 +305,9 @@ describe('handler-parser.js getHandleModule()', () => {
     let data = handlerParser.getHandleModule('demo_simple', 'success', true);
 
     expect(data).to.include({
-      "description": "success",
-      "priority": 0,
-      "name": "success",
+      'description': 'success',
+      'priority': 0,
+      'name': 'success'
     });
   });
 
@@ -321,9 +321,9 @@ describe('handler-parser.js getHandleModule()', () => {
     let data = handlerParser.getHandleModule('demo_handle_modules', 'success_3');
 
     expect(data).to.include({
-      "description": "description_success_3",
-      "priority": 100,
-      "name": "success_3"
+      'description': 'description_success_3',
+      'priority': 100,
+      'name': 'success_3'
     });
   });
 
@@ -380,18 +380,18 @@ describe('handler-parser.js getReqInfoByRoute()', () => {
   });
 });
 
-describe('handler-parser.js getHandleModuleResult()', () => {
+describe('handler-parser.js getHandleModuleResultForHttp()', () => {
   let handlerParser;
 
   before(() => {
     handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
   });
 
-  describe('demo_handle_modules >> null', () => {
+  describe('demo_handle_modules, no param, return activeModule', () => {
     let result;
 
     before(() => {
-      return handlerParser.getHandleModuleResult('/cgi-bin/a/b/demo_handle_modules')
+      return handlerParser.getHandleModuleResultForHttp('/cgi-bin/a/b/demo_handle_modules')
         .then((data) => {
           result = data;
         });
@@ -402,16 +402,19 @@ describe('handler-parser.js getHandleModuleResult()', () => {
         .that.include.all.keys('data', 'extra');
     });
 
-    it('module result is 1', () => {
-      expect(result.data.result).is.equal(1);
+    it('should return default result', () => {
+      expect(result.data).to.eql({
+        'result': 1
+      });
     });
+
   });
 
-  describe('demo_handle_modules >> null', () => {
+  describe('demo_handle_modules, with param, return param._m_target', () => {
     let result;
 
     before(() => {
-      return handlerParser.getHandleModuleResult('/cgi-bin/a/b/demo_handle_modules', {
+      return handlerParser.getHandleModuleResultForHttp('/cgi-bin/a/b/demo_handle_modules', {
         a: 1,
         _m_target: 'success_4'
       })
@@ -434,7 +437,7 @@ describe('handler-parser.js getHandleModuleResult()', () => {
     let result;
 
     before(() => {
-      return handlerParser.getHandleModuleResult('/cgi-bin/a/b/demo_no_modules')
+      return handlerParser.getHandleModuleResultForHttp('/cgi-bin/a/b/demo_no_modules')
         .then((data) => {
           result = data;
         });
@@ -447,6 +450,49 @@ describe('handler-parser.js getHandleModuleResult()', () => {
 
     it('module result is 1', () => {
       expect(result.data.result).is.equal(1);
+    });
+  });
+});
+
+describe('handler-parser.js getHandleModuleResult()', () => {
+  let handlerParser;
+
+  before(() => {
+    handlerParser = new HandlerParser(BASE_PATH_FIXTURES, BASE_PATH_EXPECTED);
+  });
+
+  describe('demo_handle_modules, no param, return activeModule', () => {
+    let result;
+
+    before(() => {
+      return handlerParser.getHandleModuleResult('/cgi-bin/a/b/demo_handle_modules')
+        .then((data) => {
+          result = data;
+        });
+    });
+
+    it('should return default result', () => {
+      expect(result).to.eql({
+        'result': 1
+      });
+    });
+  });
+
+  describe('demo_handle_modules, with param, return param._m_target', () => {
+    let result;
+
+    before(() => {
+      return handlerParser.getHandleModuleResult('/cgi-bin/a/b/demo_handle_modules', {
+        a: 1,
+        _m_target: 'success_4'
+      })
+        .then((data) => {
+          result = data;
+        });
+    });
+
+    it('module result is from_param_1', () => {
+      expect(result).to.equal('from_param_1');
     });
   });
 });
