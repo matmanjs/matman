@@ -289,8 +289,7 @@ export default class HandlerParser {
    * @param {Object} [params] 请求的参数
    * @return {Object}
    */
-  getReqInfoByRoute(route, params = {},req) {
-    console.log(req.headers.referer)
+  getReqInfoByRoute(route, params = {}) {
     // 获得当前的 handler 信息
     let handlerInfo = this.getHandlerByRoute(route, params);
 
