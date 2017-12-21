@@ -5,6 +5,7 @@ const request = require('request');
 const bodyParser = require('../body-parser');
 const HandlerParser = require('../../parser/handler-parser').default;
 const initPlugins = require('./plugins');
+const util = require('../../util');
 
 module.exports = (entry) => {
   const handlerParser = new HandlerParser(entry.HANDLER_PATH, entry.DATA_PATH);
@@ -77,11 +78,19 @@ module.exports = (entry) => {
 
       // console.log(req.headers.referer)
       // 目前只支持 plugin=mocker 的场景，_m_name=该模块的名字，_m_target=该模块的值对应的名字,_m_disable
-      let paramsFromReferer = [{
-        _m_name: 'demo_simple11',
-        _m_target: 'success',
-        _m_disable: 0
-      }];
+      let paramsFromReferer;
+      try {
+        paramsFromReferer = JSON.parse(util.query('_matman', req.headers.referer)) || [];
+      } catch (e) {
+        paramsFromReferer = [];
+      }
+      // let paramsFromReferer = [{
+      //   _m_name: 'demo_simple11',
+      //   _m_target: 'success',
+      //   _m_disable: 0
+      // }];
+
+      console.log('====paramsFromReferer=====', paramsFromReferer);
 
       let isDisable;
 
@@ -89,6 +98,8 @@ module.exports = (entry) => {
       let matchedReferer = paramsFromReferer.filter((item) => {
         return item._m_name === handlerData.name;
       })[0];
+
+      console.log('====matchedReferer=====', matchedReferer);
 
       if (matchedReferer) {
         // referer 里面的请求参数拥有最高优先级，因为这种场景比较特殊，主要用于自动化测试之用
@@ -126,7 +137,7 @@ module.exports = (entry) => {
           })
           .catch((err) => {
             // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
-            let errMsg = err.stack || err;
+            let errMsg = err && err.stack || err;
 
             console.error(errMsg);
 
