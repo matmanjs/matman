@@ -2294,9 +2294,11 @@ webpackJsonp([9],{
 	                className = _a.className,
 	                inputPrefixCls = _a.inputPrefixCls,
 	                prefixCls = _a.prefixCls,
-	                others = __rest(_a, ["className", "inputPrefixCls", "prefixCls"]);
+	                suffix = _a.suffix,
+	                others = __rest(_a, ["className", "inputPrefixCls", "prefixCls", "suffix"]);
 	            delete others.onSearch;
-	            var searchSuffix = _react2['default'].createElement(_icon2['default'], { className: prefixCls + '-icon', onClick: this.onSearch, type: 'search' });
+	            var searchIcon = _react2['default'].createElement(_icon2['default'], { className: prefixCls + '-icon', onClick: this.onSearch, type: 'search', key: 'searchIcon' });
+	            var searchSuffix = suffix ? [suffix, searchIcon] : searchIcon;
 	            return _react2['default'].createElement(_Input2['default'], (0, _extends3['default'])({ onPressEnter: this.onSearch }, others, { className: (0, _classnames2['default'])(prefixCls, className), prefixCls: inputPrefixCls, suffix: searchSuffix, ref: function ref(node) {
 	                    return _this2.input = node;
 	                } }));
