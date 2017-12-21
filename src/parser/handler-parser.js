@@ -251,7 +251,7 @@ export default class HandlerParser {
    * @return {Promise}
    */
   getHandleModuleResultForHttp(route, params = {}, req) {
-    let reqInfoByRoute = this.getReqInfoByRoute(route, params);
+    let reqInfoByRoute = this.getReqInfoByRoute(route, params, req);
 
     if (!reqInfoByRoute) {
       return Promise.reject();
@@ -289,7 +289,8 @@ export default class HandlerParser {
    * @param {Object} [params] 请求的参数
    * @return {Object}
    */
-  getReqInfoByRoute(route, params = {}) {
+  getReqInfoByRoute(route, params = {},req) {
+    console.log(req.headers.referer)
     // 获得当前的 handler 信息
     let handlerInfo = this.getHandlerByRoute(route, params);
 

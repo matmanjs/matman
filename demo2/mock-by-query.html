@@ -20,6 +20,7 @@
             <label for="mockerModuleName">输入MockerModuleName</label>
             <input type="text" class="form-control" id="mockerModuleName">
         </div>
+        <button type="button" class="btn btn-default" id="subBtn1">TEST1</button>
         <button type="button" class="btn btn-default" id="subBtn">Submit</button>
     </form>
 
@@ -33,10 +34,14 @@
 <script>
     $(function () {
 
-        $('#subBtn').on('click', function () {
+        $('#subBtn1').on('click', function () {
             var mockerName = $('#mockerName').val();
             var mockerModuleName = $('#mockerModuleName').val();
             showLog(mockerName + '/' + mockerModuleName);
+
+            $.get('http://localhost:3000/cgi-bin/a/b/demo_simple?_m_target=success', function (res) {
+                showLog(res);
+            });
         });
 
     });
