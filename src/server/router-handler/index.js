@@ -5,6 +5,7 @@ const request = require('request');
 const bodyParser = require('../body-parser');
 const HandlerParser = require('../../parser/handler-parser').default;
 const initPlugins = require('./plugins');
+const util = require('../../util');
 
 module.exports = (entry) => {
   const handlerParser = new HandlerParser(entry.HANDLER_PATH, entry.DATA_PATH);
@@ -21,14 +22,14 @@ module.exports = (entry) => {
 
   // Expose render
   router.render = (req, res) => {
-    res.jsonp(res.locals.data)
+    res.jsonp(res.locals.data);
   };
 
   initPlugins(router, handlerParser);
 
   // 所有的请求都会经过这里，可以做一些类似权限控制的事情
   router.all('*', function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Origin', '*');
     next();
   });
 
@@ -75,14 +76,43 @@ module.exports = (entry) => {
       // req.query.activeModule = "error_not_login"
       // req.params.id = "1"
 
-      // 从请求 req 或者 config.json 文件中检查当前请求是否需要禁用 handle 服务
-      let isDisable = req.query._m_disable || req.body._m_disable;
-      if (!isDisable) {
-        // 此处要重新获取新的数据，以便取到缓存的。
-        // TODO 此处还可以优化，比如及时更新缓存中的数据，而不需要每次都去获取
-        let curMockerData = handlerParser.getHandler(handlerData.name, true);
+      // console.log(req.headers.referer)
+      // 目前只支持 plugin=mocker 的场景，_m_name=该模块的名字，_m_target=该模块的值对应的名字,_m_disable
+      let paramsFromReferer;
+      try {
+        paramsFromReferer = JSON.parse(util.query('_matman', req.headers.referer)) || [];
+      } catch (e) {
+        paramsFromReferer = [];
+      }
+      // let paramsFromReferer = [{
+      //   _m_name: 'demo_simple11',
+      //   _m_target: 'success',
+      //   _m_disable: 0
+      // }];
 
-        isDisable = curMockerData.disable;
+      console.log('====paramsFromReferer=====', paramsFromReferer);
+
+      let isDisable;
+
+      // 判断该路由的名字是否在referer中
+      let matchedReferer = paramsFromReferer.filter((item) => {
+        return item._m_name === handlerData.name;
+      })[0];
+
+      console.log('====matchedReferer=====', matchedReferer);
+
+      if (matchedReferer) {
+        // referer 里面的请求参数拥有最高优先级，因为这种场景比较特殊，主要用于自动化测试之用
+        isDisable = matchedReferer._m_disable;
+      } else {
+        // 从请求 req 或者 config.json 文件中检查当前请求是否需要禁用 handle 服务
+        isDisable = req.query._m_disable || req.body._m_disable;
+        if (!isDisable) {
+          // 此处要重新获取新的数据，以便取到缓存的。
+          // TODO 此处还可以优化，比如及时更新缓存中的数据，而不需要每次都去获取
+          let curMockerData = handlerParser.getHandler(handlerData.name, true);
+          isDisable = curMockerData.disable;
+        }
       }
 
       if (isDisable) {
@@ -95,7 +125,8 @@ module.exports = (entry) => {
         let params = (METHOD === 'post') ? req.body : req.query;
 
         // 还要合并一下来自 url path 中的参数值
-        params = _.merge({}, params, req.params);
+        // referer 里面的请求参数拥有最高优先级，因为这种场景比较特殊，主要用于自动化测试之用
+        params = _.merge({}, params, req.params, matchedReferer);
 
         // 请求
         handlerParser.getHandleModuleResultForHttp(url, params, req)
@@ -106,7 +137,7 @@ module.exports = (entry) => {
           })
           .catch((err) => {
             // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
-            let errMsg = err.stack || err;
+            let errMsg = err && err.stack || err;
 
             console.error(errMsg);
 
@@ -174,7 +205,7 @@ module.exports = (entry) => {
     } else if (req.method === 'POST' && !isRequested) {
       request
         .post(_.merge({}, opts, {
-          form: req.body,
+          form: req.body
         }))
         .on('response', function (response) {
           // console.log(response.statusCode)

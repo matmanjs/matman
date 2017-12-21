@@ -3,13 +3,13 @@
   "dataPath": "D:\\gitprojects\\matman\\demo\\data",
   "data": [
     {
-      "description": "description_demo_handle_modules",
+      "description": "description_demo_plugin_mocker",
       "disable": false,
       "method": "get",
       "priority": 0,
       "plugin": "mocker",
       "name": "demo_plugin_mocker",
-      "route": "/cgi-bin/a/b/demo_handle_modules",
+      "route": "/cgi-bin/a/b/demo_plugin_mocker",
       "defaultModule": "success_1",
       "activeModule": "error",
       "tags": [

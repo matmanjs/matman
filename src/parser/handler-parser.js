@@ -254,7 +254,7 @@ export default class HandlerParser {
     let reqInfoByRoute = this.getReqInfoByRoute(route, params);
 
     if (!reqInfoByRoute) {
-      return Promise.reject();
+      return Promise.reject('Could not get reqInfo by route=' + route + ' and params=' + JSON.stringify(params));
     }
 
     return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, reqInfoByRoute.params, req)
@@ -268,18 +268,19 @@ export default class HandlerParser {
 
   /**
    * 根据路由，获得目标的执行结果
-   * @param route
+   * @param {String} route 路由规则
+   * @param {Object} [params] 请求的参数
    * @param props
    * @return {Promise}
    */
-  getHandleModuleResult(route, ...props) {
-    let reqInfoByRoute = this.getReqInfoByRoute(route);
+  getHandleModuleResult(route, params, ...props) {
+    let reqInfoByRoute = this.getReqInfoByRoute(route, params);
 
     if (!reqInfoByRoute) {
       return Promise.reject();
     }
 
-    return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, ...props);
+    return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, params, ...props);
   }
 
   /**
