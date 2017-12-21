@@ -5,6 +5,10 @@
  * @return {String}
  */
 function query(name, url) {
+  if (!name) {
+    return '';
+  }
+
   if (!url) {
     if (typeof location === 'undefined' || !location.search) {
       return '';
@@ -14,7 +18,7 @@ function query(name, url) {
   }
 
   let value = url
-    .match(new RegExp('(\\?|&)' + name + '=([^&]*)(&|$)'))
+    .match(new RegExp('(\\??|&)' + name + '=([^&]*)(&|$)'))
     ? decodeURIComponent(RegExp.$2) : '';
 
   if (value.match(/<\/?script>/i)) {
@@ -31,13 +35,17 @@ function query(name, url) {
  * @param {Object} obj
  * @return {String}
  */
-function param(obj = {}) {
+function param(obj) {
+  if (!obj) {
+    return '';
+  }
+
   var str = [];
 
   for (var k in obj) {
     if (obj.hasOwnProperty(k)) {
       var v = typeof obj[k] !== 'undefined' ? obj[k] : '';
-      str.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
+      str.push(encodeURIComponent(k) + '=' + encodeURIComponent(JSON.stringify(v)));
     }
   }
 
@@ -48,5 +56,3 @@ module.exports = {
   query: query,
   param: param
 };
-
-console.log(param({ a: 1, b: { c: 1 } }));

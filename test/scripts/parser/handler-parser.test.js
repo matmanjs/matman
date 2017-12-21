@@ -420,7 +420,6 @@ describe('handler-parser.js getHandleModuleResultForHttp()', () => {
       })
         .then((data) => {
           result = data;
-          console.log('--------data-------', data);
         });
     });
 
