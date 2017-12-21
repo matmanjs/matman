@@ -3,7 +3,13 @@ Mock service and Tester assistant
 
 ## matman 是什么
 
-本质上是一个 mock 服务器，可以方便的管理你的不同的 mock 数据。在大部分前后端分离的架构中，一般会先加载前端页面，然后通过 CGI 请求获取数据，最后完成渲染。CGI 返回什么样的数据会直接影响页面的展现和交互。借助 matman，你很容易构造自己的 mock 数据，并且指定返回哪些形式的数据。
+能够做到：
+
+- 强大的 mock 数据管理
+- 轻易实现与native等场景的数据交互
+- 数据校验
+- 数据过滤和展示
+- 可配合前端自动化测试
 
 ## 如何使用
 
@@ -17,14 +23,17 @@ var options = {};
 matman.run(options);
 ```
 
+配置参数支持的字段和属性如下表所示。
+
  字段名 | 是否必须 | 类型 | 含义描述 |
 | --- | --- | --- | --- |
 | `ROOT_PATH` | 是 | `String` | 项目根目录 |
 | `SRC_PATH` | 否 | `String` | 源文件的目录，默认值为 `${ROOT_PATH}/src` |
 | `APP_PATH` | 否 | `String` | 运行目录，默认值为 `${ROOT_PATH}/app` |
-| `MOCKER_RELATIVE_PATH` | 否 | `String` | `mocker` 文件相对源文件目录的路径，默认值为 `'./mocker'` |
+| `HANDLER_RELATIVE_PATH` | 否 | `String` | `handler` 文件相对源文件目录的路径，默认值为 `'./handler'` |
+| `DATA_PATH` | 否 | `String` | 配置数据缓存路径，默认值为 `${ROOT_PATH}/data` |
 | `LOG_PATH` | 否 | `String` | 日志文件存储的路径，默认值为 `${ROOT_PATH}/logs` |
-| `port` | 否 | `Number` | 端口号，默认为 `3000` |
+| `port` | 否 | `Number` | 服务端口号，默认为 `3000` |
 
 更多使用请看 [demo](https://github.com/helinjiang/matman/tree/master/demo)。
 
