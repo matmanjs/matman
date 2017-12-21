@@ -75,9 +75,10 @@ module.exports = (entry) => {
       // req.query.activeModule = "error_not_login"
       // req.params.id = "1"
 
+      // console.log(req.headers.referer)
       // 目前只支持 plugin=mocker 的场景，_m_name=该模块的名字，_m_target=该模块的值对应的名字,_m_disable
       let paramsFromReferer = [{
-        _m_name: 'demo_simple',
+        _m_name: 'demo_simple11',
         _m_target: 'success',
         _m_disable: 0
       }];
