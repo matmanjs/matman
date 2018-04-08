@@ -30,14 +30,17 @@ export default class HandlerParser {
    * 分析并保存数据到本地
    */
   parseAndSave() {
+    // 获取本地所有的 handler 列表。注意此处不能够取自缓存，要重新去分析。
     let allHandler = this.getAllHandler(true);
 
+    // 存储到本地缓存数据文件内，以便下次启动时能够记录上一次的操作
     this.db.setState({
       basePath: this.basePath,
       dataPath: this.dataPath,
       data: allHandler
     }).write();
 
+    // 将结果返回
     return allHandler;
   }
 
@@ -48,7 +51,7 @@ export default class HandlerParser {
    * @return {Array}
    */
   getAllHandler(isReset) {
-    // 如果是优先缓存，则直接返回。
+    // 默认情况下，handler列表的数据从缓存中获取，除非指定了 isReset=true。
     if (!isReset) {
       return this.db.get('data').value() || [];
     }
