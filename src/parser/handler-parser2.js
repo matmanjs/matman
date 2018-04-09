@@ -61,9 +61,7 @@ export default class HandlerParser {
       return this.db.get('data').value() || [];
     }
 
-    // 1. 获取所有的 handler name
-    let handlerNameArr = [];
-
+    // 1. 获取所有的 handler
     fsHandler.search.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
       /**
        * 限制只处理文件夹类型的
@@ -71,7 +69,6 @@ export default class HandlerParser {
        */
       if (item.isDirectory()) {
         let name = path.basename(item.relativePath);
-        handlerNameArr.push(name);
 
         // 将模块进行序列化处理
         matmanCore.serialize(path.join(this.srcHandlerPath, name), path.join(this.appHandlerPath, name));
@@ -94,14 +91,13 @@ export default class HandlerParser {
     });
 
     // 打印一些结果
-    console.log(handlerNameArr);
     console.log(this.definedHandlers);
 
     // 2. 根据 handler name 获取该 handler 下的所有 handle_modules
     let handlerArr = [];
 
-    handlerNameArr.forEach((handlerName) => {
-      let handlerInfo = this.getHandler(handlerName, true);
+    this.definedHandlers.forEach((item) => {
+      let handlerInfo = this.getHandler(item.name, true);
 
       // 有可能该 handler 不合法，只有合法的 handler 才进行处理
       if (handlerInfo) {
