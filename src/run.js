@@ -5,7 +5,7 @@ const path = require('path');
 require('babel-runtime/core-js/promise').default = require('bluebird');
 global.Promise = require('bluebird');
 
-// const babelCompileDirectory = require('babel-d');
+const babelCompileDirectory = require('babel-d');
 
 const matmanServer = require('./server');
 
@@ -59,11 +59,11 @@ module.exports = (opts) => {
   // 确认 HANDLER_PATH 的值
   // if (configOpts.SRC_PATH === configOpts.APP_PATH) {
   // 如果源文件目录和运行目录一致，就不进行babel编译了
-  configOpts.HANDLER_PATH = path.join(configOpts.SRC_PATH, configOpts.HANDLER_RELATIVE_PATH);
+  // configOpts.HANDLER_PATH = path.join(configOpts.SRC_PATH, configOpts.HANDLER_RELATIVE_PATH);
   // } else {
-  //   // babel 编译
-  //   babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
-  //   configOpts.HANDLER_PATH = path.join(configOpts.APP_PATH, configOpts.HANDLER_RELATIVE_PATH);
+  // babel 编译
+  babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
+  configOpts.HANDLER_PATH = path.join(configOpts.APP_PATH, configOpts.HANDLER_RELATIVE_PATH);
   // }
 
   // 启动
