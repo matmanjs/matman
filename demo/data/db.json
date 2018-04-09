@@ -1,5 +1,5 @@
 {
-  "basePath": "D:\\gitprojects\\matman\\demo\\src\\handler",
+  "basePath": "D:\\gitprojects\\matman\\demo\\app\\handler",
   "dataPath": "D:\\gitprojects\\matman\\demo\\data",
   "data": [
     {
@@ -152,6 +152,63 @@
           "query": {
             "_m_target": "success"
           }
+        }
+      ]
+    },
+    {
+      "description": "description_matman-mocker-test",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "plugin": "mocker",
+      "name": "matman-mocker-test",
+      "route": "/cgi-bin/a/b/matman-mocker-test",
+      "defaultModule": "success_1",
+      "activeModule": "success_1",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success_1",
+          "priority": 0,
+          "name": "success_1",
+          "query": {
+            "_m_target": "success_1"
+          }
+        },
+        {
+          "description": "success_2",
+          "priority": 0,
+          "name": "success_2",
+          "query": {
+            "_m_target": "success_2"
+          }
+        },
+        {
+          "description": "description_success_3",
+          "priority": 100,
+          "name": "success_3",
+          "query": {
+            "_m_target": "success_3"
+          }
+        },
+        {
+          "description": "success_4",
+          "priority": 10,
+          "query": {
+            "type": 1,
+            "_m_target": "success_4"
+          },
+          "name": "success_4"
         }
       ]
     }
