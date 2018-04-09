@@ -20,24 +20,41 @@ global.attentionLogger = attentionLogger;
 module.exports = (opts) => {
   let configOpts;
 
+  // opts 如果是字符串则认为是文件路径，可将配置项放在独立的配置文件中
   if (typeof opts === 'string' && fs.existsSync(opts)) {
     configOpts = require(opts);
   } else if (typeof opts === 'object') {
     configOpts = opts;
   }
 
+  // 如果没有 ROOT_PATH，则将无法启动成功
   if (!configOpts || !configOpts.ROOT_PATH) {
-    console.error('Params error!', opts, configOpts);
+    console.error('Invalid param!', opts, configOpts);
     return;
   }
 
   // 设置默认值
+  // 项目源文件的目录，默认值为 ${ROOT_PATH}/src
   configOpts.SRC_PATH = configOpts.SRC_PATH || path.join(configOpts.ROOT_PATH, './src');
+
+  // 运行目录，由 SRC_PATH 处理之后生成的，默认值为 ${ROOT_PATH}/app
   configOpts.APP_PATH = configOpts.APP_PATH || path.join(configOpts.ROOT_PATH, './app');
+
+  // 配置数据缓存路径，默认值为 ${ROOT_PATH}/data
+  // TODO 这个字段可以和 APP_PATH 进行合并，因为冗余了
   configOpts.DATA_PATH = configOpts.DATA_PATH || path.join(configOpts.ROOT_PATH, './data');
+
+  // handler 文件相对 SRC_PATH 目录的路径，默认值为 './handler'
   configOpts.HANDLER_RELATIVE_PATH = configOpts.HANDLER_RELATIVE_PATH || './handler';
+
+  // 日志文件存储的路径，默认值为 ${ROOT_PATH}/logs
   configOpts.LOG_PATH = configOpts.LOG_PATH || path.join(configOpts.ROOT_PATH, 'logs');
+
+  // matman 启动之后的服务端口号，默认为 3000
   configOpts.port = configOpts.port || 3000;
+
+  // 外部 handler 列表，比如引入npm包或者其他目录下的 handler
+  configOpts.definedHandlers = configOpts.definedHandlers || [];
 
   // 确认 HANDLER_PATH 的值
   // if (configOpts.SRC_PATH === configOpts.APP_PATH) {
@@ -48,6 +65,8 @@ module.exports = (opts) => {
   //   babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
   //   configOpts.HANDLER_PATH = path.join(configOpts.APP_PATH, configOpts.HANDLER_RELATIVE_PATH);
   // }
+
+  // 启动
 
   // 初始化日志打印
   logger.init(configOpts.LOG_PATH);
