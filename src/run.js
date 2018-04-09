@@ -63,7 +63,6 @@ module.exports = (opts) => {
   // } else {
   // babel 编译
   babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
-  configOpts.HANDLER_PATH = path.join(configOpts.APP_PATH, configOpts.HANDLER_RELATIVE_PATH);
   // }
 
   // 启动
