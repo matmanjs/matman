@@ -249,7 +249,9 @@ export default class HandlerParser {
       return Promise.reject('Could not get reqInfo by route=' + route + ' and params=' + JSON.stringify(params));
     }
 
-    return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, reqInfoByRoute.params, req)
+    console.log('==reqInfoByRoute==', reqInfoByRoute);
+
+    return fsHandler.handle.getTargetResult(reqInfoByRoute.requiredModule, reqInfoByRoute.params, req)
       .then((data) => {
         return {
           data: data,
@@ -308,11 +310,15 @@ export default class HandlerParser {
     // 还有部分参数在 handle_module 的 query 字段中，需要合并请求
     let reqParams = _.merge({}, handleModuleInfo.query, params);
 
+    // TODO 此处还需要进一步优化
+    let requiredModule = this.definedHandlers.filter(item => item.name === handlerInfo.name)[0].handleModules.filter(item => item.name === handleModuleInfo.name)[0].module;
+
     return {
       handlerInfo: handlerInfo,
       handleModuleInfo: handleModuleInfo,
       fullPath: moduleFullPath,
-      params: reqParams
+      params: reqParams,
+      requiredModule: requiredModule
     };
   }
 
