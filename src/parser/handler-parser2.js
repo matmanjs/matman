@@ -13,18 +13,19 @@ const parserUtil = require('./parser-util');
 export default class HandlerParser {
   constructor(entry) {
     this.basePath = path.join(entry.APP_PATH, entry.HANDLER_RELATIVE_PATH);
-    this.srcBasePath = path.join(entry.SRC_PATH, entry.HANDLER_RELATIVE_PATH);
+    this.appPath = path.join(entry.APP_PATH, entry.HANDLER_RELATIVE_PATH);
+    this.srcPath = path.join(entry.SRC_PATH, entry.HANDLER_RELATIVE_PATH);
 
-    this.dataPath = entry.DATA_PATH || this.basePath;
+    // this.dataPath = entry.DATA_PATH || this.basePath;
     this.handleModulesFolderName = 'handle_modules';
     this.handlerConfigName = 'config.json';
     this.handleModuleConfigName = 'config.json';
     this.targetField = '_m_target';
 
-    // 注意此处一定要保证存储数据的地址是可存在的，否则会保存。
-    fse.ensureDirSync(this.dataPath);
+    // 注意此处一定要保证存储数据的地址是可存在的，否则会保存失败。
+    // fse.ensureDirSync(this.dataPath);
 
-    this.db = store.getDB(path.join(this.dataPath, 'db.json'));
+    this.db = store.getDB(path.join(this.appPath, 'db.json'));
   }
 
   /**
@@ -37,7 +38,8 @@ export default class HandlerParser {
     // 存储到本地缓存数据文件内，以便下次启动时能够记录上一次的操作
     this.db.setState({
       basePath: this.basePath,
-      dataPath: this.dataPath,
+      srcPath: this.srcPath,
+      appPath: this.appPath,
       data: allHandler
     }).write();
 
