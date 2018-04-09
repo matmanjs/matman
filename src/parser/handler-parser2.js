@@ -4,6 +4,7 @@ const _ = require('lodash');
 const path = require('path');
 const marked = require('marked');
 const fsHandler = require('fs-handler');
+const matmanCore = require('matman-core');
 
 const util = require('../util');
 const store = require('../store');
@@ -68,7 +69,11 @@ export default class HandlerParser {
        * 在根目录下，每个子文件夹就是一个 handler 单位，其名字即为文件夹名字
        */
       if (item.isDirectory()) {
-        handlerNameArr.push(path.basename(item.relativePath));
+        let name = path.basename(item.relativePath);
+        handlerNameArr.push(name);
+
+        // 将模块进行序列化处理，以便后续使用
+        matmanCore.serialize(path.join(this.srcHandlerPath, name), path.join(this.appHandlerPath, name));
       } else {
         // 正常情况下不允许在根目录下有非文件夹的存在，因此此处需要增加错误展示
         console.error(`${path.join(item.basePath, item.relativePath)} SHOULD BE Directory!`);
