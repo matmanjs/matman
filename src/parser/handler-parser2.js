@@ -16,6 +16,7 @@ export default class HandlerParser {
     this.appHandlerPath = path.join(entry.APP_PATH, entry.HANDLER_RELATIVE_PATH);
     this.srcHandlerPath = path.join(entry.SRC_PATH, entry.HANDLER_RELATIVE_PATH);
     this.basePath = this.appHandlerPath;
+    this.definedHandlers = [...entry.definedHandlers];
 
     this.dbPath = entry.APP_PATH;
     this.handleModulesFolderName = 'handle_modules';
@@ -72,8 +73,20 @@ export default class HandlerParser {
         let name = path.basename(item.relativePath);
         handlerNameArr.push(name);
 
-        // 将模块进行序列化处理，以便后续使用
+        // 将模块进行序列化处理
         matmanCore.serialize(path.join(this.srcHandlerPath, name), path.join(this.appHandlerPath, name));
+
+        // 获得相对路径，以便 require 到 definedHandlers 中
+        let relativePath = path.relative(__dirname, path.join(this.appHandlerPath, name));
+
+        // 当路径是 './' 开头时，这里的结果会将其省略，因此要再加回来，否则 require 时会先去 node_modules 寻找，就会产生问题
+        relativePath = relativePath.indexOf('..') > -1 ? relativePath : './' + relativePath;
+
+        // 需要将“\”替换为“/”
+        relativePath = relativePath.replace(/\\/gi, '/');
+
+        // 把处理之后的模块加入到 definedHandlers 中
+        this.definedHandlers.push(require(relativePath));
       } else {
         // 正常情况下不允许在根目录下有非文件夹的存在，因此此处需要增加错误展示
         console.error(`${path.join(item.basePath, item.relativePath)} SHOULD BE Directory!`);
@@ -81,7 +94,8 @@ export default class HandlerParser {
     });
 
     // 打印一些结果
-    // console.log(handlerNameArr);
+    console.log(handlerNameArr);
+    console.log(this.definedHandlers);
 
     // 2. 根据 handler name 获取该 handler 下的所有 handle_modules
     let handlerArr = [];
@@ -111,7 +125,7 @@ export default class HandlerParser {
     //===============================================================
     let cacheData = this.db.get('data').find({ name: handlerName }).value();
 
-    // 如果是优先缓存，则直接返回。
+    // 默认情况下，handler列表的数据直接从缓存中获取，除非指定了 isReset=true。
     if (!isReset) {
       return cacheData;
     }
