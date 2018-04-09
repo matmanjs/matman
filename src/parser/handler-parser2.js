@@ -131,27 +131,18 @@ export default class HandlerParser {
     }
 
     //===============================================================
-    // 2. 获取这个 handler 模块的 config 信息
+    // 2. 获取 definedHandler 信息
     //===============================================================
-
-    // 如果不需要缓存，则从文件系统中获取并处理
-    const CUR_HANDLER_PATH = path.join(this.basePath, handlerName);
-
-    const CUR_HANDLER_CONFIG = path.join(CUR_HANDLER_PATH, this.handlerConfigName);
-
-    // 注意：handler 的 config.json 可能不存在，此时需要提示错误
-    // 我们需要有个配置文件，用于指导如何匹配规则，因此是必须的
-    if (!fs.existsSync(CUR_HANDLER_CONFIG)) {
-      console.error(CUR_HANDLER_CONFIG + ' is not exist!');
+    let curDefinedHandler = this.definedHandlers.filter(item => item.name === handlerName)[0];
+    if (!curDefinedHandler || !curDefinedHandler.config) {
+      console.error(handlerName + ' invalid!', curDefinedHandler);
       return null;
     }
-
-    let handlerConfigData = store.getDB(CUR_HANDLER_CONFIG).getState();
 
     //===============================================================
     // 3. 以一定的方式， 获取 handler 模块最终信息
     //===============================================================
-    let handlerData = parserUtil.getMixinHandlerData(handlerName, handlerConfigData, cacheData);
+    let handlerData = parserUtil.getMixinHandlerData(handlerName, curDefinedHandler.config, cacheData);
 
     // TODO 如果匹配规则一模一样，需要进行警告提示！！！！！
     if (!handlerData) {
@@ -161,10 +152,10 @@ export default class HandlerParser {
     //===============================================================
     // 4. 获取当前的 handler 下的 handle_modules 列表，或者 index.js/index.json
     //===============================================================
-    const CUR_HANDLE_MODULE_PATH = path.join(CUR_HANDLER_PATH, this.handleModulesFolderName);
-
+    const CUR_HANDLER_PATH = path.join(this.basePath, handlerName);
     let modules = [];
-    if (!fs.existsSync(CUR_HANDLE_MODULE_PATH)) {
+
+    if (!curDefinedHandler.handleModules.length) {
       // 如果没有 handle_modules 文件夹，则使用 index.js 或者 index.json，且将其设置为默认
       let indexModule = {
         name: 'index_module',
@@ -186,29 +177,9 @@ export default class HandlerParser {
       modules.push(indexModule);
 
     } else {
-      fsHandler.search.getAll(CUR_HANDLE_MODULE_PATH, { globs: ['*'] }).forEach((item) => {
-        // 获取各个 handle_module 中 config.json 的数据
-        let handleModuleConfigDBState = {};
-        let curHandleModuleName = '';
-
-        if (item.isDirectory()) {
-          // 获取模块名
-          curHandleModuleName = path.basename(item.relativePath);
-
-          // 如果 handle_module 是一个目录，则需要去检查其是否存在 config.json 文件，优先使用它
-          // config.json 的作用是用于用户自定义，拥有最高的优先级
-          let CUR_HANDLE_MODULE_CONFIG = path.join(CUR_HANDLE_MODULE_PATH, curHandleModuleName, this.handleModuleConfigName);
-
-          if (fs.existsSync(CUR_HANDLE_MODULE_CONFIG)) {
-            handleModuleConfigDBState = store.getDB(CUR_HANDLE_MODULE_CONFIG).getState();
-          }
-        } else {
-          // 获取模块名
-          curHandleModuleName = path.basename(item.relativePath, path.extname(item.relativePath));
-        }
-
+      curDefinedHandler.handleModules.forEach((item) => {
         // 获取最后处理之后的数据
-        let curHandleModuleData = parserUtil.getMixinHandleModuleData(curHandleModuleName, handleModuleConfigDBState);
+        let curHandleModuleData = parserUtil.getMixinHandleModuleData(item.name, item.config || {});
 
         modules.push(curHandleModuleData);
       });
