@@ -373,7 +373,7 @@ export default class HandlerParser {
     try {
       let content = fs.readFileSync(handlerReadMeFile, 'utf8');
 
-      content = content.replace(/__HANDLER_PATH__/g, handlerName);
+      content = content.replace(/__STATIC_PATH__/g, handlerName + '/static');
 
       return marked(content);
     } catch (e) {

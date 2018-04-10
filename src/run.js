@@ -80,12 +80,13 @@ module.exports = (opts) => {
     res.redirect('/');
   });
 
-  // GET /admin/handlers/handler/:handlerName/static/* 静态资源
-  // http://localhost:3000/admin/handlers/handler/standard_cgi/static/1.png
-  app.get('/admin/handlers/handler/:handlerName/static/*', (req, res) => {
+  // TODO 此处还需要支持 reporter 等场景
+  // GET /admin/mockers/mocker/:name/static/* 静态资源
+  // http://localhost:3000/admin/mockers/mocker/standard_cgi/static/subdir/3.png
+  app.get('/admin/mockers/mocker/:name/static/*', (req, res) => {
     // req.params[0] = 'subdir/3.png'
-    // req.params.handlerName = 'standard_cgi'
-    let imageFilePath = path.join(configOpts.HANDLER_PATH, req.params.handlerName, 'static', req.params[0]);
+    // req.params.name = 'standard_cgi'
+    let imageFilePath = path.join(configOpts.HANDLER_PATH, req.params.name, 'static', req.params[0]);
     res.sendFile(imageFilePath);
   });
 
