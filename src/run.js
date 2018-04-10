@@ -40,9 +40,8 @@ module.exports = (opts) => {
   // 运行目录，由 SRC_PATH 处理之后生成的，默认值为 ${ROOT_PATH}/app
   configOpts.APP_PATH = configOpts.APP_PATH || path.join(configOpts.ROOT_PATH, './app');
 
-  // 配置数据缓存路径，默认值为 ${ROOT_PATH}/data
-  // TODO 这个字段可以和 APP_PATH 进行合并，因为冗余了
-  configOpts.DATA_PATH = configOpts.DATA_PATH || path.join(configOpts.ROOT_PATH, './data');
+  // 配置数据缓存路径，默认值为 APP_PATH
+  configOpts.DATA_PATH = configOpts.DATA_PATH || configOpts.APP_PATH;
 
   // handler 文件相对 SRC_PATH 目录的路径，默认值为 './handler'
   configOpts.HANDLER_RELATIVE_PATH = configOpts.HANDLER_RELATIVE_PATH || './handler';
