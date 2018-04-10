@@ -129,7 +129,7 @@ export default class HandlerParser {
     //===============================================================
     // 2. 获取 definedHandler 信息
     //===============================================================
-    let curDefinedHandler = this.definedHandlers.filter(item => item.name === handlerName)[0];
+    let curDefinedHandler = this.getDefinedHandler(handlerName);
     if (!curDefinedHandler || !curDefinedHandler.config) {
       console.error(handlerName + ' invalid!', curDefinedHandler);
       return null;
@@ -310,14 +310,15 @@ export default class HandlerParser {
     // 还有部分参数在 handle_module 的 query 字段中，需要合并请求
     let reqParams = _.merge({}, handleModuleInfo.query, params);
 
-    // TODO 此处还需要进一步优化
-    let requiredModule = this.definedHandlers.filter(item => item.name === handlerInfo.name)[0].handleModules.filter(item => item.name === handleModuleInfo.name)[0].module;
+    let definedHandleModule = this.getDefinedHandleModule(handlerInfo.name, handleModuleInfo.name);
+    let requiredModule = definedHandleModule ? definedHandleModule.module : null;
 
     return {
       handlerInfo: handlerInfo,
       handleModuleInfo: handleModuleInfo,
       fullPath: moduleFullPath,
       params: reqParams,
+      definedHandleModule: definedHandleModule,
       requiredModule: requiredModule
     };
   }
@@ -343,7 +344,12 @@ export default class HandlerParser {
    * 获取指定 handler 的 README 信息
    */
   getReadMeContent(handlerName) {
-    let curMockerPath = path.join(this.basePath, handlerName);
+    let curDefinedHandler = this.getDefinedHandler(handlerName);
+    if (!curDefinedHandler) {
+      return '异常错误，找不到对应信息！handlerName=' + handlerName;
+    }
+
+    let curMockerPath = curDefinedHandler.PATH;
 
     let handlerReadMeFile = path.join(curMockerPath, 'readme.md');
     if (!fs.existsSync(handlerReadMeFile)) {
@@ -378,6 +384,33 @@ export default class HandlerParser {
       return marked(content);
     } catch (e) {
       return e.stack;
+    }
+  }
+
+  /**
+   * 获取序列化处理之后的 handler 信息
+   * @param handlerName
+   * @return {*}
+   */
+  getDefinedHandler(handlerName) {
+    try {
+      return this.definedHandlers.filter(item => item.name === handlerName)[0];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
+   * 获取序列化之后 handle_module
+   * @param handlerName
+   * @param moduleName
+   * @return {null}
+   */
+  getDefinedHandleModule(handlerName, moduleName) {
+    try {
+      return this.getDefinedHandler(handlerName).handleModules.filter(item => item.name === moduleName)[0];
+    } catch (e) {
+      return null;
     }
   }
 
