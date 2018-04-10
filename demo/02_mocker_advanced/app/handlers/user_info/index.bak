@@ -2,7 +2,7 @@ export const isSerialized = true;
 export const PATH = __dirname;
 import config from './config';
 export config from './config';
-export const name = 'user_info';
+export const name = config.name || 'user_info';
 import error from './handle_modules/error'
 import success_1 from './handle_modules/success_1'
 import success_2 from './handle_modules/success_2'

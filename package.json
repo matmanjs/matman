@@ -50,7 +50,7 @@
     "log4js": "^1.1.1",
     "lowdb": "^1.0.0",
     "marked": "^0.3.6",
-    "matman-core": "^0.1.3",
+    "matman-core": "^0.1.4",
     "method-override": "^2.3.9",
     "morgan": "^1.8.2",
     "object-assign": "^4.1.1",
