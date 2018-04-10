@@ -9,8 +9,8 @@
       "method": "get",
       "priority": 0,
       "plugin": "mocker",
-      "name": "npm_user_info",
-      "route": "/cgi-bin/a/b/npm_user_info",
+      "name": "demo_user_info",
+      "route": "/cgi-bin/a/b/demo_user_info",
       "defaultModule": "success_1",
       "activeModule": "success_1",
       "tags": [
@@ -69,7 +69,7 @@
       "name": "user_info",
       "route": "/cgi-bin/a/b/user_info",
       "defaultModule": "success_1",
-      "activeModule": "error",
+      "activeModule": "success_1",
       "tags": [
         "全部"
       ],
@@ -115,8 +115,7 @@
           },
           "name": "success_4"
         }
-      ],
-      "createdAt": 1523336787533
+      ]
     }
   ]
 }
