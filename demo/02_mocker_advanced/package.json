@@ -10,6 +10,6 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "matman-mocker-demo-user-info": "^1.0.0"
+        "matman-mocker-demo-user-info": "^1.0.1"
     }
 }

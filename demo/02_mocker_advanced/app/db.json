@@ -11,52 +11,47 @@
       "plugin": "mocker",
       "name": "demo_user_info",
       "route": "/cgi-bin/a/b/demo_user_info",
-      "defaultModule": "success_1",
-      "activeModule": "success_1",
+      "defaultModule": "success_type_0",
+      "activeModule": "error_not_login",
       "tags": [
         "全部"
       ],
       "modules": [
         {
-          "description": "error",
+          "description": "错误：未登录",
           "priority": 0,
-          "name": "error",
+          "version": "0.0.1",
+          "name": "error_not_login",
           "query": {
-            "_m_target": "error"
+            "_m_target": "error_not_login"
           }
         },
         {
-          "description": "success_1",
+          "description": "根据请求自动返回相应的type",
           "priority": 0,
-          "name": "success_1",
+          "version": "0.0.1",
+          "name": "success_depend_on_request",
           "query": {
-            "_m_target": "success_1"
+            "_m_target": "success_depend_on_request"
           }
         },
         {
-          "description": "success_2",
+          "description": "获取简单的数据",
           "priority": 0,
-          "name": "success_2",
+          "version": "0.0.1",
+          "name": "success_type_0",
           "query": {
-            "_m_target": "success_2"
+            "_m_target": "success_type_0"
           }
         },
         {
-          "description": "description_success_3",
-          "priority": 100,
-          "name": "success_3",
+          "description": "获取更多丰富的数据",
+          "priority": 0,
+          "version": "0.0.1",
+          "name": "success_type_1",
           "query": {
-            "_m_target": "success_3"
+            "_m_target": "success_type_1"
           }
-        },
-        {
-          "description": "success_4",
-          "priority": 10,
-          "query": {
-            "type": 1,
-            "_m_target": "success_4"
-          },
-          "name": "success_4"
         }
       ]
     },
