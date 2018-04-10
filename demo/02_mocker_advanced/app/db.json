@@ -1,0 +1,64 @@
+{
+  "basePath": "D:\\gitprojects\\matman\\demo\\02_mocker_advanced\\app\\handler",
+  "srcHandlerPath": "D:\\gitprojects\\matman\\demo\\02_mocker_advanced\\src\\handler",
+  "appHandlerPath": "D:\\gitprojects\\matman\\demo\\02_mocker_advanced\\app\\handler",
+  "data": [
+    {
+      "description": "查询用户信息",
+      "disable": false,
+      "method": "get",
+      "priority": 0,
+      "plugin": "mocker",
+      "name": "user_info",
+      "route": "/cgi-bin/a/b/user_info",
+      "defaultModule": "success_1",
+      "activeModule": "success_1",
+      "tags": [
+        "全部"
+      ],
+      "modules": [
+        {
+          "description": "error",
+          "priority": 0,
+          "name": "error",
+          "query": {
+            "_m_target": "error"
+          }
+        },
+        {
+          "description": "success_1",
+          "priority": 0,
+          "name": "success_1",
+          "query": {
+            "_m_target": "success_1"
+          }
+        },
+        {
+          "description": "success_2",
+          "priority": 0,
+          "name": "success_2",
+          "query": {
+            "_m_target": "success_2"
+          }
+        },
+        {
+          "description": "description_success_3",
+          "priority": 100,
+          "name": "success_3",
+          "query": {
+            "_m_target": "success_3"
+          }
+        },
+        {
+          "description": "success_4",
+          "priority": 10,
+          "query": {
+            "type": 1,
+            "_m_target": "success_4"
+          },
+          "name": "success_4"
+        }
+      ]
+    }
+  ]
+}
