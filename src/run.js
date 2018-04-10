@@ -86,8 +86,17 @@ module.exports = (opts) => {
   app.get('/admin/mockers/mocker/:name/static/*', (req, res) => {
     // req.params[0] = 'subdir/3.png'
     // req.params.name = 'standard_cgi'
-    let imageFilePath = path.join(configOpts.HANDLERS_PATH, req.params.name, 'static', req.params[0]);
-    res.sendFile(imageFilePath);
+
+    let handlerName = req.params.name;
+    let curDefinedHandler = routerHandler._handlerParser.getDefinedHandler(handlerName);
+    let staticRelativePath = path.join('static', req.params[0]);
+
+    if (!curDefinedHandler) {
+      res.send(`Can not find ${path.join(handlerName, staticRelativePath)}`);
+    } else {
+      res.sendFile(path.join(curDefinedHandler.PATH, staticRelativePath));
+    }
+
   });
 
   // GET /admin/*
