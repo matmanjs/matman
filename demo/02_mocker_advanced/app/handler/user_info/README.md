@@ -2,12 +2,11 @@
 
 该接口用于查询用户的信息。
 
-![](__HANDLER_PATH__/static/logo.jpg)
-![](__HANDLER_PATH__/static/sub/workflow.jpg)
+![](__STATIC_PATH__/logo.jpg)
 
 ## 接口说明
 
-> 详见 xxx 地址。
+> 详见 xxx 地址。目前该接口由 xxx 同学维护。
 
 ### 入参格式
 
@@ -19,3 +18,7 @@
 ### 返回格式
 
 略
+
+### 流程图
+
+![](__STATIC_PATH__/sub/workflow.png)
