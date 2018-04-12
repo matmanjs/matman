@@ -8,6 +8,7 @@ global.Promise = require('bluebird');
 const babelCompileDirectory = require('babel-d');
 
 const matmanServer = require('./server');
+const util = require('./util');
 
 const logger = require('./server/logger');
 const matmanLogger = logger.matmanLogger();
@@ -57,6 +58,9 @@ module.exports = (opts) => {
 
   // 确认 HANDLERS_PATH 的值
   configOpts.HANDLERS_PATH = path.join(configOpts.APP_PATH, configOpts.HANDLERS_RELATIVE_PATH);
+
+  // 是否 watch 文件变动
+  configOpts.shouldWatchFile = configOpts.shouldWatchFile || false;
 
   // babel 编译
   babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
@@ -127,5 +131,14 @@ module.exports = (opts) => {
   server.listen(configOpts.port || 3000, () => {
     console.log('matman server is running');
     matmanLogger.info('matman server is running');
+
+    if (configOpts.shouldWatchFile) {
+      matmanLogger.info('watching files...');
+
+      util.watch([], [configOpts.SRC_PATH], [], {}, function (err, filesModified, dirsModified, missingCreated, fileTimestamps, dirTimestamps) {
+        console.log('文件变化了，需要重启！');
+        process.exit(1);
+      });
+    }
   });
 };
