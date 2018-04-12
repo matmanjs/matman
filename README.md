@@ -30,7 +30,7 @@ matman.run(options);
 | `ROOT_PATH` | 是 | `String` | 项目根目录 |
 | `SRC_PATH` | 否 | `String` | 源文件的目录，默认值为 `${ROOT_PATH}/src` |
 | `APP_PATH` | 否 | `String` | 运行目录，默认值为 `${ROOT_PATH}/app` |
-| `HANDLER_RELATIVE_PATH` | 否 | `String` | `handler` 文件相对源文件目录的路径，默认值为 `'./handler'` |
+| `HANDLERS_RELATIVE_PATH` | 否 | `String` | `handler` 文件相对源文件目录的路径，默认值为 `'./handler'` |
 | `DATA_PATH` | 否 | `String` | 配置数据缓存路径，默认值为 `${ROOT_PATH}/data` |
 | `LOG_PATH` | 否 | `String` | 日志文件存储的路径，默认值为 `${ROOT_PATH}/logs` |
 | `port` | 否 | `Number` | 服务端口号，默认为 `3000` |

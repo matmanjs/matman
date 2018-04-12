@@ -46,3 +46,5 @@ yarn-error.log*
 .idea
 tmp
 demo/app
+demo/app2
+logs

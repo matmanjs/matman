@@ -3,12 +3,12 @@ const methodOverride = require('method-override');
 const _ = require('lodash');
 const request = require('request');
 const bodyParser = require('../body-parser');
-const HandlerParser = require('../../parser/handler-parser').default;
+const HandlerParser = require('../../parser/handler-parser2').default;
 const initPlugins = require('./plugins');
 const util = require('../../util');
 
 module.exports = (entry) => {
-  const handlerParser = new HandlerParser(entry.HANDLER_PATH, entry.DATA_PATH);
+  const handlerParser = new HandlerParser(entry);
 
   let handlerList = handlerParser.parseAndSave();
 
