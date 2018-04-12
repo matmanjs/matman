@@ -1,0 +1,17 @@
+{
+  "name": "02_mocker_advanced",
+  "version": "1.0.0",
+  "description": "Mock service and Tester assistant",
+  "main": "entry.js",
+  "scripts": {
+    "start": "node ./entry.js",
+    "dev-win": "set NODE_ENV=development && pm2 start entry.js --name=02_mocker_advanced",
+    "dev-mac": "export NODE_ENV=development && pm2 start entry.js --name=02_mocker_advanced",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "matman-mocker-demo-user-info": "^1.0.1"
+  }
+}

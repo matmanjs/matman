@@ -4,6 +4,7 @@ const _ = require('lodash');
 const path = require('path');
 const marked = require('marked');
 const fsHandler = require('fs-handler');
+const matmanCore = require('matman-core');
 
 const util = require('../util');
 const store = require('../store');
@@ -11,19 +12,22 @@ const store = require('../store');
 const parserUtil = require('./parser-util');
 
 export default class HandlerParser {
-  constructor(basePath, dataPath) {
-    this.basePath = basePath;
+  constructor(entry) {
+    this.appHandlerPath = path.join(entry.APP_PATH, entry.HANDLERS_RELATIVE_PATH);
+    this.srcHandlerPath = path.join(entry.SRC_PATH, entry.HANDLERS_RELATIVE_PATH);
+    this.basePath = this.appHandlerPath;
+    this.definedHandlers = [...entry.definedHandlers];
 
-    this.dataPath = dataPath || basePath;
+    this.dbPath = entry.APP_PATH;
     this.handleModulesFolderName = 'handle_modules';
     this.handlerConfigName = 'config.json';
     this.handleModuleConfigName = 'config.json';
     this.targetField = '_m_target';
 
-    // 注意此处一定要保证存储数据的地址是可存在的，否则会保存。
-    fse.ensureDirSync(this.dataPath);
+    // 注意此处一定要保证存储数据的地址是可存在的，否则会保存失败。
+    // fse.ensureDirSync(this.dbPath);
 
-    this.db = store.getDB(path.join(this.dataPath, 'db.json'));
+    this.db = store.getDB(path.join(this.dbPath, 'db.json'));
   }
 
   /**
@@ -36,7 +40,8 @@ export default class HandlerParser {
     // 存储到本地缓存数据文件内，以便下次启动时能够记录上一次的操作
     this.db.setState({
       basePath: this.basePath,
-      dataPath: this.dataPath,
+      srcHandlerPath: this.srcHandlerPath,
+      appHandlerPath: this.appHandlerPath,
       data: allHandler
     }).write();
 
@@ -51,21 +56,34 @@ export default class HandlerParser {
    * @return {Array}
    */
   getAllHandler(isReset) {
-    // 默认情况下，handler列表的数据从缓存中获取，除非指定了 isReset=true。
+    // 默认情况下，handler列表的数据直接从缓存中获取，除非指定了 isReset=true。
     if (!isReset) {
       return this.db.get('data').value() || [];
     }
 
-    // 1. 获取所有的 handler name
-    let handlerNameArr = [];
-
+    // 1. 获取所有的 handler
     fsHandler.search.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
       /**
        * 限制只处理文件夹类型的
        * 在根目录下，每个子文件夹就是一个 handler 单位，其名字即为文件夹名字
        */
       if (item.isDirectory()) {
-        handlerNameArr.push(path.basename(item.relativePath));
+        let name = path.basename(item.relativePath);
+
+        // 将模块进行序列化处理
+        matmanCore.serialize(path.join(this.srcHandlerPath, name), path.join(this.appHandlerPath, name));
+
+        // 获得相对路径，以便 require 到 definedHandlers 中
+        let relativePath = path.relative(__dirname, path.join(this.appHandlerPath, name));
+
+        // 当路径是 './' 开头时，这里的结果会将其省略，因此要再加回来，否则 require 时会先去 node_modules 寻找，就会产生问题
+        relativePath = relativePath.indexOf('..') > -1 ? relativePath : './' + relativePath;
+
+        // 需要将“\”替换为“/”
+        relativePath = relativePath.replace(/\\/gi, '/');
+
+        // 把处理之后的模块加入到 definedHandlers 中
+        this.definedHandlers.push(require(relativePath));
       } else {
         // 正常情况下不允许在根目录下有非文件夹的存在，因此此处需要增加错误展示
         console.error(`${path.join(item.basePath, item.relativePath)} SHOULD BE Directory!`);
@@ -73,13 +91,13 @@ export default class HandlerParser {
     });
 
     // 打印一些结果
-    // console.log(handlerNameArr);
+    console.log(this.definedHandlers);
 
     // 2. 根据 handler name 获取该 handler 下的所有 handle_modules
     let handlerArr = [];
 
-    handlerNameArr.forEach((handlerName) => {
-      let handlerInfo = this.getHandler(handlerName, true);
+    this.definedHandlers.forEach((item) => {
+      let handlerInfo = this.getHandler(item.name, true);
 
       // 有可能该 handler 不合法，只有合法的 handler 才进行处理
       if (handlerInfo) {
@@ -103,33 +121,24 @@ export default class HandlerParser {
     //===============================================================
     let cacheData = this.db.get('data').find({ name: handlerName }).value();
 
-    // 如果是优先缓存，则直接返回。
+    // 默认情况下，handler列表的数据直接从缓存中获取，除非指定了 isReset=true。
     if (!isReset) {
       return cacheData;
     }
 
     //===============================================================
-    // 2. 获取这个 handler 模块的 config 信息
+    // 2. 获取 definedHandler 信息
     //===============================================================
-
-    // 如果不需要缓存，则从文件系统中获取并处理
-    const CUR_HANDLER_PATH = path.join(this.basePath, handlerName);
-
-    const CUR_HANDLER_CONFIG = path.join(CUR_HANDLER_PATH, this.handlerConfigName);
-
-    // 注意：handler 的 config.json 可能不存在，此时需要提示错误
-    // 我们需要有个配置文件，用于指导如何匹配规则，因此是必须的
-    if (!fs.existsSync(CUR_HANDLER_CONFIG)) {
-      console.error(CUR_HANDLER_CONFIG + ' is not exist!');
+    let curDefinedHandler = this.getDefinedHandler(handlerName);
+    if (!curDefinedHandler || !curDefinedHandler.config) {
+      console.error(handlerName + ' invalid!', curDefinedHandler);
       return null;
     }
-
-    let handlerConfigData = store.getDB(CUR_HANDLER_CONFIG).getState();
 
     //===============================================================
     // 3. 以一定的方式， 获取 handler 模块最终信息
     //===============================================================
-    let handlerData = parserUtil.getMixinHandlerData(handlerName, handlerConfigData, cacheData);
+    let handlerData = parserUtil.getMixinHandlerData(handlerName, curDefinedHandler.config, cacheData);
 
     // TODO 如果匹配规则一模一样，需要进行警告提示！！！！！
     if (!handlerData) {
@@ -139,10 +148,10 @@ export default class HandlerParser {
     //===============================================================
     // 4. 获取当前的 handler 下的 handle_modules 列表，或者 index.js/index.json
     //===============================================================
-    const CUR_HANDLE_MODULE_PATH = path.join(CUR_HANDLER_PATH, this.handleModulesFolderName);
-
+    const CUR_HANDLER_PATH = path.join(this.basePath, handlerName);
     let modules = [];
-    if (!fs.existsSync(CUR_HANDLE_MODULE_PATH)) {
+
+    if (!curDefinedHandler.handleModules.length) {
       // 如果没有 handle_modules 文件夹，则使用 index.js 或者 index.json，且将其设置为默认
       let indexModule = {
         name: 'index_module',
@@ -164,29 +173,9 @@ export default class HandlerParser {
       modules.push(indexModule);
 
     } else {
-      fsHandler.search.getAll(CUR_HANDLE_MODULE_PATH, { globs: ['*'] }).forEach((item) => {
-        // 获取各个 handle_module 中 config.json 的数据
-        let handleModuleConfigDBState = {};
-        let curHandleModuleName = '';
-
-        if (item.isDirectory()) {
-          // 获取模块名
-          curHandleModuleName = path.basename(item.relativePath);
-
-          // 如果 handle_module 是一个目录，则需要去检查其是否存在 config.json 文件，优先使用它
-          // config.json 的作用是用于用户自定义，拥有最高的优先级
-          let CUR_HANDLE_MODULE_CONFIG = path.join(CUR_HANDLE_MODULE_PATH, curHandleModuleName, this.handleModuleConfigName);
-
-          if (fs.existsSync(CUR_HANDLE_MODULE_CONFIG)) {
-            handleModuleConfigDBState = store.getDB(CUR_HANDLE_MODULE_CONFIG).getState();
-          }
-        } else {
-          // 获取模块名
-          curHandleModuleName = path.basename(item.relativePath, path.extname(item.relativePath));
-        }
-
+      curDefinedHandler.handleModules.forEach((item) => {
         // 获取最后处理之后的数据
-        let curHandleModuleData = parserUtil.getMixinHandleModuleData(curHandleModuleName, handleModuleConfigDBState);
+        let curHandleModuleData = parserUtil.getMixinHandleModuleData(item.name, item.config || {});
 
         modules.push(curHandleModuleData);
       });
@@ -260,7 +249,9 @@ export default class HandlerParser {
       return Promise.reject('Could not get reqInfo by route=' + route + ' and params=' + JSON.stringify(params));
     }
 
-    return fsHandler.handle.getModuleResult(reqInfoByRoute.fullPath, reqInfoByRoute.params, req)
+    console.log('==reqInfoByRoute==', reqInfoByRoute);
+
+    return fsHandler.handle.getTargetResult(reqInfoByRoute.requiredModule, reqInfoByRoute.params, req)
       .then((data) => {
         return {
           data: data,
@@ -319,11 +310,16 @@ export default class HandlerParser {
     // 还有部分参数在 handle_module 的 query 字段中，需要合并请求
     let reqParams = _.merge({}, handleModuleInfo.query, params);
 
+    let definedHandleModule = this.getDefinedHandleModule(handlerInfo.name, handleModuleInfo.name);
+    let requiredModule = definedHandleModule ? definedHandleModule.module : null;
+
     return {
       handlerInfo: handlerInfo,
       handleModuleInfo: handleModuleInfo,
       fullPath: moduleFullPath,
-      params: reqParams
+      params: reqParams,
+      definedHandleModule: definedHandleModule,
+      requiredModule: requiredModule
     };
   }
 
@@ -348,7 +344,12 @@ export default class HandlerParser {
    * 获取指定 handler 的 README 信息
    */
   getReadMeContent(handlerName) {
-    let curMockerPath = path.join(this.basePath, handlerName);
+    let curDefinedHandler = this.getDefinedHandler(handlerName);
+    if (!curDefinedHandler) {
+      return '异常错误，找不到对应信息！handlerName=' + handlerName;
+    }
+
+    let curMockerPath = curDefinedHandler.PATH;
 
     let handlerReadMeFile = path.join(curMockerPath, 'readme.md');
     if (!fs.existsSync(handlerReadMeFile)) {
@@ -378,11 +379,38 @@ export default class HandlerParser {
     try {
       let content = fs.readFileSync(handlerReadMeFile, 'utf8');
 
-      content = content.replace(/__STATIC_PATH__/g, handlerName);
+      content = content.replace(/__STATIC_PATH__/g, handlerName + '/static');
 
       return marked(content);
     } catch (e) {
       return e.stack;
+    }
+  }
+
+  /**
+   * 获取序列化处理之后的 handler 信息
+   * @param handlerName
+   * @return {*}
+   */
+  getDefinedHandler(handlerName) {
+    try {
+      return this.definedHandlers.filter(item => item.name === handlerName)[0];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
+   * 获取序列化之后 handle_module
+   * @param handlerName
+   * @param moduleName
+   * @return {null}
+   */
+  getDefinedHandleModule(handlerName, moduleName) {
+    try {
+      return this.getDefinedHandler(handlerName).handleModules.filter(item => item.name === moduleName)[0];
+    } catch (e) {
+      return null;
     }
   }
 
