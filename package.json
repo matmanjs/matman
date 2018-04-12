@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm run compile && node ./demo/entry.js",
     "server-babel": "babel-node ./demo/02_mocker_advanced/entry.js",
+    "mytest": "node ./tmp/watch-file.js",
     "tmp-babel": "babel-node ./tmp/dbtest.js",
     "compile": "babel --presets es2015-loose,stage-1 --plugins transform-runtime src/ --out-dir lib/ --source-maps",
     "webpack": "webpack --watch",
@@ -74,6 +75,7 @@
     "superagent": "^3.8.2",
     "update-notifier": "^2.4.0",
     "url": "^0.11.0",
+    "watchpack": "^1.5.0",
     "yargs": "^8.0.2"
   },
   "devDependencies": {
