@@ -60,7 +60,7 @@ module.exports = (opts) => {
   configOpts.HANDLERS_PATH = path.join(configOpts.APP_PATH, configOpts.HANDLERS_RELATIVE_PATH);
 
   // 是否 watch 文件变动
-  configOpts.shouldWatchFile = configOpts.shouldWatchFile || false;
+  configOpts.shouldWatch = configOpts.shouldWatch || (process.env.NODE_ENV === 'development') || false;
 
   // babel 编译
   babelCompileDirectory(configOpts.SRC_PATH, configOpts.APP_PATH);
@@ -132,7 +132,7 @@ module.exports = (opts) => {
     console.log('matman server is running');
     matmanLogger.info('matman server is running');
 
-    if (configOpts.shouldWatchFile) {
+    if (configOpts.shouldWatch) {
       matmanLogger.info('watching files...');
 
       util.watch([], [configOpts.SRC_PATH], [], {}, function (err, filesModified, dirsModified, missingCreated, fileTimestamps, dirTimestamps) {
