@@ -20,6 +20,7 @@
         {
           "description": "错误：未登录",
           "priority": 0,
+          "delay": 0,
           "version": "0.0.1",
           "name": "error_not_login",
           "query": {
@@ -29,6 +30,7 @@
         {
           "description": "根据请求自动返回相应的type",
           "priority": 0,
+          "delay": 0,
           "version": "0.0.1",
           "name": "success_depend_on_request",
           "query": {
@@ -38,6 +40,7 @@
         {
           "description": "获取简单的数据",
           "priority": 0,
+          "delay": 0,
           "version": "0.0.1",
           "name": "success_type_0",
           "query": {
@@ -47,6 +50,7 @@
         {
           "description": "获取更多丰富的数据",
           "priority": 0,
+          "delay": 0,
           "version": "0.0.1",
           "name": "success_type_1",
           "query": {
@@ -72,6 +76,7 @@
         {
           "description": "错误：未登录",
           "priority": 0,
+          "delay": 0,
           "version": "0.0.1",
           "name": "error_not_login",
           "query": {
@@ -81,6 +86,7 @@
         {
           "description": "根据请求自动返回相应的type",
           "priority": 0,
+          "delay": 0,
           "version": "0.0.1",
           "name": "success_depend_on_request",
           "query": {
@@ -90,6 +96,7 @@
         {
           "description": "获取简单的数据",
           "priority": 0,
+          "delay": 0,
           "version": "0.0.1",
           "name": "success_type_0",
           "query": {
@@ -97,8 +104,19 @@
           }
         },
         {
+          "description": "获取简单的数据",
+          "priority": 0,
+          "delay": 2000,
+          "version": "0.0.1",
+          "name": "success_type_0_delay_2000",
+          "query": {
+            "_m_target": "success_type_0_delay_2000"
+          }
+        },
+        {
           "description": "获取更多丰富的数据",
           "priority": 0,
+          "delay": 0,
           "version": "0.0.1",
           "name": "success_type_1",
           "query": {

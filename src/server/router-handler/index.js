@@ -99,7 +99,7 @@ module.exports = (entry) => {
         return item._m_name === handlerData.name;
       })[0];
 
-      console.log('====matchedReferer=====', matchedReferer);
+      // console.log('====matchedReferer=====', matchedReferer);
 
       if (matchedReferer) {
         // referer 里面的请求参数拥有最高优先级，因为这种场景比较特殊，主要用于自动化测试之用
@@ -133,7 +133,18 @@ module.exports = (entry) => {
           .then((result) => {
             res.append('matman-handler', result.extra.handlerInfo.name);
             res.append('matman-handle-module', result.extra.handleModuleInfo.name);
-            res.jsonp(result.data);
+
+            // 延时返回
+            let delay = result.extra.handleModuleInfo.delay || 0;
+            res.append('matman-delay', delay + '');
+
+            if (delay) {
+              setTimeout(() => {
+                res.jsonp(result.data);
+              }, delay);
+            } else {
+              res.jsonp(result.data);
+            }
           })
           .catch((err) => {
             // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
