@@ -9,6 +9,8 @@ import success_depend_on_request_config from './handle_modules/success_depend_on
 import success_depend_on_request from './handle_modules/success_depend_on_request'
 import success_type_0_config from './handle_modules/success_type_0/config.json';
 import success_type_0 from './handle_modules/success_type_0'
+import success_type_0_delay_2000_config from './handle_modules/success_type_0_delay_2000/config.json';
+import success_type_0_delay_2000 from './handle_modules/success_type_0_delay_2000'
 import success_type_1_config from './handle_modules/success_type_1/config.json';
 import success_type_1 from './handle_modules/success_type_1'
-export const handleModules = [{name: 'error_not_login', module: error_not_login, config: error_not_login_config},{name: 'success_depend_on_request', module: success_depend_on_request, config: success_depend_on_request_config},{name: 'success_type_0', module: success_type_0, config: success_type_0_config},{name: 'success_type_1', module: success_type_1, config: success_type_1_config}]
+export const handleModules = [{name: 'error_not_login', module: error_not_login, config: error_not_login_config},{name: 'success_depend_on_request', module: success_depend_on_request, config: success_depend_on_request_config},{name: 'success_type_0', module: success_type_0, config: success_type_0_config},{name: 'success_type_0_delay_2000', module: success_type_0_delay_2000, config: success_type_0_delay_2000_config},{name: 'success_type_1', module: success_type_1, config: success_type_1_config}]
