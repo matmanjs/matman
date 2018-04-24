@@ -1,0 +1,8 @@
+export const isSerialized = true;
+export const PATH = __dirname;
+import config from './config';
+export config from './config';
+export const name = config.name || 'demo_simple';
+import error from './handle_modules/error'
+import success from './handle_modules/success'
+export const handleModules = [{name: 'error', module: error, config: null},{name: 'success', module: success, config: null}]
