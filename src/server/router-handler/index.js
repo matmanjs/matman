@@ -133,8 +133,18 @@ module.exports = (entry) => {
           .then((result) => {
             res.append('matman-handler', result.extra.handlerInfo.name);
             res.append('matman-handle-module', result.extra.handleModuleInfo.name);
-            res.append('matman-delay', result.extra.handleModuleInfo.delay);
-            res.jsonp(result.data);
+
+            // 延时返回
+            let delay = result.extra.handleModuleInfo.delay || 0;
+            res.append('matman-delay', delay + '');
+
+            if (delay) {
+              setTimeout(() => {
+                res.jsonp(result.data);
+              }, delay);
+            } else {
+              res.jsonp(result.data);
+            }
           })
           .catch((err) => {
             // 注意 err 有可能是 Error 对象，也可能是普通的字符串或对象
