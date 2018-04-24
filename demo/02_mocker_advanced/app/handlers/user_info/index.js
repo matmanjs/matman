@@ -31,9 +31,17 @@ var _success_type_ = require('./handle_modules/success_type_0');
 
 var _success_type_2 = _interopRequireDefault(_success_type_);
 
-var _config10 = require('./handle_modules/success_type_1/config.json');
+var _config10 = require('./handle_modules/success_type_0_delay_2000/config.json');
 
 var _config11 = _interopRequireDefault(_config10);
+
+var _success_type_0_delay_ = require('./handle_modules/success_type_0_delay_2000');
+
+var _success_type_0_delay_2 = _interopRequireDefault(_success_type_0_delay_);
+
+var _config12 = require('./handle_modules/success_type_1/config.json');
+
+var _config13 = _interopRequireDefault(_config12);
 
 var _success_type_3 = require('./handle_modules/success_type_1');
 
@@ -45,4 +53,4 @@ var isSerialized = exports.isSerialized = true;
 var PATH = exports.PATH = __dirname;
 exports.config = _config3.default;
 var name = exports.name = _config3.default.name || 'user_info';
-var handleModules = exports.handleModules = [{ name: 'error_not_login', module: _error_not_login2.default, config: _config5.default }, { name: 'success_depend_on_request', module: _success_depend_on_request2.default, config: _config7.default }, { name: 'success_type_0', module: _success_type_2.default, config: _config9.default }, { name: 'success_type_1', module: _success_type_4.default, config: _config11.default }];
+var handleModules = exports.handleModules = [{ name: 'error_not_login', module: _error_not_login2.default, config: _config5.default }, { name: 'success_depend_on_request', module: _success_depend_on_request2.default, config: _config7.default }, { name: 'success_type_0', module: _success_type_2.default, config: _config9.default }, { name: 'success_type_0_delay_2000', module: _success_type_0_delay_2.default, config: _config11.default }, { name: 'success_type_1', module: _success_type_4.default, config: _config13.default }];
