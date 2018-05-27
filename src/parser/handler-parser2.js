@@ -13,8 +13,8 @@ const parserUtil = require('./parser-util');
 
 export default class HandlerParser {
   constructor(entry) {
-    this.appHandlerPath = path.join(entry.APP_PATH, entry.HANDLERS_RELATIVE_PATH);
-    this.srcHandlerPath = path.join(entry.SRC_PATH, entry.HANDLERS_RELATIVE_PATH);
+    this.appHandlerPath = path.join(entry.APP_PATH, entry.MOCKER_BASE_PATH,  entry.HANDLERS_RELATIVE_PATH);
+    this.srcHandlerPath = path.join(entry.SRC_PATH,  entry.MOCKER_BASE_PATH, entry.HANDLERS_RELATIVE_PATH);
     this.basePath = this.appHandlerPath;
     this.definedHandlers = [...entry.definedHandlers];
 

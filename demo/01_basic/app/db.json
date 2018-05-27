@@ -1,7 +1,7 @@
 {
-  "basePath": "D:\\gitprojects\\matman\\demo\\01_basic\\app\\handlers",
-  "srcHandlerPath": "D:\\gitprojects\\matman\\demo\\01_basic\\src\\handlers",
-  "appHandlerPath": "D:\\gitprojects\\matman\\demo\\01_basic\\app\\handlers",
+  "basePath": "/Users/helinjiang/gitprojects/matman/demo/01_basic/app/mocker/handlers",
+  "srcHandlerPath": "/Users/helinjiang/gitprojects/matman/demo/01_basic/src/mocker/handlers",
+  "appHandlerPath": "/Users/helinjiang/gitprojects/matman/demo/01_basic/app/mocker/handlers",
   "data": [
     {
       "description": "description_demo_plugin_mocker",
@@ -20,6 +20,7 @@
         {
           "description": "error",
           "priority": 0,
+          "delay": 0,
           "name": "error",
           "query": {
             "_m_target": "error"
@@ -28,6 +29,7 @@
         {
           "description": "success_1",
           "priority": 0,
+          "delay": 0,
           "name": "success_1",
           "query": {
             "_m_target": "success_1"
@@ -36,6 +38,7 @@
         {
           "description": "success_2",
           "priority": 0,
+          "delay": 0,
           "name": "success_2",
           "query": {
             "_m_target": "success_2"
@@ -44,6 +47,7 @@
         {
           "description": "description_success_3",
           "priority": 100,
+          "delay": 0,
           "name": "success_3",
           "query": {
             "_m_target": "success_3"
@@ -52,73 +56,12 @@
         {
           "description": "success_4",
           "priority": 10,
+          "delay": 0,
           "query": {
             "type": 1,
             "_m_target": "success_4"
           },
           "name": "success_4"
-        }
-      ]
-    },
-    {
-      "description": "demo_plugin_reporter",
-      "disable": false,
-      "method": "get",
-      "priority": 0,
-      "plugin": "reporter",
-      "route": "/cgi-bin/a/b/demo_plugin_reporter",
-      "name": "demo_plugin_reporter",
-      "activeModule": "error",
-      "tags": [
-        "全部"
-      ],
-      "modules": [
-        {
-          "description": "error",
-          "priority": 0,
-          "name": "error",
-          "query": {
-            "_m_target": "error"
-          }
-        },
-        {
-          "description": "success",
-          "priority": 0,
-          "name": "success",
-          "query": {
-            "_m_target": "success"
-          }
-        }
-      ]
-    },
-    {
-      "description": "demo_plugin_stub",
-      "disable": false,
-      "method": "get",
-      "priority": 0,
-      "plugin": "stub",
-      "route": "/cgi-bin/a/b/demo_plugin_stub",
-      "name": "demo_plugin_stub",
-      "activeModule": "error",
-      "tags": [
-        "全部"
-      ],
-      "modules": [
-        {
-          "description": "error",
-          "priority": 0,
-          "name": "error",
-          "query": {
-            "_m_target": "error"
-          }
-        },
-        {
-          "description": "success",
-          "priority": 0,
-          "name": "success",
-          "query": {
-            "_m_target": "success"
-          }
         }
       ]
     },
@@ -138,6 +81,7 @@
         {
           "description": "error",
           "priority": 0,
+          "delay": 0,
           "name": "error",
           "query": {
             "_m_target": "error"
@@ -146,6 +90,7 @@
         {
           "description": "success",
           "priority": 0,
+          "delay": 0,
           "name": "success",
           "query": {
             "_m_target": "success"
