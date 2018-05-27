@@ -1,7 +1,7 @@
 {
   "name": "matman",
-  "version": "1.5.1",
-  "description": "mock service and tester assistant",
+  "version": "2.0.0",
+  "description": "mock service and test assistant",
   "main": "lib/index.js",
   "scripts": {
     "start": "npm run compile && node ./demo/entry.js",
