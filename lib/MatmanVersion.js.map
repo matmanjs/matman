@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/MatmanVersion.js"],"names":["module","exports"],"mappings":"AAAA;;AAEAA,OAAOC,OAAP,GAAiB,OAAjB","file":"MatmanVersion.js","sourcesContent":["'use strict';\n\nmodule.exports = '1.2.1';"]}
+{"version":3,"sources":["../src/MatmanVersion.js"],"names":["module","exports","require","version"],"mappings":"AAAA;;AAEAA,OAAOC,OAAP,GAAiBC,QAAQ,iBAAR,EAA2BC,OAA5C","file":"MatmanVersion.js","sourcesContent":["'use strict';\n\nmodule.exports = require('../package.json').version;"]}
