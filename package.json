@@ -9,7 +9,7 @@
     "compile": "babel --presets es2015-loose,stage-1 --plugins transform-runtime src/ --out-dir lib/ --source-maps",
     "webpack": "webpack --watch",
     "webpack.build": "webpack",
-    "prepublish": "npm run compile && npm run webpack.build",
+    "prepublishOnly": "npm run compile && npm run webpack.build",
     "commitmsg": "validate-commit-msg",
     "commit": "git-cz ",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
@@ -78,7 +78,6 @@
     "yargs": "^8.0.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^6.2.1",
