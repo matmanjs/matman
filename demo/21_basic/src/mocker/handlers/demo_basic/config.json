@@ -1,0 +1,6 @@
+{
+  "name": "name_demo_plugin_mocker",
+  "description": "description_demo_plugin_mocker",
+  "route": "/cgi-bin/a/b/demo_plugin_mocker",
+  "defaultModule": "success_1"
+}
