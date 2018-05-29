@@ -1,4 +1,4 @@
-const baseCgi = require('../../base-cgi');
+const baseCgi = require('../../lib/base-cgi');
 
 const defaultResult = {
     result: 0,
