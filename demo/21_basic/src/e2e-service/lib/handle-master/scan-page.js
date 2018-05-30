@@ -1,5 +1,5 @@
-import { WebEventRecorder } from 'nightmare-handler';
-import ActionHandle from './action-handle';
+const { WebEventRecorder } = require('nightmare-handler');
+const ActionHandle = require('./action-handle');
 
 /**
  * 适合简单的页面扫描场景，无交互行为。
@@ -11,7 +11,7 @@ import ActionHandle from './action-handle';
  * @param {Boolean} [params.useRecorder] 是否需要记录器
  * @returns {Promise<*>}
  */
-export default function scanPage(pageUrl, preloadClientScriptPath, opts = {}, params = {}) {
+function scanPage(pageUrl, preloadClientScriptPath, opts = {}, params = {}) {
     let actionHandle = new ActionHandle(pageUrl, preloadClientScriptPath, opts);
 
     // 使用记录器
@@ -40,4 +40,4 @@ export default function scanPage(pageUrl, preloadClientScriptPath, opts = {}, pa
         });
 }
 
-
+module.exports = scanPage;

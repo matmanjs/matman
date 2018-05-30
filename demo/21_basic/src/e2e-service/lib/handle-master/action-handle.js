@@ -1,10 +1,9 @@
 /**
  * 通用的流程
  */
+const { NightmarePlus } = require('nightmare-handler');
 
-import { NightmarePlus } from 'nightmare-handler';
-
-export default class ActionHandle {
+class ActionHandle {
     /**
      * 构造函数
      *
@@ -192,3 +191,5 @@ function getMainUrl(url) {
         return arr2[0];
     }
 }
+
+module.exports = ActionHandle;
