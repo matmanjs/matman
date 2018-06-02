@@ -1,6 +1,6 @@
+const MockModule = require('../../../../../src/mocker/MockModule');
+
 const config = require('./config');
-const error = require('./mock_modules/error');
-const success = require('./mock_modules/success');
 
 /**
  * 是否序列化之后的标准 mocker 模块
@@ -24,20 +24,16 @@ const name = config.name || 'demo_simple';
  * mock module 配置列表
  * @type {Array}
  */
-const mockModuleList = [{
-    name: 'error',
-    module: error,
-    config: null
-}, {
-    name: 'success',
-    module: success,
-    config: null
-}];
+const mockModuleList = [];
+
+mockModuleList.push(new MockModule('error', require('./mock_modules/error')));
+mockModuleList.push(new MockModule('success', require('./mock_modules/success')));
 
 module.exports = {
     name: name,
     isSerialized: isSerialized,
     ROOT_PATH: ROOT_PATH,
+    config: config,
     mockModuleList: mockModuleList
 };
 

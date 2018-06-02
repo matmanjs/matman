@@ -12,3 +12,4 @@ console.log(mockerList);
 console.log(mockerParser.getMockerByName('demo_simple'));
 console.log(mockerParser.getMockModuleByName('demo_simple', 'error'));
 console.log(mockerParser.getMockModuleByName('demo_simple', 'success'));
+console.log(mockerParser.getMockModuleByName('demo_simple', 'success').module);
