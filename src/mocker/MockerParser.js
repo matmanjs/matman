@@ -21,6 +21,8 @@ class MockerParser {
      * @return {Array}
      */
     getAllMocker(isReset) {
+        let mockerArr = [];
+
         // 1. 获取所有的 handler
         fsHandler.search.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
             // 限制只处理文件夹类型的，不允许在 basePath 目录下有非文件夹的存在
@@ -32,12 +34,40 @@ class MockerParser {
             // 模块名字，默认取文件名，
             // 在根目录下，每个子文件夹就是一个 mocker 单位，其名字即为文件夹名字
             let name = path.basename(item.relativePath);
+            console.log('\n找到 mocker ：', name, item);
 
-            console.log('找到 mocker ：', name);
+            // 获得 require 这个模块的相对路径
+            let requirePath = getRequirePath(path.join(this.basePath, item.relativePath));
+            console.log('requirePath ：', requirePath);
 
+            mockerArr.push(require(requirePath));
         });
 
+        return mockerArr;
     }
+}
+
+/**
+ * 获得传递给 require 的模块路径，相对于当前文件
+ *
+ * @param {String} absolutePath 绝对路径
+ * @returns {String}
+ */
+function getRequirePath(absolutePath) {
+    // 获得 require 这个模块的相对路径
+    let relativePath = path.relative(__dirname, absolutePath);
+
+    // 注意，path.relative 方法返回的结果中，如果是相对当前目录的，则其会把 './' 去掉，
+    // 例如， './path/a/b' 会被返回 'path/a/b'
+    // 此时如果 require('path/a/b') ，node 会先去 node_modules 模块寻找，
+    // 而不是当前目录去寻找，修改为 require('./path/a/b') 就不会有这样问题，
+    // 因此，这种情况下一定要补上一个 './'，
+    if (relativePath.indexOf('..') < 0) {
+        relativePath = './' + relativePath;
+    }
+
+    // 需要将“\”替换为“/”，因为 require 语法中模块的路径是以 "/" 来分目录层级的
+    return relativePath.replace(/\\/gi, '/');
 }
 
 module.exports = MockerParser;
