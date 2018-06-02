@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/helinjiang/matman.git"
+    "url": "git+https://github.com/matmanjs/matman.git"
   },
   "keywords": [
     "mock",
@@ -26,7 +26,7 @@
   "author": "helinjiang",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/helinjiang/matman/issues"
+    "url": "https://github.com/matmanjs/matman/issues"
   },
   "dependencies": {
     "babel-d": "^0.1.5",
