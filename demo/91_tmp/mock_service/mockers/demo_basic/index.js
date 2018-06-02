@@ -1,4 +1,5 @@
 const MockModule = require('../../../../../src/mocker/MockModule');
+const MockerConfig = require('../../../../../src/mocker/MockerConfig');
 
 const config = require('./config');
 
@@ -36,7 +37,7 @@ module.exports = {
     name: name,
     isSerialized: isSerialized,
     ROOT_PATH: ROOT_PATH,
-    config: config,
+    config: new MockerConfig(name, config),
     mockModuleList: mockModuleList
 };
 
