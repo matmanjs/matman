@@ -26,10 +26,12 @@ const name = config.name || 'demo_simple';
  */
 const mockModules = [{
     name: 'error',
-    module: error
+    module: error,
+    config: null
 }, {
     name: 'success',
-    module: success
+    module: success,
+    config: null
 }];
 
 module.exports = {

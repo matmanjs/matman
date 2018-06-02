@@ -17,11 +17,11 @@ class MockerParser {
     /**
      * 获取所有的 mocker 信息
      *
-     * @param {boolean} [isReset] 是否为重置，如果为 true，则将忽略缓存数据
+     * @param {Boolean} [isReset] 是否为重置，如果为 true，则将忽略缓存数据
      * @return {Array}
      */
     getAllMocker(isReset) {
-        let mockerArr = [];
+        let mockerList = [];
 
         // 1. 获取所有的 handler
         fsHandler.search.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
@@ -33,17 +33,47 @@ class MockerParser {
 
             // 模块名字，默认取文件名，
             // 在根目录下，每个子文件夹就是一个 mocker 单位，其名字即为文件夹名字
-            let name = path.basename(item.relativePath);
-            console.log('\n找到 mocker ：', name, item);
+            // let name = path.basename(item.relativePath);
+            // console.log('\n找到 mocker ：', name, item);
 
             // 获得 require 这个模块的相对路径
             let requirePath = getRequirePath(path.join(this.basePath, item.relativePath));
-            console.log('requirePath ：', requirePath);
+            // console.log('requirePath ：', requirePath);
 
-            mockerArr.push(require(requirePath));
+            mockerList.push(require(requirePath));
         });
 
-        return mockerArr;
+        // TODO 2018/6/2 helinjiang: 如果isReset=true，则还需要及时更新到 this.matmanMockers
+        // TODO 2018/6/2 helinjiang: 还要返回 this.matmanMockers 中数据
+
+        return mockerList;
+    }
+
+    /**
+     * 通过名字获取指定的 mocker
+     *
+     * @param {String} mockerName 名字
+     * @param {Boolean} [isReset] 是否为重置，如果为 true，则将忽略缓存数据
+     * @return {Object} MatmanMocker 对象
+     */
+    getMockerByName(mockerName, isReset){
+        let mockerList = this.getAllMocker(isReset);
+
+        return mockerList.filter((item)=>{
+            return item.name === mockerName
+        })[0]
+    }
+
+    /**
+     * 通过名字获取指定的 mock module
+     *
+     * @param {String} mockerName mocker 名字
+     * @param {String} mockModuleName mock module 名字
+     * @param {Boolean} [isReset] 是否为重置，如果为 true，则将忽略缓存数据
+     * @return {Object} MatmanMockModule 对象
+     */
+    getMockModuleByName(mockerName, mockModuleName, isReset) {
+
     }
 }
 

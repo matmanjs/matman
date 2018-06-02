@@ -6,4 +6,7 @@ const mockerParser = new MockerParser({
     basePath: path.join(__dirname, './mock_service/mockers')
 });
 
-console.log(mockerParser.getAllMocker())
+let mockerList = mockerParser.getAllMocker();
+
+console.log(mockerList)
+console.log(mockerParser.getMockerByName('demo_simple'))
