@@ -35,6 +35,7 @@ class MockerConfig {
         this.disable = config.disable || false;
 
         // 当前激活的 mock module 名字
+        // TODO 如果没有配置 defaultModule，则需要设置默认的值，使之不能够为空
         this.activeModule = config.activeModule || config.defaultModule || '';
 
         // http 请求方式，包括 get(默认) 和 post
