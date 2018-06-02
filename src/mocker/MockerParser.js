@@ -56,12 +56,12 @@ class MockerParser {
      * @param {Boolean} [isReset] 是否为重置，如果为 true，则将忽略缓存数据
      * @return {Object} MatmanMocker 对象
      */
-    getMockerByName(mockerName, isReset){
+    getMockerByName(mockerName, isReset) {
         let mockerList = this.getAllMocker(isReset);
 
-        return mockerList.filter((item)=>{
-            return item.name === mockerName
-        })[0]
+        return mockerList.filter((item) => {
+            return item.name === mockerName;
+        })[0];
     }
 
     /**
@@ -73,7 +73,17 @@ class MockerParser {
      * @return {Object} MatmanMockModule 对象
      */
     getMockModuleByName(mockerName, mockModuleName, isReset) {
+        let mocker = this.getMockerByName(mockerName, isReset);
 
+        // 有可能找不到 mocker
+        if (!mocker) {
+            console.error('Can not find mock module!', mockerName, mockModuleName);
+            return null;
+        }
+
+        return mocker.mockModuleList.filter((item) => {
+            return item.name === mockModuleName;
+        })[0];
     }
 }
 

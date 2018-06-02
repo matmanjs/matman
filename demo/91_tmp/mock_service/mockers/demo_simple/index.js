@@ -24,7 +24,7 @@ const name = config.name || 'demo_simple';
  * mock module 配置列表
  * @type {Array}
  */
-const mockModules = [{
+const mockModuleList = [{
     name: 'error',
     module: error,
     config: null
@@ -38,6 +38,6 @@ module.exports = {
     name: name,
     isSerialized: isSerialized,
     ROOT_PATH: ROOT_PATH,
-    mockModules: mockModules
+    mockModuleList: mockModuleList
 };
 
