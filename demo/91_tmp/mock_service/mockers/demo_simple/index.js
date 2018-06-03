@@ -34,7 +34,7 @@ module.exports = {
     name: name,
     isSerialized: isSerialized,
     ROOT_PATH: ROOT_PATH,
-    config: new MockerConfig(name, config),
+    config: new MockerConfig(name, config, mockModuleList),
     mockModuleList: mockModuleList
 };
 
