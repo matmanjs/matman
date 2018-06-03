@@ -40,5 +40,45 @@ describe.only('./mocker/MockerConfig.js', () => {
             });
         });
     });
+
+    describe('check simple.json', () => {
+        it('should equal correct value', () => {
+            let mockerConfig = new MockerConfig('simple', require('../../data/fixtures/mocker-config/simple'), mockModuleList);
+
+            expect(mockerConfig).to.eql({
+                name: 'simple',
+                route: '/cgi-bin/a/b/simple',
+                description: 'simple example description',
+                disable: false,
+                defaultModule: '',
+                activeModule: 'return-plain-object',
+                method: 'get',
+                priority: 0,
+                tags: ['全部']
+            });
+        });
+    });
+
+    describe('check basic.json', () => {
+        it('should equal correct value', () => {
+            let mockerConfig = new MockerConfig('basic', require('../../data/fixtures/mocker-config/basic'), mockModuleList);
+
+            expect(mockerConfig).to.eql({
+                name: 'basic',
+                route: '/cgi-bin/a/b/basic',
+                description: 'basic example description',
+                disable: true,
+                defaultModule: 'exist-config',
+                activeModule: 'exist-config',
+                method: 'post',
+                priority: 88,
+                tags: [
+                    '全部',
+                    '标签1',
+                    '标签2'
+                ]
+            });
+        });
+    });
 });
 

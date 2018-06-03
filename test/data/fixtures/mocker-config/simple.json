@@ -1,3 +1,4 @@
 {
-  "route": "/cgi-bin/a/b/demo_simple"
+    "description": "simple example description",
+    "route": "/cgi-bin/a/b/simple"
 }
