@@ -1,43 +1,29 @@
-const MockModule = require('../../../../../src/mocker/MockModule');
-const MockerConfig = require('../../../../../src/mocker/MockerConfig');
+const Mocker = require('../../../../../src/mocker/Mocker');
 
-const config = require('./config');
+// 默认名字
+let defaultName = 'demo_basic';
 
-/**
- * 是否序列化之后的标准 mocker 模块
- * @type {Boolean}
- */
-const isSerialized = true;
+// mock module 的配置信息
+let modules = [{
+    name: 'success_2',
+    hasConfig: false
+}, {
+    name: 'success_3_renamed',
+    hasConfig: true
+}, {
+    name: 'success_4',
+    hasConfig: true
+}, {
+    name: 'error',
+    hasConfig: false
+}, {
+    name: 'success_1',
+    hasConfig: false
+}];
 
-/**
- * 该模块的根目录
- * @type {String}
- */
-const ROOT_PATH = __dirname;
+module.exports = new Mocker(__dirname, {
+    defaultName: defaultName,
+    modules: modules
+});
 
-/**
- * 模块名字，用于区别不同的模块，建议不重复
- * @type {String}
- */
-const name = config.name || 'demo_basic';
-
-/**
- * mock module 配置列表
- * @type {Array}
- */
-const mockModuleList = [];
-
-mockModuleList.push(new MockModule('success_2', require('./mock_modules/success_2')));
-mockModuleList.push(new MockModule('success_3', require('./mock_modules/success_3_renamed'), require('./mock_modules/success_3_renamed/config')));
-mockModuleList.push(new MockModule('success_4', require('./mock_modules/success_4'), require('./mock_modules/success_4/config')));
-mockModuleList.push(new MockModule('error', require('./mock_modules/error')));
-mockModuleList.push(new MockModule('success_1', require('./mock_modules/success_1')));
-
-module.exports = {
-    name: name,
-    isSerialized: isSerialized,
-    ROOT_PATH: ROOT_PATH,
-    config: new MockerConfig(name, config, mockModuleList),
-    mockModuleList: mockModuleList
-};
 

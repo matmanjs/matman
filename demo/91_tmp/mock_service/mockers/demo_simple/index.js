@@ -1,5 +1,9 @@
 const Mocker = require('../../../../../src/mocker/Mocker');
 
+// 默认名字
+let defaultName = 'demo_simple';
+
+// mock module 的配置信息
 let modules = [{
     name: 'error',
     hasConfig: false
@@ -9,7 +13,7 @@ let modules = [{
 }];
 
 module.exports = new Mocker(__dirname, {
-    defaultName: 'demo_simple',
+    defaultName: defaultName,
     modules: modules
 });
 
