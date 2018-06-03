@@ -13,7 +13,7 @@ class MockModuleConfig {
      * @param {Object} [config.query] 标记
      */
     constructor(mockModuleName, config = {}) {
-        // 名字，注意名字不能够再被修改
+        // 名字，注意名字不能够再被修改，即忽略 config.name
         this.name = mockModuleName;
 
         // 简要描述

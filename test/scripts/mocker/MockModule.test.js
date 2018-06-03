@@ -102,5 +102,32 @@ describe('./mocker/MockModule', () => {
         });
     });
 
+    describe('check no-config', () => {
+        it('should return correct value', () => {
+            let mockModule = new MockModule('no-config', require('../../data/fixtures/mock_modules/no-config'));
+
+            return mockModule.getResult()
+                .then((data) => {
+                    expect(data).to.eql({
+                        name: 'no-config',
+                        age: 16
+                    });
+                });
+        });
+    });
+
+    describe('check exist-config', () => {
+        it('should return correct value', () => {
+            let mockModule = new MockModule('exist-config', require('../../data/fixtures/mock_modules/exist-config'), require('../../data/fixtures/mock_modules/exist-config/config'));
+
+            return mockModule.getResult()
+                .then((data) => {
+                    expect(data).to.eql({
+                        name: 'exist-config',
+                        age: 16
+                    });
+                });
+        });
+    });
 });
 
