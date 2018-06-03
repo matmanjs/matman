@@ -25,7 +25,7 @@ class MockerConfig {
         this.route = config.route || '';
 
         // #57 可能route中不以 / 开头，此时需要增加之
-        if (this.route.indexOf('/') !== 0) {
+        if (this.route && this.route.indexOf('/') !== 0) {
             this.route = '/' + this.route;
         }
 
@@ -58,7 +58,7 @@ class MockerConfig {
         this.tags = _.union(['全部'], config.tags || []);
 
         // 最后更新的时间
-        this.lastModified = Date.now();
+        // this.lastModified = Date.now();
     }
 }
 
