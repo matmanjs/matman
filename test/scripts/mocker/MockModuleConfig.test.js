@@ -3,7 +3,7 @@ const expect = chai.expect;
 
 const MockModuleConfig = require('../../../src/mocker/MockModuleConfig');
 
-describe('./mocker/MockModuleConfig', () => {
+describe('./mocker/MockModuleConfig.js', () => {
     describe('check json-file.json', () => {
         let mockModuleConfig;
 
@@ -12,8 +12,8 @@ describe('./mocker/MockModuleConfig', () => {
             // console.log(mockModuleConfig);
         });
 
-        it('should return object', () => {
-            expect(mockModuleConfig).to.be.an('object');
+        it('should be instanceof MockModuleConfig ', () => {
+            expect(mockModuleConfig).to.be.an.instanceof(MockModuleConfig);
         });
 
         it('should contain some fields', () => {
