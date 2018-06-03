@@ -80,5 +80,27 @@ describe.only('./mocker/MockerConfig.js', () => {
             });
         });
     });
+
+    describe('check basic_02.json', () => {
+        it('should equal correct value', () => {
+            let mockerConfig = new MockerConfig('basic_02', require('../../data/fixtures/mocker-config/basic_02'), mockModuleList);
+
+            expect(mockerConfig).to.eql({
+                name: 'basic_02',
+                route: '',
+                description: 'basic_02',
+                disable: false,
+                defaultModule: 'exist-config',
+                activeModule: 'return-plain-object',
+                method: 'get',
+                priority: 0,
+                tags: [
+                    '全部',
+                    '标签1',
+                    '标签2'
+                ]
+            });
+        });
+    });
 });
 
