@@ -4,32 +4,34 @@ const expect = chai.expect;
 const MockModuleConfig = require('../../../src/mocker/MockModuleConfig');
 
 describe('./mocker/MockModuleConfig', () => {
-    describe('default value', () => {
-        let handleModuleInfo;
+    describe('check json-file.json', () => {
+        let mockModuleConfig;
 
         before(() => {
-            handleModuleInfo = parserUtil.getMixinHandleModuleData('default_value', {});
+            mockModuleConfig = new MockModuleConfig('json-file', require('../../data/fixtures/mock_modules/json-file'));
+            // console.log(mockModuleConfig);
         });
 
         it('should return object', () => {
-            expect(handleModuleInfo).to.be.an('object');
+            expect(mockModuleConfig).to.be.an('object');
         });
 
-        it('should contain default values', () => {
-            expect(handleModuleInfo).to.include({
-                name: 'default_value',
-                description: 'default_value',
+        it('should contain some fields', () => {
+            expect(mockModuleConfig).to.have.all.keys('name', 'description', 'priority', 'delay', 'query');
+        });
+
+        it('should equal value', () => {
+            expect(mockModuleConfig).to.eql({
+                name: 'json-file',
+                description: 'json-file',
                 priority: 0,
-            });
-        });
-
-        it('should contain property of query', () => {
-            expect(handleModuleInfo.query).to.include({
-                _m_target: 'default_value'
+                delay: 0,
+                query: {
+                    _m_target: 'json-file'
+                }
             });
         });
     });
 
-
-
 });
+
