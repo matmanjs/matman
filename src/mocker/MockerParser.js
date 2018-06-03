@@ -23,7 +23,7 @@ class MockerParser {
     getAllMocker(isReset) {
         let mockerList = [];
 
-        // 1. 获取所有的 handler
+        // 1. 获取所有的 mocker，约定：this.basePath 的每个子目录都是一个独立的 mocker
         fsHandler.search.getAll(this.basePath, { globs: ['*'] }).forEach((item) => {
             // 限制只处理文件夹类型的，不允许在 basePath 目录下有非文件夹的存在
             if (!item.isDirectory()) {
