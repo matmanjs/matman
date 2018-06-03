@@ -18,7 +18,7 @@ class MockerConfig {
      * @param {Array} [mockModuleList] mock module 数组
      */
     constructor(handlerName, config = {}, mockModuleList = []) {
-        // 名字，注意名字不能够再被修改
+        // 名字，注意名字不能够再被修改，即忽略 config.name
         this.name = handlerName;
 
         // 需要处理的路由，只有匹配到这个路由，才会被处理
