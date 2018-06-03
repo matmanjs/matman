@@ -2,6 +2,7 @@ const chai = require('chai');
 const expect = chai.expect;
 
 const MockModule = require('../../../src/mocker/MockModule');
+const MockModuleConfig = require('../../../src/mocker/MockModuleConfig');
 
 describe('./mocker/MockModule', () => {
     describe('check json-file.json', () => {
@@ -18,6 +19,10 @@ describe('./mocker/MockModule', () => {
 
         it('should contain some fields', () => {
             expect(mockModule).to.have.all.keys('name', 'module', 'config');
+        });
+
+        it('mockModule.config is instanceof MockModuleConfig ', () => {
+            expect(mockModule.config).to.be.an.instanceof(MockModuleConfig);
         });
 
         it('should return correct value', () => {
