@@ -15,8 +15,9 @@ class MockerConfig {
      * @param {String} [config.method] http 请求方式，包括 get(默认) 和 post
      * @param {Number} [config.priority] 管理后台列表中排序的权重，值越大则越排在前面
      * @param {Array} [config.tags] 标签，用于过滤，字符串数组
+     * @param {Array} [mockModuleList] mock module 数组
      */
-    constructor(handlerName, config = {}) {
+    constructor(handlerName, config = {}, mockModuleList = []) {
         // 名字，注意名字不能够再被修改
         this.name = handlerName;
 
@@ -32,11 +33,20 @@ class MockerConfig {
         this.description = config.description || this.name;
 
         // 此mocker是否为禁用状态，一旦设置为 true，则将忽略该mocker，而是去请求现网
+        // 该字段是可以被 CGI 修改的。
         this.disable = config.disable || false;
 
+        // 默认的的 mock module 名字
+        this.defaultModule = config.defaultModule || '';
+
         // 当前激活的 mock module 名字
-        // TODO 如果没有配置 defaultModule，则需要设置默认的值，使之不能够为空
-        this.activeModule = config.activeModule || config.defaultModule || '';
+        // 该字段是可以被 CGI 修改的。因此优先使用配置项中的 activeModule，其次才是 defaultModule
+        this.activeModule = config.activeModule || this.defaultModule;
+
+        // activeModule 如果不存在，则默认设置 mock module 列表中的第一个
+        if (!this.activeModule && mockModuleList && mockModuleList.length) {
+            this.activeModule = mockModuleList[0].name;
+        }
 
         // http 请求方式，包括 get(默认) 和 post
         this.method = config.method || 'get';
