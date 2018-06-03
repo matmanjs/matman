@@ -33,7 +33,7 @@ describe('./mocker/MockModuleConfig', () => {
         });
     });
 
-    describe('check return-function-promise', () => {
+    describe('check return-function-promise.js', () => {
         it('should equal correct value', () => {
             expect(new MockModuleConfig('return-function-promise')).to.eql({
                 name: 'return-function-promise',
@@ -47,7 +47,7 @@ describe('./mocker/MockModuleConfig', () => {
         });
     });
 
-    describe('check return-function-pure', () => {
+    describe('check return-function-pure.js', () => {
         it('should equal correct value', () => {
             expect(new MockModuleConfig('return-function-pure')).to.eql({
                 name: 'return-function-pure',
@@ -61,7 +61,7 @@ describe('./mocker/MockModuleConfig', () => {
         });
     });
 
-    describe('check return-function-with-param', () => {
+    describe('check return-function-with-param.js', () => {
         it('should equal correct value', () => {
             expect(new MockModuleConfig('return-function-with-param')).to.eql({
                 name: 'return-function-with-param',
@@ -75,7 +75,7 @@ describe('./mocker/MockModuleConfig', () => {
         });
     });
 
-    describe('check return-plain-object', () => {
+    describe('check return-plain-object.js', () => {
         it('should equal correct value', () => {
             expect(new MockModuleConfig('return-plain-object')).to.eql({
                 name: 'return-plain-object',
@@ -89,7 +89,7 @@ describe('./mocker/MockModuleConfig', () => {
         });
     });
 
-    describe('check return-promise', () => {
+    describe('check return-promise.js', () => {
         it('should equal correct value', () => {
             expect(new MockModuleConfig('return-promise')).to.eql({
                 name: 'return-promise',
