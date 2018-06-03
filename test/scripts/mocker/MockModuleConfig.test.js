@@ -8,7 +8,7 @@ describe('./mocker/MockModuleConfig', () => {
         let mockModuleConfig;
 
         before(() => {
-            mockModuleConfig = new MockModuleConfig('json-file', require('../../data/fixtures/mock_modules/json-file'));
+            mockModuleConfig = new MockModuleConfig('json-file');
             // console.log(mockModuleConfig);
         });
 
@@ -20,7 +20,7 @@ describe('./mocker/MockModuleConfig', () => {
             expect(mockModuleConfig).to.have.all.keys('name', 'description', 'priority', 'delay', 'query');
         });
 
-        it('should equal value', () => {
+        it('should equal correct value', () => {
             expect(mockModuleConfig).to.eql({
                 name: 'json-file',
                 description: 'json-file',
@@ -37,7 +37,7 @@ describe('./mocker/MockModuleConfig', () => {
         let mockModuleConfig;
 
         before(() => {
-            mockModuleConfig = new MockModuleConfig('return-function-promise', require('../../data/fixtures/mock_modules/return-function-promise'));
+            mockModuleConfig = new MockModuleConfig('return-function-promise');
             // console.log(mockModuleConfig);
         });
 
@@ -49,7 +49,7 @@ describe('./mocker/MockModuleConfig', () => {
             expect(mockModuleConfig).to.have.all.keys('name', 'description', 'priority', 'delay', 'query');
         });
 
-        it('should equal value', () => {
+        it('should equal correct value', () => {
             expect(mockModuleConfig).to.eql({
                 name: 'return-function-promise',
                 description: 'return-function-promise',
