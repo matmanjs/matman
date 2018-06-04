@@ -45,12 +45,10 @@ class Mocker {
             let module = require(requireModulePath);
 
             // 是否存在配置文件
-            let hasConfig = false;
+            let config;
             if (item.isDirectory() && (fs.existsSync(path.join(requireModulePath, 'config.json')) || fs.existsSync(path.join(requireModulePath, 'config.js')))) {
-                hasConfig = true;
+                config = require(path.join(requireModulePath, 'config'));
             }
-
-            let config = hasConfig ? require(path.join(requireModulePath, 'config')) : undefined;
 
             mockModuleList.push(new MockModule(name, module, config));
         });
