@@ -9,7 +9,7 @@ const mockModuleList = [];
 mockModuleList.push(new MockModule('return-plain-object', require('../../data/fixtures/mock_modules/return-plain-object')));
 mockModuleList.push(new MockModule('exist-config', require('../../data/fixtures/mock_modules/exist-config')));
 
-describe.only('./mocker/MockerConfig.js', () => {
+describe('./mocker/MockerConfig.js', () => {
     describe('check empty.json', () => {
         let mockerConfig;
 
