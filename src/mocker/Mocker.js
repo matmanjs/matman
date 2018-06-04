@@ -18,7 +18,7 @@ class Mocker {
         const config = require(path.join(this.basePath, './config'));
 
         // 优先使用 config.name，其次是模块的文件夹名
-        this.name = config.name || path.basename(__dirname);
+        this.name = config.name || path.basename(this.basePath);
 
         // mock module 配置列表
         this.mockModuleList = this._getMockModuleList();
@@ -38,7 +38,7 @@ class Mocker {
             // 注意也可能是 json 文件
             name = path.basename(name, '.json');
 
-            console.log('\n找到 mock module ：', name, item);
+            // console.log('\n找到 mock module ：', name, item);
 
             let requireModulePath = path.join(this.basePath, 'mock_modules', name);
 
