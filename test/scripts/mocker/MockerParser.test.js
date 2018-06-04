@@ -98,6 +98,57 @@ describe.only('./mocker/MockerParser.js', () => {
                     });
                 });
         });
+
+        it('mockerParser.getMockModuleByName(\'demo_02_renamed\', \'success_2\') should return correct mockModule', () => {
+            let mockModule = mockerParser.getMockModuleByName('demo_02_renamed', 'success_2');
+
+            expect(mockModule).to.be.an.instanceof(MockModule);
+            expect(mockModule.name).to.equal('success_2');
+
+            return mockModule.getResult()
+                .then((data) => {
+                    expect(data).to.eql({
+                        'result': 2
+                    });
+                });
+        });
+
+        it('mockerParser.getMockModuleByName(\'demo_02_renamed\', \'success_3_renamed\') should return correct mockModule', () => {
+            let mockModule = mockerParser.getMockModuleByName('demo_02_renamed', 'success_3_renamed');
+
+            expect(mockModule).to.be.an.instanceof(MockModule);
+            expect(mockModule.name).to.equal('success_3_renamed');
+
+            return mockModule.getResult()
+                .then((data) => {
+                    expect(data).to.eql({
+                        'result': 3
+                    });
+                });
+        });
+
+        it('mockerParser.getMockModuleByName(\'demo_02_renamed\', \'success_4\') should return correct mockModule', () => {
+            let mockModule = mockerParser.getMockModuleByName('demo_02_renamed', 'success_4');
+
+            expect(mockModule).to.be.an.instanceof(MockModule);
+            expect(mockModule.name).to.equal('success_4');
+
+            return mockModule.getResult()
+                .then((data) => {
+                    expect(data).to.equal(4);
+                });
+        });
+        it('mockerParser.getMockModuleByName(\'demo_02_renamed\', \'success_4\') with param should return correct mockModule', () => {
+            let mockModule = mockerParser.getMockModuleByName('demo_02_renamed', 'success_4');
+
+            expect(mockModule).to.be.an.instanceof(MockModule);
+            expect(mockModule.name).to.equal('success_4');
+
+            return mockModule.getResult({ a: 110 })
+                .then((data) => {
+                    expect(data).to.equal('from_param_110');
+                });
+        });
     });
 });
 
