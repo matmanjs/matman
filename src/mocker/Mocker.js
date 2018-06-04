@@ -1,4 +1,7 @@
+const fs = require('fs');
 const path = require('path');
+const fsHandler = require('fs-handler');
+
 const MockerConfig = require('./MockerConfig');
 const MockModule = require('./MockModule');
 
@@ -7,40 +10,52 @@ class Mocker {
      * 构造函数
      *
      * @param {String} basePath mocker 的绝对路径
-     * @param {Object} [opts] 额外参数
-     * @param {String} [opts.defaultName] mocker 的默认名字
-     * @param {{name:String, hasConfig:Boolean}[]} [opts.modules] mock module 的基本信息数组
      */
-    constructor(basePath, opts = {}) {
+    constructor(basePath) {
         this.basePath = basePath;
 
         // config.json 的内容
         const config = require(path.join(this.basePath, './config'));
 
-        // 优先使用 config.name，其次是模块名
-        this.name = config.name || opts.defaultName;
+        // 优先使用 config.name，其次是模块的文件夹名
+        this.name = config.name || path.basename(__dirname);
 
         // mock module 配置列表
-        this.mockModuleList = this._getMockModuleList(opts.modules);
+        this.mockModuleList = this._getMockModuleList();
 
         // mocker config 配置参数
         this.config = new MockerConfig(this.name, config, this.mockModuleList);
     }
 
-    _getMockModuleList(modules) {
+    _getMockModuleList() {
         let mockModuleList = [];
 
-        if (modules && modules.length) {
-            modules.forEach((item) => {
-                let module = require(path.join(this.basePath, './mock_modules', item.name));
-                let config = item.hasConfig ? require(path.join(this.basePath, './mock_modules', item.name, 'config')) : undefined;
+        // 1. 获取所有的 mocker，约定：this.basePath 的每个子目录都是一个独立的 mocker
+        fsHandler.search.getAll(this.basePath, { globs: ['mock_modules/*'] }).forEach((item) => {
+            // 模块名字，默认取文件夹或文件名
+            let name = path.basename(item.relativePath, '.js');
 
-                mockModuleList.push(new MockModule(item.name, module, config));
-            });
-        }
+            // 注意也可能是 json 文件
+            name = path.basename(name, '.json');
+
+            console.log('\n找到 mock module ：', name, item);
+
+            let requireModulePath = path.join(this.basePath, 'mock_modules', name);
+
+            let module = require(requireModulePath);
+
+            // 是否存在配置文件
+            let hasConfig = false;
+            if (item.isDirectory() && (fs.existsSync(path.join(requireModulePath, 'config.json')) || fs.existsSync(path.join(requireModulePath, 'config.js')))) {
+                hasConfig = true;
+            }
+
+            let config = hasConfig ? require(path.join(requireModulePath, 'config')) : undefined;
+
+            mockModuleList.push(new MockModule(name, module, config));
+        });
 
         return mockModuleList;
-
     }
 }
 
