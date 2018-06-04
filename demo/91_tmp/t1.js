@@ -14,10 +14,10 @@ console.log(mockerParser.getMockerByName('demo_simple'));
 
 // console.log(mockerParser.getMockerByName('name_demo_basic'));
 //
-// console.log('\n');
-//
-// mockerParser.getMockModuleByName('name_demo_basic', 'success_4').getResult().then((data) => {
-//     console.log(data);
-// }).catch((err) => {
-//     console.error(err);
-// });
+console.log('\n');
+
+mockerParser.getMockModuleByName('name_demo_basic', 'success_4').getResult().then((data) => {
+    console.log(data);
+}).catch((err) => {
+    console.error(err);
+});
