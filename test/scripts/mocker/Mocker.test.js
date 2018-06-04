@@ -12,7 +12,7 @@ describe.only('./mocker/Mocker.js', () => {
 
         before(() => {
             mocker = new Mocker(path.resolve(__dirname, '../../data/fixtures/mock_service/mockers/demo_01'));
-            // console.log(mocker);
+            console.log(mocker);
         });
 
         it('should be instanceof Mocker ', () => {
@@ -41,6 +41,13 @@ describe.only('./mocker/Mocker.js', () => {
 
         it('mocker.mockModuleList has 2 items', () => {
             expect(mocker.mockModuleList).to.have.lengthOf(2);
+        });
+
+        it('mocker.mockModuleList item\'s name is correct', () => {
+            let itemNameList = mocker.mockModuleList.map((item) => {
+                return item.name;
+            });
+            expect(itemNameList).to.have.members(['error', 'success']);
         });
     });
 });
