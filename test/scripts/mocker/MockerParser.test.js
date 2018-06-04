@@ -50,8 +50,37 @@ describe.only('./mocker/MockerParser.js', () => {
                     });
                 });
         });
-
     });
 
+
+    describe('check demo_02', () => {
+        it('mockerParser.getMockerByName(\'demo_02\') should return correct mocker', () => {
+            let mocker = mockerParser.getMockerByName('demo_02');
+
+            expect(mocker).to.be.undefined;
+        });
+
+        it('mockerParser.getMockerByName(\'demo_02_renamed\') should return correct mocker', () => {
+            let mocker = mockerParser.getMockerByName('demo_02_renamed');
+
+            expect(mocker).to.be.an.instanceof(Mocker);
+            expect(mocker.name).to.equal('demo_02_renamed');
+            expect(mocker.mockModuleList).to.have.lengthOf(5);
+        });
+
+        it('mockerParser.getMockModuleByName(\'demo_02_renamed\', \'error\') should return correct mockModule', () => {
+            let mockModule = mockerParser.getMockModuleByName('demo_02_renamed', 'error');
+
+            expect(mockModule).to.be.an.instanceof(MockModule);
+            expect(mockModule.name).to.equal('error');
+
+            return mockModule.getResult()
+                .then((data) => {
+                    expect(data).to.eql({
+                        errCode: 100000
+                    });
+                });
+        });
+    });
 });
 
