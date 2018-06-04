@@ -12,7 +12,7 @@ describe.only('./mocker/Mocker.js', () => {
 
         before(() => {
             mocker = new Mocker(path.resolve(__dirname, '../../data/fixtures/mock_service/mockers/demo_01'));
-            console.log(mocker);
+            // console.log(mocker);
         });
 
         it('should be instanceof Mocker ', () => {
@@ -48,6 +48,38 @@ describe.only('./mocker/Mocker.js', () => {
                 return item.name;
             });
             expect(itemNameList).to.have.members(['error', 'success']);
+        });
+    });
+
+    describe('check demo_02', () => {
+        let mocker;
+
+        before(() => {
+            mocker = new Mocker(path.resolve(__dirname, '../../data/fixtures/mock_service/mockers/demo_02'));
+            // console.log(mocker);
+        });
+
+        it('mocker.name should be correct ', () => {
+            // 只有 mocker 才能优先使用 config.name 的值
+            expect(mocker.name).to.equal('demo_02_renamed');
+        });
+
+        it('mocker.mockModuleList has 5 items', () => {
+            expect(mocker.mockModuleList).to.have.lengthOf(5);
+        });
+
+        it('mocker.mockModuleList item\'s name is correct', () => {
+            let itemNameList = mocker.mockModuleList.map((item) => {
+                return item.name;
+            });
+
+            expect(itemNameList).to.have.members([
+                'error',
+                'success_1',
+                'success_2',
+                'success_3_renamed',
+                'success_4'
+            ]);
         });
     });
 });
