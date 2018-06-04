@@ -52,7 +52,6 @@ describe.only('./mocker/MockerParser.js', () => {
         });
     });
 
-
     describe('check demo_02', () => {
         it('mockerParser.getMockerByName(\'demo_02\') should return correct mocker', () => {
             let mocker = mockerParser.getMockerByName('demo_02');
@@ -78,6 +77,24 @@ describe.only('./mocker/MockerParser.js', () => {
                 .then((data) => {
                     expect(data).to.eql({
                         errCode: 100000
+                    });
+                });
+        });
+
+        it('mockerParser.getMockModuleByName(\'demo_02_renamed\', \'success_1\') should return correct mockModule', () => {
+            let mockModule = mockerParser.getMockModuleByName('demo_02_renamed', 'success_1');
+
+            expect(mockModule).to.be.an.instanceof(MockModule);
+            expect(mockModule.name).to.equal('success_1');
+
+            return mockModule.getResult()
+                .then((data) => {
+                    expect(data).to.eql({
+                        'result': {
+                            'other': 'other',
+                            'result': 1
+                        },
+                        'retcode': 0
                     });
                 });
         });
