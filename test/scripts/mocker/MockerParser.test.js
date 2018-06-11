@@ -158,6 +158,12 @@ describe.only('./mocker/MockerParser.js', () => {
             expect(mocker.name).to.equal('demo_01');
         });
 
+        it('should return null', () => {
+            let mocker = mockerParser.getMockerByRoute('/cgi-bin/a/b/demo_not_exist');
+
+            expect(mocker).to.be.null;
+        });
+
         it('should return demo_02', () => {
             let mocker = mockerParser.getMockerByRoute('/cgi-bin/a/b/demo_02');
 
