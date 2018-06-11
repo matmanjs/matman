@@ -1,4 +1,6 @@
-class MatmanQueryItem {
+const QUERY_KEY = '_matman';
+
+class QueryItem {
   /**
    * 构造函数
    *
@@ -25,4 +27,34 @@ class MatmanQueryItem {
   }
 }
 
-module.exports = MatmanQueryItem;
+class QueryHandler {
+  /**
+   * 构造函数
+   */
+  constructor() {
+    this.list = [];
+  }
+
+  /**
+   * 增加一个元素
+   *
+   * @param {Object | String} mockerName mocker 的名字
+   * @param {String} mockModuleName mock module 的名字
+   * @param {Boolean} shouldDisableMatman 是否禁用 mocker 服务
+   */
+  addOne(mockerName, mockModuleName, shouldDisableMatman) {
+    // TODO 也许这里应该要加一个去重判断
+    this.list.push(new QueryItem(name, target, shouldDisableMatman));
+  }
+
+  getQueryString() {
+    return QUERY_KEY + '=' + JSON.stringify(this.list);
+  };
+
+}
+
+module.exports = {
+  QueryItem: QueryItem,
+  QueryHandler: QueryHandler,
+  QUERY_KEY: QUERY_KEY
+};
