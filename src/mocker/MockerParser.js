@@ -1,5 +1,7 @@
 const path = require('path');
-const fsHandler = require('fs-handler');
+const fsHandler = require('fs-mocker');
+
+const TARGET_FIELD = '_m_target';
 
 class MockerParser {
     /**
@@ -65,7 +67,7 @@ class MockerParser {
     }
 
     /**
-     * 通过路由及请求参数获取 handler 的信息
+     * 通过路由及请求参数获取 mocker 的信息
      *
      * @param {String} route 路由规则
      * @param {Object} [params] 请求的参数
@@ -150,6 +152,48 @@ class MockerParser {
         })[0];
     }
 
+    /**
+     * 通过路由匹配及请求参数获得响应数据
+     *
+     * @param {String} route 路由规则
+     * @param {Object} [params] 请求的参数
+     * @return {Object}
+     */
+    getResInfoByRoute(route, params = {}) {
+        // 1. 获得当前的 mocker 信息
+        let mockerItem = this.getMockerByRoute(route, params);
+
+        if (!mockerItem) {
+            return null;
+        }
+
+        // 2. 获得当前最适合的 mock module
+        // 优先获取 param 中请求的指定 mock_module，其次是 mocker.config.activeModule
+        let mockModuleName = params[TARGET_FIELD] || mockerItem.config.activeModule;
+
+        let mockModuleItem = this.getMockModuleByName(mockerItem.name, mockModuleName);
+
+        if (!mockModuleItem) {
+            return null;
+        }
+
+        // 3. 获得 mock module 的绝对路径
+        // 目标模块的路径，需要注意下 no module 的场景
+        const moduleRelativePath = (mockModuleItem.type && mockModuleItem.type === 'noModule') ? mockModuleItem.fileName : path.join('mock_modules', mockModuleName);
+
+        const moduleFullPath = path.join(this.basePath, mockerItem.name, moduleRelativePath);
+
+        // 4. 获得所有的请求参数
+        // 还有部分参数在 mock_module 的 query 字段中，需要合并请求
+        const reqParams = _.merge({}, mockModuleItem.query, params);
+
+        return {
+            mockerItem: mockerItem,
+            mockModuleItem: mockModuleItem,
+            moduleFullPath: moduleFullPath,
+            params: reqParams
+        };
+    }
 }
 
 /**
