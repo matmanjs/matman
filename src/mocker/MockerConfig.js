@@ -7,6 +7,7 @@ class MockerConfig {
      * @param {String} handlerName 名字
      * @param {Object} config config.json 中的值
      * @param {String} [config.route] 需要处理的路由，只有匹配到这个路由，才会被处理
+     * @param {Object} [config.routeExtra] 额外的路由匹配参数
      * @param {String} [config.name] 名字
      * @param {String} [config.description] 简要描述
      * @param {Boolean} [config.disable] 此mocker是否为禁用状态，一旦设置为 true，则将忽略该mocker，而是去请求现网
@@ -23,6 +24,9 @@ class MockerConfig {
 
         // 需要处理的路由，只有匹配到这个路由，才会被处理
         this.route = config.route || '';
+
+        // 额外的路由匹配参数
+        this.routeExtra = config.routeExtra || {};
 
         // #57 可能route中不以 / 开头，此时需要增加之
         if (this.route && this.route.indexOf('/') !== 0) {

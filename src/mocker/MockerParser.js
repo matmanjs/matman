@@ -65,6 +65,70 @@ class MockerParser {
     }
 
     /**
+     * 通过路由及请求参数获取 handler 的信息
+     *
+     * @param {String} route 路由规则
+     * @param {Object} [params] 请求的参数
+     * @return {Object}
+     */
+    getMockerByRoute(route, params = {}) {
+        const allMockerList = this.getAllMocker();
+        const paramsKeyLength = Object.keys(params).length;
+
+        let matchedArr = [];
+
+        allMockerList.forEach((item) => {
+            const mockerConfig = item.config || {};
+
+            // 如果连 route 都没匹配，则无需后续处理
+            if (route !== mockerConfig.route) {
+                return;
+            }
+
+            let obj = {
+                match: 1,
+                data: item
+            };
+
+            let routeExtra = mockerConfig.routeExtra || {},
+                routeExtraKeys = Object.keys(routeExtra),
+                routeExtraKeyLength = routeExtraKeys.length;
+
+            // 如果 routeExtra 为空，则放入数组中之后，无须再后续处理
+            if (!routeExtraKeyLength) {
+                matchedArr.push(obj);
+                return;
+            }
+
+            // 如果 routeExtra 不为空，但请求参数为空，则肯定是匹配失败了的，无须放入数组
+            if (routeExtraKeyLength && !paramsKeyLength) {
+                return;
+            }
+
+            let isExistNotMatchedField = false;
+
+            // 如果 routeExtra 不为空，且请求参数也为空，则为其计算匹配度
+            routeExtraKeys.forEach((routeExtraKey) => {
+                // 注意，这里都转化为字符串来比较
+                if ((routeExtra[routeExtraKey] + '') === (params[routeExtraKey] + '')) {
+                    obj.match++;
+                } else {
+                    // 如果定义了 routeExtra，就要全匹配，有一个不匹配都不行
+                    isExistNotMatchedField = true;
+                }
+            });
+
+            if (!isExistNotMatchedField) {
+                matchedArr.push(obj);
+            }
+        });
+
+        return matchedArr.length ? matchedArr.sort((a, b) => {
+            return b.match - a.match;
+        })[0].data : null;
+    }
+
+    /**
      * 通过名字获取指定的 mock module
      *
      * @param {String} mockerName mocker 名字
@@ -85,6 +149,7 @@ class MockerParser {
             return item.name === mockModuleName;
         })[0];
     }
+
 }
 
 /**
