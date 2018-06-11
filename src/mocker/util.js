@@ -25,6 +25,24 @@ function getParamsFromReferer(referer) {
   return paramsFromReferer;
 }
 
+function getMatchedReferer(referer, name) {
+  let paramsFromReferer = getParamsFromReferer(referer);
+
+  // let paramsFromReferer = [{
+  //   _m_name: 'demo_simple11',
+  //   _m_target: 'success',
+  //   _m_disable: 0
+  // }];
+
+  console.log('====paramsFromReferer=====', paramsFromReferer);
+
+  // 判断该路由的名字是否在referer中
+  return paramsFromReferer.filter((item) => {
+    return item._m_name === name;
+  })[0];
+}
+
 module.exports = {
-  getParamsFromReferer: getParamsFromReferer
+  getParamsFromReferer: getParamsFromReferer,
+  getMatchedReferer: getMatchedReferer
 };
