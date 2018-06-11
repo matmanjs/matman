@@ -1,5 +1,6 @@
 const path = require('path');
 const fsHandler = require('fs-handler');
+const _ = require('lodash');
 
 const TARGET_FIELD = '_m_target';
 
