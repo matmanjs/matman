@@ -149,5 +149,22 @@ describe.only('./mocker/MockerParser.js', () => {
                 });
         });
     });
+
+    describe('check getMockerByRoute', () => {
+        it('should return demo_01', () => {
+            let mocker = mockerParser.getMockerByRoute('/cgi-bin/a/b/demo_01');
+
+            expect(mocker).to.be.an.instanceof(Mocker);
+            expect(mocker.name).to.equal('demo_01');
+        });
+
+        it('should return demo_02', () => {
+            let mocker = mockerParser.getMockerByRoute('/cgi-bin/a/b/demo_02');
+
+            expect(mocker).to.be.an.instanceof(Mocker);
+            expect(mocker.name).to.equal('demo_02_renamed');
+        });
+
+    });
 });
 

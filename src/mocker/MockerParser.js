@@ -1,5 +1,5 @@
 const path = require('path');
-const fsHandler = require('fs-mocker');
+const fsHandler = require('fs-handler');
 
 const TARGET_FIELD = '_m_target';
 
