@@ -5,7 +5,6 @@ const expect = chai.expect;
 const MockerParser = require('../../../src/mocker/MockerParser');
 const Mocker = require('../../../src/mocker/Mocker');
 const MockModule = require('../../../src/mocker/MockModule');
-const MockerConfig = require('../../../src/mocker/MockerConfig');
 
 describe.only('./mocker/MockerParser.js', () => {
     let mockerParser;
