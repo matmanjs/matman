@@ -170,7 +170,30 @@ describe.only('./mocker/MockerParser.js', () => {
             expect(mocker).to.be.an.instanceof(Mocker);
             expect(mocker.name).to.equal('demo_02_renamed');
         });
+    });
 
+    describe('check getResInfoByRoute', () => {
+        it('demo_01 ok', () => {
+            let resInfo = mockerParser.getResInfoByRoute('/cgi-bin/a/b/demo_01');
+
+            expect(resInfo).to.have.all.keys('mockerItem', 'mockModuleItem', 'moduleFullPath', 'params');
+            expect(resInfo.mockerItem.name).to.equal('demo_01');
+            expect(resInfo.mockModuleItem.name).to.equal('error');
+        });
+
+        it('should return null', () => {
+            let mocker = mockerParser.getResInfoByRoute('/cgi-bin/a/b/demo_not_exist');
+
+            expect(mocker).to.be.null;
+        });
+
+        it('demo_02 ok', () => {
+            let resInfo = mockerParser.getResInfoByRoute('/cgi-bin/a/b/demo_02');
+
+            expect(resInfo).to.have.all.keys('mockerItem', 'mockModuleItem', 'moduleFullPath', 'params');
+            expect(resInfo.mockerItem.name).to.equal('demo_02_renamed');
+            expect(resInfo.mockModuleItem.name).to.equal('success_1');
+        });
     });
 });
 

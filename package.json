@@ -42,7 +42,7 @@
     "fs-handler": "^0.1.2",
     "husky": "^0.13.3",
     "json-parse-helpfulerror": "^1.0.3",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.10",
     "lodash-id": "^0.14.0",
     "log4js": "^1.1.1",
     "lowdb": "^1.0.0",
