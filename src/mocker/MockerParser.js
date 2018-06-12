@@ -54,7 +54,23 @@ class MockerParser {
       let requirePath = getRequirePath(path.join(this.basePath, item.relativePath));
       // console.log('requirePath ：', requirePath);
 
-      mockerList.push(require(requirePath));
+      let mockerItem = require(requirePath);
+
+      // 更新用户操作历史记录
+      if (this.db) {
+        // 更新数据
+        let cacheMockerItem = this.db.get('data').find({ name: mockerItem.name }).value();
+
+        // 如果存在记录，则更新两个字段即可
+        if (cacheMockerItem) {
+          mockerItem.updateConfig({
+            disable: cacheMockerItem.config.disable,
+            activeModule: cacheMockerItem.config.activeModule
+          });
+        }
+      }
+
+      mockerList.push(mockerItem);
     });
 
     // TODO 2018/6/2 helinjiang: 如果isReset=true，则还需要及时更新到 this.matmanMockers

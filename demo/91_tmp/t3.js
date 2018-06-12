@@ -13,12 +13,12 @@ const mockerParser = new MockerParser({
 console.log(mockerParser.getMockerByName('demo_simple'));
 
 console.log('\n');
-//
-// mockerParser.updateMocker('demo_simple', {
-//   config: {
-//     disable: true
-//   }
-// });
-// console.log('\n');
-//
-// console.log(mockerParser.getMockerByName('demo_simple'));
+
+mockerParser.updateMocker('demo_simple', {
+  config: {
+    disable: true
+  }
+});
+console.log('\n');
+
+console.log(mockerParser.getMockerByName('demo_simple'));
