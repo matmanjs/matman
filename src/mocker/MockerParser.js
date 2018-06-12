@@ -1,7 +1,8 @@
 const path = require('path');
+const fse = require('fs-extra');
 const fsHandler = require('fs-handler');
 const _ = require('lodash');
-
+const store = require('../store');
 const TARGET_FIELD = '_m_target';
 
 class MockerParser {
@@ -10,11 +11,21 @@ class MockerParser {
      *
      * @param {Object} opts 参数
      * @param {String} opts.basePath mocker的根目录
+     * @param {String} opts.dbPath db的根目录
      * @param {Array} [opts.matmanMockers] MatmanMocker 列表
      */
     constructor(opts) {
         this.basePath = opts.basePath;
         this.matmanMockers = Array.isArray(opts.matmanMockers) ? [...opts.matmanMockers] : [];
+
+        if (opts.dbPath) {
+            this.dbPath = opts.dbPath;
+
+            // 注意此处一定要保证存储数据的地址是可存在的，否则会保存失败。
+            fse.ensureDirSync(this.dbPath);
+
+            this.db = store.getDB(path.join(this.dbPath, 'db.json'));
+        }
     }
 
     /**
@@ -48,6 +59,15 @@ class MockerParser {
 
         // TODO 2018/6/2 helinjiang: 如果isReset=true，则还需要及时更新到 this.matmanMockers
         // TODO 2018/6/2 helinjiang: 还要返回 this.matmanMockers 中数据
+
+        if (this.db) {
+            // 存储到本地缓存数据文件内，以便下次启动时能够记录上一次的操作
+            this.db.setState({
+                mockServerPath: this.basePath,
+                dbPath: this.dbPath,
+                data: mockerList
+            }).write();
+        }
 
         return mockerList;
     }
@@ -194,6 +214,23 @@ class MockerParser {
             moduleFullPath: moduleFullPath,
             params: reqParams
         };
+    }
+
+    /**
+     * 更新 mocker 的 信息
+     *
+     * @param {String} mockerName handler 名字
+     * @param {Object} [updateData] 要更新的数据
+     */
+    updateMocker(mockerName, updateData) {
+        // 更新数据
+        this.db.get('data')
+            .find({ name: mockerName })
+            .assign(updateData)
+            .write();
+
+        // 返回新的结果
+        return this.getMockerByName(mockerName);
     }
 }
 
