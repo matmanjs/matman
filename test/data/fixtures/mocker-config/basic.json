@@ -1,0 +1,13 @@
+{
+    "name": "basic",
+    "route": "/cgi-bin/a/b/basic",
+    "description": "basic example description",
+    "disable": true,
+    "defaultModule": "exist-config",
+    "method": "post",
+    "priority": 88,
+    "tags": [
+        "标签1",
+        "标签2"
+    ]
+}

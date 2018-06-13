@@ -1,10 +1,17 @@
 const version = require('./MatmanVersion');
 const util = require('./util');
-const run = require('./run');
+
+const Mocker = require('./mocker/Mocker');
+const MockerParser = require('./mocker/MockerParser');
+const mockerUtil = require('./mocker/util');
+
+const matmanQuery = require('./business/matman-query');
 
 module.exports = {
   version: version,
   util: util,
-  run: run,
-  logger: global.matmanLogger
+  Mocker: Mocker,
+  MockerParser: MockerParser,
+  matmanQuery: matmanQuery,
+  mockerUtil: mockerUtil,
 };

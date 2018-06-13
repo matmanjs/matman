@@ -1,6 +1,8 @@
 # matman
 Mock service and Tester assistant
 
+- Node 7.6 默认支持 Async/Await
+
 ## matman 是什么
 
 能够做到：
