@@ -4,13 +4,9 @@
   "description": "mock service and test assistant",
   "main": "lib/index.js",
   "scripts": {
-    "start": "npm run compile && node ./demo/01_basic/entry.js",
-    "server-babel": "babel-node ./demo/02_mocker_advanced/entry.js",
-    "compile": "babel --presets es2015-loose,stage-1 --plugins transform-runtime src/ --out-dir lib/ --source-maps",
-    "webpack": "webpack --watch",
-    "webpack.build": "webpack",
-    "prepublishOnly": "npm run compile && npm run webpack.build",
-    "test": "mocha --compilers js:babel-core/register"
+    "compile": "babel src/ --out-dir lib/",
+    "prepublishOnly": "npm run compile ",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -27,42 +23,18 @@
   },
   "dependencies": {
     "bluebird": "^3.5.1",
-    "body-parser": "^1.17.2",
-    "chalk": "^1.1.3",
-    "compression": "^1.7.2",
-    "connect-pause": "^0.1.1",
-    "cors": "^2.8.3",
-    "errorhandler": "^1.5.0",
     "fs-extra": "^4.0.3",
     "fs-handler": "^0.1.2",
-    "husky": "^0.13.3",
-    "json-parse-helpfulerror": "^1.0.3",
     "lodash": "^4.17.10",
-    "lodash-id": "^0.14.0",
-    "log4js": "^1.1.1",
     "lowdb": "^1.0.0",
     "marked": "^0.3.19",
-    "method-override": "^2.3.9",
-    "morgan": "^1.8.2",
-    "object-assign": "^4.1.1",
-    "pluralize": "^5.0.0",
     "request": "^2.85.0",
-    "server-destroy": "^1.0.1",
-    "shortid": "^2.2.8",
-    "socket.io": "^2.1.0",
-    "socket.io-client": "^2.1.0",
-    "superagent": "^3.8.2",
-    "update-notifier": "^2.4.0",
-    "url": "^0.11.0",
-    "url-handle": "^0.2.1",
-    "yargs": "^8.0.2"
+    "url-handle": "^0.2.1"
   },
   "devDependencies": {
-    "babel-core": "^6.25.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
-    "mocha": "^3.5.3",
-    "npm-run-all": "^4.1.2"
+    "mocha": "^3.5.3"
   }
 }
