@@ -4,7 +4,5 @@ const run = require('./run');
 
 module.exports = {
   version: version,
-  util: util,
-  run: run,
-  logger: global.matmanLogger
+  util: util
 };
