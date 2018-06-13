@@ -2,7 +2,7 @@ const baseCgi = require('../../lib/base-cgi');
 
 const defaultResult = {
     result: 0,
-    other: 'other'
+    other: 'demo_03_other'
 };
 
 function getSuccess(result) {
