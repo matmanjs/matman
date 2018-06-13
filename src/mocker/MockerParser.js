@@ -1,7 +1,9 @@
-const path = require('path');
+const fs = require('fs');
 const fse = require('fs-extra');
+const path = require('path');
 const fsHandler = require('fs-handler');
 const _ = require('lodash');
+const marked = require('marked');
 const store = require('../store');
 const TARGET_FIELD = '_m_target';
 
@@ -251,6 +253,45 @@ class MockerParser {
 
     // 返回新的结果
     return newMockerItem;
+  }
+
+  /**
+   * 获取指定 mocker 的 README 信息
+   *
+   * @param {String} mockerName
+   */
+  getReadMeContent(mockerName) {
+    let mockerItem = this.getMockerByName(mockerName);
+    if (!mockerItem) {
+      return '异常错误，找不到对应信息！handlerName=' + mockerName;
+    }
+
+    // README.md 的绝对路径
+    let mockerReadMeFile = path.join(mockerItem.basePath, 'README.md');
+    if (!fs.existsSync(mockerReadMeFile)) {
+      return '';
+    }
+
+    marked.setOptions({
+      renderer: new marked.Renderer(),
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: false,
+      smartLists: true,
+      smartypants: false
+    });
+
+    try {
+      let content = fs.readFileSync(mockerReadMeFile, 'utf8');
+
+      content = content.replace(/__STATIC_PATH__/g, mockerName + '/static');
+
+      return marked(content);
+    } catch (e) {
+      return e.stack;
+    }
   }
 }
 
