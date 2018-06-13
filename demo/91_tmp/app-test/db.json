@@ -1,0 +1,205 @@
+{
+  "mockServerPath": "/Users/helinjiang/gitprojects/matman/test/data/fixtures/mock_service/mockers",
+  "dbPath": "/Users/helinjiang/gitprojects/matman/demo/91_tmp/app-test",
+  "data": [
+    {
+      "basePath": "/Users/helinjiang/gitprojects/matman/test/data/fixtures/mock_service/mockers/demo_01",
+      "name": "demo_01",
+      "mockModuleList": [
+        {
+          "name": "error",
+          "module": {
+            "errCode": 100000
+          },
+          "config": {
+            "name": "error",
+            "description": "error",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "error"
+            }
+          }
+        },
+        {
+          "name": "success",
+          "module": {
+            "errCode": 0,
+            "result": {
+              "description": "demo_01 success.json"
+            }
+          },
+          "config": {
+            "name": "success",
+            "description": "success",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "success"
+            }
+          }
+        }
+      ],
+      "config": {
+        "name": "demo_01",
+        "route": "/cgi-bin/a/b/demo_01",
+        "routeExtra": {},
+        "description": "demo_01",
+        "disable": false,
+        "defaultModule": "",
+        "activeModule": "error",
+        "method": "get",
+        "priority": 0,
+        "tags": [
+          "全部"
+        ]
+      }
+    },
+    {
+      "basePath": "/Users/helinjiang/gitprojects/matman/test/data/fixtures/mock_service/mockers/demo_02",
+      "name": "demo_02_renamed",
+      "mockModuleList": [
+        {
+          "name": "error",
+          "module": {
+            "errCode": 100000
+          },
+          "config": {
+            "name": "error",
+            "description": "error",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "error"
+            }
+          }
+        },
+        {
+          "name": "success_1",
+          "config": {
+            "name": "success_1",
+            "description": "success_1",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "success_1"
+            }
+          }
+        },
+        {
+          "name": "success_2",
+          "module": {
+            "result": 2
+          },
+          "config": {
+            "name": "success_2",
+            "description": "success_2",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "success_2"
+            }
+          }
+        },
+        {
+          "name": "success_3_renamed",
+          "module": {
+            "result": 3
+          },
+          "config": {
+            "name": "success_3_renamed",
+            "description": "description_success_3_renamed",
+            "priority": 100,
+            "delay": 0,
+            "query": {
+              "_m_target": "success_3_renamed"
+            }
+          }
+        },
+        {
+          "name": "success_4",
+          "config": {
+            "name": "success_4",
+            "description": "success_4",
+            "priority": 10,
+            "delay": 0,
+            "query": {
+              "type": 1,
+              "_m_target": "success_4"
+            }
+          }
+        }
+      ],
+      "config": {
+        "name": "demo_02_renamed",
+        "route": "/cgi-bin/a/b/demo_02",
+        "routeExtra": {},
+        "description": "description for demo_02",
+        "disable": false,
+        "defaultModule": "success_1",
+        "activeModule": "success_1",
+        "method": "get",
+        "priority": 0,
+        "tags": [
+          "全部"
+        ]
+      }
+    },
+    {
+      "basePath": "/Users/helinjiang/gitprojects/matman/test/data/fixtures/mock_service/mockers/demo_03",
+      "name": "demo_03",
+      "mockModuleList": [
+        {
+          "name": "error_1",
+          "config": {
+            "name": "error_1",
+            "description": "description_error_1",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "error_1"
+            }
+          }
+        },
+        {
+          "name": "success_1",
+          "config": {
+            "name": "success_1",
+            "description": "description_success_1",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "success_1"
+            }
+          }
+        },
+        {
+          "name": "success_2",
+          "config": {
+            "name": "success_2",
+            "description": "description_success_2",
+            "priority": 100,
+            "delay": 0,
+            "query": {
+              "_m_target": "success_2"
+            }
+          }
+        }
+      ],
+      "config": {
+        "name": "demo_03",
+        "route": "/cgi-bin/a/b/demo_03",
+        "routeExtra": {},
+        "description": "description for demo_03",
+        "disable": false,
+        "defaultModule": "success_1",
+        "activeModule": "success_1",
+        "method": "get",
+        "priority": 0,
+        "tags": [
+          "全部"
+        ]
+      }
+    }
+  ]
+}
