@@ -25,6 +25,10 @@ class Item {
   isDisabled() {
     return !!this._m_disable;
   }
+
+  isMe(name) {
+    return this._m_name === name;
+  }
 }
 
 class MatmanQuery {

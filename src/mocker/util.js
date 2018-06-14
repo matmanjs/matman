@@ -29,16 +29,18 @@ function getMatmanQueryItemsFromReferer(referer) {
 function getMatmanQueryItem(referer, name) {
   let matmanQueryItemsFromReferer = getMatmanQueryItemsFromReferer(referer);
 
-  // 判断该路由的名字是否在referer中
-  let result = matmanQueryItemsFromReferer.filter((item) => {
-    return item[matmanQuery.QUERY_KEY] === name;
-  })[0];
+  let result = null;
 
-  if (!result) {
-    return null;
+  // 判断该路由的名字是否在referer中
+  for (let i = 0, length = matmanQueryItemsFromReferer.length; i < length; i++) {
+    let matmanQueryItem = new matmanQuery.Item(matmanQueryItemsFromReferer[i]);
+    if (matmanQueryItem.isMe(name)) {
+      result = matmanQueryItem;
+      break;
+    }
   }
 
-  return new matmanQuery.Item(result);
+  return result;
 }
 
 module.exports = {
