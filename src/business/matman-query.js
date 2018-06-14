@@ -44,7 +44,7 @@ class QueryHandler {
    */
   addOne(mockerName, mockModuleName, shouldDisableMatman) {
     // TODO 也许这里应该要加一个去重判断
-    this.list.push(new QueryItem(name, target, shouldDisableMatman));
+    this.list.push(new QueryItem(mockerName, mockModuleName, shouldDisableMatman));
   }
 
   getQueryString() {
