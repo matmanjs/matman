@@ -1,6 +1,6 @@
 const QUERY_KEY = '_matman';
 
-class QueryItem {
+class Item {
   /**
    * 构造函数
    *
@@ -27,7 +27,7 @@ class QueryItem {
   }
 }
 
-class QueryHandler {
+class MatmanQuery {
   /**
    * 构造函数
    */
@@ -44,7 +44,7 @@ class QueryHandler {
    */
   addOne(mockerName, mockModuleName, shouldDisableMatman) {
     // TODO 也许这里应该要加一个去重判断
-    this.list.push(new QueryItem(mockerName, mockModuleName, shouldDisableMatman));
+    this.list.push(new Item(mockerName, mockModuleName, shouldDisableMatman));
   }
 
   getQueryString() {
@@ -54,7 +54,6 @@ class QueryHandler {
 }
 
 module.exports = {
-  QueryItem: QueryItem,
-  QueryHandler: QueryHandler,
+  MatmanQuery: MatmanQuery,
   QUERY_KEY: QUERY_KEY
 };

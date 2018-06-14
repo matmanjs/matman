@@ -12,6 +12,7 @@ module.exports = {
   util: util,
   Mocker: Mocker,
   MockerParser: MockerParser,
-  matmanQuery: matmanQuery,
-  mockerUtil: mockerUtil,
+  MatmanQuery: matmanQuery.MatmanQuery,
+  QUERY_KEY: matmanQuery.QUERY_KEY,
+  mockerUtil: mockerUtil
 };
