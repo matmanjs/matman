@@ -54,6 +54,7 @@ class MatmanQuery {
 }
 
 module.exports = {
+  Item: Item,
   MatmanQuery: MatmanQuery,
   QUERY_KEY: QUERY_KEY
 };
