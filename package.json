@@ -1,6 +1,6 @@
 {
   "name": "matman",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "mock service and test assistant",
   "main": "lib/index.js",
   "scripts": {
