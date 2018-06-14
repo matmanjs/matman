@@ -24,12 +24,10 @@ function getMatmanQueryItemsFromReferer(referer) {
  *
  * @param {String} referer req.headers.referer
  * @param {String} name 指定的 mocker 名字
- * @returns {QueryItem | null}
+ * @returns {Item | null}
  */
 function getMatmanQueryItem(referer, name) {
   let matmanQueryItemsFromReferer = getMatmanQueryItemsFromReferer(referer);
-
-  console.log('====matmanQueryItemsFromReferer=====', matmanQueryItemsFromReferer);
 
   // 判断该路由的名字是否在referer中
   let result = matmanQueryItemsFromReferer.filter((item) => {
@@ -40,7 +38,7 @@ function getMatmanQueryItem(referer, name) {
     return null;
   }
 
-  return new matmanQuery.QueryItem(result);
+  return new matmanQuery.Item(result);
 }
 
 module.exports = {
