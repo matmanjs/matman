@@ -1,6 +1,6 @@
 {
   "mockServerPath": "/Users/helinjiang/gitprojects/matman/test/data/fixtures/mock_server/mockers",
-  "dataPath": "/Users/helinjiang/gitprojects/matman/demo/91_tmp/app-test",
+  "buildPath": "/Users/helinjiang/gitprojects/matman/demo/91_tmp/app-test",
   "data": [
     {
       "basePath": "/Users/helinjiang/gitprojects/matman/test/data/fixtures/mock_server/mockers/demo_01",
