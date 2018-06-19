@@ -11,7 +11,7 @@ describe('./mocker/Mocker.js', () => {
         let mocker;
 
         before(() => {
-            mocker = new Mocker(path.resolve(__dirname, '../../data/fixtures/mock_service/mockers/demo_01'));
+            mocker = new Mocker(path.resolve(__dirname, '../../data/fixtures/mock_server/mockers/demo_01'));
             // console.log(mocker);
         });
 
@@ -55,7 +55,7 @@ describe('./mocker/Mocker.js', () => {
         let mocker;
 
         before(() => {
-            mocker = new Mocker(path.resolve(__dirname, '../../data/fixtures/mock_service/mockers/demo_02'));
+            mocker = new Mocker(path.resolve(__dirname, '../../data/fixtures/mock_server/mockers/demo_02'));
             // console.log(mocker);
         });
 

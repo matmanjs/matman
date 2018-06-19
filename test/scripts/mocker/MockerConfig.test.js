@@ -23,13 +23,14 @@ describe('./mocker/MockerConfig.js', () => {
         });
 
         it('should contain some fields', () => {
-            expect(mockerConfig).to.have.all.keys('name', 'description', 'route', 'disable', 'defaultModule', 'activeModule', 'method', 'priority', 'tags');
+            expect(mockerConfig).to.have.all.keys('name', 'description', 'route', 'routeExtra', 'disable', 'defaultModule', 'activeModule', 'method', 'priority', 'tags');
         });
 
         it('should equal correct value', () => {
             expect(mockerConfig).to.eql({
                 name: 'empty',
                 route: '',
+                routeExtra: {},
                 description: 'empty',
                 disable: false,
                 defaultModule: '',
@@ -48,6 +49,7 @@ describe('./mocker/MockerConfig.js', () => {
             expect(mockerConfig).to.eql({
                 name: 'simple',
                 route: '/cgi-bin/a/b/simple',
+                routeExtra: {},
                 description: 'simple example description',
                 disable: false,
                 defaultModule: '',
@@ -66,6 +68,7 @@ describe('./mocker/MockerConfig.js', () => {
             expect(mockerConfig).to.eql({
                 name: 'basic',
                 route: '/cgi-bin/a/b/basic',
+                routeExtra: {},
                 description: 'basic example description',
                 disable: true,
                 defaultModule: 'exist-config',
@@ -88,6 +91,7 @@ describe('./mocker/MockerConfig.js', () => {
             expect(mockerConfig).to.eql({
                 name: 'basic_02',
                 route: '',
+                routeExtra: {},
                 description: 'basic_02',
                 disable: false,
                 defaultModule: 'exist-config',

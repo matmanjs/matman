@@ -6,12 +6,12 @@ const MockerParser = require('../../../src/mocker/MockerParser');
 const Mocker = require('../../../src/mocker/Mocker');
 const MockModule = require('../../../src/mocker/MockModule');
 
-describe.only('./mocker/MockerParser.js', () => {
+describe('./mocker/MockerParser.js', () => {
     let mockerParser;
 
     before(() => {
         mockerParser = new MockerParser({
-            basePath: path.resolve(__dirname, '../../data/fixtures/mock_service/mockers')
+            basePath: path.resolve(__dirname, '../../data/fixtures/mock_server/mockers')
         });
 
         // console.log(mockerParser);
