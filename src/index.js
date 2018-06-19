@@ -7,6 +7,8 @@ const mockerUtil = require('./mocker/util');
 
 const matmanQuery = require('./business/matman-query');
 
+const ClientScript = require('./tester/ClientScript');
+
 module.exports = {
   version: version,
   util: util,
@@ -14,5 +16,7 @@ module.exports = {
   MockerParser: MockerParser,
   MatmanQuery: matmanQuery.MatmanQuery,
   QUERY_KEY: matmanQuery.QUERY_KEY,
-  mockerUtil: mockerUtil
+  mockerUtil: mockerUtil,
+  ClientScript: ClientScript,
+
 };
