@@ -1,5 +1,9 @@
 {
   "description": "description for demo_03",
   "route": "/cgi-bin/a/b/demo_03",
-  "defaultModule": "success_1"
+  "defaultModule": "success_1",
+  "tags": [
+    "tag1",
+    "tag2"
+  ]
 }
