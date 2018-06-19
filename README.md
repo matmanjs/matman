@@ -1,17 +1,8 @@
 # matman
-Mock service and Tester assistant
 
-- Node 7.6 默认支持 Async/Await
+matman 是一个用于数据模拟和段对端测试的工具。
 
-## matman 是什么
-
-能够做到：
-
-- 强大的 mock 数据管理
-- 轻易实现与native等场景的数据交互
-- 数据校验
-- 数据过滤和展示
-- 可配合前端自动化测试
+> Node `v7.6.0` 开始默认支持 `Async/Await`，请将 Node 升级到 `v7.6.0` 以上。
 
 ## 如何使用
 
