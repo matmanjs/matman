@@ -26,3 +26,6 @@ mockModule.getResult()
   .catch((err) => {
     console.error(err);
   });
+
+// 获得 demo_03 的 readme.md 中转义成 html 的内容
+console.log(mockerParser.getReadMeContent('demo_03'));
