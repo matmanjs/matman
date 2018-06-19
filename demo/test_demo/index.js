@@ -9,4 +9,6 @@ const clientScript = new ClientScript({
 });
 
 // 获得所有的 mocker
+console.log(clientScript.basePath);
+console.log(clientScript.buildPath);
 console.log(clientScript.getEntry());

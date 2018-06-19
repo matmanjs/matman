@@ -6,7 +6,7 @@ class ClientScript {
    * 构造函数
    *
    * @param {Object} opts 参数
-   * @param {String} opts.basePath mocker的根目录
+   * @param {String} opts.basePath  项目根目录
    * @param {String} [opts.buildPath] client script 构建之后的目录
    * @param {String} [opts.regMatch] 用于匹配是 client script 的正则
    */
