@@ -1,7 +1,4 @@
-const fs = require('fs');
 const path = require('path');
-const _ = require('lodash');
-
 const glob = require('glob');
 
 class ClientScript {
@@ -23,26 +20,26 @@ class ClientScript {
       this.buildPath = path.resolve(this.basePath, this.buildPath);
     }
 
-    this.entry = {};
+    this.entry = this._getEntry();
   }
 
-  getEntry() {
-    // let globResult = glob.sync(path.resolve(this.basePath, './**/crawlers/**.js'));
+  _getEntry() {
+    let entry = {};
+
     let globResult = glob.sync(path.resolve(this.basePath, './**/**.js'));
-    // console.log(this.clientScriptMatch)
-    // console.log(this.clientScriptMatch.toString())
-    // console.log(this.clientScriptMatch + '')
 
     globResult.forEach((item) => {
-      // console.log(item,item.match(this.clientScriptMatch));
       let matchResult = item.match(this.clientScriptMatch);
-      if (matchResult) {
-        console.log(item);
-        console.log(matchResult);
-        console.log(matchResult[0]);
-      }
 
+      if (matchResult) {
+        let entryScript = item.match(new RegExp('/([^/]*/' + matchResult[0] + ')', 'i'))[1];
+        let entryName = entryScript.replace('.js', '');
+
+        entry[entryName] = item;
+      }
     });
+
+    return entry;
   }
 
 }
