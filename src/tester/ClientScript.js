@@ -57,6 +57,11 @@ class ClientScript {
     return entry;
   }
 
+  getPath(name){
+    const webpackConfig = require(path.resolve(this.buildPath, './webpack-config'));
+
+    return path.join(webpackConfig.output.path, webpackConfig.output.filename.replace('[name]', name));
+  }
 }
 
 module.exports = ClientScript;
