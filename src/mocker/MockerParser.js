@@ -20,7 +20,11 @@ class MockerParser {
     this.basePath = opts.basePath;
     this.matmanMockers = Array.isArray(opts.matmanMockers) ? [...opts.matmanMockers] : [];
 
-    this.buildPath = opts.buildPath || path.resolve(this.basePath, './build');
+    // 设置默认值和绝对路径
+    this.buildPath = opts.buildPath || './build';
+    if (!path.isAbsolute(this.buildPath)) {
+      this.buildPath = path.resolve(this.basePath, this.buildPath);
+    }
 
     // 注意此处一定要保证存储数据的地址是可存在的，否则会保存失败。
     fse.ensureDirSync(this.buildPath);
