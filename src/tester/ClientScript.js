@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 
@@ -5,12 +6,28 @@ class ClientScript {
   /**
    * 构造函数
    *
-   * @param {Object} opts 参数
-   * @param {String} opts.basePath  项目根目录
+   * @param {Object | String} opts 参数
+   * @param {String} [opts.basePath]  项目根目录
    * @param {String} [opts.buildPath] client script 构建之后的目录
-   * @param {String} [opts.regMatch] 用于匹配是 client script 的正则
+   * @param {RegExp} [opts.regMatch] 用于匹配是 client script 的正则
    */
   constructor(opts) {
+    // 如果 opts 为字符串，则认为是 matman.config.js 的绝对路径
+    if (opts && (typeof opts === 'string')) {
+      let matmanConfigAbsolutePath = path.isAbsolute(opts) ? opts : path.resolve(opts);
+      if (!fs.existsSync(matmanConfigAbsolutePath)) {
+        throw new Error('Unknown matman.config.js path: ' + matmanConfigAbsolutePath);
+      }
+
+      let config = require(matmanConfigAbsolutePath);
+
+      opts = {
+        basePath: config.basePath || path.dirname(matmanConfigAbsolutePath),
+        buildPath: config.clientScriptBuildPath,
+        regMatch: config.clientScriptMatch
+      };
+    }
+
     this.basePath = opts.basePath;
     this.regMatch = opts.regMatch || /crawlers\/.*\.js$/;
 
