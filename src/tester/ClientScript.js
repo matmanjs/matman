@@ -7,12 +7,13 @@ class ClientScript {
    * 构造函数
    *
    * @param {Object | String} opts 参数
-   * @param {String} [opts.rootPath]  项目根目录
+   * @param {String} [opts.rootPath]  项目的根目录
+   * @param {String} [opts.basePath]  client script 的根目录
    * @param {String} [opts.buildPath] client script 构建之后的目录
    * @param {RegExp} [opts.regMatch] 用于匹配是 client script 的正则
    */
   constructor(opts) {
-    // 如果 opts 为字符串，则认为是 matman.config.js 的绝对路径
+    // 如果 opts 为字符串，则认为是 matman.config.js 的绝对路径，则直接获取配置项
     if (opts && (typeof opts === 'string')) {
       let matmanConfigAbsolutePath = path.isAbsolute(opts) ? opts : path.resolve(opts);
       if (!fs.existsSync(matmanConfigAbsolutePath)) {
@@ -23,6 +24,7 @@ class ClientScript {
 
       opts = {
         rootPath: config.rootPath || path.dirname(matmanConfigAbsolutePath),
+        basePath: config.basePath,
         buildPath: config.clientScriptBuildPath,
         regMatch: config.clientScriptMatch
       };
@@ -30,6 +32,16 @@ class ClientScript {
 
     this.rootPath = opts.rootPath;
     this.regMatch = opts.regMatch || /crawlers\/.*\.js$/;
+
+    // 设置默认值和绝对路径
+    this.basePath = opts.basePath || './e2e/targets';
+    if (!path.isAbsolute(this.basePath)) {
+      this.basePath = path.resolve(this.rootPath, this.basePath);
+    }
+
+    if (!fs.existsSync(this.basePath)) {
+      throw new Error('Unknown e2e path: ' + this.basePath);
+    }
 
     // 设置默认值和绝对路径
     this.buildPath = opts.buildPath || './build/client-script';
@@ -41,7 +53,7 @@ class ClientScript {
   getEntry() {
     let entry = {};
 
-    let globResult = glob.sync(path.resolve(this.rootPath, './**/**.js'));
+    let globResult = glob.sync(path.resolve(this.basePath, './**/**.js'));
 
     globResult.forEach((item) => {
       let matchResult = item.match(this.regMatch);
@@ -57,7 +69,7 @@ class ClientScript {
     return entry;
   }
 
-  getPath(name){
+  getPath(name) {
     const webpackConfig = require(path.resolve(this.buildPath, './webpack-config'));
 
     return path.join(webpackConfig.output.path, webpackConfig.output.filename.replace('[name]', name));
