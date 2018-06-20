@@ -12,21 +12,23 @@ class MockerParser {
    * 构造函数
    *
    * @param {Object} opts 参数
-   * @param {String} opts.basePath mocker的根目录
-   * @param {String} opts.dataPath 数据存储的根目录
+   * @param {String} opts.basePath mocker的根目录，绝对路径
+   * @param {String} [opts.buildPath] 构建之后的目录，也是数据存储的根目录，绝对路径
    * @param {Array} [opts.matmanMockers] MatmanMocker 列表
    */
   constructor(opts) {
     this.basePath = opts.basePath;
     this.matmanMockers = Array.isArray(opts.matmanMockers) ? [...opts.matmanMockers] : [];
 
-    if (opts.dataPath) {
-      this.dataPath = opts.dataPath;
+    // 只有传递了 opts.buildPath，才处理 db
+    if (opts.buildPath) {
+      // 设置默认值和绝对路径
+      this.buildPath = opts.buildPath;
 
       // 注意此处一定要保证存储数据的地址是可存在的，否则会保存失败。
-      fse.ensureDirSync(this.dataPath);
+      fse.ensureDirSync(this.buildPath);
 
-      this.db = store.getDB(path.join(this.dataPath, 'db.json'));
+      this.db = store.getDB(path.join(this.buildPath, 'db.json'));
     }
   }
 
@@ -82,7 +84,7 @@ class MockerParser {
       // 存储到本地缓存数据文件内，以便下次启动时能够记录上一次的操作
       this.db.setState({
         mockServerPath: this.basePath,
-        dataPath: this.dataPath,
+        buildPath: this.buildPath,
         data: mockerList
       }).write();
     }

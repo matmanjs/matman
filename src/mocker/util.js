@@ -1,3 +1,4 @@
+const path = require('path');
 const urlHandle = require('url-handle');
 const matmanQuery = require('../business/matman-query');
 
@@ -43,7 +44,37 @@ function getMatmanQueryItem(referer, name) {
   return result;
 }
 
+/**
+ * 获得 mock server 的根目录绝对路径
+ * @param {String} rootPath 项目根目录
+ * @param {String} mockServerPath
+ * @returns {String}
+ */
+function getMockServerBasePath(rootPath, mockServerPath) {
+  let result = mockServerPath || './mock_server/mockers';
+  if (!path.isAbsolute(result)) {
+    result = path.resolve(rootPath, result);
+  }
+  return result;
+}
+
+/**
+ * 获得 mock server 的根目录绝对路径
+ * @param {String} rootPath 项目根目录
+ * @param {String} buildPath
+ * @returns {String}
+ */
+function getMockServerBuildPath(rootPath, buildPath) {
+  let result = buildPath || './build';
+  if (!path.isAbsolute(result)) {
+    result = path.resolve(rootPath, result);
+  }
+  return result;
+}
+
 module.exports = {
   getMatmanQueryItemsFromReferer: getMatmanQueryItemsFromReferer,
-  getMatmanQueryItem: getMatmanQueryItem
+  getMatmanQueryItem: getMatmanQueryItem,
+  getMockServerBasePath: getMockServerBasePath,
+  getMockServerBuildPath: getMockServerBuildPath
 };

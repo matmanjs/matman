@@ -3,7 +3,7 @@ const path = require('path');
 const MockerParser = require('../../src/mocker/MockerParser');
 
 const mockerParser = new MockerParser({
-    basePath: path.join(__dirname, './mock_service/mockers')
+    basePath: path.join(__dirname, './mock_server/mockers')
 });
 
 // let mockerList = mockerParser.getAllMocker();
