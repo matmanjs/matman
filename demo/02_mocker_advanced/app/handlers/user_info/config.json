@@ -1,6 +1,0 @@
-{
-  "name": "user_info",
-  "description": "查询用户信息",
-  "route": "/cgi-bin/a/b/user_info",
-  "defaultModule": "success_1"
-}

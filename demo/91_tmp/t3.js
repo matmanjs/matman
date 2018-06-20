@@ -4,7 +4,7 @@ const MockerParser = require('../../src/mocker/MockerParser');
 
 const mockerParser = new MockerParser({
   basePath: path.join(__dirname, './mock_service/mockers'),
-  dataPath: path.join(__dirname, './app')
+  buildPath: path.join(__dirname, './app')
 });
 
 // let mockerList = mockerParser.getAllMocker();
