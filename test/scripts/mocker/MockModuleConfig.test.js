@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const MockModuleConfig = require('../../../src/mocker/MockModuleConfig');
+const MockModuleConfig = require('../../../lib/mocker/MockModuleConfig');
 
 describe('./mocker/MockModuleConfig.js', () => {
     describe('check json-file.json', () => {
