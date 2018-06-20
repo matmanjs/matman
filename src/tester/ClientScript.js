@@ -7,7 +7,7 @@ class ClientScript {
    * 构造函数
    *
    * @param {Object | String} opts 参数
-   * @param {String} [opts.basePath]  项目根目录
+   * @param {String} [opts.rootPath]  项目根目录
    * @param {String} [opts.buildPath] client script 构建之后的目录
    * @param {RegExp} [opts.regMatch] 用于匹配是 client script 的正则
    */
@@ -22,26 +22,26 @@ class ClientScript {
       let config = require(matmanConfigAbsolutePath);
 
       opts = {
-        basePath: config.basePath || path.dirname(matmanConfigAbsolutePath),
+        rootPath: config.rootPath || path.dirname(matmanConfigAbsolutePath),
         buildPath: config.clientScriptBuildPath,
         regMatch: config.clientScriptMatch
       };
     }
 
-    this.basePath = opts.basePath;
+    this.rootPath = opts.rootPath;
     this.regMatch = opts.regMatch || /crawlers\/.*\.js$/;
 
     // 设置默认值和绝对路径
     this.buildPath = opts.buildPath || './build/client-script';
     if (!path.isAbsolute(this.buildPath)) {
-      this.buildPath = path.resolve(this.basePath, this.buildPath);
+      this.buildPath = path.resolve(this.rootPath, this.buildPath);
     }
   }
 
   getEntry() {
     let entry = {};
 
-    let globResult = glob.sync(path.resolve(this.basePath, './**/**.js'));
+    let globResult = glob.sync(path.resolve(this.rootPath, './**/**.js'));
 
     globResult.forEach((item) => {
       let matchResult = item.match(this.regMatch);
