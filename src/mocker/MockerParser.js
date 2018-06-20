@@ -12,8 +12,8 @@ class MockerParser {
    * 构造函数
    *
    * @param {Object} opts 参数
-   * @param {String} opts.basePath mocker的根目录
-   * @param {String} [opts.buildPath] 构建之后的目录，也是数据存储的根目录
+   * @param {String} opts.basePath mocker的根目录，绝对路径
+   * @param {String} [opts.buildPath] 构建之后的目录，也是数据存储的根目录，绝对路径
    * @param {Array} [opts.matmanMockers] MatmanMocker 列表
    */
   constructor(opts) {
@@ -23,10 +23,7 @@ class MockerParser {
     // 只有传递了 opts.buildPath，才处理 db
     if (opts.buildPath) {
       // 设置默认值和绝对路径
-      this.buildPath = opts.buildPath || './build';
-      if (!path.isAbsolute(this.buildPath)) {
-        this.buildPath = path.resolve(this.basePath, this.buildPath);
-      }
+      this.buildPath = opts.buildPath;
 
       // 注意此处一定要保证存储数据的地址是可存在的，否则会保存失败。
       fse.ensureDirSync(this.buildPath);
