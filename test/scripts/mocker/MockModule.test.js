@@ -1,138 +1,138 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const MockModule = require('../../../src/mocker/MockModule');
-const MockModuleConfig = require('../../../src/mocker/MockModuleConfig');
+const MockModule = require('../../../lib/mocker/MockModule');
+const MockModuleConfig = require('../../../lib/mocker/MockModuleConfig');
 
 describe('./mocker/MockModule.js', () => {
-    describe('check json-file.json', () => {
-        let mockModule;
+  describe('check json-file.json', () => {
+    let mockModule;
 
-        before(() => {
-            mockModule = new MockModule('json-file', require('../../data/fixtures/mock_modules/json-file'));
-            // console.log(mockModule);
-        });
-
-        it('should be instanceof MockModule ', () => {
-            expect(mockModule).to.be.an.instanceof(MockModule);
-        });
-
-        it('should contain some fields', () => {
-            expect(mockModule).to.have.all.keys('name', 'module', 'config');
-        });
-
-        it('mockModule.config is instanceof MockModuleConfig ', () => {
-            expect(mockModule.config).to.be.an.instanceof(MockModuleConfig);
-        });
-
-        it('should return correct value', () => {
-            return mockModule.getResult()
-                .then((data) => {
-                    expect(data).to.eql({
-                        name: 'json-file.json',
-                        age: 16
-                    });
-                });
-        });
+    before(() => {
+      mockModule = new MockModule('json-file', require('../../data/fixtures/mock_modules/json-file'));
+      // console.log(mockModule);
     });
 
-    describe('check return-function-promise.js', () => {
-        it('should return correct value', () => {
-            let mockModule = new MockModule('return-function-promise', require('../../data/fixtures/mock_modules/return-function-promise'));
-
-            return mockModule.getResult()
-                .then((data) => {
-                    expect(data).to.eql({
-                        name: 'return-function-promise',
-                        age: 16
-                    });
-                });
-        });
+    it('should be instanceof MockModule ', () => {
+      expect(mockModule).to.be.an.instanceof(MockModule);
     });
 
-    describe('check return-function-pure.js', () => {
-        it('should return correct value', () => {
-            let mockModule = new MockModule('return-function-pure', require('../../data/fixtures/mock_modules/return-function-pure'));
-
-            return mockModule.getResult()
-                .then((data) => {
-                    expect(data).to.eql({
-                        name: 'return-function-pure',
-                        age: 16
-                    });
-                });
-        });
+    it('should contain some fields', () => {
+      expect(mockModule).to.have.all.keys('name', 'module', 'config');
     });
 
-    describe('check return-function-with-param.js', () => {
-        it('should return correct value', () => {
-            let mockModule = new MockModule('return-function-with-param', require('../../data/fixtures/mock_modules/return-function-with-param'));
-
-            return mockModule.getResult('name-a', 2, 'not-exist')
-                .then((data) => {
-                    expect(data).to.eql({
-                        name: 'return-function-with-param',
-                        desc: 'a=name-a,b=2',
-                        age: 16
-                    });
-                });
-        });
+    it('mockModule.config is instanceof MockModuleConfig ', () => {
+      expect(mockModule.config).to.be.an.instanceof(MockModuleConfig);
     });
 
-    describe('check return-plain-object.js', () => {
-        it('should return correct value', () => {
-            let mockModule = new MockModule('return-plain-object', require('../../data/fixtures/mock_modules/return-plain-object'));
-
-            return mockModule.getResult()
-                .then((data) => {
-                    expect(data).to.eql({
-                        name: 'return-plain-object',
-                        age: 16
-                    });
-                });
+    it('should return correct value', () => {
+      return mockModule.getResult()
+        .then((data) => {
+          expect(data).to.eql({
+            name: 'json-file.json',
+            age: 16
+          });
         });
     });
+  });
 
-    describe('check return-promise.js', () => {
-        it('should return correct value', () => {
-            let mockModule = new MockModule('return-promise', require('../../data/fixtures/mock_modules/return-promise'));
+  describe('check return-function-promise.js', () => {
+    it('should return correct value', () => {
+      let mockModule = new MockModule('return-function-promise', require('../../data/fixtures/mock_modules/return-function-promise'));
 
-            return mockModule.getResult()
-                .then((data) => {
-                    expect(data).to.eql({
-                        name: 'return-promise',
-                        age: 16
-                    });
-                });
+      return mockModule.getResult()
+        .then((data) => {
+          expect(data).to.eql({
+            name: 'return-function-promise',
+            age: 16
+          });
         });
     });
+  });
 
-    describe('check no-config', () => {
-        it('should return correct value', () => {
-            let mockModule = new MockModule('no-config', require('../../data/fixtures/mock_modules/no-config'));
+  describe('check return-function-pure.js', () => {
+    it('should return correct value', () => {
+      let mockModule = new MockModule('return-function-pure', require('../../data/fixtures/mock_modules/return-function-pure'));
 
-            return mockModule.getResult()
-                .then((data) => {
-                    expect(data).to.eql({
-                        name: 'no-config',
-                        age: 16
-                    });
-                });
+      return mockModule.getResult()
+        .then((data) => {
+          expect(data).to.eql({
+            name: 'return-function-pure',
+            age: 16
+          });
         });
     });
+  });
 
-    describe('check exist-config', () => {
-        it('should return correct value', () => {
-            let mockModule = new MockModule('exist-config', require('../../data/fixtures/mock_modules/exist-config'), require('../../data/fixtures/mock_modules/exist-config/config'));
+  describe('check return-function-with-param.js', () => {
+    it('should return correct value', () => {
+      let mockModule = new MockModule('return-function-with-param', require('../../data/fixtures/mock_modules/return-function-with-param'));
 
-            return mockModule.getResult()
-                .then((data) => {
-                    expect(data).to.eql({
-                        name: 'exist-config',
-                        age: 16
-                    });
-                });
+      return mockModule.getResult('name-a', 2, 'not-exist')
+        .then((data) => {
+          expect(data).to.eql({
+            name: 'return-function-with-param',
+            desc: 'a=name-a,b=2',
+            age: 16
+          });
         });
     });
+  });
+
+  describe('check return-plain-object.js', () => {
+    it('should return correct value', () => {
+      let mockModule = new MockModule('return-plain-object', require('../../data/fixtures/mock_modules/return-plain-object'));
+
+      return mockModule.getResult()
+        .then((data) => {
+          expect(data).to.eql({
+            name: 'return-plain-object',
+            age: 16
+          });
+        });
+    });
+  });
+
+  describe('check return-promise.js', () => {
+    it('should return correct value', () => {
+      let mockModule = new MockModule('return-promise', require('../../data/fixtures/mock_modules/return-promise'));
+
+      return mockModule.getResult()
+        .then((data) => {
+          expect(data).to.eql({
+            name: 'return-promise',
+            age: 16
+          });
+        });
+    });
+  });
+
+  describe('check no-config', () => {
+    it('should return correct value', () => {
+      let mockModule = new MockModule('no-config', require('../../data/fixtures/mock_modules/no-config'));
+
+      return mockModule.getResult()
+        .then((data) => {
+          expect(data).to.eql({
+            name: 'no-config',
+            age: 16
+          });
+        });
+    });
+  });
+
+  describe('check exist-config', () => {
+    it('should return correct value', () => {
+      let mockModule = new MockModule('exist-config', require('../../data/fixtures/mock_modules/exist-config'), require('../../data/fixtures/mock_modules/exist-config/config'));
+
+      return mockModule.getResult()
+        .then((data) => {
+          expect(data).to.eql({
+            name: 'exist-config',
+            age: 16
+          });
+        });
+    });
+  });
 });
 
