@@ -24,7 +24,7 @@ class ClientScript {
 
       opts = {
         rootPath: config.rootPath || path.dirname(matmanConfigAbsolutePath),
-        basePath: config.basePath,
+        basePath: config.e2ePath,
         buildPath: config.clientScriptBuildPath,
         regMatch: config.clientScriptMatch
       };
