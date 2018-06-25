@@ -10,6 +10,8 @@ const matmanQuery = require('./business/matman-query');
 const ClientScript = require('./tester/ClientScript');
 const E2eTestAction = require('./tester/E2eTestAction');
 
+const e2eTestScanPage = require('./tester/e2e-test-scan-page');
+
 module.exports = {
   version: version,
   util: util,
@@ -19,5 +21,8 @@ module.exports = {
   QUERY_KEY: matmanQuery.QUERY_KEY,
   mockerUtil: mockerUtil,
   ClientScript: ClientScript,
-  E2eTestAction: E2eTestAction
+  E2eTestAction: E2eTestAction,
+  e2e: {
+    scan: e2eTestScanPage
+  }
 };
