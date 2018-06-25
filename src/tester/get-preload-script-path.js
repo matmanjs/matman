@@ -7,7 +7,7 @@ const configFileName = 'matman.config.js';
 const getPreloadScriptPath = (name, configPath) => {
   // 非法的路径时，默认为本文件夹的 dirname
   if (!configPath || !fs.existsSync(configPath)) {
-    console.log('Unknow configPath=' + configPath);
+    // console.log('Unknow configPath=' + configPath);
     configPath = __dirname;
   }
 
