@@ -34,7 +34,7 @@ class ClientScript {
     this.regMatch = opts.regMatch || /crawlers\/.*\.js$/;
 
     // 设置默认值和绝对路径
-    this.basePath = opts.basePath || './e2e/targets';
+    this.basePath = opts.basePath || './e2e_test';
     if (!path.isAbsolute(this.basePath)) {
       this.basePath = path.resolve(this.rootPath, this.basePath);
     }

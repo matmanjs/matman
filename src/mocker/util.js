@@ -51,7 +51,7 @@ function getMatmanQueryItem(referer, name) {
  * @returns {String}
  */
 function getMockServerBasePath(rootPath, mockServerPath) {
-  let result = mockServerPath || './mock_server/mockers';
+  let result = mockServerPath || './mock_server';
   if (!path.isAbsolute(result)) {
     result = path.resolve(rootPath, result);
   }
