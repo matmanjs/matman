@@ -1,4 +1,3 @@
-const { WebEventRecorder } = require('nightmare-handler');
 const E2eTestAction = require('./E2eTestAction');
 
 /**
@@ -7,20 +6,10 @@ const E2eTestAction = require('./E2eTestAction');
  * @param pageUrl
  * @param preloadClientScriptPath
  * @param opts
- * @param {Object} params 额外的参数
- * @param {Boolean} [params.useRecorder] 是否需要记录器
  * @returns {Promise<*>}
  */
-function scanPage(pageUrl, preloadClientScriptPath, opts = {}, params = {}) {
+function scanPage(pageUrl, preloadClientScriptPath, opts = {}) {
   let actionHandle = new E2eTestAction(pageUrl, preloadClientScriptPath, opts);
-
-  // 使用记录器
-  if (params.useRecorder) {
-    actionHandle.onNightmareCreated = function (self) {
-      // 记录器
-      self.globalInfo.recorder = new WebEventRecorder(self.nightmare);
-    };
-  }
 
   actionHandle.addAction(function (nightmareRun) {
     return nightmareRun.wait(opts.wait || 500);
