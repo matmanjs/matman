@@ -8,6 +8,10 @@ const mockerUtil = require('./mocker/util');
 const matmanQuery = require('./business/matman-query');
 
 const ClientScript = require('./tester/ClientScript');
+const E2eTestAction = require('./tester/E2eTestAction');
+
+const e2eTestScanPage = require('./tester/e2e-test-scan-page');
+const getPreloadScriptPath = require('./tester/get-preload-script-path');
 
 module.exports = {
   version: version,
@@ -18,5 +22,9 @@ module.exports = {
   QUERY_KEY: matmanQuery.QUERY_KEY,
   mockerUtil: mockerUtil,
   ClientScript: ClientScript,
-
+  E2eTestAction: E2eTestAction,
+  getPreloadScriptPath: getPreloadScriptPath,
+  e2e: {
+    scan: e2eTestScanPage
+  }
 };
