@@ -1,6 +1,8 @@
 /**
  * 通用的流程
  */
+const path = require('path');
+const fse = require('fs-extra');
 const { NightmarePlus, WebEventRecorder } = require('nightmare-handler');
 const getBuildPath = require('./get-build-path');
 
@@ -165,7 +167,7 @@ class E2eTestAction {
       let curRun = this.actionList[i](this.nightmareRun);
 
       if (this.screenshotConfig) {
-        curRun.screenshot(this.screenshotConfig.path || path.join(this.screenshotConfig.saveDir, [this.screenshotConfig.fileName, i + 1].join('_') + '.png', this.screenshotConfig.clip));
+        curRun.screenshot(this.screenshotConfig.path || path.join(this.screenshotConfig.saveDir, [this.screenshotConfig.fileName, i + 1].join('_') + '.png'), this.screenshotConfig.clip);
       }
 
       let t = await curRun.evaluate(evaluate);
