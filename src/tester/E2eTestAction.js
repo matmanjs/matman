@@ -1,7 +1,10 @@
 /**
  * 通用的流程
  */
+const path = require('path');
+const fse = require('fs-extra');
 const { NightmarePlus, WebEventRecorder } = require('nightmare-handler');
+const getBuildPath = require('./get-build-path');
 
 class E2eTestAction {
   /**
@@ -17,6 +20,7 @@ class E2eTestAction {
    * @param {String} [opts.cookie] document.cookie的内容
    * @param {String} [opts.matmanQuery] 指定matman的query参数
    * @param {String | Boolean} [opts.useRecorder] 是否使用记录器记录整个请求队列
+   * @param {String | Object} [opts.screenshot] 截图设置，如果为字符串则传递 cases 文件路径
    */
   constructor(pageUrl, preloadClientScriptPath, opts = {}) {
     this.pageUrl = pageUrl;
@@ -47,6 +51,44 @@ class E2eTestAction {
 
       return (typeof useRecorder === 'boolean') ? 'recorder' : useRecorder;
     })(opts.useRecorder);
+
+    // https://github.com/segmentio/nightmare#screenshotpath-clip
+    this.screenshotConfig = (function (screenshot) {
+      if (!screenshot) {
+        return;
+      }
+
+      let result = screenshot;
+
+      // 为字符串时则认为是 cases 的文件名，例如 /path/to/xx.js
+      if (typeof screenshot === 'string') {
+        const buildPath = getBuildPath(screenshot);
+
+        // ../e2e_test/page_withdraw/cases/select-check.js
+
+        // select-check
+        let fileName = path.basename(screenshot, '.js');
+
+        // e2e_test/page_withdraw/cases/select-check.js
+        let relativePath = path.relative(buildPath, screenshot).replace('../', '').replace('./', '');
+
+        // e2e_test_page_withdraw_cases
+        let folderName = path.dirname(relativePath).replace(new RegExp(path.sep, 'gi'), '_');
+
+        // 需要保存的文件夹路径
+        const saveDir = path.join(buildPath, 'screenshot', folderName);
+
+        // 要保证这个目录存在，否则保存时会报错
+        fse.ensureDirSync(saveDir);
+
+        result = {
+          saveDir: saveDir,
+          fileName: fileName
+        };
+      }
+
+      return result;
+    })(opts.screenshot);
 
     this.globalInfo = {};
 
@@ -98,9 +140,8 @@ class E2eTestAction {
     // 初始化一些行为
     this.nightmareRun = this.nightmare
       .exDevice('mobile')
-      // .exCookies(this.cookie, getMainUrl(this.pageUrl))
-      .header('mat-from', 'nightmare')
-      .header('mat-timestamp', Date.now());
+      .header('x-mat-from', 'nightmare')
+      .header('x-mat-timestamp', Date.now());
 
     // 设置 cookie
     if (this.cookie) {
@@ -123,8 +164,13 @@ class E2eTestAction {
     let result = [];
 
     for (let i = 0, length = this.actionList.length; i < length; i++) {
-      let t = await this.actionList[i](this.nightmareRun)
-        .evaluate(evaluate);
+      let curRun = this.actionList[i](this.nightmareRun);
+
+      if (this.screenshotConfig) {
+        curRun.screenshot(this.screenshotConfig.path || path.join(this.screenshotConfig.saveDir, [this.screenshotConfig.fileName, i + 1].join('_') + '.png'), this.screenshotConfig.clip);
+      }
+
+      let t = await curRun.evaluate(evaluate);
 
       result.push(t);
     }
