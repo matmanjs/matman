@@ -1,30 +1,19 @@
-const version = require('./MatmanVersion');
-const util = require('./util');
-
-const Mocker = require('./mocker/Mocker');
-const MockerParser = require('./mocker/MockerParser');
-const mockerUtil = require('./mocker/util');
-
 const matmanQuery = require('./business/matman-query');
 
-const ClientScript = require('./tester/ClientScript');
-const E2eTestAction = require('./tester/E2eTestAction');
-
-const e2eTestScanPage = require('./tester/e2e-test-scan-page');
-const getPreloadScriptPath = require('./tester/get-preload-script-path');
-
 module.exports = {
-  version: version,
-  util: util,
-  Mocker: Mocker,
-  MockerParser: MockerParser,
+  version: require('./MatmanVersion'),
+  util: require('./util'),
+  Mocker: require('./mocker/Mocker'),
+  MockerParser: require('./mocker/MockerParser'),
   MatmanQuery: matmanQuery.MatmanQuery,
   QUERY_KEY: matmanQuery.QUERY_KEY,
-  mockerUtil: mockerUtil,
-  ClientScript: ClientScript,
-  E2eTestAction: E2eTestAction,
-  getPreloadScriptPath: getPreloadScriptPath,
+  mockerUtil: require('./mocker/util'),
+  ClientScript: require('./tester/ClientScript'),
+  E2eTestAction: require('./tester/E2eTestAction'),
+  getPreloadScriptPath: require('./tester/get-preload-script-path'),
+  getBuildPath: require('./tester/get-build-path'),
+  getConfigFilePath: require('./tester/get-config-file-path'),
   e2e: {
-    scan: e2eTestScanPage
+    scan: require('./tester/e2e-test-scan-page')
   }
 };
