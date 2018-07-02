@@ -2,9 +2,7 @@
   "name": "matman",
   "private": true,
   "scripts": {
-    "compile": "babel src/ --out-dir lib/",
-    "prepublishOnly": "npm run compile ",
-    "test": "mocha"
+    "publish": "git pull && tlerna publish --cd-version patch"
   },
   "repository": {
     "type": "git",
