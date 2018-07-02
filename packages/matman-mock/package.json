@@ -1,0 +1,16 @@
+{
+  "name": "matman-mock",
+  "version": "3.0.0",
+  "description": "Easy to build mock server. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mock",
+    "server"
+  ],
+  "author": "helinjiang",
+  "license": "MIT",
+  "repository": "https://github.com/matmanjs/matman/tree/master/packages/matman-mock"
+}
