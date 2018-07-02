@@ -1,6 +1,6 @@
 {
   "name": "matman-cli",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "CLI for matman projects",
   "main": "lib/index.js",
   "scripts": {
@@ -44,7 +44,7 @@
     "log4js": "^2.8.0",
     "matman": "^2.1.2",
     "matman-core": "^0.1.5",
-    "matman-e2e": "^3.0.3",
+    "matman-e2e": "^3.0.4",
     "matman-mock": "^3.0.2",
     "meow": "^3.7.0",
     "method-override": "^2.3.10",
