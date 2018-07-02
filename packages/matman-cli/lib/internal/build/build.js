@@ -30,11 +30,13 @@ module.exports = function (args) {
         // 如果是非简单模式下，则为打包之后的文件手动增加 nightmare client script
         if (!isDevBuild) {
           prependCodePromiseList.push(getNightmareClientCode());
-        }
 
-        // 插入 jQuery
-        prependCodePromiseList.push(getJqueryCode('jQueryCode'));
-        evalList.push('jQueryCode');
+          // 插入 jQuery
+          prependCodePromiseList.push(getJqueryCode('jQueryCode'));
+          evalList.push('jQueryCode');
+        } else {
+          prependCodePromiseList.push(getDevPrependCode());
+        }
 
         // 获得所有的代码之后，追加在头部
         if (prependCodePromiseList.length) {
@@ -42,15 +44,15 @@ module.exports = function (args) {
             .then((result) => {
               result.push(`window.evalList=[${evalList.map(item => `"${item}"`).join(',')}]`);
 
-              if (isDevBuild) {
-                result.push(`
-                                    if (window.evalList && window.evalList.length) {
-                                        window.evalList.forEach((item) => {
-                                            eval(window[item]);
-                                        });
-                                    }
-                                `);
-              }
+              // if (isDevBuild) {
+              //   result.push(`
+              //                       if (window.evalList && window.evalList.length) {
+              //                           window.evalList.forEach((item) => {
+              //                               eval(window[item]);
+              //                           });
+              //                       }
+              //                   `);
+              // }
 
               prependCodeToDistFile(clientScriptHandler.buildPath, result.join(';'));
             });
@@ -69,6 +71,18 @@ module.exports = function (args) {
 function getNightmareClientCode() {
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(__dirname, './builder-webpack3/libs/nightmare-preload.js'), 'utf8', (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+
+      resolve(data);
+    });
+  });
+}
+
+function getDevPrependCode() {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path.join(__dirname, './builder-webpack3/libs/dev-prepend.js'), 'utf8', (err, data) => {
       if (err) {
         return reject(err);
       }
