@@ -4,7 +4,7 @@ const expect = chai.expect;
 
 const { Mocker, MockModule, MockerConfig } = require('../../../lib');
 
-describe.only('./mocker/Mocker.js', () => {
+describe('./mocker/Mocker.js', () => {
   describe('check demo_01', () => {
     let mocker;
 
