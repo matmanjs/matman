@@ -2,7 +2,9 @@
   "name": "matman-cli",
   "version": "3.0.5",
   "description": "CLI for matman projects",
-  "main": "lib/index.js",
+  "bin": {
+    "matman": "./bin/matman"
+  },
   "scripts": {
     "start": "node ./bin/matman",
     "dev-ui": "cd ./business/local-server/webui && npm run start",
