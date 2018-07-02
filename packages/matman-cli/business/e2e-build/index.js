@@ -1,4 +1,4 @@
-const matman = require('../matman');
+const matmanE2E = require('matman-e2e');
 
 /**
  * @function createProdConfig
@@ -12,7 +12,7 @@ const matman = require('../matman');
  * @example
  */
 function getClientScriptHandler(params) {
-  const clientScript = new matman.ClientScript({
+  const clientScript = new matmanE2E.ClientScript({
     rootPath: params.rootPath,
     basePath: params.e2eTestPath,
     buildPath: params.clientScriptBuildPath,

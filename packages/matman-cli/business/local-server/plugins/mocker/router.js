@@ -1,20 +1,16 @@
-const path = require('path');
 const _ = require('lodash');
-const baseRouter = require('../../server/router/base-router');
-const matman = require('../../../../business/matman');
+const matmanMock = require('matman-mock');
 
-const MockerParser = matman.MockerParser;
-const QUERY_KEY = matman.QUERY_KEY;
-const mockerUtil = matman.mockerUtil;
+const baseRouter = require('../../server/router/base-router');
 
 const PLUGIN_NAME = 'mocker';
 const HANDLER_NAME_FIELD = 'mockerName';
 
 module.exports = (router, entry) => {
   // 创建 MockerParser 对象
-  const mockerParser = new MockerParser({
-    basePath: matman.mockerUtil.getMockServerBasePath(entry.rootPath, entry.mockServerPath),
-    buildPath: matman.mockerUtil.getMockServerBuildPath(entry.rootPath, entry.buildPath)
+  const mockerParser = new matmanMock.MockerParser({
+    basePath: matmanMock.util.getMockServerBasePath(entry.rootPath, entry.mockServerPath),
+    buildPath: matmanMock.util.getMockServerBuildPath(entry.rootPath, entry.buildPath)
   });
 
   // 获取所有的 mocker 列表
@@ -107,13 +103,14 @@ module.exports = (router, entry) => {
       let isDisabled;
 
       // 判断该路由的名字是否在referer中
-      let matmanQueryItem = mockerUtil.getMatmanQueryItem(req.headers.referer, mockerItem.name);
+      let matmanQueryItem = matmanMock.util.getMatmanQueryItem(req.headers.referer, mockerItem.name);
 
       if (matmanQueryItem) {
         // referer 里面的请求参数拥有最高优先级，因为这种场景比较特殊，主要用于自动化测试之用
         isDisabled = matmanQueryItem.isDisabled();
       } else {
         // 从请求 req 或者 config.json 文件中检查当前请求是否需要禁用 mock 服务
+        const QUERY_KEY = matmanMock.config.MATMAN_QUERY_KEY;
         isDisabled = req.query[QUERY_KEY] || req.body[QUERY_KEY];
         if (!isDisabled) {
           // 此处要重新获取新的数据，以便取到缓存的。
