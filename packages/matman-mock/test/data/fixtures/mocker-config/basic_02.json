@@ -1,0 +1,10 @@
+{
+    "name": "another name",
+    "defaultModule": "exist-config",
+    "activeModule": "return-plain-object",
+    "tags": [
+        "标签1",
+        "全部",
+        "标签2"
+    ]
+}

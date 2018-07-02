@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
-    "prepublishOnly": "npm run compile "
+    "prepublishOnly": "npm run compile ",
+    "test": "mocha"
   },
   "keywords": [
     "mock",

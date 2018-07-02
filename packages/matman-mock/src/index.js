@@ -1,6 +1,7 @@
 module.exports = {
   util: require('./util'),
   config: require('./config'),
+  store: require('./store'),
 
   MockerParser: require('./model/MockerParser'),
 

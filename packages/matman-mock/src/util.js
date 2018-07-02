@@ -1,7 +1,7 @@
 const path = require('path');
 const urlHandle = require('url-handle');
 
-const { MATMAN_QUERY_KEY } = require('../config');
+const { MATMAN_QUERY_KEY } = require('./config');
 const MatmanQueryItem = require('./model/MatmanQueryItem');
 
 /**
