@@ -1,4 +1,4 @@
-const E2eTestAction = require('../model/E2eTestAction');
+const BasicActionWithClientScript = require('../model/BasicActionWithClientScript');
 
 /**
  * 适合简单的页面扫描场景，无交互行为。
@@ -9,7 +9,7 @@ const E2eTestAction = require('../model/E2eTestAction');
  * @returns {Promise<*>}
  */
 function scan(pageUrl, preloadClientScriptPath, opts = {}) {
-  let actionHandle = new E2eTestAction(pageUrl, preloadClientScriptPath, opts);
+  let actionHandle = new BasicActionWithClientScript(pageUrl, preloadClientScriptPath, opts);
 
   actionHandle.addAction(function (nightmareRun) {
     return nightmareRun.wait(opts.wait || 500);
