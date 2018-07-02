@@ -23,5 +23,12 @@
     "lowdb": "^1.0.0",
     "marked": "^0.4.0",
     "url-handle": "^0.2.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3"
   }
 }
