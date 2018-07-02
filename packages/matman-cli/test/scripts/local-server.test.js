@@ -34,7 +34,7 @@ describe('local-server', () => {
         activeModule: 'success_1',
         method: 'get',
         priority: 0,
-        tags: ['全部']
+        tags: ['全部', 'tag1', 'tag2']
       });
     });
   });
@@ -70,7 +70,7 @@ describe('local-server', () => {
         activeModule: 'success_1',
         method: 'get',
         priority: 0,
-        tags: ['全部']
+        tags: ['全部', 'tag1', 'tag2']
       });
     });
   });
