@@ -1,6 +1,0 @@
-{
-  "name": "demo_02_renamed",
-  "description": "description for demo_02",
-  "route": "/cgi-bin/a/b/demo_02",
-  "defaultModule": "success_1"
-}

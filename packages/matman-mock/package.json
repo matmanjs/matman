@@ -1,0 +1,36 @@
+{
+  "name": "matman-mock",
+  "version": "3.0.2",
+  "description": "Easy to build mock server",
+  "main": "lib/index.js",
+  "scripts": {
+    "compile": "babel ./src --out-dir ./lib",
+    "test": "mocha",
+    "prepublishOnly": "npm run compile",
+    "prepublish": "npm run compile"
+  },
+  "keywords": [
+    "mock",
+    "server"
+  ],
+  "author": "helinjiang",
+  "license": "MIT",
+  "repository": "https://github.com/matmanjs/matman/tree/master/packages/matman-mock",
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "fs-extra": "^6.0.1",
+    "fs-handler": "^0.1.2",
+    "glob": "^7.1.2",
+    "lodash": "^4.17.10",
+    "lowdb": "^1.0.0",
+    "marked": "^0.4.0",
+    "url-handle": "^0.2.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3"
+  }
+}

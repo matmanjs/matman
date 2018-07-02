@@ -1,0 +1,15 @@
+{
+  "name": "demo_01_start",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node ../../../bin/matman build",
+    "build-dev": "node ../../../bin/matman build --dev",
+    "test": "mocha e2e_test/**/*.test.js"
+  },
+  "author": "helinjiang",
+  "license": "MIT",
+  "dependencies": {
+    "url-handle": "^0.2.1",
+    "web-crawl-util": "^0.1.0"
+  }
+}
