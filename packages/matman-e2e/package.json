@@ -2,7 +2,7 @@
   "name": "matman-e2e",
   "version": "3.0.1",
   "description": "Easy to write e2e test",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
     "test": "mocha",
