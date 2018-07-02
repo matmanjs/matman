@@ -3,5 +3,21 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.0.0"
+  "version": "3.0.0",
+  "commands": {
+    "publish": {
+      "ignore": [
+        "test/**",
+        "src/**",
+        "make/**"
+      ],
+      "ignoreChanges": [
+        "ignored-file",
+        "*.md"
+      ]
+    },
+    "bootstrap": {
+      "ignore": "component-*"
+    }
+  }
 }
