@@ -1,8 +1,12 @@
-const path = require('path');
-const urlHandle = require('url-handle');
+'use strict';
 
-const { MATMAN_QUERY_KEY } = require('../config');
-const MatmanQueryItem = require('./model/MatmanQueryItem');
+var path = require('path');
+var urlHandle = require('url-handle');
+
+var _require = require('../config'),
+    MATMAN_QUERY_KEY = _require.MATMAN_QUERY_KEY;
+
+var MatmanQueryItem = require('./model/MatmanQueryItem');
 
 /**
  * 获得 req.headers.referer 中携带的额外参数
@@ -11,7 +15,7 @@ const MatmanQueryItem = require('./model/MatmanQueryItem');
  * @returns {{_m_name:String,_m_target:String,_m_disable:Number}[]} 结果
  */
 function getMatmanQueryItemsFromReferer(referer) {
-  let paramsFromReferer;
+  var paramsFromReferer = void 0;
 
   try {
     paramsFromReferer = JSON.parse(urlHandle.query(MATMAN_QUERY_KEY, referer)) || [];
@@ -30,13 +34,13 @@ function getMatmanQueryItemsFromReferer(referer) {
  * @returns {Item | null}
  */
 function getMatmanQueryItem(referer, name) {
-  let matmanQueryItemsFromReferer = getMatmanQueryItemsFromReferer(referer);
+  var matmanQueryItemsFromReferer = getMatmanQueryItemsFromReferer(referer);
 
-  let result = null;
+  var result = null;
 
   // 判断该路由的名字是否在referer中
-  for (let i = 0, length = matmanQueryItemsFromReferer.length; i < length; i++) {
-    let matmanQueryItem = new MatmanQueryItem(matmanQueryItemsFromReferer[i]);
+  for (var i = 0, length = matmanQueryItemsFromReferer.length; i < length; i++) {
+    var matmanQueryItem = new MatmanQueryItem(matmanQueryItemsFromReferer[i]);
     if (matmanQueryItem.isMe(name)) {
       result = matmanQueryItem;
       break;
@@ -53,7 +57,7 @@ function getMatmanQueryItem(referer, name) {
  * @returns {String}
  */
 function getMockServerBasePath(rootPath, mockServerPath) {
-  let result = mockServerPath || './mock_server';
+  var result = mockServerPath || './mock_server';
   if (!path.isAbsolute(result)) {
     result = path.resolve(rootPath, result);
   }
@@ -67,7 +71,7 @@ function getMockServerBasePath(rootPath, mockServerPath) {
  * @returns {String}
  */
 function getMockServerBuildPath(rootPath, buildPath) {
-  let result = buildPath || './build';
+  var result = buildPath || './build';
   if (!path.isAbsolute(result)) {
     result = path.resolve(rootPath, result);
   }

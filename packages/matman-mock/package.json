@@ -4,7 +4,7 @@
   "description": "Easy to build mock server. ",
   "main": "index.js",
   "scripts": {
-    "compile": "babel src/ --out-dir lib/",
+    "compile": "babel ./src --out-dir ./lib",
     "prepublishOnly": "npm run compile "
   },
   "keywords": [
