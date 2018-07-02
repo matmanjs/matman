@@ -3,7 +3,7 @@
 var path = require('path');
 var urlHandle = require('url-handle');
 
-var _require = require('../config'),
+var _require = require('./config'),
     MATMAN_QUERY_KEY = _require.MATMAN_QUERY_KEY;
 
 var MatmanQueryItem = require('./model/MatmanQueryItem');
