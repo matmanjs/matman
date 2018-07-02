@@ -22,9 +22,10 @@ class Builder {
    * @param {RegExp} params.clientScriptMatch 正则表达式，用于匹配路径中那些文件是 client script
    * @param {Object} params.entry 传递给webpack 的 entry属性属性
    * @param {Object} opts
+   * @param {Boolean} [isDevBuild] 是否为开发模式
    */
-  static createProdConfig(params = {}, opts = {}) {
-    const clientScriptHandler = e2eBuild.getClientScriptHandler(params);
+  static createProdConfig(params = {}, opts = {}, isDevBuild) {
+    const clientScriptHandler = e2eBuild.getClientScriptHandler(params, isDevBuild);
 
     // 设置打包规则
     const prodRules = [];

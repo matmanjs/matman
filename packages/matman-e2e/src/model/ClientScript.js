@@ -11,6 +11,7 @@ class ClientScript {
    * @param {String} [opts.basePath]  client script 的根目录
    * @param {String} [opts.buildPath] client script 构建之后的目录
    * @param {RegExp} [opts.regMatch] 用于匹配是 client script 的正则
+   * @param {Boolean} [opts.isDevBuild] 是否为开发模式
    */
   constructor(opts) {
     // 如果 opts 为字符串，则认为是 matman.config.js 的绝对路径，则直接获取配置项
@@ -48,6 +49,12 @@ class ClientScript {
     if (!path.isAbsolute(this.buildPath)) {
       this.buildPath = path.resolve(this.rootPath, this.buildPath);
     }
+
+    // 如果是开发模式下，则修改构建之后的路径，使之与原构建路径同目录，且文件夹增加 _dev 后缀
+    if (opts.isDevBuild) {
+      this.buildPath = path.join(path.dirname(this.buildPath), path.basename(this.buildPath) + '_dev');
+    }
+
   }
 
   getEntry() {

@@ -8,14 +8,15 @@ const utils = require('../utils');
  * 获得 webpack 的配置结果
  *
  * @param {Object} [opts] 额外选项，可覆盖 config.js 中的配置
+ * @param {Boolean} [isDevBuild] 是否为开发模式
  * @return {Promise}
  */
-function getWebpackConfig(opts) {
+function getWebpackConfig(opts, isDevBuild) {
   return utils.getConfig()
     .then((data) => {
       // console.log('config.getConfig then', data);
 
-      return Builder.createProdConfig(data, opts);
+      return Builder.createProdConfig(data, opts, isDevBuild);
     });
 }
 
