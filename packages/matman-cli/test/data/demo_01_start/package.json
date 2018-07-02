@@ -1,0 +1,11 @@
+{
+  "name": "demo_01_start",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node ../../../bin/matman start",
+    "start-dev": "node ../../../bin/matman start --dev",
+    "start-by-node-dev": "node-dev ../../../bin/matman start"
+  },
+  "author": "helinjiang",
+  "license": "MIT"
+}
