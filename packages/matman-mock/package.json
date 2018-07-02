@@ -1,6 +1,6 @@
 {
   "name": "matman-mock",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Easy to build mock server",
   "main": "index.js",
   "scripts": {
