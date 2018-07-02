@@ -1,13 +1,14 @@
 const path = require('path');
 const fse = require('fs-extra');
 const spawn = require('cross-spawn');
-const matman = require('../matman');
+
+const matmanMock = require('matman-mock');
 
 module.exports = (configOpts) => {
   // console.log('run-by-pm2', configOpts);
 
   // pm2 的方式下，则需要先生成 pm2.json 文件，然后再使用 pm2 启动
-  const buildPath = matman.mockerUtil.getMockServerBuildPath(configOpts.rootPath, configOpts.buildPath);
+  const buildPath = matmanMock.util.getMockServerBuildPath(configOpts.rootPath, configOpts.buildPath);
   const pm2ConfigFilePath = path.join(buildPath, 'pm2.json');
 
   // 获取配置信息
@@ -61,8 +62,8 @@ function run(pm2ConfigFilePath) {
  * @returns {{apps: *[]}}
  */
 function getPm2Config(configOpts) {
-  const mockServerPath = matman.mockerUtil.getMockServerBasePath(configOpts.rootPath, configOpts.mockServerPath);
-  const buildPath = matman.mockerUtil.getMockServerBuildPath(configOpts.rootPath, configOpts.buildPath);
+  const mockServerPath = matmanMock.util.getMockServerBasePath(configOpts.rootPath, configOpts.mockServerPath);
+  const buildPath = matmanMock.util.getMockServerBuildPath(configOpts.rootPath, configOpts.buildPath);
   const matmanConfigPath = path.join(configOpts.rootPath, 'matman.config.js');
 
   // http://pm2.keymetrics.io/docs/usage/application-declaration/
