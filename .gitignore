@@ -48,6 +48,5 @@ tmp
 demo/app
 demo/app2
 logs
-dist
-dist-client-script
-build
+
+packages/*/test/**/build
