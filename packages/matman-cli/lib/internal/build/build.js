@@ -13,7 +13,7 @@ module.exports = function (args) {
   let isDevBuild = !!args.dev;
 
   // 编译 client src
-  builderWebpack3.getWebpackConfig()
+  builderWebpack3.getWebpackConfig(null, isDevBuild)
     .then((webpackConfig) => {
 
       // 获取到 webpack 配置项结果

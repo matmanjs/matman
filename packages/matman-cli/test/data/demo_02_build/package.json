@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "node ../../../bin/matman build",
+    "build-dev": "node ../../../bin/matman build --dev",
     "test": "mocha e2e_test/**/*.test.js"
   },
   "author": "helinjiang",
