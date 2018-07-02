@@ -10,7 +10,7 @@ var E2eTestAction = require('../model/E2eTestAction');
  * @param opts
  * @returns {Promise<*>}
  */
-function scanPage(pageUrl, preloadClientScriptPath) {
+function scan(pageUrl, preloadClientScriptPath) {
   var opts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
   var actionHandle = new E2eTestAction(pageUrl, preloadClientScriptPath, opts);
@@ -32,4 +32,4 @@ function scanPage(pageUrl, preloadClientScriptPath) {
   });
 }
 
-module.exports = scanPage;
+module.exports = scan;

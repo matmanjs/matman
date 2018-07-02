@@ -8,7 +8,7 @@ const E2eTestAction = require('../model/E2eTestAction');
  * @param opts
  * @returns {Promise<*>}
  */
-function scanPage(pageUrl, preloadClientScriptPath, opts = {}) {
+function scan(pageUrl, preloadClientScriptPath, opts = {}) {
   let actionHandle = new E2eTestAction(pageUrl, preloadClientScriptPath, opts);
 
   actionHandle.addAction(function (nightmareRun) {
@@ -29,4 +29,4 @@ function scanPage(pageUrl, preloadClientScriptPath, opts = {}) {
     });
 }
 
-module.exports = scanPage;
+module.exports = scan;
