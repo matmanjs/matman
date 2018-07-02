@@ -1,0 +1,12 @@
+{
+  "name": "<%= name %>",
+  "description": "<%= description %>",
+  "version": "<%= version %>",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublish": "node ./node_modules/matman-cli/bin/matman build-handler ./src ./lib -a"
+  },
+  "devDependencies": {
+    "matman-cli": "^<%= matmanCliVersion %>"
+  }
+}
