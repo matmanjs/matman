@@ -1,0 +1,15 @@
+{
+  "name": "<%= name %>",
+  "description": "<%= name %>",
+  "version": "1.0.0",
+  "main": "entry.js",
+  "scripts": {
+    "start": "node ./entry.js",
+    "dev-win": "set NODE_ENV=development && pm2 start entry.js --name=<%= name %>",
+    "dev-mac": "export NODE_ENV=development && pm2 start entry.js --name=<%= name %>",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "matman": "^<%= matmanVersion %>"
+  }
+}
