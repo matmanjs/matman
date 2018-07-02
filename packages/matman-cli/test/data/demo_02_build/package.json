@@ -2,7 +2,8 @@
   "name": "demo_01_start",
   "version": "1.0.0",
   "scripts": {
-    "build": "node ../../../bin/matman build"
+    "build": "node ../../../bin/matman build",
+    "test": "mocha e2e_test/**/*.test.js"
   },
   "author": "helinjiang",
   "license": "MIT",

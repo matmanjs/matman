@@ -14,30 +14,6 @@ describe('提现规则页：常规检查', function () {
             });
     });
 
-    describe('检查-全局设置信息', function () {
-        let data;
-
-        before(function () {
-            data = resultData.data.projectInfo;
-        });
-
-        it('全局badjsId：246', function () {
-            expect(data.config.badjsId).to.be.equal(246);
-        });
-
-        it('window.__DEV__ 为 false', function () {
-            expect(data.basic.isDev).to.be.false;
-        });
-
-        it('已经设置了 window._webviewloaded=true', function () {
-            expect(data.appNow.isSetWebviewLoaded).to.be.true;
-        });
-
-        it('已经定义了 window.__WEBVIEW_LOADFAIL 方法', function () {
-            expect(data.appNow.isDefinedWebviewLoadFail).to.be.true;
-        });
-    });
-
     describe('检查-提现说明', function () {
         let data;
 
