@@ -1,9 +1,15 @@
-const matmanQuery = require('./business/matman-query');
-
 module.exports = {
   util: require('./util'),
-  Mocker: require('./model/Mocker'),
+  config: require('./config'),
+
   MockerParser: require('./model/MockerParser'),
-  MatmanQuery: matmanQuery.MatmanQuery,
-  QUERY_KEY: matmanQuery.QUERY_KEY
+
+  Mocker: require('./model/Mocker'),
+  MockerConfig: require('./model/MockerConfig'),
+
+  MockModule: require('./model/MockModule'),
+  MockModuleConfig: require('./model/MockModuleConfig'),
+
+  MatmanQuery: require('./model/MatmanQuery'),
+  MatmanQueryItem: require('./model/MatmanQueryItem')
 };
