@@ -1,7 +1,7 @@
 {
-  "name": "matman-mock",
+  "name": "matman-e2e",
   "version": "3.0.0",
-  "description": "Easy to build mock server",
+  "description": "Easy to write e2e test",
   "main": "index.js",
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
@@ -14,7 +14,7 @@
   ],
   "author": "helinjiang",
   "license": "MIT",
-  "repository": "https://github.com/matmanjs/matman/tree/master/packages/matman-mock",
+  "repository": "https://github.com/matmanjs/matman/tree/master/packages/matman-e2e",
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "fs-extra": "^6.0.1",
