@@ -10,7 +10,7 @@ const builderWebpack3 = require('./builder-webpack3');
 module.exports = function (args) {
   // console.log(args);
 
-  let isDevBuild = !!args.s;
+  let isDevBuild = !!args.dev;
 
   // 编译 client src
   builderWebpack3.getWebpackConfig()
