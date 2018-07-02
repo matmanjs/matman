@@ -44,6 +44,7 @@
     "log4js": "^2.8.0",
     "matman": "^2.1.2",
     "matman-core": "^0.1.5",
+    "matman-e2e": "^3.0.1",
     "matman-mock": "^3.0.1",
     "meow": "^3.7.0",
     "method-override": "^2.3.10",
