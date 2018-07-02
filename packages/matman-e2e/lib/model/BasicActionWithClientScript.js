@@ -30,7 +30,7 @@ var _require = require('nightmare-handler'),
 
 var getBuildPath = require('../util/get-build-path');
 
-var E2eTestAction = function () {
+var BasicActionWithClientScript = function () {
   /**
    * 构造函数
    *
@@ -46,9 +46,9 @@ var E2eTestAction = function () {
    * @param {String | Boolean} [opts.useRecorder] 是否使用记录器记录整个请求队列
    * @param {String | Object} [opts.screenshot] 截图设置，如果为字符串则传递 cases 文件路径
    */
-  function E2eTestAction(pageUrl, preloadClientScriptPath) {
+  function BasicActionWithClientScript(pageUrl, preloadClientScriptPath) {
     var opts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    (0, _classCallCheck3.default)(this, E2eTestAction);
+    (0, _classCallCheck3.default)(this, BasicActionWithClientScript);
 
     this.pageUrl = pageUrl;
     this.preloadClientScriptPath = preloadClientScriptPath;
@@ -126,7 +126,7 @@ var E2eTestAction = function () {
     this.actionList = [];
   }
 
-  (0, _createClass3.default)(E2eTestAction, [{
+  (0, _createClass3.default)(BasicActionWithClientScript, [{
     key: 'getResult',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
@@ -273,7 +273,7 @@ var E2eTestAction = function () {
     // }
 
   }]);
-  return E2eTestAction;
+  return BasicActionWithClientScript;
 }();
 
 function evaluate() {
@@ -314,4 +314,4 @@ function getMainUrl(url) {
   }
 }
 
-module.exports = E2eTestAction;
+module.exports = BasicActionWithClientScript;

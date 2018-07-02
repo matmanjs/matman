@@ -6,7 +6,7 @@ const fse = require('fs-extra');
 const { NightmarePlus, WebEventRecorder } = require('nightmare-handler');
 const getBuildPath = require('../util/get-build-path');
 
-class E2eTestAction {
+class BasicActionWithClientScript {
   /**
    * 构造函数
    *
@@ -241,4 +241,4 @@ function getMainUrl(url) {
   }
 }
 
-module.exports = E2eTestAction;
+module.exports = BasicActionWithClientScript;

@@ -1,6 +1,6 @@
 'use strict';
 
-var E2eTestAction = require('../model/E2eTestAction');
+var BasicActionWithClientScript = require('../model/BasicActionWithClientScript');
 
 /**
  * 适合简单的页面扫描场景，无交互行为。
@@ -13,7 +13,7 @@ var E2eTestAction = require('../model/E2eTestAction');
 function scan(pageUrl, preloadClientScriptPath) {
   var opts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-  var actionHandle = new E2eTestAction(pageUrl, preloadClientScriptPath, opts);
+  var actionHandle = new BasicActionWithClientScript(pageUrl, preloadClientScriptPath, opts);
 
   actionHandle.addAction(function (nightmareRun) {
     return nightmareRun.wait(opts.wait || 500);
