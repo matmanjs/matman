@@ -2,6 +2,8 @@ module.exports = {
   util: require('./util'),
   config: require('./config'),
   store: require('./store'),
+  
+  CaseConfig: require('./model/CaseConfig'),
 
   MockerParser: require('./model/MockerParser'),
 
