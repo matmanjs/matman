@@ -1,0 +1,9 @@
+{
+    "name": "case",
+    "description": "exist-config description",
+    "priority": 88,
+    "delay": 10086,
+    "query": {
+        "type": 1
+    }
+}
