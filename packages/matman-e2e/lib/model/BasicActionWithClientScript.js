@@ -22,6 +22,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * 通用的流程
  */
 var path = require('path');
+var fs = require('fs');
 var fse = require('fs-extra');
 
 var _require = require('nightmare-handler'),
@@ -52,6 +53,12 @@ var BasicActionWithClientScript = function () {
 
     this.pageUrl = pageUrl;
     this.preloadClientScriptPath = preloadClientScriptPath;
+
+    // 校验 preloadClientScriptPath 必须是存在的，否则后续的逻辑也执行不了
+    // 如果获取 client script 地址不存在，则抛出异常提示 #107
+    if (!fs.existsSync(preloadClientScriptPath)) {
+      throw new Error('Unknown preloadClientScriptPath=' + preloadClientScriptPath);
+    }
 
     this.show = opts.show;
     this.wait = opts.wait;
