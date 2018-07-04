@@ -1,8 +1,10 @@
 {
   "name": "matman-cli",
-  "version": "3.0.3",
+  "version": "3.0.7",
   "description": "CLI for matman projects",
-  "main": "lib/index.js",
+  "bin": {
+    "matman": "./bin/matman"
+  },
   "scripts": {
     "start": "node ./bin/matman",
     "dev-ui": "cd ./business/local-server/webui && npm run start",
@@ -42,9 +44,8 @@
     "inquirer": "^3.0.6",
     "js-yaml": "^3.11.0",
     "log4js": "^2.8.0",
-    "matman": "^2.1.2",
     "matman-core": "^0.1.5",
-    "matman-e2e": "^3.0.3",
+    "matman-e2e": "^3.0.7",
     "matman-mock": "^3.0.2",
     "meow": "^3.7.0",
     "method-override": "^2.3.10",

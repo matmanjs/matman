@@ -1,4 +1,4 @@
-const E2eTestAction = require('../model/E2eTestAction');
+const operate = require('./operate');
 
 /**
  * 适合简单的页面扫描场景，无交互行为。
@@ -9,13 +9,14 @@ const E2eTestAction = require('../model/E2eTestAction');
  * @returns {Promise<*>}
  */
 function scan(pageUrl, preloadClientScriptPath, opts = {}) {
-  let actionHandle = new E2eTestAction(pageUrl, preloadClientScriptPath, opts);
+  return operate(pageUrl, preloadClientScriptPath, opts, (testAction) => {
 
-  actionHandle.addAction(function (nightmareRun) {
-    return nightmareRun.wait(opts.wait || 500);
-  });
+    // scan 行为是一种特殊的操作，因为它只有一个行为，且结果也不再是数组
+    testAction.addAction(function (nightmareRun) {
+      return nightmareRun.wait(opts.wait || 500);
+    });
 
-  return actionHandle.getResult()
+  })
     .then(function (result) {
       // 去掉这个nightmare的返回。目前他没有什么其他的用处，但是在 JSON.stringify 时会报错
       if (result.globalInfo && result.globalInfo.recorder && result.globalInfo.recorder.nightmare) {
