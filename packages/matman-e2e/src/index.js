@@ -5,5 +5,5 @@ module.exports = {
 
   ClientScript: require('./model/ClientScript'),
 
-  E2eTestAction: require('./model/E2eTestAction')
+  BasicActionWithClientScript: require('./model/BasicActionWithClientScript')
 };

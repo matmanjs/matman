@@ -1,3 +1,4 @@
 module.exports = {
-  scan: require('./scan')
+  scan: require('./scan'),
+  operate: require('./operate'),
 };
