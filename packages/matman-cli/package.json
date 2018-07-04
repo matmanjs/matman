@@ -44,7 +44,6 @@
     "inquirer": "^3.0.6",
     "js-yaml": "^3.11.0",
     "log4js": "^2.8.0",
-    "matman": "^2.1.2",
     "matman-core": "^0.1.5",
     "matman-e2e": "^3.0.5",
     "matman-mock": "^3.0.2",
