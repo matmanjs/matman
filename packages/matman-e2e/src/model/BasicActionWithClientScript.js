@@ -2,6 +2,7 @@
  * 通用的流程
  */
 const path = require('path');
+const fs = require('fs');
 const fse = require('fs-extra');
 const { NightmarePlus, WebEventRecorder } = require('nightmare-handler');
 const getBuildPath = require('../util/get-build-path');
@@ -25,6 +26,12 @@ class BasicActionWithClientScript {
   constructor(pageUrl, preloadClientScriptPath, opts = {}) {
     this.pageUrl = pageUrl;
     this.preloadClientScriptPath = preloadClientScriptPath;
+
+    // 校验 preloadClientScriptPath 必须是存在的，否则后续的逻辑也执行不了
+    // 如果获取 client script 地址不存在，则抛出异常提示 #107
+    if (!fs.existsSync(preloadClientScriptPath)) {
+      throw new Error('Unknown preloadClientScriptPath=' + preloadClientScriptPath);
+    }
 
     this.show = opts.show;
     this.wait = opts.wait;
