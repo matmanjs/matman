@@ -80,7 +80,7 @@ class BasicActionWithClientScript {
         let relativePath = path.relative(buildPath, screenshot).replace('../', '').replace('./', '');
 
         // e2e_test_page_withdraw_cases
-        let folderName = path.dirname(relativePath).replace(new RegExp(path.sep, 'gi'), '_');
+        let folderName = path.dirname(relativePath).replace(new RegExp(path.sep.replace(/\\/gi,'\\\\'),'gi'), '_');
 
         // 需要保存的文件夹路径
         const saveDir = path.join(buildPath, 'screenshot', folderName);
