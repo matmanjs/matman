@@ -104,7 +104,7 @@ var BasicActionWithClientScript = function () {
         var fileName = path.basename(screenshot, '.js');
 
         // e2e_test/page_withdraw/cases/select-check.js
-        var relativePath = path.relative(buildPath, screenshot).replace('../', '').replace('./', '');
+        var relativePath = path.relative(buildPath, screenshot).replace(/^\.([^[\\||\/])*[\\||\/]/gi, '');
 
         // e2e_test_page_withdraw_cases
         var folderName = path.dirname(relativePath).replace(new RegExp(path.sep.replace(/\\/gi, '\\\\'), 'gi'), '_');
