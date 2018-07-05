@@ -3,6 +3,9 @@ module.exports = {
   config: require('./config'),
   store: require('./store'),
 
+  Case: require('./model/Case'),
+  CaseConfig: require('./model/CaseConfig'),
+
   MockerParser: require('./model/MockerParser'),
 
   Mocker: require('./model/Mocker'),

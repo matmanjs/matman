@@ -46,7 +46,9 @@ var ClientScript = function () {
     }
 
     this.rootPath = opts.rootPath;
-    this.regMatch = opts.regMatch || /crawlers\/.*\.js$/;
+
+    // windows mock server 报 prereload faild #116
+    this.regMatch = opts.regMatch || /crawlers[\/|\\].*\.js$/;
 
     // 设置默认值和绝对路径
     this.basePath = opts.basePath || './e2e_test';
