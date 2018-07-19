@@ -16,6 +16,14 @@ matman 是一个用于数据模拟和段对端测试的工具。
 $ npm install matman --save
 ```
 
+## FAQ
+
+全局安装 `matman-cli` 时，可能会出现以下错误。错误是由 electron 安装时造成的，详见 https://github.com/matmanjs/matman-cli/issues/30 。此时需要增加一些额外参数来安装：
+
+```bash
+sudo npm install matman-cli -g --unsafe-perm=true --allow-root
+```
+
 ## 文档
 
 - 中文文档
