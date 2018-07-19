@@ -30,7 +30,7 @@ class Matman {
     const rcPath = path.join(base, '.matmanrc.yml');
 
     this.version = pkg.version;
-    this.baseDir = base;
+    this.baseDir = base + sep;
     this.rcPath = rcPath;
     this.pkgPath = path.join(base, 'package.json');
     this.pluginDir = path.join(base, 'node_modules') + sep;
