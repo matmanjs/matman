@@ -50,3 +50,5 @@ demo/app2
 logs
 
 packages/*/test/**/build
+
+package-lock.json
