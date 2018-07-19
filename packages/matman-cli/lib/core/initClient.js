@@ -27,7 +27,7 @@ class Client {
       if (!fs.existsSync(baseDir)) {
         log.info('检测到这是您第一次使用matman，即将进行cli client初始化');
 
-        fs.mkdirsSync(baseDir);
+        fs.mkdirSync(baseDir);
       }
 
       log.debug('.matman 目录已经创建');
@@ -93,7 +93,7 @@ class Client {
     const { logDir, log } = ctx;
     return new Promise(function (resolve) {
       if (!fs.existsSync(logDir)) {
-        fs.mkdirsSync(logDir);
+        fs.mkdirSync(logDir);
       }
       log.debug('.matman/logs 日志文件夹已经创建');
       resolve(ctx);
