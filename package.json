@@ -2,7 +2,8 @@
   "name": "matman",
   "private": true,
   "scripts": {
-    "publish": "git pull && lerna publish --cd-version patch"
+    "publish": "git pull && lerna publish --cd-version patch",
+    "force-publish": "lerna publish --cd-version patch --force-publish=*"
   },
   "repository": {
     "type": "git",

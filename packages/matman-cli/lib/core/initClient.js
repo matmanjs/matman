@@ -24,11 +24,13 @@ class Client {
         fs.unlinkSync(baseDir);
       }
 
-      if (!fs.existsSync(baseDir)) {
-        log.info('检测到这是您第一次使用matman，即将进行cli client初始化');
-
-        fs.mkdirsSync(baseDir);
-      }
+      fs.ensurePathSync(baseDir);
+      // 注意 fs.existsSync('.matman/') 与 fs.existsSync('.matman') 结果不一样
+      // if (!fs.existsSync(baseDir)) {
+      //   log.info('检测到这是您第一次使用matman，即将进行cli client初始化');
+      //
+      //   fs.mkdirsSync(baseDir);
+      // }
 
       log.debug('.matman 目录已经创建');
       resolve(ctx);
@@ -92,9 +94,8 @@ class Client {
     const ctx = this.ctx;
     const { logDir, log } = ctx;
     return new Promise(function (resolve) {
-      if (!fs.existsSync(logDir)) {
-        fs.mkdirsSync(logDir);
-      }
+      fs.ensurePathSync(logDir);
+
       log.debug('.matman/logs 日志文件夹已经创建');
       resolve(ctx);
     });
