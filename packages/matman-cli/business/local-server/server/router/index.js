@@ -21,7 +21,8 @@ module.exports = (entry) => {
 
   // 所有的请求都会经过这里，可以做一些类似权限控制的事情
   router.all('*', function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
+    // res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', req.get('Origin'));
     next();
   });
 
