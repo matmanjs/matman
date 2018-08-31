@@ -37,34 +37,24 @@ module.exports = class extends Generator {
     return this.prompt([{
       type: 'input',
       name: 'name',
-      message: '请输入项目名称，只能够输入英文、数字和、- 及 _ ：',
-      default: 'matman-app'
+      message: '请输入项目名称，只能够输入英文、数字和、- 及 _ ',
+      default: 'matman-app',
+      validate: function (name) {
+        if (!name) {
+          return '项目名称不能为空';
+        }
+
+        // 默认情况下是在当前路径下新建以 name 为名字的文件夹，然后再进入其中生成代码。
+        // 但如果当前路径下已经存在了，则需要进行提示，避免覆盖
+        if (fse.pathExistsSync(name)) {
+          return `当前目录下已经存在名字为 ${name} 的文件夹了`;
+        }
+
+        return true;
+      }
     }]).then((answers) => {
       this.answers = answers;
     });
-  }
-
-  /**
-   * Validate developer input message.
-   */
-  validate() {
-    const { name } = this.answers;
-
-    log.info('\n即将开始校验输入的项目基本信息');
-
-    if (!name) {
-      log.info(`项目名称不能够为空！\n`);
-      return this.prompting();
-    }
-
-    // 默认情况下是在当前路径下新建以 name 为名字的文件夹，然后再进入其中生成代码。
-    // 但如果当前路径下已经存在了，则需要进行提示，避免覆盖
-    if (fse.pathExistsSync(name)) {
-      log.info(`当前目录下已经存在名字为 ${name} 的文件夹了，请到其他目录运行命令或者修改项目名字。\n`);
-      return this.prompting();
-    }
-
-    log.info('校验通过，即将在本地生成代码');
   }
 
   /**
@@ -73,21 +63,22 @@ module.exports = class extends Generator {
   writing() {
     const { name } = this.answers;
 
+    const folderPath = path.resolve(name);
+
     const _copyTemplates = () => {
       // 默认情况下是在当前路径下新建以 name 为名字的文件夹，然后再进入其中生成代码。
       // 但如果当前路径下已经存在了，则需要进行提示。
-      mkdirp(name);
+      mkdirp(folderPath);
+      shell.cd(folderPath);
 
-      shell.cd(name);
-
-      this.destinationRoot(this.destinationPath(name));
+      this.destinationRoot(this.destinationPath(folderPath));
 
       this.fs.copyTpl(
-        this.templatePath('_package.json'),
+        this.templatePath('_package'),
         this.destinationPath('package.json'),
         {
           name: name,
-          matmanVersion: this.options.matmanVersion
+          pkgVersion: this.options.pkgVersion
         }
       );
 
@@ -110,18 +101,17 @@ module.exports = class extends Generator {
       );
 
       this.fs.copy(
-        this.templatePath('entry.js'),
-        this.destinationPath('entry.js')
+        this.templatePath('matman.config.js'),
+        this.destinationPath('matman.config.js')
       );
 
-      // copy src dir
-      const sourceDir = path.join(this.templatePath(), './src/');
-      const filePaths = Utils.read(sourceDir);
+      // copy mock_server
+      const mockServerFilePaths = Utils.read(path.join(this.templatePath(), './mock_server/'));
 
-      filePaths.map((filePath) => {
+      mockServerFilePaths.map((filePath) => {
         this.fs.copy(
-          this.templatePath('./src/' + filePath),
-          this.destinationPath('./src/' + filePath)
+          this.templatePath('./mock_server/' + filePath),
+          this.destinationPath('./mock_server/' + filePath)
         );
       });
 
