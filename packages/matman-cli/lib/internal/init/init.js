@@ -24,36 +24,23 @@ module.exports = function (args) {
   // node ./bin/matman init --from=tnpm
   // console.log(args);
 
-  new Promise((resolve, reject) => {
-    // 如果输入了 matman 的版本号，则不再在线查找
-    if (args.matman) {
-      return resolve(args.matman);
-    }
+  const name = 'matman-app';
+  const pkgVersion = {
+    'matman-mock': '3.0.11'
+  };
 
-    // 在线获取 matman 的版本号
-    let registry = args.registry || registryMap[args.from || 'npm'];
+  // generator 的目录
+  const generatorPath = path.resolve(__dirname, '../../generators/' + name);
 
-    pkgJson('matman', 'latest', registry)
-      .then(json => {
-        resolve(json.version || '1.5.0');
-      });
-  })
-    .then((matmanVersion) => {
-      let name = 'matman-app';
+  yeomanEnv.register(require.resolve(generatorPath), name);
 
-      let generatorPath = path.resolve(__dirname, '../../generators/' + name);
-
-      yeomanEnv.register(require.resolve(generatorPath), name);
-
-      // 可以通过透传额外参数到 generator 中，然后通过 this.options 就能够取到传递过去的值
-      let yeoResult = yeomanEnv.run(name, {
-        'skip-install': true,
-        'matmanVersion': matmanVersion
-      }, err => {
-        // console.log('=====end===', err);
-        // 这里的 yeoResult 即 generator 的 this 对象，例如可以通过 result.destinationPath() 获得生成的地址
-      });
-    });
+  // 可以通过透传额外参数到 generator 中，然后通过 this.options 就能够取到传递过去的值
+  let yeoResult = yeomanEnv.run(name, {
+    'pkgVersion': pkgVersion
+  }, err => {
+    // console.log('=====end===', err);
+    // 这里的 yeoResult 即 generator 的 this 对象，例如可以通过 result.destinationPath() 获得生成的地址
+  });
 
   return Promise.resolve();
 };

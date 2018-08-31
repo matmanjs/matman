@@ -1,0 +1,9 @@
+{
+  "name": "<%= name %>",
+  "scripts": {
+    "start": "matman start"
+  },
+  "dependencies": {
+    "matman-mock": "^<%= pkgVersion['matman-mock'] %>"
+  }
+}
