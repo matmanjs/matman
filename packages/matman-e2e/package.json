@@ -1,6 +1,6 @@
 {
   "name": "matman-e2e",
-  "version": "3.0.11",
+  "version": "3.0.14",
   "description": "Easy to write e2e test",
   "main": "lib/index.js",
   "scripts": {

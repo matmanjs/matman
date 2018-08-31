@@ -45,7 +45,7 @@ function entry(args) {
             }
 
             console.log(chalk.cyan(data));
-            console.log(chalk.cyan(` Matman，当前版本v${matman.version}, 让数据模拟和测试更简单，主页: https://github.com/matmanjs/matman-cli `));
+            console.log(chalk.cyan(` Matman，当前版本v${matman.version}, 让数据打桩和自动化测试更简单，主页: https://github.com/matmanjs/matman-cli `));
             console.log(chalk.cyan(' (c) powered by IVWEB Team                                                                            '));
             console.log(chalk.cyan(' Run matman --help to see usage.                                                                      '));
         });
