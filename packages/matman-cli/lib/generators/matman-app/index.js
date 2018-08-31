@@ -105,16 +105,15 @@ module.exports = class extends Generator {
         this.destinationPath('matman.config.js')
       );
 
-      // copy src dir
-      // const sourceDir = path.join(this.templatePath(), './src/');
-      // const filePaths = Utils.read(sourceDir);
-      //
-      // filePaths.map((filePath) => {
-      //   this.fs.copy(
-      //     this.templatePath('./src/' + filePath),
-      //     this.destinationPath('./src/' + filePath)
-      //   );
-      // });
+      // copy mock_server
+      const mockServerFilePaths = Utils.read(path.join(this.templatePath(), './mock_server/'));
+
+      mockServerFilePaths.map((filePath) => {
+        this.fs.copy(
+          this.templatePath('./mock_server/' + filePath),
+          this.destinationPath('./mock_server/' + filePath)
+        );
+      });
 
     };
 
