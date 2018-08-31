@@ -26,7 +26,7 @@ module.exports = function (args) {
 
   const name = 'matman-app';
   const pkgVersion = {
-    'matman-mock': '3.0.11'
+    'matman-mock': '3.0.14'
   };
 
   // generator 的目录
