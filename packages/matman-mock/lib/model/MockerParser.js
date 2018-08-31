@@ -354,14 +354,19 @@ function getRequirePath(absolutePath) {
   // 获得 require 这个模块的相对路径
   var relativePath = path.relative(__dirname, absolutePath);
 
+  if (path.isAbsolute(relativePath)) {}
+  // 如果 __dirname 和 absolutePath 不在同一个磁盘中，则 path.relative(__dirname, absolutePath) 会返回后者
+  // 因此此处就无需处理相对路径 #128
+
+
   // 注意，path.relative 方法返回的结果中，如果是相对当前目录的，则其会把 './' 去掉，
   // 例如， './path/a/b' 会被返回 'path/a/b'
   // 此时如果 require('path/a/b') ，node 会先去 node_modules 模块寻找，
   // 而不是当前目录去寻找，修改为 require('./path/a/b') 就不会有这样问题，
   // 因此，这种情况下一定要补上一个 './'，
-  if (relativePath.indexOf('..') < 0) {
-    relativePath = './' + relativePath;
-  }
+  else if (relativePath.indexOf('..') < 0) {
+      relativePath = './' + relativePath;
+    }
 
   // 需要将“\”替换为“/”，因为 require 语法中模块的路径是以 "/" 来分目录层级的
   return relativePath.replace(/\\/gi, '/');
