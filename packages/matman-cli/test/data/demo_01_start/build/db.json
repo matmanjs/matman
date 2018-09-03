@@ -251,14 +251,15 @@
         "description": "stub_01",
         "disable": false,
         "defaultModule": "",
-        "activeModule": "error",
+        "activeModule": "success",
         "method": "get",
         "plugin": "stub",
         "priority": 0,
         "tags": [
           "全部"
         ]
-      }
+      },
+      "createdAt": 1535966233861
     }
   ]
 }
