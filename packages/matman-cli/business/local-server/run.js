@@ -107,7 +107,9 @@ module.exports = (configOpts) => {
 
   // TODO 触发 onBeforeServerListen 事件
   // 如果启动了 plugin=stub 则开启 websocket
-  require('./plugins/mocker/websocket')(configOpts, server, routerMocker._mockerParser);
+  if (configOpts.supportStub) {
+    require('./plugins/mocker/websocket')(configOpts, server, routerMocker._mockerParser);
+  }
 
   server.listen(configOpts.port || 9527, () => {
     // matmanLogger.info('matman server is running');
