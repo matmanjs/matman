@@ -6,8 +6,7 @@
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
     "test": "mocha",
-    "prepublishOnly": "npm run compile",
-    "prepublish": "npm run compile"
+    "prepublishOnly": "npm run compile"
   },
   "keywords": [
     "mock",

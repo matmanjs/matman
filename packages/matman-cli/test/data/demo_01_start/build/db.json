@@ -49,6 +49,7 @@
         "defaultModule": "",
         "activeModule": "error",
         "method": "get",
+        "plugin": "xhr",
         "priority": 0,
         "tags": [
           "全部"
@@ -139,6 +140,7 @@
         "defaultModule": "success_1",
         "activeModule": "success_1",
         "method": "get",
+        "plugin": "xhr",
         "priority": 0,
         "tags": [
           "全部"
@@ -195,11 +197,66 @@
         "defaultModule": "success_1",
         "activeModule": "success_1",
         "method": "get",
+        "plugin": "xhr",
         "priority": 0,
         "tags": [
           "全部",
           "tag1",
           "tag2"
+        ]
+      }
+    },
+    {
+      "basePath": "/Users/helinjiang/gitprojects/matman/packages/matman-mock/test/data/fixtures/mock_server/mockers/stub_01",
+      "name": "stub_01",
+      "mockModuleList": [
+        {
+          "name": "error",
+          "module": {
+            "errCode": 100000
+          },
+          "config": {
+            "name": "error",
+            "description": "error",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "error"
+            }
+          }
+        },
+        {
+          "name": "success",
+          "module": {
+            "errCode": 0,
+            "result": {
+              "description": "stub_01 success.json"
+            }
+          },
+          "config": {
+            "name": "success",
+            "description": "success",
+            "priority": 0,
+            "delay": 0,
+            "query": {
+              "_m_target": "success"
+            }
+          }
+        }
+      ],
+      "config": {
+        "name": "stub_01",
+        "route": "/stub/a/b/stub_01",
+        "routeExtra": {},
+        "description": "stub_01",
+        "disable": false,
+        "defaultModule": "",
+        "activeModule": "error",
+        "method": "get",
+        "plugin": "stub",
+        "priority": 0,
+        "tags": [
+          "全部"
         ]
       }
     }
