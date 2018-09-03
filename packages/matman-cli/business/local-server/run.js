@@ -102,40 +102,12 @@ module.exports = (configOpts) => {
   // Use handler router
   app.use(routerMocker);
 
-  // 触发 onBeforeServerListen 事件
-  // const server = require('./plugins/stub/websocket')(configOpts, app, routerMocker._handlerParser);
   // https://socket.io/get-started/chat/#The-web-framework
   const server = require('http').createServer(app);
 
-  const io = require('socket.io')(server);
-
-  io.set('origins', '*:*');
-
-  io.on('connection', function (socket) {
-    console.log('connection ' + socket.id);
-
-    // 监听 emitStub，传递特殊的值，然后再将指定的数据发送给客户端的特定事件
-    socket.on('emitStub', function (data) {
-      // broadcast.emit 会广播给其他连接了 websocket 的用户，但是不会广播给自己
-      // 因此需要额外的 emit 发给自己以便校验
-      // 必须要一次 broadcast.emit，因为我们是在 matman 系统进行操作然后广播给其他服务的
-      // 必须要一次 emit，因为要进行校验
-      socket.broadcast.emit(data.route, data.result);
-      socket.emit(data.route, data.result);
-    });
-
-    socket.on('/ws/a/b/demo', function (params, opts = {}) {
-      console.log('-----', Date.now(), params, opts);
-
-      socket.broadcast.emit('wsCallback', { params: params, opts: opts });
-      socket.emit('wsCallback', { params: params, opts: opts });
-    });
-
-    // when the user disconnects.. perform this
-    socket.on('disconnect', function () {
-      console.log('disconnect ' + socket.id);
-    });
-  });
+  // TODO 触发 onBeforeServerListen 事件
+  // 如果启动了 plugin=stub 则开启 websocket
+  require('./plugins/mocker/websocket')(configOpts, server, routerMocker._mockerParser);
 
   server.listen(configOpts.port || 9527, () => {
     // matmanLogger.info('matman server is running');

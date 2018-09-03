@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const matmanMock = require('matman-mock');
 
 const baseRouter = require('../../server/router/base-router');
@@ -50,5 +49,6 @@ module.exports = (router, entry) => {
   handleXhr(router, mockerList, mockerParser);
 
   // 携带变量出去
+  router._mockerParser = mockerParser;
   router._mockerParser = mockerParser;
 };
