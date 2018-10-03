@@ -44,11 +44,8 @@ class Mocker extends Component {
 
     let actualURL = mockerItem.config.route;
 
-    let host;
-
-    if (process.env.NODE_ENV !== 'production') {
-      host = 'localhost:9527';
-    }
+    // 在预览的情况下，host 的值应该是与当前页面一致的
+    let host = window.location.host;
 
     if (mockerItem.config.plugin !== 'stub') {
       // 如果有指定的host，则使用指定的host
