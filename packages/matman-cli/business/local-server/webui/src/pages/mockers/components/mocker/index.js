@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { Layout } from 'antd';
 
-import { ajax } from '../../../../business/db';
+import { ajax, requestStub } from '../../../../business/db';
 
 import { loadMocker, loadMockerReadme, setMockerActiveModule, setMockerDisable } from '../../data/data-mocker';
 import { loadMockerList } from '../../data/data-mocker-list';
@@ -51,26 +50,40 @@ class Mocker extends Component {
       host = 'localhost:9527';
     }
 
-    // 如果有指定的host，则使用指定的host
-    if (host && (actualURL.indexOf(host) < 0)) {
-      actualURL = `http://${host}${actualURL}`;
-    }
+    if (mockerItem.config.plugin !== 'stub') {
+      // 如果有指定的host，则使用指定的host
+      if (host && (actualURL.indexOf(host) < 0)) {
+        actualURL = `http://${host}${actualURL}`;
+      }
 
-    ajax({
-      method: mockerItem.config.method,
-      url: actualURL,
-      data: query
-    })
-      .then((data) => {
-        if (process.env.NODE_ENV !== 'production') {
-          console.log(`url=${actualURL}`, query, data);
-        }
-
-        this.handleModalShow(data);
+      ajax({
+        method: mockerItem.config.method,
+        url: actualURL,
+        data: query
       })
-      .catch((err) => {
-        console.error(err);
-      });
+        .then((data) => {
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(`url=${actualURL}`, query, data);
+          }
+
+          this.handleModalShow(data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      requestStub(`http://${host}`, actualURL, query)
+        .then((data) => {
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(`url=${actualURL}`, query, data);
+          }
+
+          this.handleModalShow(data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   handleActive = (name) => {
