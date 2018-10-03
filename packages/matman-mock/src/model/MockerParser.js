@@ -115,7 +115,13 @@ class MockerParser {
    * @return {Object}
    */
   getMockerByRoute(route, params = {}) {
+    // 为避免 params=null，此处要特别设置一下
+    if (!params) {
+      params = {};
+    }
+
     const allMockerList = this.getAllMocker();
+
     const paramsKeyLength = Object.keys(params).length;
 
     let matchedArr = [];
@@ -201,6 +207,11 @@ class MockerParser {
    * @return {Object}
    */
   getResInfoByRoute(route, params = {}) {
+    // 为避免 params=null，此处要特别设置一下
+    if (!params) {
+      params = {};
+    }
+
     // 1. 获得当前的 mocker 信息
     let mockerItem = this.getMockerByRoute(route, params);
 

@@ -147,7 +147,13 @@ var MockerParser = function () {
     value: function getMockerByRoute(route) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
+      // 为避免 params=null，此处要特别设置一下
+      if (!params) {
+        params = {};
+      }
+
       var allMockerList = this.getAllMocker();
+
       var paramsKeyLength = Object.keys(params).length;
 
       var matchedArr = [];
@@ -240,6 +246,11 @@ var MockerParser = function () {
     key: 'getResInfoByRoute',
     value: function getResInfoByRoute(route) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      // 为避免 params=null，此处要特别设置一下
+      if (!params) {
+        params = {};
+      }
 
       // 1. 获得当前的 mocker 信息
       var mockerItem = this.getMockerByRoute(route, params);
