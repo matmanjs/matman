@@ -78,23 +78,28 @@ function recieve(asyncClient, route, params) {
  */
 function _check(asyncClient, route) {
     return new Promise((resolve, reject) => {
-        // 有问题时直接执行真实的fetch方法
-        if (!asyncClient) {
-            return reject(RESULT.NO_ASYNC_CLIENT);
-        }
 
-        // 如果远程服务未启动也需要放弃stub
-        if (!asyncClient.isConnected()) {
-            alert(`matman stub 服务未启动！请检查 ${asyncClient.getURI()} 是否已启动`);
-            return reject(RESULT.NOT_CONNECTED);
-        }
+        // 使之异步，避免 websocket 还未连接成功
+        setTimeout(() => {
+            // 有问题时直接执行真实的fetch方法
+            if (!asyncClient) {
+                return reject(RESULT.NO_ASYNC_CLIENT);
+            }
 
-        // 如果远程服务未启动也需要放弃stub
-        if (!route) {
-            return reject(RESULT.NO_ROUTE);
-        }
+            // 如果远程服务未启动也需要放弃stub
+            if (!asyncClient.isConnected()) {
+                alert(`matman stub 服务未启动！请检查 ${asyncClient.getURI()} 是否已启动`);
+                return reject(RESULT.NOT_CONNECTED);
+            }
 
-        resolve();
+            // 如果远程服务未启动也需要放弃stub
+            if (!route) {
+                return reject(RESULT.NO_ROUTE);
+            }
+
+            resolve();
+        }, 10);
+
     });
 }
 
