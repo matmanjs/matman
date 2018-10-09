@@ -1,10 +1,14 @@
 const io = require('socket.io-client');
 
 class StubAsyncClient {
+    /**
+     *
+     * @param {String} [url] socket启动地址，例如 http://10.66.95.54:3000'，如果是移动端代理，记得要写IP，而不能够使用 localhost 或者 127.0.0.1 这种
+     */
     constructor(url) {
-        this.url = url;
+        this.url = url || 'http://local.matmanjs.org';
 
-        this.socket = io(url);
+        this.socket = io(this.url);
 
         // 序列号，用于识别不同的事件
         this._seq = 0;
@@ -16,7 +20,7 @@ class StubAsyncClient {
         let self = this;
 
         this.socket.on('connect', () => {
-            console.log('connect ' + self.socket.id);
+            console.log('connect ' + self.socket.id + ' for ' + self.url);
         });
 
         this.socket.on('disconnect', function () {
