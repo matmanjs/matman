@@ -10,18 +10,71 @@ var RESULT = {
     // 桩数据服务启动失败
     NOT_CONNECTED: 'NOT_CONNECTED',
 
+    // 没有路由
+    NO_ROUTE: 'NO_ROUTE',
+
     // 桩数据服务被设置了禁用
     DISABLED: 'DISABLED'
 };
 
 /**
+ * 请求数据
  *
  * @param {StubAsyncClient} asyncClient StubAsyncClient对象
  * @param {String} route 路由
  * @param {Object} [params] 参数
  * @return {Promise<any>}
  */
-function asyncClientEmit(asyncClient, route, params) {
+function request(asyncClient, route, params) {
+    return new Promise(function (resolve, reject) {
+        _check(asyncClient, route).then(function () {
+            // 发送信息到远程，然后接收其回调
+            asyncClient.emit(route, params, function (data) {
+                // 如果stub服务端设置了禁用stub，则执行真实的fetch方法
+                if (data && data._disable) {
+                    return reject(RESULT.DISABLED);
+                }
+
+                resolve(data);
+            });
+        }).catch(function (err) {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * 请求数据
+ *
+ * @param {StubAsyncClient} asyncClient StubAsyncClient对象
+ * @param {String} route 路由
+ * @param {Object} [params] 参数
+ * @return {Promise<any>}
+ */
+function recieve(asyncClient, route, params) {
+    return new Promise(function (resolve, reject) {
+        _check(asyncClient, route).then(function () {
+            asyncClient.on(route, params, function (data) {
+                // 如果stub服务端设置了禁用stub，则执行真实的fetch方法
+                if (data && data._disable) {
+                    return reject(RESULT.DISABLED);
+                }
+
+                resolve(data);
+            });
+        }).catch(function (err) {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * 检查参数
+ * @param {StubAsyncClient} asyncClient StubAsyncClient对象
+ * @param {String} route 路由
+ * @return {Promise<any>}
+ */
+function _check(asyncClient, route) {
     return new Promise(function (resolve, reject) {
         // 有问题时直接执行真实的fetch方法
         if (!asyncClient) {
@@ -34,20 +87,16 @@ function asyncClientEmit(asyncClient, route, params) {
             return reject(RESULT.NOT_CONNECTED);
         }
 
-        // 发送信息到远程，然后接收其回调
-        asyncClient.emit(route, params, function () {
-            var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        // 如果远程服务未启动也需要放弃stub
+        if (!route) {
+            return reject(RESULT.NO_ROUTE);
+        }
 
-            // 如果stub服务端设置了禁用stub，则执行真实的fetch方法
-            if (data._disable) {
-                return reject(RESULT.DISABLED);
-            }
-
-            resolve(data);
-        });
+        resolve();
     });
 }
 
 module.exports = {
-    asyncClientEmit: asyncClientEmit
+    request: request,
+    recieve: recieve
 };
