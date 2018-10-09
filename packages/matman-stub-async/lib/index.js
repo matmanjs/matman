@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-    StubAsyncCient: require('./model/StubAsyncCient')
+    StubAsyncClient: require('./model/StubAsyncClient')
 };

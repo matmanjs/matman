@@ -1,6 +1,6 @@
-import io from 'socket.io-client';
+const io = require('socket.io-client');
 
-export default class StubAsyncCient {
+class StubAsyncClient {
     constructor(url) {
         this.url = url;
 
@@ -76,3 +76,5 @@ export default class StubAsyncCient {
         }
     }
 }
+
+module.exports = StubAsyncClient;
