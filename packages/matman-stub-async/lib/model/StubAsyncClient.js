@@ -7,12 +7,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var io = require('socket.io-client');
 
 var StubAsyncClient = function () {
+    /**
+     *
+     * @param {String} [url] socket启动地址，例如 http://10.66.95.54:3000'，如果是移动端代理，记得要写IP，而不能够使用 localhost 或者 127.0.0.1 这种
+     */
     function StubAsyncClient(url) {
         _classCallCheck(this, StubAsyncClient);
 
-        this.url = url;
+        this.url = url || 'http://local.matmanjs.org';
 
-        this.socket = io(url);
+        this.socket = io(this.url);
 
         // 序列号，用于识别不同的事件
         this._seq = 0;
@@ -26,7 +30,7 @@ var StubAsyncClient = function () {
             var self = this;
 
             this.socket.on('connect', function () {
-                console.log('connect ' + self.socket.id);
+                console.log('connect ' + self.socket.id + ' for ' + self.url);
             });
 
             this.socket.on('disconnect', function () {
