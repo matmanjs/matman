@@ -41,8 +41,8 @@ export function getDataByGet(url, queryOpts) {
 }
 
 export function requestStub(url, route, params = {}) {
-  let asyncClient = new matmanStubAsync.StubAsyncClient(url);
+  let asyncClient = new matmanStubAsync.AsyncClient(url);
 
   // TODO 这里需要考虑下超时的情形
-  return matmanStubAsync.util.request(asyncClient, route, params);
+  return asyncClient.request(route, params);
 }
