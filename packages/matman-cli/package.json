@@ -47,7 +47,7 @@
     "matman-core": "^0.1.5",
     "matman-e2e": "^3.0.14",
     "matman-mock": "^3.0.14",
-    "matman-stub-async": "^3.0.14",
+    "matman-mock-async": "^3.0.14",
     "meow": "^3.7.0",
     "method-override": "^2.3.10",
     "minimist": "^1.2.0",
