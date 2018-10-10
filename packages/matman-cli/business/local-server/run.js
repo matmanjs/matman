@@ -106,8 +106,8 @@ module.exports = (configOpts) => {
   const server = require('http').createServer(app);
 
   // TODO 触发 onBeforeServerListen 事件
-  // 如果启动了 plugin=stub 则开启 websocket
-  if (configOpts.supportStub) {
+  // 如果启动了 plugin=async 则开启 websocket
+  if (configOpts.supportAsync) {
     require('./plugins/mocker/websocket')(configOpts, server, routerMocker._mockerParser);
   }
 

@@ -29,7 +29,7 @@ function request(asyncClient, route, params) {
       .then(() => {
         // 发送信息到远程，然后接收其回调
         asyncClient.emit(route, params, function (data) {
-          // 如果stub服务端设置了禁用stub，则执行真实的fetch方法
+          // 如果async服务端设置了禁用async，则执行真实的fetch方法
           if (data && data._disable) {
             return reject(RESULT.DISABLED);
           }
@@ -73,7 +73,7 @@ function _check(asyncClient, route) {
       return reject(RESULT.NO_ASYNC_CLIENT);
     }
 
-    // 如果远程服务未启动也需要放弃stub
+    // 如果远程服务未启动也需要放弃async
     if (!route) {
       return reject(RESULT.NO_ROUTE);
     }
@@ -95,7 +95,7 @@ function _check(asyncClient, route) {
           clearTimeout(checkT);
         }
 
-        alert(`matman stub 服务未启动！请检查 ${asyncClient.getURI()} 是否已启动`);
+        alert(`matman async 服务未启动！请检查 ${asyncClient.getURI()} 是否已启动`);
         reject(RESULT.NOT_CONNECTED);
       } else {
         i++;

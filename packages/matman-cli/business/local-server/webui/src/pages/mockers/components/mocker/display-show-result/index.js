@@ -31,7 +31,7 @@ export default class MockerShowResult extends Component {
     const { showData } = this.state;
 
     const isShow = !!data;
-    const isShowEmitButton = (mockerItem.config.plugin === 'stub');
+    const isShowEmitButton = (mockerItem.config.plugin === 'async');
 
     return (
       <div className="mocker-show-result">

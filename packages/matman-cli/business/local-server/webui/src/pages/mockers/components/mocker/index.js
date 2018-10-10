@@ -54,7 +54,7 @@ class Mocker extends Component {
       host = '127.0.0.1:9527';
     }
 
-    if (mockerItem.config.plugin !== 'stub') {
+    if (mockerItem.config.plugin !== 'async') {
       // 如果有指定的host，则使用指定的host
       if (host && (actualURL.indexOf(host) < 0)) {
         actualURL = `http://${host}${actualURL}`;

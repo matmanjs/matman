@@ -22,7 +22,7 @@ var MockerConfig =
  * @param {String} [config.activeModule] 当前激活的 mock module 名字
  * @param {String} [config.defaultModule] 默认初始化时激活的 mock module 名字
  * @param {String} [config.method] http 请求方式，包括 get(默认) 和 post
- * @param {String} [config.plugin] 数据mock类型，包括 xhr(默认) 和 stub
+ * @param {String} [config.plugin] 数据mock类型，包括 xhr(默认) 和 async
  * @param {Number} [config.priority] 管理后台列表中排序的权重，值越大则越排在前面
  * @param {Array} [config.tags] 标签，用于过滤，字符串数组
  * @param {Array} [mockModuleList] mock module 数组
@@ -83,7 +83,7 @@ function MockerConfig(handlerName) {
   // http 请求方式，包括 get(默认) 和 post
   this.method = config.method || 'get';
 
-  // 数据mock类型，包括 xhr(默认) 和 stub
+  // 数据mock类型，包括 xhr(默认) 和 async
   this.plugin = config.plugin || 'xhr';
 
   // 管理后台列表中排序的权重，值越大则越排在前面

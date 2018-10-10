@@ -33,8 +33,8 @@ module.exports = function (opts, server, mockerParser) {
       // mocker 的配置项在其 config 字段中
       const mockerConfig = mockerItem.config;
 
-      // 只处理 plugin=stub 的场景
-      if (mockerConfig.plugin !== 'stub') {
+      // 只处理 plugin=async 的场景
+      if (mockerConfig.plugin !== 'async') {
         return;
       }
 
@@ -45,7 +45,7 @@ module.exports = function (opts, server, mockerParser) {
         return;
       }
 
-      // 每一个 stub 都监听其特定的消息
+      // 每一个 async 都监听其特定的消息
       // TODO 此处需要确认如果有多个同样的 SOCKET_ROUTE，则会发生什么事情，是否需要程序进行提示？
       socket.on(SOCKET_ROUTE, function (params, opts = {}) {
         console.log(Date.now(), mockerConfig.disable, SOCKET_ROUTE, socket.id, params, opts);
@@ -67,7 +67,7 @@ module.exports = function (opts, server, mockerParser) {
         if (!resInfo) {
           let errMsg = 'Could not get reqInfo by route=' + url + ' and params=' + JSON.stringify(params);
           console.error(errMsg);
-          socket.emit('stub_error', errMsg);
+          socket.emit('async_error', errMsg);
           socket.emit('wsCallback', { data: errMsg, params: params, opts: opts });
           return;
         }
@@ -93,7 +93,7 @@ module.exports = function (opts, server, mockerParser) {
 
             console.error(errMsg);
 
-            socket.emit('stub_error', errMsg);
+            socket.emit('async_error', errMsg);
             socket.emit('wsCallback', { data: errMsg, params: params, opts: opts });
           });
       });
