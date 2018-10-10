@@ -22,7 +22,7 @@ describe('./mocker/MockerConfig.js', () => {
     });
 
     it('should contain some fields', () => {
-      expect(mockerConfig).to.have.all.keys('name', 'description', 'route', 'routeExtra', 'disable', 'defaultModule', 'activeModule', 'method', 'priority', 'tags');
+      expect(mockerConfig).to.have.all.keys('name', 'description', 'route', 'routeExtra', 'plugin', 'disable', 'defaultModule', 'activeModule', 'method', 'priority', 'tags');
     });
 
     it('should equal correct value', () => {
@@ -30,6 +30,7 @@ describe('./mocker/MockerConfig.js', () => {
         name: 'empty',
         route: '',
         routeExtra: {},
+        plugin: 'xhr',
         description: 'empty',
         disable: false,
         defaultModule: '',
@@ -49,6 +50,7 @@ describe('./mocker/MockerConfig.js', () => {
         name: 'simple',
         route: '/cgi-bin/a/b/simple',
         routeExtra: {},
+        plugin: 'xhr',
         description: 'simple example description',
         disable: false,
         defaultModule: '',
@@ -68,6 +70,7 @@ describe('./mocker/MockerConfig.js', () => {
         name: 'basic',
         route: '/cgi-bin/a/b/basic',
         routeExtra: {},
+        plugin: 'xhr',
         description: 'basic example description',
         disable: true,
         defaultModule: 'exist-config',
@@ -91,6 +94,7 @@ describe('./mocker/MockerConfig.js', () => {
         name: 'basic_02',
         route: '',
         routeExtra: {},
+        plugin: 'xhr',
         description: 'basic_02',
         disable: false,
         defaultModule: 'exist-config',
