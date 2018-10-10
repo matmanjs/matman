@@ -5,7 +5,8 @@ const fsHandler = require('fs-handler');
 const _ = require('lodash');
 const marked = require('marked');
 const store = require('../store');
-const TARGET_FIELD = '_m_target';
+
+const gConfig = require('../config');
 
 class MockerParser {
   /**
@@ -221,7 +222,7 @@ class MockerParser {
 
     // 2. 获得当前最适合的 mock module
     // 优先获取 param 中请求的指定 mock_module，其次是 mocker.config.activeModule
-    let mockModuleName = params[TARGET_FIELD] || mockerItem.config.activeModule;
+    let mockModuleName = params[gConfig.TARGET_FIELD] || mockerItem.config.activeModule;
 
     let mockModuleItem = this.getMockModuleByName(mockerItem.name, mockModuleName);
 
@@ -231,7 +232,7 @@ class MockerParser {
 
     // 3. 获得 mock module 的绝对路径
     // 目标模块的路径，需要注意下 no module 的场景
-    const moduleRelativePath = (mockModuleItem.type && mockModuleItem.type === 'noModule') ? mockModuleItem.fileName : path.join('mock_modules', mockModuleName);
+    const moduleRelativePath = (mockModuleItem.type && mockModuleItem.type === 'noModule') ? mockModuleItem.fileName : path.join(gConfig.MOCK_MODULES, mockModuleName);
 
     const moduleFullPath = path.join(this.basePath, mockerItem.name, moduleRelativePath);
 
