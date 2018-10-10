@@ -44,13 +44,13 @@ function request(asyncClient, route, params) {
 }
 
 /**
- * 请求数据
+ * 监听数据
  *
  * @param {StubAsyncClient} asyncClient StubAsyncClient对象
  * @param {String} route 路由
  * @param {Function} callback 回调
  */
-function receive(asyncClient, route, callback) {
+function listen(asyncClient, route, callback) {
   _check(asyncClient, route)
     .then(() => {
       asyncClient.on(route, callback);
@@ -112,5 +112,5 @@ function _check(asyncClient, route) {
 
 module.exports = {
   request: request,
-  receive: receive
+  listen: listen
 };
