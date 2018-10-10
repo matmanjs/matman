@@ -69,8 +69,8 @@ class StubAsyncClient {
                 eventName: eventName
             });
 
-            // 接受回调
-            this.socket.on(eventName, (data) => {
+            // 接受回调，此处只接受一次。虽然 eventName 已经是唯一的，但是 once 只监听一次，可以避免内存被占用
+            this.socket.once(eventName, (data) => {
                 console.log('[stub-async-client on data after emit]', eventName, route, data);
                 callback(data);
             });
