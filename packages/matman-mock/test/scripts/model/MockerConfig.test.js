@@ -51,7 +51,7 @@ describe('./mocker/MockerConfig.js', () => {
         route: '/cgi-bin/a/b/simple',
         routeExtra: {},
         plugin: 'xhr',
-        description: 'simple example description',
+        description: 'simple',
         disable: false,
         defaultModule: '',
         activeModule: 'return-plain-object',
@@ -69,7 +69,9 @@ describe('./mocker/MockerConfig.js', () => {
       expect(mockerConfig).to.eql({
         name: 'basic',
         route: '/cgi-bin/a/b/basic',
-        routeExtra: {},
+        routeExtra: {
+          'desc': 'I am from routeExtra'
+        },
         plugin: 'xhr',
         description: 'basic example description',
         disable: true,
@@ -106,6 +108,26 @@ describe('./mocker/MockerConfig.js', () => {
           '标签1',
           '标签2'
         ]
+      });
+    });
+  });
+
+  describe('check basic_async.json', () => {
+    it('should equal correct value', () => {
+      let mockerConfig = new MockerConfig('basic_async', require('../../data/fixtures/mocker-config/basic_async'), mockModuleList);
+
+      expect(mockerConfig).to.eql({
+        name: 'basic_async',
+        route: '/cgi-bin/a/b/basic_async',
+        routeExtra: {},
+        plugin: 'async',
+        description: 'basic_async',
+        disable: false,
+        defaultModule: '',
+        activeModule: 'return-plain-object',
+        method: 'get',
+        priority: 0,
+        tags: ['全部']
       });
     });
   });
