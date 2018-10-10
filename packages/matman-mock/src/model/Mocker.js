@@ -6,6 +6,8 @@ const fsHandler = require('fs-handler');
 const MockerConfig = require('./MockerConfig');
 const MockModule = require('./MockModule');
 
+const gConfig = require('../config');
+
 class Mocker {
   /**
    * 构造函数
@@ -36,7 +38,7 @@ class Mocker {
     let mockModuleList = [];
 
     // 1. 获取所有的 mocker，约定：this.basePath 的每个子目录都是一个独立的 mocker
-    fsHandler.search.getAll(this.basePath, { globs: ['mock_modules/*'] }).forEach((item) => {
+    fsHandler.search.getAll(this.basePath, { globs: [gConfig.MOCK_MODULES + '/*'] }).forEach((item) => {
       // 模块名字，默认取文件夹或文件名
       let name = path.basename(item.relativePath, '.js');
 
@@ -45,7 +47,7 @@ class Mocker {
 
       // console.log('\n找到 mock module ：', name, item);
 
-      let requireModulePath = path.join(this.basePath, 'mock_modules', name);
+      let requireModulePath = path.join(this.basePath, gConfig.MOCK_MODULES, name);
 
       let module = require(requireModulePath);
 
