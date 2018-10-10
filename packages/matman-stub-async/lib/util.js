@@ -48,22 +48,13 @@ function request(asyncClient, route, params) {
  *
  * @param {StubAsyncClient} asyncClient StubAsyncClient对象
  * @param {String} route 路由
- * @return {Promise<any>}
+ * @param {Function} callback 回调
  */
-function recieve(asyncClient, route) {
-  return new Promise(function (resolve, reject) {
-    _check(asyncClient, route).then(function () {
-      asyncClient.on(route, function (data) {
-        // 如果stub服务端设置了禁用stub，则执行真实的fetch方法
-        if (data && data._disable) {
-          return reject(RESULT.DISABLED);
-        }
-
-        resolve(data);
-      });
-    }).catch(function (err) {
-      reject(err);
-    });
+function receive(asyncClient, route, callback) {
+  _check(asyncClient, route).then(function () {
+    asyncClient.on(route, callback);
+  }).catch(function (err) {
+    throw err;
   });
 }
 
@@ -101,5 +92,5 @@ function _check(asyncClient, route) {
 
 module.exports = {
   request: request,
-  recieve: recieve
+  receive: receive
 };
