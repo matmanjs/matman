@@ -68,28 +68,45 @@ function receive(asyncClient, route, callback) {
  */
 function _check(asyncClient, route) {
   return new Promise((resolve, reject) => {
+    // 有问题时直接执行真实的fetch方法
+    if (!asyncClient) {
+      return reject(RESULT.NO_ASYNC_CLIENT);
+    }
 
-    // 使之异步，避免 websocket 还未连接成功
-    setTimeout(() => {
-      // 有问题时直接执行真实的fetch方法
-      if (!asyncClient) {
-        return reject(RESULT.NO_ASYNC_CLIENT);
-      }
+    // 如果远程服务未启动也需要放弃stub
+    if (!route) {
+      return reject(RESULT.NO_ROUTE);
+    }
 
-      // 如果远程服务未启动也需要放弃stub
-      if (!asyncClient.isConnected()) {
+    let i = 0;
+    let checkT;
+
+    function checkConnect() {
+      if (asyncClient.isConnected()) {
+        // 如果已经连接成功，则清除定时器，并返回
+        if (checkT) {
+          clearTimeout(checkT);
+        }
+
+        resolve();
+      } else if (i > 9) {
+        // 如果重试次数大于了10次，也终止，清除定时器，并返回
+        if (checkT) {
+          clearTimeout(checkT);
+        }
+
         alert(`matman stub 服务未启动！请检查 ${asyncClient.getURI()} 是否已启动`);
-        return reject(RESULT.NOT_CONNECTED);
+        reject(RESULT.NOT_CONNECTED);
+      } else {
+        i++;
+        // 使之异步，避免 websocket 还未连接成功
+        checkT = setTimeout(() => {
+          checkConnect();
+        }, 10);
       }
+    }
 
-      // 如果远程服务未启动也需要放弃stub
-      if (!route) {
-        return reject(RESULT.NO_ROUTE);
-      }
-
-      resolve();
-    }, 10);
-
+    checkConnect();
   });
 }
 
