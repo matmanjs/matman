@@ -1,3 +1,5 @@
+const gConfig = require('../config');
+
 class MatmanQueryItem {
   /**
    * 构造函数
@@ -10,12 +12,12 @@ class MatmanQueryItem {
     if (mockerName && (typeof mockerName === 'object')) {
       // 如果传入的是对象，则假设这个对象是符合 MatmanQueryItem 字段定义的对象
       this._m_name = mockerName._m_name;
-      this._m_target = mockerName._m_target;
+      this[gConfig.TARGET_FIELD] = mockerName[gConfig.TARGET_FIELD];
       this._m_disable = mockerName._m_disable;
     } else {
       // 如果传递的是普通的参数，则依次设置
       this._m_name = mockerName;
-      this._m_target = mockModuleName;
+      this[gConfig.TARGET_FIELD] = mockModuleName;
       this._m_disable = shouldDisableMatman ? 1 : 0;
     }
   }
