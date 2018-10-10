@@ -50,7 +50,7 @@ describe('./mocker/MockerParser.js', () => {
   });
 
   describe('check demo_02', () => {
-    it('mockerParser.getMockerByName(\'demo_02\') should return correct mocker', () => {
+    it('mockerParser.getMockerByName(\'demo_02\') should return undefined', () => {
       let mocker = mockerParser.getMockerByName('demo_02');
 
       expect(mocker).to.be.undefined;
