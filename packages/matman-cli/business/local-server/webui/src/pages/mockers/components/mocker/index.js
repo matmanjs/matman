@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 
-import matmanStubAsync from 'matman-stub-async';
+import matmanMockAsync from 'matman-mock-async';
 
 import { ajax, requestStub } from '../../../../business/db';
 
@@ -118,7 +118,7 @@ class Mocker extends Component {
       host = '127.0.0.1:9527';
     }
 
-    let asyncClient = new matmanStubAsync.AsyncClient(`http://${host}`);
+    let asyncClient = new matmanMockAsync.AsyncClient(`http://${host}`);
 
     asyncClient.emit('emitStub', {
       route: mockerItem.config.route,
