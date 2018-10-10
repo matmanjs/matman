@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 
+import matmanStubAsync from 'matman-stub-async';
+
 import { ajax, requestStub } from '../../../../business/db';
 
 import { loadMocker, loadMockerReadme, setMockerActiveModule, setMockerDisable } from '../../data/data-mocker';
@@ -46,6 +48,11 @@ class Mocker extends Component {
 
     // 在预览的情况下，host 的值应该是与当前页面一致的
     let host = window.location.host;
+
+    // 开发模式下切换这个，主要是为了方便调试，因为 websocket 默认启动的时9527端口，而ui项目则默认为3000
+    if (process.env.NODE_ENV !== 'production') {
+      host = '127.0.0.1:9527';
+    }
 
     if (mockerItem.config.plugin !== 'stub') {
       // 如果有指定的host，则使用指定的host
@@ -99,6 +106,28 @@ class Mocker extends Component {
     });
   };
 
+  handleModalEmitPush = (data) => {
+    console.log('--push---', data);
+    const { mockerItem } = this.props;
+
+    // 在预览的情况下，host 的值应该是与当前页面一致的
+    let host = window.location.host;
+
+    // 开发模式下切换这个，主要是为了方便调试，因为 websocket 默认启动的时9527端口，而ui项目则默认为3000
+    if (process.env.NODE_ENV !== 'production') {
+      host = '127.0.0.1:9527';
+    }
+
+    let asyncClient = new matmanStubAsync.StubAsyncClient(`http://${host}`);
+
+    asyncClient.emit('emitStub', {
+      route: mockerItem.config.route,
+      name: mockerItem.config.name,
+      activeModule: mockerItem.config.activeModule,
+      result: data
+    });
+  };
+
   handleDisable = () => {
     this.props.setMockerDisable(this.props.mockerItem.name, !this.props.mockerItem.config.disable);
   };
@@ -145,7 +174,9 @@ class Mocker extends Component {
 
                 <MockerShowResult
                   data={modalShowData}
+                  mockerItem={mockerItem}
                   onHide={this.handleModalHide}
+                  onEmitPush={this.handleModalEmitPush}
                 />
 
                 <MockerReadme htmlContent={readme} />
