@@ -3,5 +3,5 @@ const util = require('./util');
 module.exports = {
   request: util.request,
   listen: util.listen,
-  StubAsyncClient: require('./model/StubAsyncClient')
+  AsyncClient: require('./model/AsyncClient')
 };
