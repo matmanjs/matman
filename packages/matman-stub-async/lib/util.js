@@ -20,7 +20,7 @@ var RESULT = {
 /**
  * 请求数据
  *
- * @param {AsyncClient} asyncClient StubAsyncClient对象
+ * @param {AsyncClient} asyncClient AsyncClient对象
  * @param {String} route 路由
  * @param {Object} [params] 参数
  * @return {Promise<any>}
@@ -46,7 +46,7 @@ function request(asyncClient, route, params) {
 /**
  * 监听数据
  *
- * @param {AsyncClient} asyncClient StubAsyncClient对象
+ * @param {AsyncClient} asyncClient AsyncClient对象
  * @param {String} route 路由
  * @param {Function} callback 回调
  */
@@ -60,7 +60,7 @@ function listen(asyncClient, route, callback) {
 
 /**
  * 检查参数
- * @param {StubAsyncClient} asyncClient StubAsyncClient对象
+ * @param {AsyncClient} asyncClient AsyncClient对象
  * @param {String} route 路由
  * @return {Promise<any>}
  */

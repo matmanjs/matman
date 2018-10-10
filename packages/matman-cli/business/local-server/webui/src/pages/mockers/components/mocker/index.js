@@ -118,7 +118,7 @@ class Mocker extends Component {
       host = '127.0.0.1:9527';
     }
 
-    let asyncClient = new matmanStubAsync.StubAsyncClient(`http://${host}`);
+    let asyncClient = new matmanStubAsync.AsyncClient(`http://${host}`);
 
     asyncClient.emit('emitStub', {
       route: mockerItem.config.route,
