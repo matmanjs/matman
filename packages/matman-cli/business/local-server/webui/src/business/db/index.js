@@ -1,5 +1,5 @@
 import superagent from 'superagent';
-import StubAsyncClient from './stub-async-client';
+import matmanStubAsync from 'matman-stub-async';
 
 export function ajax(opts = {}) {
   if (opts.method === 'post') {
@@ -41,13 +41,8 @@ export function getDataByGet(url, queryOpts) {
 }
 
 export function requestStub(url, route, params = {}) {
-  return new Promise((resolve, reject) => {
-    let stub = new StubAsyncClient(url);
+  let asyncClient = new matmanStubAsync.StubAsyncClient(url);
 
-    // TODO 这里需要考虑下超时的情形
-    stub.emit(route, params, (data) => {
-      resolve(data);
-    });
-  });
-
+  // TODO 这里需要考虑下超时的情形
+  return matmanStubAsync.util.request(asyncClient, route, params);
 }
