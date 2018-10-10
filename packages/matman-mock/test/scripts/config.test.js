@@ -7,7 +7,8 @@ describe('./config.js', () => {
   it('should be correct', () => {
     expect(config).to.eql({
       MATMAN_QUERY_KEY: '_matman',
-      MOCK_MODULES: 'mock_modules'
+      MOCK_MODULES: 'mock_modules',
+      TARGET_FIELD: '_m_target'
     });
   });
 });

@@ -260,10 +260,12 @@ class MockerParser {
     let newMockerItem = _.merge({}, oldMockerItem, updateData);
 
     // 更新数据
-    this.db.get('data')
-      .find({ name: mockerName })
-      .assign(newMockerItem)
-      .write();
+    if (this.db) {
+      this.db.get('data')
+        .find({ name: mockerName })
+        .assign(newMockerItem)
+        .write();
+    }
 
     // 返回新的结果
     return newMockerItem;
