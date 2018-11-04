@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const StringReplaceWebpackPlugin = require('string-replace-webpack-plugin');
 
-const e2eBuild = require('../../../../business/e2e-build');
+const e2eBuild = require('./util');
 
 class Builder {
 
