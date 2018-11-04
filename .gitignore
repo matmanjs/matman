@@ -44,11 +44,13 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
-tmp
-demo/app
-demo/app2
+
 logs
 
 packages/*/test/**/build
 
 package-lock.json
+
+lib/
+tmp/
+db.json
