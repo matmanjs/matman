@@ -6,11 +6,10 @@
     "matman": "./bin/matman"
   },
   "scripts": {
-    "start": "node ./bin/matman",
-    "dev-ui": "cd ./business/local-server/webui && npm run start",
-    "build-ui": "cd ./business/local-server/webui && npm run build",
-    "prepublishOnly": "npm run build-ui",
-    "test": "mocha"
+    "test-mocha": "node ./node_modules/mocha/bin/_mocha",
+    "test": "npm run eslint && npm run test-cov",
+    "eslint": "eslint libs/",
+    "test-cov": "istanbul cover ./node_modules/mocha/bin/_mocha"
   },
   "keywords": [
     "mock",
@@ -18,7 +17,14 @@
   ],
   "author": "helinjiang",
   "license": "MIT",
-  "repository": "https://github.com/matmanjs/matman/tree/master/packages/matman-cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matmanjs/matman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matmanjs/matman/issues"
+  },
+  "homepage": "https://github.com/matmanjs/matman#readme",
   "configs": {
     "compatibleVersion": ">=3.0.10"
   },
@@ -31,43 +37,25 @@
     "bunyan": "^1.8.12",
     "chalk": "^2.3.2",
     "clean-webpack-plugin": "^0.1.19",
-    "compression": "^1.7.2",
-    "cors": "^2.8.4",
     "cross-spawn": "^5.1.0",
-    "easy-table": "^1.1.1",
-    "errorhandler": "^1.5.0",
-    "express": "^4.16.3",
     "figlet": "^1.2.0",
     "fs-extra": "^5.0.0",
     "fs-handler": "^0.1.2",
     "hexo-fs": "^0.2.3",
-    "inquirer": "^3.0.6",
-    "js-yaml": "^3.11.0",
-    "log4js": "^2.8.0",
-    "matman-core": "^0.1.5",
     "matman-e2e": "^3.0.14",
-    "matman-mock": "^3.0.14",
-    "matman-mock-async": "^3.0.14",
     "meow": "^3.7.0",
-    "method-override": "^2.3.10",
     "minimist": "^1.2.0",
-    "morgan": "^1.9.0",
-    "ora": "^1.4.0",
-    "os": "^0.1.1",
     "osenv": "^0.1.4",
-    "pm2": "^2.10.4",
-    "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "semver": "^5.4.1",
-    "socket.io": "^2.1.1",
     "string-replace-webpack-plugin": "^0.1.3",
-    "superagent": "^3.8.3",
-    "webpack": "^3.12.0",
-    "yeoman-environment": "^1.6.6",
-    "yeoman-generator": "^2.0.3"
+    "webpack": "^3.12.0"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^3.5.3"
+    "babel-eslint": "^10.0.1",
+    "chai": "^4.2.0",
+    "eslint": "^5.7.0",
+    "mocha": "^5.2.0",
+    "superagent": "^3.8.3"
   }
 }

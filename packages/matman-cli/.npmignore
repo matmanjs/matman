@@ -1,5 +1,9 @@
-demo
-test
-src
+node_modules/
+coverage/
+demo/
+test/
+src/
+tmp/
+coverage
+*.map
 *.log
-node_modules
