@@ -10,3 +10,4 @@ var getPreloadScriptPath = function getPreloadScriptPath(name, configPath) {
 };
 
 module.exports = getPreloadScriptPath;
+//# sourceMappingURL=get-preload-script-path.js.map

@@ -52,3 +52,4 @@ function _search(targetPath) {
 }
 
 module.exports = getConfigFilePath;
+//# sourceMappingURL=get-config-file-path.js.map

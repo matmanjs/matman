@@ -9,3 +9,4 @@ module.exports = {
 
   BasicActionWithClientScript: require('./model/BasicActionWithClientScript')
 };
+//# sourceMappingURL=index.js.map

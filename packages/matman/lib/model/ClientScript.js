@@ -106,3 +106,4 @@ var ClientScript = function () {
 }();
 
 module.exports = ClientScript;
+//# sourceMappingURL=ClientScript.js.map

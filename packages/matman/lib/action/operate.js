@@ -26,3 +26,4 @@ function operate(pageUrl, preloadClientScriptPath) {
 }
 
 module.exports = operate;
+//# sourceMappingURL=operate.js.map
