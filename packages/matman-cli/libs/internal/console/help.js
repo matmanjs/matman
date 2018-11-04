@@ -2,20 +2,28 @@
 const meow = require('meow');
 
 module.exports = function (args) {
-  const cli = meow(`
-    Usage: matman [options] [command]
+    let arr = [];
 
-    Commands:
-        init                                     Initialize project.
-        build         <srcPath>                  Convert local handler to npm package.
-        start                                    Start local server.
+    // 如果不是 -h 或者 --help 命令过来的，则需要提示命令不存在
+    if (!args.h && !args.help) {
+        arr.push('    WARNING: Command is NOT exist!');
+        arr.push('\n');
+    }
 
-    Options:
-        --version, -[v]           Print version and exit successfully.
-        --help, -[h]              Print this help and exit successfully.
+    arr.push('    Usage: matman [options] [command]');
+    arr.push('\n');
+    arr.push('    Commands:');
+    arr.push('        build                                    Build the code.');
+    arr.push('\n');
+    arr.push('    Options:');
+    arr.push('        --version, -[v]           Print version and exit successfully.');
+    arr.push('        --help, -[h]              Print this help and exit successfully.');
+    arr.push('\n');
+    arr.push('    Report bugs to https://github.com/matmanjs/matman/issues.');
 
-    Report bugs to https://github.com/matmanjs/matman-cli/issues.
-  `);
-
-  return cli.showHelp(0);
+    // https://www.npmjs.com/package/meow
+    return meow({
+        description: false,
+        help: arr.join('\n')
+    }).showHelp(0);
 };
