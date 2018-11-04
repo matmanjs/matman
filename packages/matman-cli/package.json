@@ -45,6 +45,7 @@
     "matman": "^3.0.14",
     "meow": "^3.7.0",
     "minimist": "^1.2.0",
+    "ora": "^3.0.0",
     "osenv": "^0.1.4",
     "request-promise": "^4.2.1",
     "semver": "^5.4.1",

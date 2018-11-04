@@ -33,3 +33,4 @@ function scan(pageUrl, preloadClientScriptPath) {
 }
 
 module.exports = scan;
+//# sourceMappingURL=scan.js.map

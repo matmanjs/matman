@@ -322,3 +322,4 @@ function getMainUrl(url) {
 }
 
 module.exports = BasicActionWithClientScript;
+//# sourceMappingURL=BasicActionWithClientScript.js.map

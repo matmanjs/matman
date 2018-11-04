@@ -22,3 +22,4 @@ var getBuildPath = function getBuildPath(configPath) {
 };
 
 module.exports = getBuildPath;
+//# sourceMappingURL=get-build-path.js.map

@@ -5,3 +5,4 @@ module.exports = {
   getBuildPath: require('./get-build-path'),
   getConfigFilePath: require('./get-config-file-path')
 };
+//# sourceMappingURL=index.js.map

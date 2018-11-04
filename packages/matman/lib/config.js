@@ -10,3 +10,4 @@ var MATMAN_CONFIG = 'matman.config.js';
 module.exports = {
   MATMAN_CONFIG: MATMAN_CONFIG
 };
+//# sourceMappingURL=config.js.map
