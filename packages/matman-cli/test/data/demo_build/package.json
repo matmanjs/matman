@@ -3,13 +3,12 @@
   "description": "matman-app",
   "version": "1.0.0",
   "scripts": {
-    "build": "matman build",
-    "build-dev": "matman build --dev",
+    "build": "node ../../../bin/matman build",
+    "build-dev": "node ../../../bin/matman build --dev",
     "test": "mocha e2e_test/**/*.test.js",
     "test-page": "mocha e2e_test/**/page_rule/**/*.test.js"
   },
   "dependencies": {
-    "matman": "^3.0.8",
     "web-crawl-util": "^0.1.0"
   },
   "devDependencies": {
