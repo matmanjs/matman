@@ -1,4 +1,4 @@
-const matmanE2E = require('matman-e2e');
+const matmanE2E = require('matman');
 
 /**
  *

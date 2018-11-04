@@ -1,4 +1,4 @@
-const matmanE2E = require('packages/matman-e2e/lib/index');
+const matmanE2E = require('packages/matman/lib/index');
 
 const env = require('./env/index');
 
