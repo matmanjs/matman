@@ -22,7 +22,7 @@ describe('./mocker/MockerConfig.js', () => {
     });
 
     it('should contain some fields', () => {
-      expect(mockerConfig).to.have.all.keys('name', 'description', 'route', 'routeExtra', 'disable', 'defaultModule', 'activeModule', 'method', 'priority', 'tags');
+      expect(mockerConfig).to.have.all.keys('name', 'description', 'route', 'routeExtra', 'plugin', 'disable', 'defaultModule', 'activeModule', 'method', 'priority', 'tags');
     });
 
     it('should equal correct value', () => {
@@ -30,6 +30,7 @@ describe('./mocker/MockerConfig.js', () => {
         name: 'empty',
         route: '',
         routeExtra: {},
+        plugin: 'xhr',
         description: 'empty',
         disable: false,
         defaultModule: '',
@@ -49,7 +50,8 @@ describe('./mocker/MockerConfig.js', () => {
         name: 'simple',
         route: '/cgi-bin/a/b/simple',
         routeExtra: {},
-        description: 'simple example description',
+        plugin: 'xhr',
+        description: 'simple',
         disable: false,
         defaultModule: '',
         activeModule: 'return-plain-object',
@@ -67,7 +69,10 @@ describe('./mocker/MockerConfig.js', () => {
       expect(mockerConfig).to.eql({
         name: 'basic',
         route: '/cgi-bin/a/b/basic',
-        routeExtra: {},
+        routeExtra: {
+          'desc': 'I am from routeExtra'
+        },
+        plugin: 'xhr',
         description: 'basic example description',
         disable: true,
         defaultModule: 'exist-config',
@@ -91,6 +96,7 @@ describe('./mocker/MockerConfig.js', () => {
         name: 'basic_02',
         route: '',
         routeExtra: {},
+        plugin: 'xhr',
         description: 'basic_02',
         disable: false,
         defaultModule: 'exist-config',
@@ -102,6 +108,26 @@ describe('./mocker/MockerConfig.js', () => {
           '标签1',
           '标签2'
         ]
+      });
+    });
+  });
+
+  describe('check basic_async.json', () => {
+    it('should equal correct value', () => {
+      let mockerConfig = new MockerConfig('basic_async', require('../../data/fixtures/mocker-config/basic_async'), mockModuleList);
+
+      expect(mockerConfig).to.eql({
+        name: 'basic_async',
+        route: '/cgi-bin/a/b/basic_async',
+        routeExtra: {},
+        plugin: 'async',
+        description: 'basic_async',
+        disable: false,
+        defaultModule: '',
+        activeModule: 'return-plain-object',
+        method: 'get',
+        priority: 0,
+        tags: ['全部']
       });
     });
   });

@@ -6,8 +6,7 @@
   "scripts": {
     "compile": "babel ./src --out-dir ./lib",
     "test": "mocha",
-    "prepublishOnly": "npm run compile",
-    "prepublish": "npm run compile"
+    "prepublishOnly": "npm run compile"
   },
   "keywords": [
     "mock",
@@ -24,6 +23,7 @@
     "lodash": "^4.17.10",
     "lowdb": "^1.0.0",
     "marked": "^0.4.0",
+    "matman-mock-async": "^3.0.14",
     "url-handle": "^0.2.1"
   },
   "devDependencies": {

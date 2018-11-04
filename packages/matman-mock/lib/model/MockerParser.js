@@ -21,7 +21,8 @@ var fsHandler = require('fs-handler');
 var _ = require('lodash');
 var marked = require('marked');
 var store = require('../store');
-var TARGET_FIELD = '_m_target';
+
+var gConfig = require('../config');
 
 var MockerParser = function () {
   /**
@@ -147,7 +148,13 @@ var MockerParser = function () {
     value: function getMockerByRoute(route) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
+      // 为避免 params=null，此处要特别设置一下
+      if (!params) {
+        params = {};
+      }
+
       var allMockerList = this.getAllMocker();
+
       var paramsKeyLength = Object.keys(params).length;
 
       var matchedArr = [];
@@ -241,6 +248,11 @@ var MockerParser = function () {
     value: function getResInfoByRoute(route) {
       var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
+      // 为避免 params=null，此处要特别设置一下
+      if (!params) {
+        params = {};
+      }
+
       // 1. 获得当前的 mocker 信息
       var mockerItem = this.getMockerByRoute(route, params);
 
@@ -250,7 +262,7 @@ var MockerParser = function () {
 
       // 2. 获得当前最适合的 mock module
       // 优先获取 param 中请求的指定 mock_module，其次是 mocker.config.activeModule
-      var mockModuleName = params[TARGET_FIELD] || mockerItem.config.activeModule;
+      var mockModuleName = params[gConfig.TARGET_FIELD] || mockerItem.config.activeModule;
 
       var mockModuleItem = this.getMockModuleByName(mockerItem.name, mockModuleName);
 
@@ -260,7 +272,7 @@ var MockerParser = function () {
 
       // 3. 获得 mock module 的绝对路径
       // 目标模块的路径，需要注意下 no module 的场景
-      var moduleRelativePath = mockModuleItem.type && mockModuleItem.type === 'noModule' ? mockModuleItem.fileName : path.join('mock_modules', mockModuleName);
+      var moduleRelativePath = mockModuleItem.type && mockModuleItem.type === 'noModule' ? mockModuleItem.fileName : path.join(gConfig.MOCK_MODULES, mockModuleName);
 
       var moduleFullPath = path.join(this.basePath, mockerItem.name, moduleRelativePath);
 

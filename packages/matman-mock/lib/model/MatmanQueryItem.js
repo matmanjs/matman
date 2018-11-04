@@ -14,6 +14,8 @@ var _createClass3 = _interopRequireDefault(_createClass2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var gConfig = require('../config');
+
 var MatmanQueryItem = function () {
   /**
    * 构造函数
@@ -28,12 +30,12 @@ var MatmanQueryItem = function () {
     if (mockerName && (typeof mockerName === 'undefined' ? 'undefined' : (0, _typeof3.default)(mockerName)) === 'object') {
       // 如果传入的是对象，则假设这个对象是符合 MatmanQueryItem 字段定义的对象
       this._m_name = mockerName._m_name;
-      this._m_target = mockerName._m_target;
+      this[gConfig.TARGET_FIELD] = mockerName[gConfig.TARGET_FIELD];
       this._m_disable = mockerName._m_disable;
     } else {
       // 如果传递的是普通的参数，则依次设置
       this._m_name = mockerName;
-      this._m_target = mockModuleName;
+      this[gConfig.TARGET_FIELD] = mockModuleName;
       this._m_disable = shouldDisableMatman ? 1 : 0;
     }
   }

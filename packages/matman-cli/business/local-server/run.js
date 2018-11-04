@@ -102,9 +102,15 @@ module.exports = (configOpts) => {
   // Use handler router
   app.use(routerMocker);
 
-  // 触发 onBeforeServerListen 事件
-  // const server = require('./plugins/stub/websocket')(configOpts, app, routerMocker._handlerParser);
+  // https://socket.io/get-started/chat/#The-web-framework
   const server = require('http').createServer(app);
+
+  // TODO 触发 onBeforeServerListen 事件
+  // 如果启动了 plugin=async 则开启 websocket
+  if (configOpts.supportAsync) {
+    require('./plugins/mocker/websocket')(configOpts, server, routerMocker._mockerParser);
+  }
+
   server.listen(configOpts.port || 9527, () => {
     // matmanLogger.info('matman server is running');
     console.log('matman server is running');

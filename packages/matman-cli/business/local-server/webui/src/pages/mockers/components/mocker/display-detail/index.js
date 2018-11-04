@@ -31,6 +31,10 @@ export default function MockerDetail(props) {
                     <table>
                         <tbody>
                             <tr>
+                              <td>数据类型:</td>
+                              <td>{mockerItem.config.plugin}</td>
+                            </tr>
+                            <tr>
                                 <td style={{ width: '100px' }}>配置的路由:</td>
                                 <td>{mockerItem.config.route}</td>
                             </tr>

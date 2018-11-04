@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import { Layout } from 'antd';
 
-import { ajax } from '../../../../business/db';
+import matmanMockAsync from 'matman-mock-async';
+
+import { ajax, requestStub } from '../../../../business/db';
 
 import { loadMocker, loadMockerReadme, setMockerActiveModule, setMockerDisable } from '../../data/data-mocker';
 import { loadMockerList } from '../../data/data-mocker-list';
@@ -45,32 +46,48 @@ class Mocker extends Component {
 
     let actualURL = mockerItem.config.route;
 
-    let host;
+    // 在预览的情况下，host 的值应该是与当前页面一致的
+    let host = window.location.host;
 
+    // 开发模式下切换这个，主要是为了方便调试，因为 websocket 默认启动的时9527端口，而ui项目则默认为3000
     if (process.env.NODE_ENV !== 'production') {
-      host = 'localhost:9527';
+      host = '127.0.0.1:9527';
     }
 
-    // 如果有指定的host，则使用指定的host
-    if (host && (actualURL.indexOf(host) < 0)) {
-      actualURL = `http://${host}${actualURL}`;
-    }
+    if (mockerItem.config.plugin !== 'async') {
+      // 如果有指定的host，则使用指定的host
+      if (host && (actualURL.indexOf(host) < 0)) {
+        actualURL = `http://${host}${actualURL}`;
+      }
 
-    ajax({
-      method: mockerItem.config.method,
-      url: actualURL,
-      data: query
-    })
-      .then((data) => {
-        if (process.env.NODE_ENV !== 'production') {
-          console.log(`url=${actualURL}`, query, data);
-        }
-
-        this.handleModalShow(data);
+      ajax({
+        method: mockerItem.config.method,
+        url: actualURL,
+        data: query
       })
-      .catch((err) => {
-        console.error(err);
-      });
+        .then((data) => {
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(`url=${actualURL}`, query, data);
+          }
+
+          this.handleModalShow(data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      requestStub(`http://${host}`, actualURL, query)
+        .then((data) => {
+          if (process.env.NODE_ENV !== 'production') {
+            console.log(`url=${actualURL}`, query, data);
+          }
+
+          this.handleModalShow(data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   handleActive = (name) => {
@@ -86,6 +103,28 @@ class Mocker extends Component {
   handleModalHide = () => {
     this.setState({
       modalShowData: null
+    });
+  };
+
+  handleModalEmitPush = (data) => {
+    console.log('--push---', data);
+    const { mockerItem } = this.props;
+
+    // 在预览的情况下，host 的值应该是与当前页面一致的
+    let host = window.location.host;
+
+    // 开发模式下切换这个，主要是为了方便调试，因为 websocket 默认启动的时9527端口，而ui项目则默认为3000
+    if (process.env.NODE_ENV !== 'production') {
+      host = '127.0.0.1:9527';
+    }
+
+    let asyncClient = new matmanMockAsync.AsyncClient(`http://${host}`);
+
+    asyncClient.emit('emitStub', {
+      route: mockerItem.config.route,
+      name: mockerItem.config.name,
+      activeModule: mockerItem.config.activeModule,
+      result: data
     });
   };
 
@@ -135,7 +174,9 @@ class Mocker extends Component {
 
                 <MockerShowResult
                   data={modalShowData}
+                  mockerItem={mockerItem}
                   onHide={this.handleModalHide}
+                  onEmitPush={this.handleModalEmitPush}
                 />
 
                 <MockerReadme htmlContent={readme} />
