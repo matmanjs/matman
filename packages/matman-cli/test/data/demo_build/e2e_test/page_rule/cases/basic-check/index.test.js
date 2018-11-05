@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const checkPage = require('../cases/basic-ui-check');
+const checkPage = require('./index');
 
 describe('提现规则页：常规检查', function () {
     this.timeout(30000);
