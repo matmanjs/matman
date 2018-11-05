@@ -6,5 +6,5 @@
 const MATMAN_CONFIG = 'matman.config.js';
 
 module.exports = {
-  MATMAN_CONFIG
+    MATMAN_CONFIG
 };

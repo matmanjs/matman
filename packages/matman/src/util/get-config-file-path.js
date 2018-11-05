@@ -4,23 +4,23 @@ const path = require('path');
 const configFileName = require('../config').MATMAN_CONFIG;
 
 const getConfigFilePath = (configPath) => {
-  // 非法的路径时，默认为本文件夹的 dirname
-  if (!configPath || !fs.existsSync(configPath)) {
-    // console.log('Unknow configPath=' + configPath);
-    configPath = __dirname;
-  }
-
-  // 如果不是 config file，则从当前路径往上找 config file
-  if (configPath.indexOf(configFileName) < 0) {
-    let result = _search(configPath);
-    if (!result) {
-      throw new Error('Can not find ' + configFileName + ' ! configPath=' + configPath);
+    // 非法的路径时，默认为本文件夹的 dirname
+    if (!configPath || !fs.existsSync(configPath)) {
+        // console.log('Unknow configPath=' + configPath);
+        configPath = __dirname;
     }
 
-    configPath = path.resolve(result, configFileName);
-  }
+    // 如果不是 config file，则从当前路径往上找 config file
+    if (configPath.indexOf(configFileName) < 0) {
+        let result = _search(configPath);
+        if (!result) {
+            throw new Error('Can not find ' + configFileName + ' ! configPath=' + configPath);
+        }
 
-  return configPath;
+        configPath = path.resolve(result, configFileName);
+    }
+
+    return configPath;
 };
 
 /**
@@ -32,21 +32,21 @@ const getConfigFilePath = (configPath) => {
  * @return {String}
  */
 function _search(targetPath) {
-  let currDir = targetPath || process.cwd();
-  let isExist = true;
+    let currDir = targetPath || process.cwd();
+    let isExist = true;
 
-  while (!fs.existsSync(path.join(currDir, configFileName))) {
-    currDir = path.join(currDir, '../');
+    while (!fs.existsSync(path.join(currDir, configFileName))) {
+        currDir = path.join(currDir, '../');
 
-    // unix跟目录为/， win32系统根目录为 C:\\格式的
-    if (currDir === '/' || /^[a-zA-Z]:\\$/.test(currDir)) {
-      isExist = false;
-      console.log('未找到 ' + configFileName);
-      break;
+        // unix跟目录为/， win32系统根目录为 C:\\格式的
+        if (currDir === '/' || /^[a-zA-Z]:\\$/.test(currDir)) {
+            isExist = false;
+            console.log('未找到 ' + configFileName);
+            break;
+        }
     }
-  }
 
-  return isExist ? currDir : '';
+    return isExist ? currDir : '';
 }
 
 module.exports = getConfigFilePath;
