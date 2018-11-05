@@ -54,12 +54,12 @@ module.exports = function (args) {
               //                   `);
               // }
 
-              prependCodeToDistFile(crawlerParser.buildPath, result.join(';'));
+              prependCodeToDistFile(crawlerParser.crawlerBuildPath, result.join(';'));
             });
         }
 
         // 保存一份配置到本地
-        saveWebpackConfig(crawlerParser.buildPath, webpackConfig);
+        saveWebpackConfig(crawlerParser.crawlerBuildPath, webpackConfig);
 
       });
     })
