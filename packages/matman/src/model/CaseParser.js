@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import CrawlerParser from './CrawlerParser';
-
-import getConfigFilePath from '../util/get-config-file-path';
+import { getConfigFilePath } from '../util';
 
 /**
  * 爬虫脚本类，用于处理所有的前端爬虫脚本
