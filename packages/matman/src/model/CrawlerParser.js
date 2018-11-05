@@ -14,6 +14,7 @@ export default class CrawlerParser {
      * @param {String} [opts.testPath] 端对端测试代码的目录
      * @param {String} [opts.crawlerBuildPath] crawler script 构建之后的目录
      * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为 crawler script 的正则
+     * @param {RegExp} [opts.screenshotPath] 屏幕截图保存的路径
      * @param {Boolean} [opts.isDevBuild] 是否为开发模式
      */
     constructor(opts = {}) {
@@ -33,6 +34,9 @@ export default class CrawlerParser {
         if (opts.isDevBuild) {
             this.crawlerBuildPath = path.join(path.dirname(this.crawlerBuildPath), path.basename(this.crawlerBuildPath) + '_dev');
         }
+
+        // 屏幕截图保存的路径
+        this.screenshotPath = this._getScreenshotPath(opts.screenshotPath || './build/screenshot');
     }
 
     getEntry() {
@@ -82,5 +86,9 @@ export default class CrawlerParser {
 
     _getCrawlerBuildPath(crawlerBuildPath) {
         return path.isAbsolute(crawlerBuildPath) ? crawlerBuildPath : path.join(this.rootPath, crawlerBuildPath);
+    }
+
+    _getScreenshotPath(screenshotPath) {
+        return path.isAbsolute(screenshotPath) ? screenshotPath : path.join(this.rootPath, screenshotPath);
     }
 }
