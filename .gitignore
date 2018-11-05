@@ -47,10 +47,7 @@ yarn-error.log*
 
 logs
 
-packages/*/test/**/build
-
 package-lock.json
-
-lib/
+packages/*/test/lib/
+packages/*/test/**/build
 tmp/
-db.json
