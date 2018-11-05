@@ -1,11 +1,10 @@
 import CrawlerParser from './model/CrawlerParser';
 import CaseParser from './model/CaseParser';
+import { getConfigFilePath } from './util';
 
 module.exports = {
-    action: require('./action'),
-
     CrawlerParser: CrawlerParser,
     CaseParser: CaseParser,
-
-    BasicActionWithClientScript: require('./model/BasicActionWithClientScript')
+    BasicActionWithClientScript: require('./model/BasicActionWithClientScript'),
+    getConfigFilePath
 };
