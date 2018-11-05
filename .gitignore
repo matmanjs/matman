@@ -48,6 +48,6 @@ yarn-error.log*
 logs
 
 package-lock.json
-packages/*/test/lib/
+packages/*/lib/
 packages/*/test/**/build
 tmp/
