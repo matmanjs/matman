@@ -6,7 +6,6 @@ module.exports = {
     config: require('./config'),
     action: require('./action'),
 
-    ClientScript: require('./model/ClientScript'),
     CrawlerParser: CrawlerParser,
     CaseParser: CaseParser,
 

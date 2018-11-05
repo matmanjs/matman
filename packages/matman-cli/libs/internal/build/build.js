@@ -21,7 +21,7 @@ module.exports = function (args) {
 
       // return;
       let configParams = webpackConfig._configParams;
-      let clientScriptHandler = webpackConfig._clientScriptHandler;
+      let crawlerParser = webpackConfig._crawlerParser;
 
       builderWebpack3.runBuild(webpackConfig, () => {
         let prependCodePromiseList = [];
@@ -54,12 +54,12 @@ module.exports = function (args) {
               //                   `);
               // }
 
-              prependCodeToDistFile(clientScriptHandler.buildPath, result.join(';'));
+              prependCodeToDistFile(crawlerParser.buildPath, result.join(';'));
             });
         }
 
         // 保存一份配置到本地
-        saveWebpackConfig(clientScriptHandler.buildPath, webpackConfig);
+        saveWebpackConfig(crawlerParser.buildPath, webpackConfig);
 
       });
     })
