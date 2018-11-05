@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import CrawlerParser from './CrawlerParser';
-import BasicActionWithClientScript from './BasicActionWithClientScript';
+import BaseHandle from './BaseHandle';
 import { getConfigFilePath } from '../util';
 
 /**
@@ -47,14 +47,14 @@ export default class CaseParser {
      * @returns {Promise<*>}
      */
     handleOperate(pageUrl, preloadClientScriptPath, opts = {}, callAction) {
-        let testAction = new BasicActionWithClientScript(pageUrl, preloadClientScriptPath, opts);
+        let baseHandle = new BaseHandle(pageUrl, preloadClientScriptPath, opts);
 
         // 用户的自定义行为
         if (typeof callAction === 'function') {
-            callAction(testAction);
+            callAction(baseHandle);
         }
 
-        return testAction.getResult();
+        return baseHandle.getResult();
     }
 
     /**
