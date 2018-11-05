@@ -2,8 +2,6 @@ import CrawlerParser from './model/CrawlerParser';
 import CaseParser from './model/CaseParser';
 
 module.exports = {
-    util: require('./util'),
-    config: require('./config'),
     action: require('./action'),
 
     CrawlerParser: CrawlerParser,

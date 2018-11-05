@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { MATMAN_CONFIG as configFileName } from '../config';
+import { MATMAN_CONFIG_FILE as configFileName } from '../config';
 
 /**
  * 从指定目录开始向上查找 config 配置文件。

@@ -3,8 +3,5 @@
  *
  * @type {String}
  */
-const MATMAN_CONFIG = 'matman.config.js';
+export const MATMAN_CONFIG_FILE = 'matman.config.js';
 
-module.exports = {
-    MATMAN_CONFIG
-};
