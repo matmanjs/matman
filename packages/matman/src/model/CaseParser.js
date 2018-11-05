@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import CrawlerParser from './CrawlerParser';
+import BasicActionWithClientScript from './BasicActionWithClientScript';
 import { getConfigFilePath } from '../util';
 
 /**
@@ -34,6 +35,54 @@ export default class CaseParser {
 
         // 调用 crawlerParser 的方法获得该脚本的绝对路径
         return crawlerParser.getPath(name);
+    }
+
+    /**
+     * 适合交互行为的操作
+     *
+     * @param pageUrl
+     * @param preloadClientScriptPath
+     * @param opts
+     * @param callAction
+     * @returns {Promise<*>}
+     */
+    handleOperate(pageUrl, preloadClientScriptPath, opts = {}, callAction) {
+        let testAction = new BasicActionWithClientScript(pageUrl, preloadClientScriptPath, opts);
+
+        // 用户的自定义行为
+        if (typeof callAction === 'function') {
+            callAction(testAction);
+        }
+
+        return testAction.getResult();
+    }
+
+    /**
+     * 适合简单的页面扫描场景，无交互行为。
+     *
+     * @param pageUrl
+     * @param preloadClientScriptPath
+     * @param opts
+     * @returns {Promise<*>}
+     */
+    handleScan(pageUrl, preloadClientScriptPath, opts) {
+        return this.handleOperate(pageUrl, preloadClientScriptPath, opts, (testAction) => {
+            // scan 行为是一种特殊的操作，因为它只有一个行为，且结果也不再是数组
+            testAction.addAction(function (nightmareRun) {
+                return nightmareRun.wait(opts.wait || 500);
+            });
+        })
+            .then(function (result) {
+                // 去掉这个nightmare的返回。目前他没有什么其他的用处，但是在 JSON.stringify 时会报错
+                if (result.globalInfo && result.globalInfo.recorder && result.globalInfo.recorder.nightmare) {
+                    delete result.globalInfo.recorder.nightmare;
+                }
+
+                // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回
+                result.data = result.data[0];
+
+                return result;
+            });
     }
 
     _getBasePath(basePath) {
