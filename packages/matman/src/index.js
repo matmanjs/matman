@@ -1,9 +1,9 @@
 module.exports = {
-  util: require('./util'),
-  config: require('./config'),
-  action: require('./action'),
+    util: require('./util'),
+    config: require('./config'),
+    action: require('./action'),
 
-  ClientScript: require('./model/ClientScript'),
+    ClientScript: require('./model/ClientScript'),
 
-  BasicActionWithClientScript: require('./model/BasicActionWithClientScript')
+    BasicActionWithClientScript: require('./model/BasicActionWithClientScript')
 };

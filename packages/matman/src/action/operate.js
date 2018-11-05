@@ -10,14 +10,14 @@ const BasicActionWithClientScript = require('../model/BasicActionWithClientScrip
  * @returns {Promise<*>}
  */
 function operate(pageUrl, preloadClientScriptPath, opts = {}, callAction) {
-  let testAction = new BasicActionWithClientScript(pageUrl, preloadClientScriptPath, opts);
+    let testAction = new BasicActionWithClientScript(pageUrl, preloadClientScriptPath, opts);
 
-  // 用户的自定义行为
-  if (typeof callAction === 'function') {
-    callAction(testAction);
-  }
+    // 用户的自定义行为
+    if (typeof callAction === 'function') {
+        callAction(testAction);
+    }
 
-  return testAction.getResult();
+    return testAction.getResult();
 }
 
 module.exports = operate;
