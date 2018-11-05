@@ -1,6 +1,6 @@
 {
   "name": "matman-cli",
-  "version": "3.0.14",
+  "version": "3.0.15",
   "description": "CLI for matman projects",
   "bin": {
     "matman": "./bin/matman"
@@ -47,6 +47,7 @@
     "minimist": "^1.2.0",
     "ora": "^3.0.0",
     "osenv": "^0.1.4",
+    "request": "^2.88.0",
     "request-promise": "^4.2.1",
     "semver": "^5.4.1",
     "string-replace-webpack-plugin": "^0.1.3",

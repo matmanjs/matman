@@ -23,7 +23,7 @@ function getWebpackConfig(opts, isDevBuild) {
 function runBuild(webpackConfig, callback) {
   // 这个参数是临时值，传递给 webpack 时移除之
   delete webpackConfig._configParams;
-  delete webpackConfig._clientScriptHandler;
+  delete webpackConfig._crawlerParser;
 
   webpack(webpackConfig, (err, stats) => {
     if (err) {
