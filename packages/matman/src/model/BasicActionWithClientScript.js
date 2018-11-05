@@ -5,7 +5,6 @@ const path = require('path');
 const fs = require('fs');
 const fse = require('fs-extra');
 const { NightmarePlus, WebEventRecorder } = require('nightmare-handler');
-const getBuildPath = require('../util/get-build-path');
 
 class BasicActionWithClientScript {
     /**
@@ -60,42 +59,42 @@ class BasicActionWithClientScript {
         })(opts.useRecorder);
 
         // https://github.com/segmentio/nightmare#screenshotpath-clip
-        this.screenshotConfig = (function (screenshot) {
-            if (!screenshot) {
-                return;
-            }
-
-            let result = screenshot;
-
-            // 为字符串时则认为是 cases 的文件名，例如 /path/to/xx.js
-            if (typeof screenshot === 'string') {
-                const buildPath = getBuildPath(screenshot);
-
-                // ../e2e_test/page_withdraw/cases/select-check.js
-
-                // select-check
-                let fileName = path.basename(screenshot, '.js');
-
-                // e2e_test/page_withdraw/cases/select-check.js
-                let relativePath = path.relative(buildPath, screenshot).replace(/^\.([^[\\||\/])*[\\||\/]/gi, '');
-
-                // e2e_test_page_withdraw_cases
-                let folderName = path.dirname(relativePath).replace(new RegExp(path.sep.replace(/\\/gi, '\\\\'), 'gi'), '_');
-
-                // 需要保存的文件夹路径
-                const saveDir = path.join(buildPath, 'screenshot', folderName);
-
-                // 要保证这个目录存在，否则保存时会报错
-                fse.ensureDirSync(saveDir);
-
-                result = {
-                    saveDir: saveDir,
-                    fileName: fileName
-                };
-            }
-
-            return result;
-        })(opts.screenshot);
+        // this.screenshotConfig = (function (screenshot) {
+        //     if (!screenshot) {
+        //         return;
+        //     }
+        //
+        //     let result = screenshot;
+        //
+        //     // 为字符串时则认为是 cases 的文件名，例如 /path/to/xx.js
+        //     if (typeof screenshot === 'string') {
+        //         const buildPath = getBuildPath(screenshot);
+        //
+        //         // ../e2e_test/page_withdraw/cases/select-check.js
+        //
+        //         // select-check
+        //         let fileName = path.basename(screenshot, '.js');
+        //
+        //         // e2e_test/page_withdraw/cases/select-check.js
+        //         let relativePath = path.relative(buildPath, screenshot).replace(/^\.([^[\\||\/])*[\\||\/]/gi, '');
+        //
+        //         // e2e_test_page_withdraw_cases
+        //         let folderName = path.dirname(relativePath).replace(new RegExp(path.sep.replace(/\\/gi, '\\\\'), 'gi'), '_');
+        //
+        //         // 需要保存的文件夹路径
+        //         const saveDir = path.join(buildPath, 'screenshot', folderName);
+        //
+        //         // 要保证这个目录存在，否则保存时会报错
+        //         fse.ensureDirSync(saveDir);
+        //
+        //         result = {
+        //             saveDir: saveDir,
+        //             fileName: fileName
+        //         };
+        //     }
+        //
+        //     return result;
+        // })(opts.screenshot);
 
         this.globalInfo = {};
 

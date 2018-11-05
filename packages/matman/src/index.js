@@ -9,6 +9,5 @@ module.exports = {
     CrawlerParser: CrawlerParser,
     CaseParser: CaseParser,
 
-    BasicActionWithClientScript: require('./model/BasicActionWithClientScript'),
-    getPreloadScriptPath: require('./util/get-preload-script-path')
+    BasicActionWithClientScript: require('./model/BasicActionWithClientScript')
 };
