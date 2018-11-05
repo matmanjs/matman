@@ -1,12 +1,9 @@
-/**
- * 通用的流程
- */
-const path = require('path');
-const fs = require('fs');
-const fse = require('fs-extra');
-const { NightmarePlus, WebEventRecorder } = require('nightmare-handler');
+import fs from 'fs';
+import path from 'path';
+// const fse = require('fs-extra');
+import { NightmarePlus, WebEventRecorder } from 'nightmare-handler';
 
-class BasicActionWithClientScript {
+export default class BaseHandle {
     /**
      * 构造函数
      *
@@ -247,4 +244,3 @@ function getMainUrl(url) {
     }
 }
 
-module.exports = BasicActionWithClientScript;
