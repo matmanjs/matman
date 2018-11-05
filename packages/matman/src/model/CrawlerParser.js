@@ -20,11 +20,11 @@ export default class CrawlerParser {
         // 项目根目录
         this.rootPath = this._getRootPath(opts.rootPath);
 
-        // 测试代码的目录
+        // 端对端测试代码的目录
         this.testPath = this._getTestPath(opts.testPath || './e2e_test');
 
-        // 设置默认值和绝对路径
-        this.crawlerBuildPath = this._getCrawlerBuildPath(opts.crawlerBuildPath || './build/client-script');
+        // crawler script 构建之后的目录
+        this.crawlerBuildPath = this._getCrawlerBuildPath(opts.crawlerBuildPath || './build/crawler-script');
 
         // 用于匹配是否为 crawler script 的正则
         this.crawlerMatch = opts.crawlerMatch || /crawlers[\/|\\].*\.js$/;
