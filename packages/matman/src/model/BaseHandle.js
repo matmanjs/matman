@@ -135,7 +135,6 @@ export default class BaseHandle {
             let curRun = this.actionList[i](this.nightmareRun);
 
             if (this.screenshotConfig) {
-                console.log(this.screenshotConfig.getPathWithId(i + 1))
                 curRun.screenshot(this.screenshotConfig.getPathWithId(i + 1), this.screenshotConfig.clip);
             }
 
