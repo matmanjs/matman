@@ -61,6 +61,14 @@ export function findCrawlerParser(basePath) {
     return crawlerParser;
 }
 
+export function getFolderNameFromPath(targetPath) {
+    // 路径为 ./xxx 类型时要先去掉 ./，然后再将所有的 / 替换为 _
+    return targetPath
+        .replace(/^\.([^[\\||\/])*[\\||\/]/gi, '')
+        .replace(new RegExp(path.sep.replace(/\\/gi, '\\\\'), 'gi'), '_')
+        .replace(/\./, '_');
+}
+
 /**
  * 在指定的路径中，获得配置文件的路径。
  *

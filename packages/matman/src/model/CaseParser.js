@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 import BaseHandle from './BaseHandle';
+import ScreenshotConfig from './SceenshotConfig';
+
 import { findCrawlerParser } from '../util';
 
 /**
@@ -51,6 +53,11 @@ export default class CaseParser {
      * @returns {Promise<*>}
      */
     handleOperate(pageUrl, crawlerScriptPath, opts = {}, callAction) {
+        // 如果配置了截图，则需要特殊处理下
+        if (opts.screenshot) {
+            opts.screenshotConfig = new ScreenshotConfig((typeof opts.screenshot === 'object') ? opts.screenshot : {}, this.basePath);
+        }
+
         let baseHandle = new BaseHandle(pageUrl, crawlerScriptPath, opts);
 
         // 用户的自定义行为
