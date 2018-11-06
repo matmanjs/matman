@@ -1,12 +1,10 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const { config } = require('../../lib');
+const { MATMAN_CONFIG_FILE } = require('../../lib/config');
 
 describe('./config.js', () => {
-  it('should be correct', () => {
-    expect(config).to.eql({
-      MATMAN_QUERY_KEY: '_matman'
+    it('MATMAN_CONFIG_FILE should be correct', () => {
+        expect(MATMAN_CONFIG_FILE).to.equal('matman.config.js');
     });
-  });
 });
