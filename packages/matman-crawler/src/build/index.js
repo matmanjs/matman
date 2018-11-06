@@ -33,6 +33,9 @@ export default function build(config) {
 
                 // 执行构建
                 runBuild(webpackConfig, () => {
+                    // 构建完成之后保存一份配置到构建目录中
+                    saveWebpackConfig(crawlerParser.crawlerBuildPath, webpackConfig);
+
                     let prependCodePromiseList = [];
                     let evalList = [];
 
@@ -54,14 +57,20 @@ export default function build(config) {
                                 result.push(`window.evalList=[${evalList.map(item => `"${item}"`).join(',')}]`);
 
                                 // 每段插入的代码之后，注意要加一个换行符号，否则在支持 source map 之后，可能会被其"注释"掉
-                                prependCodeToDistFile(crawlerParser.crawlerBuildPath, result.join(';\n'));
+                                prependCodeToDistFile(crawlerParser.crawlerBuildPath, result.join(';\n'))
+                                    .then(() => {
+                                        resolve();
+                                    })
+                                    .catch((err) => {
+                                        reject(err);
+                                    });
+                            })
+                            .catch((err) => {
+                                reject(err);
                             });
+                    } else {
+                        resolve();
                     }
-
-                    // 构建完成之后保存一份配置到构建目录中
-                    saveWebpackConfig(crawlerParser.crawlerBuildPath, webpackConfig);
-
-                    resolve();
                 });
             })
             .catch((err) => {
@@ -111,24 +120,14 @@ function getJqueryCode(key) {
 function prependCodeToDistFile(crawlerScriptBuildPath, code) {
     let globResult = glob.sync(path.resolve(crawlerScriptBuildPath, './**/**.js'));
 
+    let promiseList = [];
+
     globResult.forEach((item) => {
         // console.log(item);
-
-        fs.readFile(item, 'utf8', (err, data) => {
-            if (err) {
-                console.log('read file err!', item, err);
-                return;
-            }
-
-            fse.outputFile(item, code + ';' + data, err => {
-                if (err) {
-                    console.error('prepend fail!', item, err);
-                } else {
-                    console.log('prepend success!', item);
-                }
-            });
-        });
+        promiseList.push(_prependCodeToOneFile(item, code));
     });
+
+    return Promise.all(promiseList);
 }
 
 function getRawCodeToPrepend(key, source) {
@@ -144,4 +143,24 @@ function saveWebpackConfig(basePath, data) {
     fse.ensureDirSync(basePath);
 
     fse.writeJsonSync(path.join(basePath, './webpack-config.json'), data);
+}
+
+function _prependCodeToOneFile(filePath, code) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filePath, 'utf8', (err, fileContent) => {
+            if (err) {
+                console.error('read file err!', filePath, err);
+                return reject('read file err! filePath=' + filePath);
+            }
+
+            fse.outputFile(filePath, code + ';' + fileContent, err => {
+                if (err) {
+                    console.error('prepend fail!', filePath, err);
+                    reject('prepend err! filePath=' + filePath);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    });
 }
