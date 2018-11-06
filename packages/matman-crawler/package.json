@@ -29,7 +29,7 @@
   "homepage": "https://github.com/matmanjs/matman#readme",
   "dependencies": {
     "clean-webpack-plugin": "^0.1.19",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^6.0.1",
     "glob": "^7.1.2",
     "string-replace-webpack-plugin": "^0.1.3",
     "webpack": "^3.12.0"

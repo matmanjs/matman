@@ -1,5 +1,5 @@
 module.exports = () => {
     return {
-        say: 'hello, c1.js!'
+        say: 'hello, q1/c1.js!'
     };
 };

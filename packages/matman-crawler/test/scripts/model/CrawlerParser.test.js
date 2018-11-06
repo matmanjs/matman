@@ -4,7 +4,7 @@ const expect = chai.expect;
 
 const CrawlerParser = require('../../../lib/model/CrawlerParser').default;
 
-describe('./mocker/CrawlerParser.js', () => {
+describe('./model/CrawlerParser.js', () => {
 
     describe('check construction', () => {
         it('if params is undefined', () => {
