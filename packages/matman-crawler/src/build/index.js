@@ -65,7 +65,7 @@ export default function build(config) {
 
 function getNightmareClientCode() {
     return new Promise((resolve, reject) => {
-        fs.readFile(path.join(__dirname, './builder-webpack3/libs/nightmare-preload.js'), 'utf8', (err, data) => {
+        fs.readFile(path.join(__dirname, '../../asserts/nightmare-preload.js'), 'utf8', (err, data) => {
             if (err) {
                 return reject(err);
             }
@@ -89,7 +89,7 @@ function getDevPrependCode() {
 
 function getJqueryCode(key) {
     return new Promise((resolve, reject) => {
-        fs.readFile(path.join(__dirname, './builder-webpack3/libs/jquery.slim.min.js'), 'utf8', (err, data) => {
+        fs.readFile(path.join(__dirname, '../../asserts/jquery.slim.min.js'), 'utf8', (err, data) => {
             if (err) {
                 return reject(err);
             }
