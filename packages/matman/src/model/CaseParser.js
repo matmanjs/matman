@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import CrawlerParser from './CrawlerParser';
+import { CrawlerParser } from 'matman-crawler';
 import BaseHandle from './BaseHandle';
 import { getConfigFilePath } from '../util';
 

@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const StringReplaceWebpackPlugin = require('string-replace-webpack-plugin');
 
-const matman = require('matman');
+const matmanCrawler = require('matman-crawler');
 
 class Builder {
 
@@ -23,7 +23,7 @@ class Builder {
      * @param {Boolean} [isDevBuild] 是否为开发模式
      */
     static createProdConfig(params = {}, opts = {}, isDevBuild) {
-        const crawlerParser = new matman.CrawlerParser({
+        const crawlerParser = new matmanCrawler.CrawlerParser({
             rootPath: params.rootPath,
             testPath: params.testPath,
             crawlerBuildPath: params.crawlerBuildPath,
