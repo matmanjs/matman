@@ -30,6 +30,11 @@ export default class CaseParser {
         // 获得 matman.config.js 的文件路径
         const configFilePath = getConfigFilePath(this.basePath);
 
+        // 如果不是 config file，则从当前路径往上找 config file
+        if (!configFilePath) {
+            throw new Error('Can not find config file by basePath=' + this.basePath);
+        }
+
         // 根据配置内容获得 crawlerParser 的对象
         const crawlerParser = new CrawlerParser(require(configFilePath));
 

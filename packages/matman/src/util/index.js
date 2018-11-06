@@ -19,8 +19,10 @@ export function getConfigFilePath(configPath) {
     // 如果不是 config file，则从当前路径往上找 config file
     if (configPath.indexOf(configFileName) < 0) {
         let result = _search(configPath);
+
+        // 如果没有找到，则直接返回空路径即可
         if (!result) {
-            throw new Error('Can not find ' + configFileName + ' ! configPath=' + configPath);
+            return '';
         }
 
         configPath = path.resolve(result, configFileName);
@@ -47,7 +49,7 @@ function _search(targetPath) {
         // unix跟目录为/， win32系统根目录为 C:\\格式的
         if (currDir === '/' || /^[a-zA-Z]:\\$/.test(currDir)) {
             isExist = false;
-            console.log('未找到 ' + configFileName);
+            // console.log('未找到 ' + configFileName);
             break;
         }
     }
