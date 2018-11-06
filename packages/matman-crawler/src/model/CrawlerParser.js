@@ -30,8 +30,10 @@ export default class CrawlerParser {
         // 用于匹配是否为 crawler script 的正则
         this.crawlerMatch = opts.crawlerMatch || /crawlers[\/|\\].*\.js$/;
 
+        this.isDevBuild = !!opts.isDevBuild;
+
         // 如果是开发模式下，则修改构建之后的路径，使之与原构建路径同目录，且文件夹增加 _dev 后缀
-        if (opts.isDevBuild) {
+        if (this.isDevBuild) {
             this.crawlerBuildPath = path.join(path.dirname(this.crawlerBuildPath), path.basename(this.crawlerBuildPath) + '_dev');
         }
 
