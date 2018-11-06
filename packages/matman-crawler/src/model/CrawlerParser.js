@@ -69,18 +69,24 @@ export default class CrawlerParser {
     getEntry() {
         let entry = {};
 
+        // 获取所有的 js 文件
         let globResult = glob.sync(path.resolve(this.testPath, './**/**.js'));
 
-        globResult.forEach((item) => {
-            let matchResult = item.match(this.crawlerMatch);
+        globResult
+            .filter((item) => {
+                // 过滤出符合条件的 js 文件
+                return item.match(this.crawlerMatch);
+            })
+            .forEach((item) => {
+                // 获取相对于 testPath 的相对路径
+                let relativePath = path.relative(this.testPath, item);
 
-            if (matchResult) {
-                let entryScript = item.match(new RegExp('/([^/]*/' + matchResult[0] + ')', 'i'))[1];
-                let entryName = entryScript.replace('.js', '');
+                // 去掉 .js 后缀
+                let entryName = relativePath.replace('.js', '');
 
+                // 置入 map 中
                 entry[entryName] = item;
-            }
-        });
+            });
 
         return entry;
     }
