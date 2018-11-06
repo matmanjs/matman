@@ -37,7 +37,7 @@ describe('./mocker/CrawlerParser.js', () => {
             expect(crawlerParser.testPath).to.equal(path.join(rootPath, './e2e_test'));
             expect(crawlerParser.crawlerBuildPath).to.equal(path.join(rootPath, './build/crawler-script'));
             expect(crawlerParser.screenshotPath).to.equal(path.join(rootPath, './build/screenshot'));
-            expect(crawlerParser.crawlerMatch).to.eql(/crawlers[\/|\\].*\.js$/);
+            expect(crawlerParser.crawlerMatch).to.eql(/[\/|\\]crawlers[\/|\\].*\.js$/);
             expect(crawlerParser.isDevBuild).to.be.false;
 
             expect(crawlerParser).to.have.all.keys('rootPath', 'testPath', 'crawlerBuildPath', 'screenshotPath', 'crawlerMatch', 'isDevBuild');
@@ -51,7 +51,7 @@ describe('./mocker/CrawlerParser.js', () => {
                 testPath: './src',
                 crawlerBuildPath: path.join(rootPath, './build/my-crawler-script'),
                 screenshotPath: './build/my-screenshot',
-                crawlerMatch: /my-crawlers[\/|\\].*\.js$/,
+                crawlerMatch: /[\/|\\]my-crawlers[\/|\\].*\.js$/,
                 isDevBuild: true
             });
 
@@ -60,30 +60,27 @@ describe('./mocker/CrawlerParser.js', () => {
             expect(crawlerParser.testPath).to.equal(path.join(rootPath, './src'));
             expect(crawlerParser.crawlerBuildPath).to.equal(path.join(rootPath, './build/my-crawler-script_dev'));
             expect(crawlerParser.screenshotPath).to.equal(path.join(rootPath, './build/my-screenshot'));
-            expect(crawlerParser.crawlerMatch).to.eql(/my-crawlers[\/|\\].*\.js$/);
+            expect(crawlerParser.crawlerMatch).to.eql(/[\/|\\]my-crawlers[\/|\\].*\.js$/);
             expect(crawlerParser.isDevBuild).to.be.true;
         });
-
     });
 
-    // describe('check getAllMocker', () => {
-    //     let crawlerParser;
-    //     before(() => {
-    //         crawlerParser = new CrawlerParser({
-    //             basePath: path.resolve(__dirname, '../../data/fixtures/mock_server/mockers')
-    //         });
-    //
-    //         // console.log(mockerParser);
-    //     });
-    //
-    //     it('should exist 4 members', () => {
-    //         expect(allMocker).to.have.lengthOf(4);
-    //     });
-    //
-    //     it('should contain correct mocker', () => {
-    //         expect(allMocker.map(item => item.name)).to.have.members(['demo_01', 'demo_02_renamed', 'demo_03', 'async_01']);
-    //     });
-    // });
+    describe('check getEntry', () => {
+        it('check demo1: getEntry', () => {
+            let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
+            let crawlerParser = new CrawlerParser({ rootPath: rootPath });
+            let entry = crawlerParser.getEntry();
+
+            expect(entry).to.eql({
+                'crawlers/c1': path.join(crawlerParser.testPath, 'crawlers/c1.js'),
+                'crawlers/c2': path.join(crawlerParser.testPath, 'crawlers/c2.js'),
+                'p1/crawlers/c1': path.join(crawlerParser.testPath, 'p1/crawlers/c1.js'),
+                'p1/crawlers/p11': path.join(crawlerParser.testPath, 'p1/crawlers/p11.js'),
+                'p1/crawlers/p12': path.join(crawlerParser.testPath, 'p1/crawlers/p12.js')
+            });
+
+        });
+    });
 
 });
 
