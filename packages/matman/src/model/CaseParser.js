@@ -1,9 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import { CrawlerParser } from 'matman-crawler';
 import BaseHandle from './BaseHandle';
-import { getConfigFilePath } from '../util';
+import { findCrawlerParser } from '../util';
 
 /**
  * 爬虫脚本类，用于处理所有的前端爬虫脚本
@@ -23,31 +22,20 @@ export default class CaseParser {
     /**
      * 获得指定脚本构建之后的本地绝对路径，以便后续加入到 nightmare 中执行
      *
-     * @param {String} name 指定脚本
+     * @param {String} relativePath 相对路径
      * @return {String} 构建之后的本地绝对路径，如果不存在则返回空字符串
      */
-    getCrawlerScriptPath(name) {
-        // 获得 matman.config.js 的文件路径
-        const configFilePath = getConfigFilePath(this.basePath);
-
-        // 如果不是 config file，则从当前路径往上找 config file
-        if (!configFilePath) {
-            console.error('Can not find config file by basePath=' + this.basePath);
-            return '';
-        }
-
+    getCrawlerScriptPath(relativePath) {
         // 根据配置内容获得 crawlerParser 的对象
-        const crawlerParser = new CrawlerParser(require(configFilePath));
+        const crawlerParser = findCrawlerParser(this.basePath);
 
-        // 如果参数不合理
-        let checkResult = crawlerParser.check();
-        if (!checkResult.result) {
-            console.error(checkResult.msg);
+        // 有可能找不到
+        if (!crawlerParser) {
             return '';
         }
 
         // 获取 crawler script 的源文件目录
-        const crawlerScriptSrcPath = path.resolve(this.basePath, name);
+        const crawlerScriptSrcPath = path.resolve(this.basePath, relativePath);
 
         // 调用 crawlerParser 的方法获得该脚本构建之后的路径
         return crawlerParser.getCrawlerScriptPath(crawlerScriptSrcPath);
