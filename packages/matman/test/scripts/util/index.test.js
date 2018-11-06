@@ -21,7 +21,7 @@ describe('./util/index.js', () => {
             expect(getConfigFilePath(targetDir)).to.equal(path.join(targetDir, '../matman.config.js'));
         });
 
-        it('data/fixtures should not exist', () => {
+        it('getConfigFilePath(data/fixtures) should return empty', () => {
             let targetDir = path.join(__dirname, '../../data/fixtures');
             expect(getConfigFilePath(targetDir)).to.be.empty;
         });
