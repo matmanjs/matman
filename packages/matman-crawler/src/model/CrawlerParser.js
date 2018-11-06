@@ -28,7 +28,7 @@ export default class CrawlerParser {
         this.crawlerBuildPath = this._getCrawlerBuildPath(opts.crawlerBuildPath || './build/crawler-script');
 
         // 用于匹配是否为 crawler script 的正则
-        this.crawlerMatch = opts.crawlerMatch || /crawlers[\/|\\].*\.js$/;
+        this.crawlerMatch = opts.crawlerMatch || /[\/|\\]crawlers[\/|\\].*\.js$/;
 
         this.isDevBuild = !!opts.isDevBuild;
 
