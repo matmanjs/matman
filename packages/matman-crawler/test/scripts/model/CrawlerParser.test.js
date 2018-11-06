@@ -5,7 +5,7 @@ const fse = require('fs-extra');
 const expect = chai.expect;
 
 const CrawlerParser = require('../../../lib/model/CrawlerParser').default;
-const build = require('../../../lib/build').default;
+const build = require('../../../lib/run-build').default;
 
 describe('./model/CrawlerParser.js', () => {
 
