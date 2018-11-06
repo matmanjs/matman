@@ -41,6 +41,31 @@ export default class CrawlerParser {
         this.screenshotPath = this._getScreenshotPath(opts.screenshotPath || './build/screenshot');
     }
 
+    /**
+     * 校验参数是否合法有效
+     *
+     * @return {{result:Boolean, [msg]:String}}
+     */
+    check() {
+        if (!fs.existsSync(this.rootPath)) {
+            return {
+                result: false,
+                msg: 'Unknown rootPath=' + this.rootPath
+            };
+        }
+
+        if (!fs.existsSync(this.testPath)) {
+            return {
+                result: false,
+                msg: 'Unknown testPath=' + this.testPath
+            };
+        }
+
+        return {
+            result: true
+        };
+    }
+
     getEntry() {
         let entry = {};
 
@@ -67,23 +92,11 @@ export default class CrawlerParser {
     }
 
     _getRootPath(rootPath) {
-        let result = path.isAbsolute(rootPath) ? rootPath : path.resolve(rootPath);
-
-        if (!fs.existsSync(result)) {
-            throw new Error('Unknown rootPath=' + result);
-        }
-
-        return result;
+        return path.isAbsolute(rootPath) ? rootPath : path.resolve(rootPath);
     }
 
     _getTestPath(testPath) {
-        let result = path.isAbsolute(testPath) ? testPath : path.join(this.rootPath, testPath);
-
-        if (!fs.existsSync(result)) {
-            throw new Error('Unknown testPath=' + result);
-        }
-
-        return result;
+        return path.isAbsolute(testPath) ? testPath : path.join(this.rootPath, testPath);
     }
 
     _getCrawlerBuildPath(crawlerBuildPath) {

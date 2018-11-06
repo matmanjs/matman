@@ -10,57 +10,65 @@ import { getWebpackConfig, runBuild } from './builder-webpack3';
  * 构建
  *
  * @param {Object} config config文件内容
- * @return {Object}
+ * @return {Promise}
  */
 export default function build(config) {
-    const crawlerParser = new CrawlerParser(config);
+    return new Promise((resolve, reject) => {
+        const crawlerParser = new CrawlerParser(config);
 
-    // TODO 校验 crawlerParser 参数合法性
+        // 校验 crawlerParser 参数合法性
+        let checkResult = crawlerParser.check();
+        if (!checkResult.result) {
+            return reject(checkResult.msg);
+        }
 
-    const isDevBuild = crawlerParser.isDevBuild;
+        const isDevBuild = crawlerParser.isDevBuild;
 
-    // 获得 webpack 构建选项
-    getWebpackConfig(crawlerParser)
-        .then((webpackConfig) => {
+        // 获得 webpack 构建选项
+        getWebpackConfig(crawlerParser)
+            .then((webpackConfig) => {
 
-            // 获取到 webpack 配置项结果
-            console.log('webpackConfig: \n', webpackConfig);
+                // 获取到 webpack 配置项结果
+                console.log('webpackConfig: \n', webpackConfig);
 
-            // 执行构建
-            runBuild(webpackConfig, () => {
-                let prependCodePromiseList = [];
-                let evalList = [];
+                // 执行构建
+                runBuild(webpackConfig, () => {
+                    let prependCodePromiseList = [];
+                    let evalList = [];
 
-                // 如果是非简单模式下，则为打包之后的文件手动增加 nightmare client script
-                if (!isDevBuild) {
-                    prependCodePromiseList.push(getNightmareClientCode());
+                    // 如果是非简单模式下，则为打包之后的文件手动增加 nightmare client script
+                    if (!isDevBuild) {
+                        prependCodePromiseList.push(getNightmareClientCode());
 
-                    // 插入 jQuery
-                    prependCodePromiseList.push(getJqueryCode('jQueryCode'));
-                    evalList.push('jQueryCode');
-                } else {
-                    prependCodePromiseList.push(getDevPrependCode());
-                }
+                        // 插入 jQuery
+                        prependCodePromiseList.push(getJqueryCode('jQueryCode'));
+                        evalList.push('jQueryCode');
+                    } else {
+                        prependCodePromiseList.push(getDevPrependCode());
+                    }
 
-                // 获得所有的代码之后，追加在头部
-                if (prependCodePromiseList.length) {
-                    Promise.all(prependCodePromiseList)
-                        .then((result) => {
-                            result.push(`window.evalList=[${evalList.map(item => `"${item}"`).join(',')}]`);
+                    // 获得所有的代码之后，追加在头部
+                    if (prependCodePromiseList.length) {
+                        Promise.all(prependCodePromiseList)
+                            .then((result) => {
+                                result.push(`window.evalList=[${evalList.map(item => `"${item}"`).join(',')}]`);
 
-                            // 每段插入的代码之后，注意要加一个换行符号，否则在支持 source map 之后，可能会被其"注释"掉
-                            prependCodeToDistFile(crawlerParser.crawlerBuildPath, result.join(';\n'));
-                        });
-                }
+                                // 每段插入的代码之后，注意要加一个换行符号，否则在支持 source map 之后，可能会被其"注释"掉
+                                prependCodeToDistFile(crawlerParser.crawlerBuildPath, result.join(';\n'));
+                            });
+                    }
 
-                // 构建完成之后保存一份配置到构建目录中
-                saveWebpackConfig(crawlerParser.crawlerBuildPath, webpackConfig);
+                    // 构建完成之后保存一份配置到构建目录中
+                    saveWebpackConfig(crawlerParser.crawlerBuildPath, webpackConfig);
 
+                    resolve();
+                });
+            })
+            .catch((err) => {
+                reject(err);
             });
-        })
-        .catch((err) => {
-            throw err;
-        });
+    });
+
 };
 
 function getNightmareClientCode() {
