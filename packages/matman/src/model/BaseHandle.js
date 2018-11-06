@@ -8,7 +8,7 @@ export default class BaseHandle {
      * 构造函数
      *
      * @param {String} pageUrl 页面的 URL 地址
-     * @param {String} preloadClientScriptPath 运行在浏览器中的脚本文件本地地址，需要是绝对路径
+     * @param {String} crawlerScriptPath 运行在浏览器中的脚本文件本地地址，需要是绝对路径
      * @param {Object} [opts] 额外参数
      * @param {Boolean} [opts.show] 是否需要展示调试的webview窗口
      * @param {String} [opts.proxyServer] 代理服务器
@@ -19,14 +19,14 @@ export default class BaseHandle {
      * @param {String | Boolean} [opts.useRecorder] 是否使用记录器记录整个请求队列
      * @param {String | Object} [opts.screenshot] 截图设置，如果为字符串则传递 cases 文件路径
      */
-    constructor(pageUrl, preloadClientScriptPath, opts = {}) {
+    constructor(pageUrl, crawlerScriptPath, opts = {}) {
         this.pageUrl = pageUrl;
-        this.preloadClientScriptPath = preloadClientScriptPath;
+        this.crawlerScriptPath = crawlerScriptPath;
 
-        // 校验 preloadClientScriptPath 必须是存在的，否则后续的逻辑也执行不了
-        // 如果获取 client script 地址不存在，则抛出异常提示 #107
-        if (!fs.existsSync(preloadClientScriptPath)) {
-            throw new Error('Unknown preloadClientScriptPath=' + preloadClientScriptPath);
+        // 校验 crawlerScriptPath 必须是存在的，否则后续的逻辑也执行不了
+        // 如果获取 client script 地址不存在，则抛出异常提示
+        if (!fs.existsSync(crawlerScriptPath)) {
+            throw new Error('Unknown crawlerScriptPath=' + crawlerScriptPath);
         }
 
         this.show = opts.show;
@@ -111,7 +111,7 @@ export default class BaseHandle {
         let nightmareConfig = {
             show: this.show,
             webPreferences: {
-                preload: this.preloadClientScriptPath
+                preload: this.crawlerScriptPath
             }
         };
 
