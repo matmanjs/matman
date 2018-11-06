@@ -38,6 +38,12 @@ export default class CaseParser {
         // 根据配置内容获得 crawlerParser 的对象
         const crawlerParser = new CrawlerParser(require(configFilePath));
 
+        // 如果参数不合理
+        let checkResult = crawlerParser.check();
+        if (!checkResult.result) {
+            throw new Error(checkResult.msg);
+        }
+
         // 调用 crawlerParser 的方法获得该脚本的绝对路径
         return crawlerParser.getPath(name);
     }
