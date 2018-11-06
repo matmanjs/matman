@@ -24,15 +24,16 @@ export default class CaseParser {
      * 获得指定脚本构建之后的本地绝对路径，以便后续加入到 nightmare 中执行
      *
      * @param {String} name 指定脚本
-     * @return {String} 构建之后的本地绝对路径
+     * @return {String} 构建之后的本地绝对路径，如果不存在则返回空字符串
      */
-    getPreloadScriptPath(name) {
+    getCrawlerScriptPath(name) {
         // 获得 matman.config.js 的文件路径
         const configFilePath = getConfigFilePath(this.basePath);
 
         // 如果不是 config file，则从当前路径往上找 config file
         if (!configFilePath) {
-            throw new Error('Can not find config file by basePath=' + this.basePath);
+            console.error('Can not find config file by basePath=' + this.basePath);
+            return '';
         }
 
         // 根据配置内容获得 crawlerParser 的对象
@@ -41,24 +42,28 @@ export default class CaseParser {
         // 如果参数不合理
         let checkResult = crawlerParser.check();
         if (!checkResult.result) {
-            throw new Error(checkResult.msg);
+            console.error(checkResult.msg);
+            return '';
         }
 
-        // 调用 crawlerParser 的方法获得该脚本的绝对路径
-        return crawlerParser.getPath(name);
+        // 获取 crawler script 的源文件目录
+        const crawlerScriptSrcPath = path.resolve(this.basePath, name);
+
+        // 调用 crawlerParser 的方法获得该脚本构建之后的路径
+        return crawlerParser.getCrawlerScriptPath(crawlerScriptSrcPath);
     }
 
     /**
      * 适合交互行为的操作
      *
      * @param pageUrl
-     * @param preloadClientScriptPath
+     * @param crawlerScriptPath
      * @param opts
      * @param callAction
      * @returns {Promise<*>}
      */
-    handleOperate(pageUrl, preloadClientScriptPath, opts = {}, callAction) {
-        let baseHandle = new BaseHandle(pageUrl, preloadClientScriptPath, opts);
+    handleOperate(pageUrl, crawlerScriptPath, opts = {}, callAction) {
+        let baseHandle = new BaseHandle(pageUrl, crawlerScriptPath, opts);
 
         // 用户的自定义行为
         if (typeof callAction === 'function') {
@@ -72,12 +77,12 @@ export default class CaseParser {
      * 适合简单的页面扫描场景，无交互行为。
      *
      * @param pageUrl
-     * @param preloadClientScriptPath
+     * @param crawlerScriptPath
      * @param opts
      * @returns {Promise<*>}
      */
-    handleScan(pageUrl, preloadClientScriptPath, opts) {
-        return this.handleOperate(pageUrl, preloadClientScriptPath, opts, (testAction) => {
+    handleScan(pageUrl, crawlerScriptPath, opts) {
+        return this.handleOperate(pageUrl, crawlerScriptPath, opts, (testAction) => {
             // scan 行为是一种特殊的操作，因为它只有一个行为，且结果也不再是数组
             testAction.addAction(function (nightmareRun) {
                 return nightmareRun.wait(opts.wait || 500);
