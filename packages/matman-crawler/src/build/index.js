@@ -1,29 +1,33 @@
-'use strict';
+import fs from 'fs';
+import path from 'path';
+import fse from 'fs-extra';
+import glob from 'glob';
 
-const path = require('path');
-const fs = require('fs');
-const fse = require('fs-extra');
-const glob = require('glob');
+import CrawlerParser from '../model/CrawlerParser';
+import { getWebpackConfig, runBuild } from './builder-webpack3';
 
-const builderWebpack3 = require('./builder-webpack3');
+/**
+ * 构建
+ *
+ * @param {Object} config config文件内容
+ * @return {Object}
+ */
+export default function build(config) {
+    const crawlerParser = new CrawlerParser(config);
 
-module.exports = function (args) {
-    // console.log(args);
+    // TODO 校验 crawlerParser 参数合法性
 
-    let isDevBuild = !!args.dev;
+    const isDevBuild = crawlerParser.isDevBuild;
 
-    // 编译 client src
-    builderWebpack3.getWebpackConfig(null, isDevBuild)
+    // 获得 webpack 构建选项
+    getWebpackConfig(crawlerParser)
         .then((webpackConfig) => {
 
             // 获取到 webpack 配置项结果
             console.log('webpackConfig: \n', webpackConfig);
 
-            // return;
-            let configParams = webpackConfig._configParams;
-            let crawlerParser = webpackConfig._crawlerParser;
-
-            builderWebpack3.runBuild(webpackConfig, () => {
+            // 执行构建
+            runBuild(webpackConfig, () => {
                 let prependCodePromiseList = [];
                 let evalList = [];
 
@@ -44,21 +48,12 @@ module.exports = function (args) {
                         .then((result) => {
                             result.push(`window.evalList=[${evalList.map(item => `"${item}"`).join(',')}]`);
 
-                            // if (isDevBuild) {
-                            //   result.push(`
-                            //                       if (window.evalList && window.evalList.length) {
-                            //                           window.evalList.forEach((item) => {
-                            //                               eval(window[item]);
-                            //                           });
-                            //                       }
-                            //                   `);
-                            // }
-
-                            prependCodeToDistFile(crawlerParser.crawlerBuildPath, result.join(';'));
+                            // 每段插入的代码之后，注意要加一个换行符号，否则在支持 source map 之后，可能会被其"注释"掉
+                            prependCodeToDistFile(crawlerParser.crawlerBuildPath, result.join(';\n'));
                         });
                 }
 
-                // 保存一份配置到本地
+                // 构建完成之后保存一份配置到构建目录中
                 saveWebpackConfig(crawlerParser.crawlerBuildPath, webpackConfig);
 
             });
@@ -105,8 +100,8 @@ function getJqueryCode(key) {
     });
 }
 
-function prependCodeToDistFile(clientScriptBuildPath, code) {
-    let globResult = glob.sync(path.resolve(clientScriptBuildPath, './**/**.js'));
+function prependCodeToDistFile(crawlerScriptBuildPath, code) {
+    let globResult = glob.sync(path.resolve(crawlerScriptBuildPath, './**/**.js'));
 
     globResult.forEach((item) => {
         // console.log(item);
