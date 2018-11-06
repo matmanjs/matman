@@ -1,7 +1,6 @@
-'use strict';
+import webpack from 'webpack';
+import { createProdConfig } from './builder';
 
-const webpack = require('webpack');
-const Builder = require('./builder');
 const utils = require('../utils');
 
 /**
@@ -11,20 +10,26 @@ const utils = require('../utils');
  * @param {Boolean} [isDevBuild] 是否为开发模式
  * @return {Promise}
  */
-function getWebpackConfig(opts, isDevBuild) {
+export function getWebpackConfig(opts, isDevBuild) {
     return utils.getConfig()
         .then((data) => {
             // console.log('config.getConfig then', data);
 
-            return Builder.createProdConfig(data, opts, isDevBuild);
+            return createProdConfig(data, opts, isDevBuild);
         });
 }
 
-function runBuild(webpackConfig, callback) {
+/**
+ * 通过 webpack 接口来调用构建
+ * @param {Object} webpackConfig 传递给 webpack 构建的参数
+ * @param {Function} callback 回调
+ */
+export function runBuild(webpackConfig, callback) {
     // 这个参数是临时值，传递给 webpack 时移除之
     delete webpackConfig._configParams;
     delete webpackConfig._crawlerParser;
 
+    // 执行构建
     webpack(webpackConfig, (err, stats) => {
         if (err) {
             throw err;
@@ -39,8 +44,3 @@ function runBuild(webpackConfig, callback) {
         callback();
     });
 }
-
-module.exports = {
-    getWebpackConfig: getWebpackConfig,
-    runBuild: runBuild
-};
