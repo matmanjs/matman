@@ -85,9 +85,9 @@ describe('./model/CrawlerParser.js', () => {
         });
     });
 
-    describe('check getPath(name)', () => {
+    describe('check getCrawlerScriptPathByName(name)', () => {
         let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
-        let tmpCrawlerBuildPath = path.join(__dirname, '../../data/tmp/demo1_getPath');
+        let tmpCrawlerBuildPath = path.join(__dirname, '../../data/tmp/demo1_getCrawlerScriptPathByName');
 
         let crawlerParser;
 
@@ -111,8 +111,8 @@ describe('./model/CrawlerParser.js', () => {
             fse.removeSync(tmpCrawlerBuildPath);
         });
 
-        it('check demo1: getPath(name)', () => {
-            let result = crawlerParser.getPath('crawlers/c1');
+        it('check demo1: getCrawlerScriptPathByName(name)', () => {
+            let result = crawlerParser.getCrawlerScriptPathByName('crawlers/c1');
 
             expect(result).to.equal(path.join(crawlerParser.crawlerBuildPath, 'crawlers/c1.js'));
         });

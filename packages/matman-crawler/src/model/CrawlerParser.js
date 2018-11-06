@@ -66,6 +66,9 @@ export default class CrawlerParser {
         };
     }
 
+    /**
+     * 获得 webpack 中的 entry 配置
+     */
     getEntry() {
         let entry = {};
 
@@ -78,23 +81,56 @@ export default class CrawlerParser {
                 return item.match(this.crawlerMatch);
             })
             .forEach((item) => {
-                // 获取相对于 testPath 的相对路径
-                let relativePath = path.relative(this.testPath, item);
-
-                // 去掉 .js 后缀
-                let entryName = relativePath.replace('.js', '');
-
-                // 置入 map 中
-                entry[entryName] = item;
+                entry[this.getEntryName(item)] = item;
             });
 
         return entry;
     }
 
-    getPath(name) {
-        const webpackConfig = require(path.resolve(this.crawlerBuildPath, './webpack-config'));
+    /**
+     * 通过一个源文件路径，获得其 entry 对象的名字
+     *
+     * @param {String} fullPath 源文件的绝对路径
+     * @return {String}
+     */
+    getEntryName(fullPath) {
+        // 获取相对于 testPath 的相对路径，且去掉 .js 后缀
+        return path.relative(this.testPath, fullPath).replace('.js', '');
+    }
 
-        return path.join(webpackConfig.output.path, webpackConfig.output.filename.replace('[name]', name));
+    /**
+     * 通过 crawler script 的源文件路径获得其构建之后的路径
+     *
+     * @param {String} srcPath 构建之前的路径
+     * @return {String}
+     */
+    getCrawlerScriptPath(srcPath) {
+        return this.getCrawlerScriptPathByName(this.getEntryName(srcPath));
+    }
+
+    /**
+     * 通过 entry.name 值来获得构建之后的路径
+     *
+     * @param {String} entryName webpack中的entry.name值
+     * @return {string}
+     */
+    getCrawlerScriptPathByName(entryName) {
+        let result = '';
+
+        try {
+            let webpackConfig = require(path.resolve(this.crawlerBuildPath, './webpack-config'));
+            result = path.join(webpackConfig.output.path, webpackConfig.output.filename.replace('[name]', entryName));
+
+            // 如果替换之后的本地文件路径不存在，则将其置空
+            if (!fs.existsSync(result)) {
+                console.error('getPath() return unknown path', result);
+                result = '';
+            }
+        } catch (err) {
+            console.error('getPath() catch err', entryName, err);
+        }
+
+        return result;
     }
 
     _getRootPath(rootPath) {
