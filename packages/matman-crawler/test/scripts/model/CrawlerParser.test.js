@@ -1,8 +1,11 @@
 const path = require('path');
 const chai = require('chai');
+const fse = require('fs-extra');
+
 const expect = chai.expect;
 
 const CrawlerParser = require('../../../lib/model/CrawlerParser').default;
+const build = require('../../../lib/build').default;
 
 describe('./model/CrawlerParser.js', () => {
 
@@ -65,8 +68,8 @@ describe('./model/CrawlerParser.js', () => {
         });
     });
 
-    describe('check getEntry', () => {
-        it('check demo1: getEntry', () => {
+    describe('check getEntry()', () => {
+        it('check demo1: getEntry()', () => {
             let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
             let crawlerParser = new CrawlerParser({ rootPath: rootPath });
             let entry = crawlerParser.getEntry();
@@ -79,6 +82,39 @@ describe('./model/CrawlerParser.js', () => {
                 'p1/crawlers/p12': path.join(crawlerParser.testPath, 'p1/crawlers/p12.js')
             });
 
+        });
+    });
+
+    describe('check getPath(name)', () => {
+        let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
+        let tmpCrawlerBuildPath = path.join(__dirname, '../../data/tmp/demo1_getPath');
+
+        let crawlerParser;
+
+        before(() => {
+            fse.removeSync(tmpCrawlerBuildPath);
+
+            return build({
+                rootPath: rootPath,
+                crawlerBuildPath: tmpCrawlerBuildPath
+            })
+                .then((data) => {
+                    crawlerParser = new CrawlerParser({
+                        rootPath: rootPath,
+                        crawlerBuildPath: tmpCrawlerBuildPath
+                    });
+                    return data;
+                });
+        });
+
+        after(() => {
+            fse.removeSync(tmpCrawlerBuildPath);
+        });
+
+        it('check demo1: getPath(name)', () => {
+            let result = crawlerParser.getPath('crawlers/c1');
+
+            expect(result).to.equal(path.join(crawlerParser.crawlerBuildPath, 'crawlers/c1.js'));
         });
     });
 
