@@ -92,7 +92,7 @@ export default class CrawlerParser {
     }
 
     _getRootPath(rootPath) {
-        return path.isAbsolute(rootPath) ? rootPath : path.resolve(rootPath);
+        return rootPath ? (path.isAbsolute(rootPath) ? rootPath : path.resolve(rootPath)) : '';
     }
 
     _getTestPath(testPath) {
