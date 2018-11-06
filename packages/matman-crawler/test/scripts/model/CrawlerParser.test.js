@@ -28,15 +28,42 @@ describe('./mocker/CrawlerParser.js', () => {
             expect(checkResult.msg).to.match(/Unknown testPath=.*not\/exist\/testPath/);
         });
 
-        it('rootPath existt', () => {
-            let checkResult = new CrawlerParser({ rootPath: __dirname, testPath: 'not/exist/testPath' }).check();
+        it('check demo1: default value', () => {
+            let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
+            let crawlerParser = new CrawlerParser({ rootPath: rootPath });
 
-            expect(checkResult.result).to.be.false;
-            expect(checkResult.msg).to.match(/Unknown testPath=.*not\/exist\/testPath/);
+            expect(crawlerParser.check().result).to.be.true;
+            expect(crawlerParser.rootPath).to.equal(rootPath);
+            expect(crawlerParser.testPath).to.equal(path.join(rootPath, './e2e_test'));
+            expect(crawlerParser.crawlerBuildPath).to.equal(path.join(rootPath, './build/crawler-script'));
+            expect(crawlerParser.screenshotPath).to.equal(path.join(rootPath, './build/screenshot'));
+            expect(crawlerParser.crawlerMatch).to.eql(/crawlers[\/|\\].*\.js$/);
+            expect(crawlerParser.isDevBuild).to.be.false;
+
+            expect(crawlerParser).to.have.all.keys('rootPath', 'testPath', 'crawlerBuildPath', 'screenshotPath', 'crawlerMatch', 'isDevBuild');
         });
-        // it('should contain some fields', () => {
-        //     expect(crawlerParser).to.have.all.keys('basePath', 'definedMockers');
-        // });
+
+        it('check demo2: custom value', () => {
+            let rootPath = path.join(__dirname, '../../data/fixtures/demo2');
+
+            let crawlerParser = new CrawlerParser({
+                rootPath: rootPath,
+                testPath: './src',
+                crawlerBuildPath: path.join(rootPath, './build/my-crawler-script'),
+                screenshotPath: './build/my-screenshot',
+                crawlerMatch: /my-crawlers[\/|\\].*\.js$/,
+                isDevBuild: true
+            });
+
+            expect(crawlerParser.check().result).to.be.true;
+            expect(crawlerParser.rootPath).to.equal(rootPath);
+            expect(crawlerParser.testPath).to.equal(path.join(rootPath, './src'));
+            expect(crawlerParser.crawlerBuildPath).to.equal(path.join(rootPath, './build/my-crawler-script_dev'));
+            expect(crawlerParser.screenshotPath).to.equal(path.join(rootPath, './build/my-screenshot'));
+            expect(crawlerParser.crawlerMatch).to.eql(/my-crawlers[\/|\\].*\.js$/);
+            expect(crawlerParser.isDevBuild).to.be.true;
+        });
+
     });
 
     // describe('check getAllMocker', () => {
