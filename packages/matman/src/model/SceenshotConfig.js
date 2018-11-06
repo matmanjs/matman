@@ -39,11 +39,15 @@ export default class SceenshotConfig {
             return;
         }
 
+        // 相对路径
+        let relativePath = path.relative(crawlerParser.testPath, basePath);
+        let arr = relativePath.split(path.sep);
+
         // 文件名
-        const folderName = getFolderNameFromPath(path.relative(crawlerParser.testPath, basePath));
+        const folderName = arr.pop();
 
         // 需要保存的文件夹路径
-        const saveDir = path.join(crawlerParser.screenshotPath, folderName);
+        const saveDir = path.join(crawlerParser.screenshotPath, getFolderNameFromPath(arr.join(path.sep)));
 
         // 要保证这个目录存在，否则保存时会报错
         fse.ensureDirSync(saveDir);
