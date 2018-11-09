@@ -15,7 +15,7 @@ export default class BaseHandle {
      * @param {String | Number} [opts.wait] wait配置，会直接透传给 nightmare 的 wait 配置项，详细请查看 https://github.com/segmentio/nightmare#waitms
      * @param {Boolean} [opts.doNotEnd] 是否在执行完成之后关闭界面
      * @param {String} [opts.cookie] document.cookie的内容
-     * @param {String} [opts.matmanQuery] 指定matman的query参数
+     * @param {String} [opts.mockstarQuery] 指定 mockstar 的query参数
      * @param {String | Boolean} [opts.useRecorder] 是否使用记录器记录整个请求队列
      * @param {undefined | ScreenshotConfig} [opts.screenshotConfig] 截图设置
      */
@@ -42,7 +42,7 @@ export default class BaseHandle {
          */
         this.proxyServer = opts.proxyServer;
 
-        this.matmanQuery = opts.matmanQuery || null;
+        this.mockstarQuery = opts.mockstarQuery || null;
 
         // 是否使用记录器记录整个请求队列
         // 如果为 true，则可以从 this.globalInfo.recorder 中获取，
@@ -88,8 +88,8 @@ export default class BaseHandle {
         }
 
         // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下
-        if (this.matmanQuery && (typeof this.matmanQuery.getQueryString === 'function')) {
-            this.pageUrl = this.pageUrl + ((this.pageUrl.indexOf('?') > -1) ? '&' : '?') + this.matmanQuery.getQueryString();
+        if (this.mockstarQuery && (typeof this.mockstarQuery.getQueryString === 'function')) {
+            this.pageUrl = this.pageUrl + ((this.pageUrl.indexOf('?') > -1) ? '&' : '?') + this.mockstarQuery.getQueryString();
         }
 
         // console.log('===nightmareConfig====', nightmareConfig);
