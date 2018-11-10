@@ -1,0 +1,18 @@
+{
+  "name": "matman-app",
+  "description": "matman-app",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node ../../../bin/matman build",
+    "build-dev": "node ../../../bin/matman build --dev",
+    "test": "mocha e2e_test/**/*.test.js",
+    "test-page": "mocha e2e_test/**/page_rule/**/*.test.js"
+  },
+  "dependencies": {
+    "web-crawl-util": "^0.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  }
+}
