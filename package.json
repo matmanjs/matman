@@ -2,7 +2,7 @@
   "name": "matman",
   "private": true,
   "scripts": {
-    "publish": "git pull && lerna publish --cd-version patch",
+    "publish": "git pull && lerna publish --cd-version premajor",
     "force-publish": "lerna publish --cd-version patch --force-publish=*"
   },
   "repository": {
@@ -19,6 +19,6 @@
     "url": "https://github.com/matmanjs/matman/issues"
   },
   "devDependencies": {
-    "lerna": "^2.11.0"
+    "lerna": "^3.4.3"
   }
 }

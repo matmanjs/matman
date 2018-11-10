@@ -1,14 +1,16 @@
 {
-  "name": "matman-cli",
+  "name": "matman",
   "version": "4.0.0-alpha.0",
-  "description": "CLI for matman projects",
-  "bin": {
-    "matman": "./bin/matman"
-  },
+  "description": "Easy to write e2e test",
+  "main": "lib/index.js",
   "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "babel ./src --out-dir ./lib --source-maps",
+    "watch-compile": "npm run build -- --watch",
+    "watch": "npm run watch-compile",
     "test-mocha": "node ./node_modules/mocha/bin/_mocha",
     "test": "npm run eslint && npm run test-cov",
-    "eslint": "eslint libs/",
+    "eslint": "eslint src/",
     "test-cov": "istanbul cover ./node_modules/mocha/bin/_mocha"
   },
   "keywords": [
@@ -25,34 +27,23 @@
     "url": "https://github.com/matmanjs/matman/issues"
   },
   "homepage": "https://github.com/matmanjs/matman#readme",
-  "configs": {
-    "compatibleVersion": ">=3.0.10"
-  },
-  "engines": {
-    "node": ">=5.6.0"
-  },
   "dependencies": {
-    "abbrev": "^1.1.1",
-    "bluebird": "^3.5.0",
-    "bunyan": "^1.8.12",
-    "chalk": "^2.3.2",
-    "cross-spawn": "^5.1.0",
-    "figlet": "^1.2.0",
-    "hexo-fs": "^0.2.3",
+    "babel-runtime": "^6.26.0",
+    "fs-extra": "^6.0.1",
+    "glob": "^7.1.2",
+    "lodash": "^4.17.10",
     "matman-crawler": "^4.0.0-alpha.0",
-    "meow": "^3.7.0",
-    "minimist": "^1.2.0",
-    "ora": "^3.0.0",
-    "osenv": "^0.1.4",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.1",
-    "semver": "^5.4.1"
+    "nightmare-handler": "^1.0.2",
+    "url-handle": "^0.2.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.2.0",
     "eslint": "^5.7.0",
-    "mocha": "^5.2.0",
-    "superagent": "^3.8.3"
+    "mocha": "^5.2.0"
   }
 }
