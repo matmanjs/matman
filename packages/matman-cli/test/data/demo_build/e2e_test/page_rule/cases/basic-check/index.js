@@ -6,8 +6,8 @@ const caseParser = new matman.CaseParser(__dirname);
 
 function getResult(opts) {
     // 如何校验，前端页面执行脚本
-    let preloadClientScriptPath = caseParser.getPreloadScriptPath('page_rule/crawlers/get-page-info');
-    console.log('---preloadClientScriptPath--', preloadClientScriptPath);
+    let crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-page-info');
+    console.log('---crawlerScriptPath--', crawlerScriptPath);
 
     opts = Object.assign({
         // proxyServer: env.OPTS.PROXY_SERVER_DEV,
@@ -18,7 +18,7 @@ function getResult(opts) {
     let pageUrl = env.getPageUrl(true);
     console.log('---pageUrl--', pageUrl);
 
-    return caseParser.handleScan(pageUrl, preloadClientScriptPath, opts);
+    return caseParser.handleScan(pageUrl, crawlerScriptPath, opts);
 }
 
 module.exports = getResult;
