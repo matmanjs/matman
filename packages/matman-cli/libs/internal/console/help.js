@@ -13,7 +13,8 @@ module.exports = function (args) {
     arr.push('    Usage: matman [options] [command]');
     arr.push('\n');
     arr.push('    Commands:');
-    arr.push('        build                                    Build the code.');
+    arr.push('        build                     Build the code.');
+    arr.push('        init                      init a project or tester.');
     arr.push('\n');
     arr.push('    Options:');
     arr.push('        --version, -[v]           Print version and exit successfully.');
