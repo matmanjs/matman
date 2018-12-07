@@ -7,6 +7,7 @@ const semver = require('semver');
 
 const internalPluginConsole = require('./internal/console');
 const internalPluginBuild = require('./internal/build');
+const internalPluginInit = require('./internal/init');
 
 /**
  * Entrance file, parse user input and call a command.
@@ -31,7 +32,8 @@ function entry(args) {
     // 初始化
     return matman.init([
         internalPluginConsole,
-        internalPluginBuild
+        internalPluginBuild,
+        internalPluginInit
     ])
         .then(function () {
             let cmd = args._.shift();
