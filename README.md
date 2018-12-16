@@ -1,19 +1,20 @@
 # matman
 
-matman 是一个用于数据模拟和段对端测试的工具。
+matman 是一个用于端对端测试的工具。更多文档详见 https://matmanjs.gitbook.io/cookbook/ 。
 
-> Node `v7.6.0` 开始默认支持 `Async/Await`，请将 Node 升级到 `v7.6.0` 以上。
+> 文档正在补齐中
+
 
 ## 特性
 
-- 强大的自定义产生模拟数据的能力
-- 灵活的获取不同模拟数据
-- E2E（段对端）测试的集成
+- 支持自定义脚本，将UI转为数据
+- 支持模拟用户的操作
+- 支持获取页面加载的事件，包括接口请求等
 
 ## 安装
 
 ```
-$ npm install matman --save
+$ npm install matman-cli -g
 ```
 
 ## FAQ
@@ -26,5 +27,4 @@ sudo npm install matman-cli -g --unsafe-perm=true --allow-root
 
 ## 文档
 
-- 中文文档
-- [贡献代码](https://github.com/helinjiang/matman/wiki/%E8%B4%A1%E7%8C%AE%E4%BB%A3%E7%A0%81)
+- [中文文档](https://matmanjs.gitbook.io/cookbook/)
