@@ -25,6 +25,10 @@ $ npm install matman-cli -g
 sudo npm install matman-cli -g --unsafe-perm=true --allow-root
 ```
 
+## 参与协作开发
+
+详见 [开发指引说明](./DEVELOP.md) 。
+
 ## 文档
 
 - [中文文档](https://matmanjs.gitbook.io/cookbook/)
