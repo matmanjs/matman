@@ -9,6 +9,7 @@
     "test-page": "mocha e2e_test/**/page_rule/**/*.test.js"
   },
   "dependencies": {
+    "url-handle": "^0.2.1",
     "web-crawl-util": "^0.1.0"
   },
   "devDependencies": {
