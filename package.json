@@ -2,7 +2,7 @@
   "name": "matman",
   "private": true,
   "scripts": {
-    "publish": "git pull && lerna publish --cd-version premajor",
+    "publish": "git pull && lerna publish --cd-version minor",
     "force-publish": "lerna publish --cd-version patch --force-publish=*"
   },
   "repository": {
@@ -10,8 +10,8 @@
     "url": "git+https://github.com/matmanjs/matman.git"
   },
   "keywords": [
-    "mock",
-    "e2e"
+    "e2e",
+    "test"
   ],
   "author": "helinjiang",
   "license": "MIT",
