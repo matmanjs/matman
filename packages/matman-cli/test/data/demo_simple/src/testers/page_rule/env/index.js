@@ -1,7 +1,7 @@
 const utils = require('../../../lib/utils');
 
 const OPTS = {
-    WAIT: '#container .section'
+    WAIT: '#container .section-1'
 };
 
 /**
@@ -10,7 +10,7 @@ const OPTS = {
  * @return {String}
  */
 function getPageUrl(isDev) {
-    return utils.getPageUrl('https://now.qq.com/h5/shake-redpacket/rule.html?_bid=3307', isDev);
+    return utils.getPageUrl('https://now.qq.com/app/cmshow/rule.html?_bid=3307', isDev);
 }
 
 module.exports = {
