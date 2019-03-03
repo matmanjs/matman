@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { NightmarePlus, WebEventRecorder } from 'nightmare-handler';
+import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
 import ScreenshotConfig from './SceenshotConfig';
 
 export default class BaseHandle {
@@ -95,6 +95,7 @@ export default class BaseHandle {
         // console.log('===nightmareConfig====', nightmareConfig);
 
         // 创建 nightmare 对象
+        const NightmarePlus = getNightmarePlus();
         this.nightmare = NightmarePlus(nightmareConfig);
 
         // 创建完成之后，可能会有一些自己的处理
