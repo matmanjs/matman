@@ -33,7 +33,7 @@
     "glob": "^7.1.2",
     "lodash": "^4.17.10",
     "matman-crawler": "^4.0.0-alpha.0",
-    "nightmare-handler": "^1.0.2",
+    "nightmare-handler": "^1.0.3",
     "url-handle": "^0.2.1"
   },
   "devDependencies": {
