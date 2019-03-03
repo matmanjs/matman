@@ -16,7 +16,7 @@ function getSectionInfo() {
     };
 
     if (result.isExist) {
-        result.title = useJquery.getText('#container .section-1 .title');
+        result.title = useJquery.getText('#container .section-1 h2');
         result.rulesLength = useJquery.getTotal('#container .section-1 p');
         result.rules = _getRules('#container .section-1');
     }
