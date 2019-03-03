@@ -2,6 +2,7 @@ import fs from 'fs';
 
 import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
 import ScreenshotConfig from './SceenshotConfig';
+import DeviceConfig from './DeviceConfig';
 
 export default class BaseHandle {
     /**
@@ -18,6 +19,7 @@ export default class BaseHandle {
      * @param {String} [opts.mockstarQuery] 指定 mockstar 的query参数
      * @param {String | Boolean} [opts.useRecorder] 是否使用记录器记录整个请求队列
      * @param {undefined | ScreenshotConfig} [opts.screenshotConfig] 截图设置
+     * @param {undefined | DeviceConfig} [opts.deviceConfig] 设备设置
      */
     constructor(pageUrl, crawlerScriptPath, opts = {}) {
         this.pageUrl = pageUrl;
@@ -57,6 +59,9 @@ export default class BaseHandle {
 
         // 截屏设置
         this.screenshotConfig = opts.screenshotConfig;
+
+        // 设备设置
+        this.deviceConfig = opts.deviceConfig;
 
         this.globalInfo = {};
 
@@ -108,13 +113,21 @@ export default class BaseHandle {
 
         // 初始化一些行为
         this.nightmareRun = this.nightmare
-            .exDevice('mobile')
             .header('x-mat-from', 'nightmare')
             .header('x-mat-timestamp', Date.now());
 
+        // 设置设备
+        if (this.deviceConfig) {
+            this.nightmareRun = this.nightmareRun.exDevice(this.deviceConfig.name, {
+                UA: this.deviceConfig.UA,
+                width: this.deviceConfig.width,
+                height: this.deviceConfig.height
+            });
+        }
+
         // 设置 cookie
         if (this.cookie) {
-            this.nightmareRun.exCookies(this.cookie, getMainUrl(this.pageUrl));
+            this.nightmareRun = this.nightmareRun.exCookies(this.cookie, getMainUrl(this.pageUrl));
         }
 
         // 加载页面之前要执行的方法

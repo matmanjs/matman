@@ -14,7 +14,13 @@ function getResult(opts) {
     opts = Object.assign({
         proxyServer: env.getProxyServer(false),
         wait: env.OPTS.WAIT,
-        // screenshot: true
+        // device: 'pc',
+        device: {
+            name: 'pc',
+            width: 300,
+            height:300
+        },
+        screenshot: true
     }, opts);
 
     // console.log('-pageUrl-', pageUrl);
