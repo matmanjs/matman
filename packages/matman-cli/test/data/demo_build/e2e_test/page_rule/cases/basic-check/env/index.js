@@ -1,4 +1,4 @@
-const utils = require('./utils/index');
+const utils = require('./utils');
 
 const OPTS = {
     PROXY_SERVER_DEV: 'localhost:8080',
