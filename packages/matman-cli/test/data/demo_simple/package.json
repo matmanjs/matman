@@ -9,8 +9,9 @@
     "test-page": "mocha src/testers/**/page_rule/**/*.test.js"
   },
   "dependencies": {
-    "matman-e2e": "^3.0.14",
+    "matman": "^4.0.0-alpha.0",
     "url-handle": "^0.2.1",
+    "url-parse": "^1.4.4",
     "web-crawl-util": "^0.1.0"
   },
   "devDependencies": {

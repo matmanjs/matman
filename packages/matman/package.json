@@ -1,7 +1,7 @@
 {
   "name": "matman",
   "version": "4.0.0-alpha.0",
-  "description": "Easy to write e2e test",
+  "description": "Easy to write e2e test2",
   "main": "lib/index.js",
   "scripts": {
     "prepublishOnly": "npm run build",
