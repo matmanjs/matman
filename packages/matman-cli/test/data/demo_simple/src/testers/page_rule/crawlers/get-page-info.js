@@ -12,13 +12,13 @@ module.exports = () => {
  */
 function getSectionInfo() {
     let result = {
-        isExist: useJquery.isExist('#container .section1')
+        isExist: useJquery.isExist('#container .section-1')
     };
 
     if (result.isExist) {
-        result.title = useJquery.getText('#container .section1 .title');
-        result.rulesLength = useJquery.getTotal('#container .section1 p');
-        result.rules = _getRules('#container .section1');
+        result.title = useJquery.getText('#container .section-1 .title');
+        result.rulesLength = useJquery.getTotal('#container .section-1 p');
+        result.rules = _getRules('#container .section-1');
     }
 
     return result;
