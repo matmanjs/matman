@@ -36,8 +36,8 @@ nightmare 提供了 [custom preload script](https://github.com/segmentio/nightma
 - `opts`: 额外参数
   - `opts.testerPath`: `String`， 测试对象的根目录，默认值为 `./src/testers`
   - `opts.crawlerBuildPath`: `String`， 前端爬虫脚本构建之后的目录，默认值为 `./build/crawler-script`
-  - `opts.crawlerMatch`: `String`， 用于匹配是否为前端爬虫脚本的正则表达式，默认值为 `/[\/|\\]crawlers[\/|\\].*\.js$/`
-  - `opts.screenshotPath`: `RegExp`， 屏幕截图保存的路径，默认值为 `./build/screenshot`
+  - `opts.crawlerMatch`: `RegExp`， 用于匹配是否为前端爬虫脚本的正则表达式，默认值为 `/[\/|\\]crawlers[\/|\\].*\.js$/`
+  - `opts.screenshotPath`: `String`， 屏幕截图保存的路径，默认值为 `./build/screenshot`
   - `opts.isDevBuild`: `Boolean`， 是否为开发模式，默认值为 `false`
   
 #### 3.1.2 check()
