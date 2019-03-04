@@ -3,6 +3,7 @@ import path from 'path';
 
 import BaseHandle from './BaseHandle';
 import ScreenshotConfig from './SceenshotConfig';
+import DeviceConfig from './DeviceConfig';
 
 import { findCrawlerParser } from '../util';
 
@@ -57,6 +58,9 @@ export default class CaseParser {
         if (opts.screenshot) {
             opts.screenshotConfig = new ScreenshotConfig((typeof opts.screenshot === 'object') ? opts.screenshot : {}, this.basePath);
         }
+
+        // 设备信息，默认为 mobile
+        opts.deviceConfig = new DeviceConfig(opts.device || 'mobile');
 
         let baseHandle = new BaseHandle(pageUrl, crawlerScriptPath, opts);
 

@@ -5,10 +5,13 @@
   "scripts": {
     "build": "node ../../../bin/matman build",
     "build-dev": "node ../../../bin/matman build --dev",
-    "test": "mocha e2e_test/**/*.test.js",
-    "test-page": "mocha e2e_test/**/page_rule/**/*.test.js"
+    "test": "mocha src/testers/**/*.test.js",
+    "test-page": "mocha src/testers/**/page_rule/**/*.test.js"
   },
   "dependencies": {
+    "matman": "^4.0.0-alpha.0",
+    "url-handle": "^0.2.1",
+    "url-parse": "^1.4.4",
     "web-crawl-util": "^0.1.0"
   },
   "devDependencies": {
