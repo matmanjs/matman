@@ -4,9 +4,9 @@ const fse = require('fs-extra');
 const glob = require('glob');
 const expect = chai.expect;
 
-const build = require('../../../lib/run-build').default;
+const { build } = require('../../../lib');
 
-describe('./build/index.js', () => {
+describe('check build()', () => {
     let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
     let tmpCrawlerBuildPath = path.join(__dirname, '../../data/tmp/demo1_build');
 
