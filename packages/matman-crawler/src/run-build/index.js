@@ -12,9 +12,9 @@ import { getWebpackConfig, runBuild } from './builder-webpack3';
  * @param {Object} config config文件内容
  * @return {Promise}
  */
-export default function build(config) {
+export default function build(rootPath, config) {
     return new Promise((resolve, reject) => {
-        const crawlerParser = new CrawlerParser(config);
+        const crawlerParser = new CrawlerParser(rootPath, config);
 
         // 校验 crawlerParser 参数合法性
         let checkResult = crawlerParser.check();
@@ -28,8 +28,10 @@ export default function build(config) {
         getWebpackConfig(crawlerParser)
             .then((webpackConfig) => {
 
-                // 获取到 webpack 配置项结果
-                console.log('webpackConfig: \n', webpackConfig);
+                if (isDevBuild) {
+                    // 获取到 webpack 配置项结果
+                    console.log('webpackConfig: \n', webpackConfig);
+                }
 
                 // 执行构建
                 runBuild(webpackConfig, () => {

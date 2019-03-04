@@ -7,9 +7,9 @@ const expect = chai.expect;
 const CrawlerParser = require('../../../lib/model/CrawlerParser').default;
 const build = require('../../../lib/run-build').default;
 
-describe.only('./model/CrawlerParser.js', () => {
+describe('./model/CrawlerParser.js', () => {
 
-    describe.only('check construction', () => {
+    describe('check construction', () => {
         it('if rootPath is undefined return false', () => {
             let checkResult = new CrawlerParser().check();
 
@@ -70,7 +70,7 @@ describe.only('./model/CrawlerParser.js', () => {
     describe('check getEntry()', () => {
         it('check demo1: getEntry()', () => {
             let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
-            let crawlerParser = new CrawlerParser({ rootPath: rootPath });
+            let crawlerParser = new CrawlerParser(rootPath);
             let entry = crawlerParser.getEntry();
 
             expect(entry).to.eql({
@@ -93,13 +93,11 @@ describe.only('./model/CrawlerParser.js', () => {
         before(() => {
             fse.removeSync(tmpCrawlerBuildPath);
 
-            return build({
-                rootPath: rootPath,
+            return build(rootPath, {
                 crawlerBuildPath: tmpCrawlerBuildPath
             })
                 .then((data) => {
-                    crawlerParser = new CrawlerParser({
-                        rootPath: rootPath,
+                    crawlerParser = new CrawlerParser(rootPath, {
                         crawlerBuildPath: tmpCrawlerBuildPath
                     });
                     return data;
