@@ -1,7 +1,7 @@
 {
   "name": "matman",
-  "version": "4.0.0-alpha.0",
-  "description": "Easy to write e2e test",
+  "version": "4.0.0",
+  "description": "Easy to write e2e test2",
   "main": "lib/index.js",
   "scripts": {
     "prepublishOnly": "npm run build",
@@ -32,8 +32,8 @@
     "fs-extra": "^6.0.1",
     "glob": "^7.1.2",
     "lodash": "^4.17.10",
-    "matman-crawler": "^4.0.0-alpha.0",
-    "nightmare-handler": "^1.0.2",
+    "matman-crawler": "^4.0.0",
+    "nightmare-handler": "^1.0.3",
     "url-handle": "^0.2.1"
   },
   "devDependencies": {
