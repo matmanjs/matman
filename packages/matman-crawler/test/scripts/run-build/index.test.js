@@ -13,8 +13,7 @@ describe('./build/index.js', () => {
     before(() => {
         fse.removeSync(tmpCrawlerBuildPath);
 
-        return build({
-            rootPath: rootPath,
+        return build(rootPath, {
             crawlerBuildPath: tmpCrawlerBuildPath
         });
     });
@@ -38,14 +37,14 @@ describe('./build/index.js', () => {
     it('check webpack-config entry', () => {
         let config = require(path.join(tmpCrawlerBuildPath, 'webpack-config'));
 
-        let testPath = path.join(rootPath, './e2e_test');
+        let testerPath = path.join(rootPath, './src/testers');
 
         expect(config.entry).to.eql({
-            'crawlers/c1': path.join(testPath, 'crawlers/c1.js'),
-            'crawlers/c2': path.join(testPath, 'crawlers/c2.js'),
-            'p1/crawlers/c1': path.join(testPath, 'p1/crawlers/c1.js'),
-            'p1/crawlers/p11': path.join(testPath, 'p1/crawlers/p11.js'),
-            'p1/crawlers/p12': path.join(testPath, 'p1/crawlers/p12.js')
+            'crawlers/c1': path.join(testerPath, 'crawlers/c1.js'),
+            'crawlers/c2': path.join(testerPath, 'crawlers/c2.js'),
+            'p1/crawlers/c1': path.join(testerPath, 'p1/crawlers/c1.js'),
+            'p1/crawlers/p11': path.join(testerPath, 'p1/crawlers/p11.js'),
+            'p1/crawlers/p12': path.join(testerPath, 'p1/crawlers/p12.js')
         });
     });
 
