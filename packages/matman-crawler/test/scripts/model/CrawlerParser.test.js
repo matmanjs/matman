@@ -4,10 +4,9 @@ const fse = require('fs-extra');
 
 const expect = chai.expect;
 
-const CrawlerParser = require('../../../lib/model/CrawlerParser').default;
-const build = require('../../../lib/run-build').default;
+const { CrawlerParser, build } = require('../../../lib');
 
-describe('./model/CrawlerParser.js', () => {
+describe('check CrawlerParser', () => {
 
     describe('check construction', () => {
         it('if rootPath is undefined return false', () => {
