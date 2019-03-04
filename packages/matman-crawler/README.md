@@ -2,35 +2,35 @@
 
 [matman](https://github.com/matmanjs/matman) 端对端测试方案中使用到的前端爬虫处理工具。
 
-## 安装
+## 1. 安装
 
 ```
 $ npm install matman-crawler --save
 ```
 
-## 功能介绍
+## 2. 功能介绍
 
-### 将多个文件打包成一个单文件
+### 2.1 将多个文件打包成一个单文件
 
 nightmare 提供了 [custom preload script](https://github.com/segmentio/nightmare#custom-preload-script) 的能力，支持注入一个单文件脚本（我们称之为**前端爬虫脚本**）。
 
 但我们开发时，大多时候是基于 CommonJS 规范来组织项目，存在多个组件和多个文件。因此，基于 webpack3， 我们开发了这个工具来将源代码打包成一个文件。
 
-### 已自动注入了 jQuery
+### 2.2 已自动注入了 jQuery
 
 为了更好的爬取 DOM 上的信息，我们构建前端爬虫脚本时，已注入了 [jQuery 3.3.1 slim 版本](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/asserts/jquery.slim.min.js)。因此在写前端爬虫脚本时，可以直接用 jQuery 了。
 
-### 已自动注入了 nightmare 需要的前置脚本
+### 2.3 已自动注入了 nightmare 需要的前置脚本
 
 按照 [custom preload script](https://github.com/segmentio/nightmare#custom-preload-script) 的要求，注入脚本中必须加上一段特殊的代码，以便于与 electron 通信。我们已经在打包时进行了自动处理，已注入了 [nightmare-preload.js](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/asserts/nightmare-preload.js) 。
 
-## API 说明
+## 3. API 说明
 
-### CrawlerParser 类
+### 3.1 CrawlerParser 类
 
 前端爬虫脚本处理类。
 
-#### constructor(rootPath, opts)
+#### 3.1.1 constructor(rootPath, opts)
 
 - `rootPath`: `String`， 项目的根目录，必填项
 - `opts`: 额外参数
@@ -40,7 +40,7 @@ nightmare 提供了 [custom preload script](https://github.com/segmentio/nightma
   - `opts.screenshotPath`: `RegExp`， 屏幕截图保存的路径，默认值为 `./build/screenshot`
   - `opts.isDevBuild`: `Boolean`， 是否为开发模式，默认值为 `false`
   
-#### check()
+#### 3.1.2 check()
 
 检验参数是否合理，返回一个对象：
 
@@ -65,7 +65,7 @@ if (!checkResult.result) {
 // do something else
 ```
 
-#### getEntry()
+#### 3.1.3 getEntry()
 
 获得传递给 webpack 的 `entry` 配置。返回一个对象。
 
@@ -82,7 +82,7 @@ if (!checkResult.result) {
 }
 ```
 
-### build(rootPath, config)
+### 3.2 build(rootPath, config)
 
 执行构建。参数说明请参考 CrawlerParser 类的 `constructor(rootPath, opts)`。
 
