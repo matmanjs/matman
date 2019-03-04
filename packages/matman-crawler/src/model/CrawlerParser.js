@@ -13,9 +13,9 @@ export default class CrawlerParser {
      * @param {Object} opts 参数
      * @param {String} [opts.testerPath] 测试对象的根目录
      * @param {String} [opts.testPath] 即将废弃，同 testerPath
-     * @param {String} [opts.crawlerBuildPath] crawler script 构建之后的目录
-     * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为 crawler script 的正则
-     * @param {RegExp} [opts.screenshotPath] 屏幕截图保存的路径
+     * @param {String} [opts.crawlerBuildPath] 前端爬虫脚本构建之后的目录
+     * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为前端爬虫脚本的正则表达式
+     * @param {String} [opts.screenshotPath] 屏幕截图保存的路径
      * @param {Boolean} [opts.isDevBuild] 是否为开发模式
      */
     constructor(rootPath, opts = {}) {

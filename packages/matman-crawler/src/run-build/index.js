@@ -9,6 +9,7 @@ import { getWebpackConfig, runBuild } from './builder-webpack3';
 /**
  * 构建
  *
+ * @param {String} rootPath 项目根目录
  * @param {Object} config config文件内容
  * @return {Promise}
  */
