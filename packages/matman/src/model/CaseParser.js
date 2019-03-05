@@ -61,7 +61,7 @@ export default class CaseParser {
      * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
      * @param {String | Boolean | Object} [opts.screenshot] 截图设置
      * @param {String | Object} [opts.device] 设备设置
-     * @param callAction
+     * @param {Function} callAction 定义用户交互行为的函数，接受一个BaseHandle对象参数
      * @returns {Promise<*>}
      */
     handleOperate(pageUrl, crawlerScriptPath, opts = {}, callAction) {
@@ -86,7 +86,7 @@ export default class CaseParser {
     }
 
     /**
-     * 适合简单的页面扫描场景，无交互行为。
+     * 获取页面信息，适合无交互行为的场景
      *
      * @param pageUrl
      * @param crawlerScriptPath
