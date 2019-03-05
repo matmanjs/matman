@@ -9,14 +9,14 @@ export default class BaseHandle {
      * 构造函数
      *
      * @param {String} pageUrl 页面的 URL 地址
-     * @param {String} crawlerScriptPath 运行在浏览器中的脚本文件本地地址，需要是绝对路径
+     * @param {String} crawlerScriptPath 运行在浏览器中的前端爬虫脚本，需要是绝对路径
      * @param {Object} [opts] 额外参数
-     * @param {Boolean} [opts.show] 是否需要展示调试的webview窗口
-     * @param {String} [opts.proxyServer] 代理服务器
+     * @param {Boolean} [opts.show] 是否需要展示浏览器，默认为 false
+     * @param {String} [opts.proxyServer] 代理服务器，例如 127.0.0.1:8899
      * @param {String | Number} [opts.wait] wait配置，会直接透传给 nightmare 的 wait 配置项，详细请查看 https://github.com/segmentio/nightmare#waitms
-     * @param {Boolean} [opts.doNotEnd] 是否在执行完成之后关闭界面
-     * @param {String} [opts.cookie] document.cookie的内容
-     * @param {String} [opts.mockstarQuery] 指定 mockstar 的query参数
+     * @param {Boolean} [opts.doNotEnd] 是否在执行完成之后不要关闭浏览器，默认为 false
+     * @param {String} [opts.cookie] 为浏览器注入cookie，格式与 document.cookie 一致
+     * @param {Object} [opts.mockstarQuery] 指定 mockstar 的query参数，用于数据打桩
      * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
      * @param {undefined | ScreenshotConfig} [opts.screenshotConfig] 截图设置
      * @param {undefined | DeviceConfig} [opts.deviceConfig] 设备设置
