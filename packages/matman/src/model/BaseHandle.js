@@ -17,7 +17,7 @@ export default class BaseHandle {
      * @param {Boolean} [opts.doNotEnd] 是否在执行完成之后关闭界面
      * @param {String} [opts.cookie] document.cookie的内容
      * @param {String} [opts.mockstarQuery] 指定 mockstar 的query参数
-     * @param {String | Boolean} [opts.useRecorder] 是否使用记录器记录整个请求队列
+     * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
      * @param {undefined | ScreenshotConfig} [opts.screenshotConfig] 截图设置
      * @param {undefined | DeviceConfig} [opts.deviceConfig] 设备设置
      */
