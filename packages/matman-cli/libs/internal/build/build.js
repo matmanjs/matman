@@ -36,5 +36,5 @@ module.exports = function (args) {
         matmanConfig.isDevBuild = isDevBuild;
     }
 
-    return matmanCrawler.build(matmanConfig);
+    return matmanCrawler.build(matmanConfig.rootPath, matmanConfig);
 };
