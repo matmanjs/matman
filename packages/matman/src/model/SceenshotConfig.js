@@ -40,7 +40,7 @@ export default class SceenshotConfig {
         }
 
         // 相对路径
-        let relativePath = path.relative(crawlerParser.testPath, basePath);
+        let relativePath = path.relative(crawlerParser.testerPath, basePath);
         let arr = relativePath.split(path.sep);
 
         // 文件名
