@@ -48,8 +48,11 @@ export function findCrawlerParser(basePath) {
         return null;
     }
 
+    // 获取 matman.config.js 中的配置项
+    const configData = require(configFilePath) || {};
+
     // 根据配置内容获得 crawlerParser 的对象
-    const crawlerParser = new CrawlerParser(require(configFilePath));
+    const crawlerParser = new CrawlerParser(configData.rootPath, configData);
 
     // 如果参数不合理
     let checkResult = crawlerParser.check();

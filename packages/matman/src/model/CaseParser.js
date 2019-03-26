@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
+import _ from 'lodash';
+
 import BaseHandle from './BaseHandle';
 import ScreenshotConfig from './SceenshotConfig';
 import DeviceConfig from './DeviceConfig';
@@ -8,13 +10,13 @@ import DeviceConfig from './DeviceConfig';
 import { findCrawlerParser } from '../util';
 
 /**
- * 爬虫脚本类，用于处理所有的前端爬虫脚本
+ * 测试用例处理类
  */
 export default class CaseParser {
     /**
      * 构造函数
      *
-     * @param {String} basePath  项目的根目录
+     * @param {String} basePath  测试用例的脚本目录
      * @param {Object} [opts] 参数
      */
     constructor(basePath, opts = {}) {
@@ -45,24 +47,35 @@ export default class CaseParser {
     }
 
     /**
-     * 适合交互行为的操作
+     * 模拟用户进行交互操作
      *
-     * @param pageUrl
-     * @param crawlerScriptPath
-     * @param opts
-     * @param callAction
+     * @param {String} pageUrl 页面的 URL 地址
+     * @param {String} crawlerScriptPath 运行在浏览器中的前端爬虫脚本，需要是绝对路径
+     * @param {Object} [opts] 额外参数
+     * @param {Boolean} [opts.show] 是否需要展示浏览器，默认为 false
+     * @param {String} [opts.proxyServer] 代理服务器，例如 127.0.0.1:8899
+     * @param {String | Number} [opts.wait] wait配置，会直接透传给 nightmare 的 wait 配置项，详细请查看 https://github.com/segmentio/nightmare#waitms
+     * @param {Boolean} [opts.doNotEnd] 是否在执行完成之后不要关闭浏览器，默认为 false
+     * @param {String} [opts.cookie] 为浏览器注入cookie，格式与 document.cookie 一致
+     * @param {Object} [opts.mockstarQuery] 指定 mockstar 的query参数，用于数据打桩
+     * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
+     * @param {String | Boolean | Object} [opts.screenshot] 截图设置
+     * @param {String | Object} [opts.device] 设备设置
+     * @param {Function} callAction 定义用户交互行为的函数，接受一个BaseHandle对象参数
      * @returns {Promise<*>}
      */
     handleOperate(pageUrl, crawlerScriptPath, opts = {}, callAction) {
+        let baseHandleOpts = _.merge({}, opts);
+
         // 如果配置了截图，则需要特殊处理下
         if (opts.screenshot) {
-            opts.screenshotConfig = new ScreenshotConfig((typeof opts.screenshot === 'object') ? opts.screenshot : {}, this.basePath);
+            baseHandleOpts.screenshotConfig = new ScreenshotConfig(opts.screenshot, this.basePath);
         }
 
         // 设备信息，默认为 mobile
-        opts.deviceConfig = new DeviceConfig(opts.device || 'mobile');
+        baseHandleOpts.deviceConfig = new DeviceConfig(opts.device || 'mobile');
 
-        let baseHandle = new BaseHandle(pageUrl, crawlerScriptPath, opts);
+        let baseHandle = new BaseHandle(pageUrl, crawlerScriptPath, baseHandleOpts);
 
         // 用户的自定义行为
         if (typeof callAction === 'function') {
@@ -73,7 +86,7 @@ export default class CaseParser {
     }
 
     /**
-     * 适合简单的页面扫描场景，无交互行为。
+     * 获取页面信息，适合无交互行为的场景
      *
      * @param pageUrl
      * @param crawlerScriptPath
