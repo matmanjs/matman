@@ -9,20 +9,21 @@ export default class CrawlerParser {
     /**
      * 构造函数
      *
+     * @param {String} rootPath  项目的根目录
      * @param {Object} opts 参数
-     * @param {String} opts.rootPath  项目的根目录
-     * @param {String} [opts.testPath] 端对端测试代码的目录
-     * @param {String} [opts.crawlerBuildPath] crawler script 构建之后的目录
-     * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为 crawler script 的正则
-     * @param {RegExp} [opts.screenshotPath] 屏幕截图保存的路径
+     * @param {String} [opts.testerPath] 测试对象的根目录
+     * @param {String} [opts.testPath] 即将废弃，同 testerPath
+     * @param {String} [opts.crawlerBuildPath] 前端爬虫脚本构建之后的目录
+     * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为前端爬虫脚本的正则表达式
+     * @param {String} [opts.screenshotPath] 屏幕截图保存的路径
      * @param {Boolean} [opts.isDevBuild] 是否为开发模式
      */
-    constructor(opts = {}) {
+    constructor(rootPath, opts = {}) {
         // 项目根目录
-        this.rootPath = this._getRootPath(opts.rootPath);
+        this.rootPath = this._getRootPath(rootPath);
 
         // 端对端测试代码的目录
-        this.testPath = this._getTestPath(opts.testPath || './e2e_test');
+        this.testerPath = this._getTestPath(opts.testerPath || opts.testPath || './src/testers');
 
         // crawler script 构建之后的目录
         this.crawlerBuildPath = this._getCrawlerBuildPath(opts.crawlerBuildPath || './build/crawler-script');
@@ -54,10 +55,10 @@ export default class CrawlerParser {
             };
         }
 
-        if (!fs.existsSync(this.testPath)) {
+        if (!fs.existsSync(this.testerPath)) {
             return {
                 result: false,
-                msg: 'Unknown testPath=' + this.testPath
+                msg: 'Unknown testerPath=' + this.testerPath
             };
         }
 
@@ -73,7 +74,7 @@ export default class CrawlerParser {
         let entry = {};
 
         // 获取所有的 js 文件
-        let globResult = glob.sync(path.resolve(this.testPath, './**/**.js'));
+        let globResult = glob.sync(path.resolve(this.testerPath, './**/**.js'));
 
         globResult
             .filter((item) => {
@@ -94,8 +95,8 @@ export default class CrawlerParser {
      * @return {String}
      */
     getEntryName(fullPath) {
-        // 获取相对于 testPath 的相对路径，且去掉 .js 后缀
-        return path.relative(this.testPath, fullPath).replace('.js', '');
+        // 获取相对于 testerPath 的相对路径，且去掉 .js 后缀
+        return path.relative(this.testerPath, fullPath).replace('.js', '');
     }
 
     /**
@@ -137,8 +138,8 @@ export default class CrawlerParser {
         return rootPath ? (path.isAbsolute(rootPath) ? rootPath : path.resolve(rootPath)) : '';
     }
 
-    _getTestPath(testPath) {
-        return path.isAbsolute(testPath) ? testPath : path.join(this.rootPath, testPath);
+    _getTestPath(testerPath) {
+        return path.isAbsolute(testerPath) ? testerPath : path.join(this.rootPath, testerPath);
     }
 
     _getCrawlerBuildPath(crawlerBuildPath) {

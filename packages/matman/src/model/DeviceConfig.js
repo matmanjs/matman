@@ -1,7 +1,7 @@
 export default class DeviceConfig {
     /**
      * 构造函数
-     * @param {String || Object} opts 参数
+     * @param {String || Object} opts 设备名或者设备配置
      * @param {String} [opts.name] 设备名字
      * @param {String} [opts.UA] userAgent
      * @param {String} [opts.width] 视窗宽度
