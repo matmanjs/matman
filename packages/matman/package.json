@@ -1,6 +1,6 @@
 {
   "name": "matman",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Easy to write e2e test2",
   "main": "lib/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
     "fs-extra": "^6.0.1",
     "glob": "^7.1.2",
     "lodash": "^4.17.10",
-    "matman-crawler": "^4.0.2",
+    "matman-crawler": "^4.0.3",
     "nightmare-handler": "^1.0.6",
     "url-handle": "^0.2.1"
   },
