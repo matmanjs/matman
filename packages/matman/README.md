@@ -14,16 +14,16 @@ $ npm install matman --save
 
 测试用例处理类。每一个测试用例都是一个 CaseParser 对象。
 
-#### 3.1.1 constructor(rootPath, opts)
+#### 2.1.1 constructor(rootPath, opts)
 
 - `rootPath`: `String`， 测试用例的脚本目录，必填项
 - `opts`: 额外参数
 
-#### 3.1.2 getCrawlerScriptPath(relativePath) 
+#### 2.1.2 getCrawlerScriptPath(relativePath)
 
-由于 nightmare 中的 `preload script` 加载单文件时，只支持绝对路径，但我们的源代码中一般是用相对路径的。因此该方法可以支持传入一个相对路径，返回构建之后的单文件绝对路径。
+获得构建之后的爬虫脚本文件的绝对路径路径。
 
-该方法的作用与 CommonJS 规范中的 `require` 是一样的。
+`relativePath` 是一个相对路径，而返回的是该文件的绝对路径。在确定 `relativePath` 值时，可以参考 CommonJS 规范中的 `require` 方法。
 
 ```javascript
 
@@ -35,30 +35,41 @@ const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-pa
 
 ```
 
-#### 3.1.3 handleOperate(pageUrl, crawlerScriptPath, opts = {}, callAction)
+#### 2.1.3 handleOperate(pageUrl, crawlerScriptPath, opts = {}, callAction)
 
 模拟用户进行交互操作。
 
 请求参数：
 
-- `pageUrl`：`String`，页面的 URL 地址
-- `crawlerScriptPath`：`String`，运行在浏览器中的前端爬虫脚本，需要是绝对路径
+- `pageUrl`：`String`，必填，页面的 URL 地址
+- `crawlerScriptPath`：`String`，必填，运行在浏览器中的前端爬虫脚本的绝对路径，建议使用 `getCrawlerScriptPath(relativePath)` 方法来动态获取
 - `opts`：`Object`，额外参数
-  - `opts.show`：`Boolean`，是否需要展示浏览器，默认为 `false`
-  - `opts.proxyServer`：`String`，代理服务器，例如 `127.0.0.1:8899`
-  - `opts.wait`：`String | Number`，wait 配置，会直接透传给 nightmare 的 `wait` 配置项，详细请查看 https://github.com/segmentio/nightmare#waitms
+  - `opts.show`：`Boolean`，运行时的无头浏览器是否需要可见，默认为 `false`，即隐藏在后台运行
+  - `opts.proxyServer`：`String`，代理服务器，例如 `127.0.0.1:8899`，或者 `my_proxy_server.example.com:8080` ，会直接透传给 [nightmare 的 switches 配置项](https://github.com/segmentio/nightmare#switches) 中的 `proxy-server` 字段
+  - `opts.wait`：`String | Number`，wait 配置，会直接透传给 [nightmare 的 wait 配置项](https://github.com/segmentio/nightmare#waitms)
   - `opts.doNotEnd`：`Boolean`，是否在执行完成之后不要关闭浏览器，默认为 `false`
   - `opts.cookie`：`String`，为浏览器注入cookie，格式与 `document.cookie` 一致
-  - `opts.mockstarQuery`：`Object`，指定 mockstar 的query参数，用于数据打桩
-  - `opts.screenshot`：`String | Boolean | Object`，截图设置
-  - `opts.device`：`String | Object`，设备设置
+  - `opts.mockstarQuery`：`Object`，指定 mockstar 的query参数，用于数据打桩，为 [mockstar](https://www.npmjs.com/package/mockstar) 中的 `MockStarQuery` 对象
+  - `opts.screenshot`：`String | Boolean | Object`，截图设置，如果是 `Object` 值，则需要包含 `path` 和 `clip` 两个属性，处理之后会直接透传给 [nightmare 的 screenshot 配置项](https://github.com/segmentio/nightmare#screenshotpath-clip)
+  - `opts.device`：`String | Object`，设备设置，如果是 `Object` 值，则需要包含 `name`、 `UA`、 `width` 和 `height` 两个属性，处理之后会直接透传给 [nightmare-handler 的 exDevice 配置项](https://github.com/helinjiang/nightmare-handler/blob/HEAD/docs/exDevice.md)
 - `callAction`：`Function`，定义用户交互行为的函数，接受一个 `BaseHandle` 对象参数
 
-返回一个 `Promise`。
+返回一个 `Promise`， `resolve` 返回的值结构为 `{data: Array, globalInfo: Object}`
 
 
 #### 3.1.4 handleScan(pageUrl, crawlerScriptPath, opts)
 
 获取页面信息，适合无交互行为的场景。
 
-请求参数和返回请参考 `handleOperate` 方法。它本质上是 `handleOperate` 的一个特殊场景。
+请求参数和返回请参考 `handleOperate` 方法，也是返回一个 `Promise`， 但 `resolve` 返回的值结构为 `{data: Object, globalInfo: Object}` 。
+
+它本质上是 `handleOperate` 的一个特殊场景，近似等效于：
+
+```
+return this.handleOperate(pageUrl, crawlerScriptPath, opts, (testAction) => {
+    // scan 行为是一种特殊的操作，因为它只有一个行为，且结果也不再是数组
+    testAction.addAction(function (nightmareRun) {
+        return nightmareRun.wait(opts.wait || 500);
+    });
+})
+```
