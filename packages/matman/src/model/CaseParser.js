@@ -91,13 +91,21 @@ export default class CaseParser {
      * @param pageUrl
      * @param crawlerScriptPath
      * @param opts
+     * @param delayBeforeClose
      * @returns {Promise<*>}
      */
-    handleScan(pageUrl, crawlerScriptPath, opts) {
+    handleScan(pageUrl, crawlerScriptPath, opts, delayBeforeClose) {
         return this.handleOperate(pageUrl, crawlerScriptPath, opts, (testAction) => {
             // scan 行为是一种特殊的操作，因为它只有一个行为，且结果也不再是数组
             testAction.addAction(function (nightmareRun) {
-                return nightmareRun.wait(opts.wait || 500);
+                let runResult = nightmareRun.wait(opts.wait || 500);
+
+                // 如果启用了记录器，则需要延时结束，否则有些 cgi 场景可能会由于关闭太快而来不及收集 #149
+                if (opts.useRecorder) {
+                    runResult.wait(delayBeforeClose || 1000);
+                }
+
+                return runResult;
             });
         })
             .then(function (result) {
