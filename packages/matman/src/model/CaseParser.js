@@ -52,7 +52,7 @@ export default class CaseParser {
      * @param {String} pageUrl 页面的 URL 地址
      * @param {String} crawlerScriptPath 运行在浏览器中的前端爬虫脚本，需要是绝对路径
      * @param {Object} [opts] 额外参数
-     * @param {Boolean} [opts.show] 是否需要展示浏览器，默认为 false
+     * @param {Boolean} [opts.show] 运行时的无头浏览器是否需要可见，默认为 false，即隐藏在后台运行
      * @param {String} [opts.proxyServer] 代理服务器，例如 127.0.0.1:8899
      * @param {String | Number} [opts.wait] wait配置，会直接透传给 nightmare 的 wait 配置项，详细请查看 https://github.com/segmentio/nightmare#waitms
      * @param {Boolean} [opts.doNotEnd] 是否在执行完成之后不要关闭浏览器，默认为 false
