@@ -57,11 +57,13 @@ const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-pa
 返回一个 `Promise`， `resolve` 返回的值结构为 `{data: Array, globalInfo: Object}`
 
 
-#### 3.1.4 handleScan(pageUrl, crawlerScriptPath, opts)
+#### 3.1.4 handleScan(pageUrl, crawlerScriptPath, opts, delayBeforeClose)
 
 获取页面信息，适合无交互行为的场景。
 
 请求参数和返回请参考 `handleOperate` 方法，也是返回一个 `Promise`， 但 `resolve` 返回的值结构为 `{data: Object, globalInfo: Object}` 。
+
+另外定义了一个 `delayBeforeClose` 参数，该值会在 `opts.useRecorder` 为 `true` 时启用，用于延迟关闭窗口，以便能够完整收集一些异步请求信息。
 
 它本质上是 `handleOperate` 的一个特殊场景，近似等效于：
 
