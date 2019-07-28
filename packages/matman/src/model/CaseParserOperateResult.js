@@ -100,7 +100,7 @@ export default class CaseParserOperateResult {
      * @param query
      * @return {boolean}
      */
-    isExistXhr(partialURL, query = {}) {
+    isExistXHR(partialURL, query = {}) {
         return this.isExistInNetwork(partialURL, query, 'xhr');
     }
 };
