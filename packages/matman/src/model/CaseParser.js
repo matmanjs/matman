@@ -6,6 +6,7 @@ import _ from 'lodash';
 import BaseHandle from './BaseHandle';
 import ScreenshotConfig from './SceenshotConfig';
 import DeviceConfig from './DeviceConfig';
+import CaseParserOperateResult from './CaseParserOperateResult';
 
 import { findCrawlerParser } from '../util';
 
@@ -82,7 +83,10 @@ export default class CaseParser {
             callAction(baseHandle);
         }
 
-        return baseHandle.getResult();
+        return baseHandle.getResult()
+            .then((resultData) => {
+                return new CaseParserOperateResult(resultData);
+            });
     }
 
     /**
@@ -109,13 +113,8 @@ export default class CaseParser {
             });
         })
             .then(function (result) {
-                // 去掉这个nightmare的返回。目前他没有什么其他的用处，但是在 JSON.stringify 时会报错
-                if (result.globalInfo && result.globalInfo.recorder && result.globalInfo.recorder.nightmare) {
-                    delete result.globalInfo.recorder.nightmare;
-                }
-
                 // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回
-                result.data = result.data[0];
+                result.data = result.get(0);
 
                 return result;
             });
