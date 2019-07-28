@@ -1,3 +1,5 @@
+import { isURLMatch } from '../util/url';
+
 export default class CaseParserOperateResult {
     constructor(baseHandleResult) {
         this.data = baseHandleResult.data || [];
@@ -60,5 +62,45 @@ export default class CaseParserOperateResult {
             // 这是真实的请求 originalURL
             return !!item.args[3];
         });
+    }
+
+    /**
+     * 是否存在某个网络请求
+     * @param {String} partialURL
+     * @param query
+     * @param resourceType
+     * @return {boolean}
+     */
+    isExistInNetwork(partialURL, query = {}, resourceType) {
+        const queue = this.getNetwork(resourceType);
+
+        // 只要找到其中一个匹配即可返回
+        for (let i = 0; i < queue.length; i++) {
+            if (isURLMatch(queue[i].args[3], partialURL, query)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 是否存在某个页面
+     * @param {String} partialURL
+     * @param query
+     * @return {boolean}
+     */
+    isExistPage(partialURL, query = {}) {
+        return this.isExistInNetwork(partialURL, query, 'mainFrame');
+    }
+
+    /**
+     * 是否存在某个xhr请求
+     * @param {String} partialURL
+     * @param query
+     * @return {boolean}
+     */
+    isExistXhr(partialURL, query = {}) {
+        return this.isExistInNetwork(partialURL, query, 'xhr');
     }
 };
