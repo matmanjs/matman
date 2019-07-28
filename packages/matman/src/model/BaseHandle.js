@@ -74,6 +74,8 @@ export default class BaseHandle {
         };
 
         this.actionList = [];
+
+        this._dataIndexMap = {};
     }
 
     async getResult() {
@@ -166,12 +168,20 @@ export default class BaseHandle {
 
         return {
             data: result,
+            _dataIndexMap: this._dataIndexMap,
             globalInfo: this.globalInfo
         };
     }
 
-    addAction(actionCall) {
-        this.actionList.push(actionCall);
+    addAction(actionName, actionCall) {
+        if (typeof actionCall === 'function') {
+            this.actionList.push(actionCall);
+            this._dataIndexMap[actionName + ''] = this.actionList.length - 1;
+        } else if (typeof actionName === 'function') {
+            this.actionList.push(actionName);
+        } else {
+            throw new Error('addAction should assign function!');
+        }
     }
 
     //
