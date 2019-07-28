@@ -54,7 +54,14 @@ const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-pa
   - `opts.device`：`String | Object`，设备设置，如果是 `Object` 值，则需要包含 `name`、 `UA`、 `width` 和 `height` 两个属性，处理之后会直接透传给 [nightmare-handler 的 exDevice 配置项](https://github.com/helinjiang/nightmare-handler/blob/HEAD/docs/exDevice.md)
 - `callAction`：`Function`，定义用户交互行为的函数，接受一个 `BaseHandle` 对象参数
 
-返回一个 `Promise`， `resolve` 返回的值结构为 `{data: Array, globalInfo: Object}`
+返回一个 `Promise`， `resolve` 返回的值为 `CaseParserOperateResult` 对象，除了包含了 `{data: Array, _dataIndexMap:Object, globalInfo: Object}` ，同时提供了以下方法：
+
+- `get(key)` ，获得指定自定义行为名字的数据结果
+- `getQueue()`，获得所有的事件结果
+- `getNetwork(resourceType)`，获得指定 `resourceType` 的网络请求列表，若 `resourceType` 为空，则返回所有。`resourceType` 目前支持八种：`mainFrame`、`subFrame`、`stylesheet`、`script`、`image`、`object`、`xhr`、`other`
+- `isExistInNetwork(partialURL, query, resourceType)`，从网络请求列表过滤出匹配的结果
+- `isExistPage(partialURL, query)`，从网络请求列表过滤出匹配的结果，且指定 `resourceType` 为 `mainFrame`
+- `isExistXHR(partialURL, query)`，从网络请求列表过滤出匹配的结果，且指定 `resourceType` 为 `xhr`
 
 
 #### 3.1.4 handleScan(pageUrl, crawlerScriptPath, opts, delayBeforeClose)
