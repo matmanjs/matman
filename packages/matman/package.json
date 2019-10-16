@@ -33,7 +33,7 @@
     "glob": "^7.1.2",
     "lodash": "^4.17.10",
     "matman-crawler": "^4.0.3",
-    "nightmare-handler": "^1.0.6"
+    "nightmare-handler": "^1.0.8"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
