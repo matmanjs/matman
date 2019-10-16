@@ -61,6 +61,7 @@ export default class CaseParser {
      * @param {Object} [opts.mockstarQuery] 指定 mockstar 的query参数，用于数据打桩
      * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
      * @param {String | Boolean | Object} [opts.screenshot] 截图设置
+     * @param {String | Object} [opts.deviceConfig] 设备设置
      * @param {String | Object} [opts.device] 设备设置
      * @param {Function} callAction 定义用户交互行为的函数，接受一个BaseHandle对象参数
      * @returns {Promise<*>}
@@ -74,7 +75,7 @@ export default class CaseParser {
         }
 
         // 设备信息，默认为 mobile
-        baseHandleOpts.deviceConfig = new DeviceConfig(opts.device || 'mobile');
+        baseHandleOpts.deviceConfig = new DeviceConfig(opts.deviceConfig || opts.device || 'mobile');
 
         let baseHandle = new BaseHandle(pageUrl, crawlerScriptPath, baseHandleOpts);
 
