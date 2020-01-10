@@ -62,6 +62,7 @@ const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-pa
 - `isExistInNetwork(partialURL, query, resourceType)`，从网络请求列表过滤出匹配的结果
 - `isExistPage(partialURL, query)`，从网络请求列表过滤出匹配的结果，且指定 `resourceType` 为 `mainFrame`
 - `isExistXHR(partialURL, query)`，从网络请求列表过滤出匹配的结果，且指定 `resourceType` 为 `xhr`
+- `isExistLogInPage(key)`，从页面log日志中滤出匹配结果
 
 
 #### 3.1.4 handleScan(pageUrl, crawlerScriptPath, opts, delayBeforeClose)
