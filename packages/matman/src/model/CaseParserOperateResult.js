@@ -65,6 +65,28 @@ export default class CaseParserOperateResult {
     }
 
     /**
+     * 
+     * 是否存在某个log日志
+     * @param {*} key 
+     * @return {Array}
+     * 
+     */
+    isExistLogInPage(key = "") {
+        const queue = this.getQueue();
+        return queue
+            .filter(item => {
+                if (item.eventName !== 'console') {
+                    return false;
+                }
+                if (!item.args.includes(key)) {
+                    return false;
+                }
+                return true;
+            })
+            .map(item => item.args.slice(1));
+    };
+    
+    /**
      * 是否存在某个网络请求
      * @param {String} partialURL
      * @param query
