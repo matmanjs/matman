@@ -83,6 +83,8 @@ export default class BaseHandle {
         let nightmareConfig = {
             show: this.show,
             webPreferences: {
+                // 用例过多且频繁启动测试时可能会存在失败的场景 #154
+                partition: 'nopersist',
                 preload: this.crawlerScriptPath
             }
         };
