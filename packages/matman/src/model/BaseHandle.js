@@ -87,6 +87,13 @@ export default class BaseHandle {
             }
         };
 
+        if (nightmareConfig.show) {
+            // https://www.npmjs.com/package/nightmare#opendevtools
+            nightmareConfig.openDevTools = {
+                mode: 'detach'
+            };
+        }
+
         // 设置代理服务器
         if (this.proxyServer) {
             nightmareConfig.switches = {
