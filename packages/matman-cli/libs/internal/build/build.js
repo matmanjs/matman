@@ -9,7 +9,7 @@ const matmanCrawler = require('matman-crawler');
  *
  * @param {Object} args 参数
  * @param {Boolean} [args.dev] 是否为开发者模式，使用方式: --dev
- * @param {String} [args.config] 自定义配置文件，使用方式: --config=mockstar.config.js
+ * @param {String} [args.config] 自定义配置文件，使用方式: --config=matman.config.js
  */
 module.exports = function (args) {
     // console.log(args);

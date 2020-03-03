@@ -43,7 +43,7 @@ ConsoleStream.prototype._write = function (data, enc, callback) {
     }
 
     // Level
-    msg += chalk[levelColors[level]]('mockstar' + ' ' + levelNames[level]) + ' ';
+    msg += chalk[levelColors[level]]('matman' + ' ' + levelNames[level]) + ' ';
 
     // Message
     msg += data.msg + '\n';
