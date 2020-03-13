@@ -21,7 +21,7 @@ module.exports = function (args) {
         }
 
         console.log(chalk.cyan(data));
-        console.log(chalk.cyan(` Matman，当前版本v${self.version}, 专注前端端对端测试，主页: https://github.com/matmanjs/matman `));
+        console.log(chalk.cyan(` Matman，当前版本v${self.version}, 专注 web 前端端对端测试，主页: https://github.com/matmanjs/matman `));
         console.log(chalk.cyan(' (c) powered by IVWEB Team'));
         console.log(chalk.cyan(' Run matman --help to see usage. '));
     });

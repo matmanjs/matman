@@ -6,15 +6,15 @@ const initTester = require('./init-tester');
 /**
  *
  * @param {Object} args
- * @param {Array} args._ 参数，例如 mockstar init xxx yyy，则 args._ = [ 'xxx', 'yyy' ]
- * @param {Boolean} [args.dev] 是否为开发者模式，使用方式: mockstar init --dev
- * @param {String} [args.mockstar] mockstar 的版本号，使用方式: mockstar init --mockstar=1.5.0
+ * @param {Array} args._ 参数，例如 matman init xxx yyy，则 args._ = [ 'xxx', 'yyy' ]
+ * @param {Boolean} [args.dev] 是否为开发者模式，使用方式: matman init --dev
+ * @param {String} [args.matman] matman 的版本号，使用方式: matman init --matman=1.5.0
  */
 module.exports = function (args) {
-    // node ./bin/mockstar init --mockstar=1.2.3
+    // node ./bin/matman init --matman=1.2.3
     // console.log(args);
-    // mockstar init xxx yyy --dev --mockstar=1.5.3
-    // { _: [ 'xxx', 'yyy' ], dev: true, mockstar: '1.5.3' }
+    // matman init xxx yyy --dev --matman=1.5.3
+    // { _: [ 'xxx', 'yyy' ], dev: true, matman: '1.5.3' }
 
     // 如果没有命令，则提示
     if (!args._.length) {
@@ -36,13 +36,13 @@ module.exports = function (args) {
 function showHelp() {
     let arr = [];
 
-    arr.push('    Usage: mockstar init <command> [options] ');
+    arr.push('    Usage: matman init <command> [options] ');
     arr.push('    Commands:');
     arr.push('        project    Initialize project.');
     arr.push('        tester     Initialize tester.');
     arr.push('    Options:');
     arr.push('        --dev                  Debug for development.');
-    arr.push('    Report bugs to https://github.com/mockstarjs/mockstar/issues.');
+    arr.push('    Report bugs to https://github.com/matmanjs/matman/issues.');
 
     // https://www.npmjs.com/package/meow
     return meow({
