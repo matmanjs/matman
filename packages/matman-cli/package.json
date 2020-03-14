@@ -1,6 +1,6 @@
 {
   "name": "matman-cli",
-  "version": "4.0.8",
+  "version": "4.0.9",
   "description": "CLI for matman projects",
   "bin": {
     "matman": "./bin/matman"
@@ -41,8 +41,8 @@
     "fs-extra": "^7.0.1",
     "fs-handler": "^0.1.2",
     "hexo-fs": "^0.2.3",
-    "matman": "^4.0.7",
-    "matman-crawler": "^4.0.3",
+    "matman": "^4.0.9",
+    "matman-crawler": "^4.0.9",
     "meow": "^3.7.0",
     "minimist": "^1.2.0",
     "ora": "^3.0.0",
