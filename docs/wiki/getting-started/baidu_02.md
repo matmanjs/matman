@@ -2,96 +2,74 @@
 sidebarDepth: 2
 ---
 
-# 01. 第一个端对端测试
+# 02. 测试用户交互
 
-本节我们将实现：测试 [https://www.baidu.com](https://www.baidu.com) 首页的UI布局。
+本节我们将实现：在 [https://www.baidu.com](https://www.baidu.com) 中输入 `matman` ，并且验证交互逻辑。
 
-## 1. 创建项目 baidu_01，安装 matman 依赖
+## 1. 创建项目 baidu_02
 
-新建一个目录，例如 `baidu_01` ，使用 `npm init` 命令初始化，然后安装 [matman](http://npmjs.com/package/matman):
+复制 `baidu_01` 目录，命名为 `baidu_02`，并安装依赖。
 
-```
-$ npm i matman --save
-```
+## 2. 编写端对端测试模块
 
-你也可以手动新建一个 `package.json` ，拷贝下面的内容：
+本次测试中，一共将发生三个动作，依次是：
 
-```json
-{
-    "name": "baidu_01",
-    "version": "1.0.0",
-    "scripts": {
-        "build": "matman build",
-        "build-dev": "matman build --dev"
-    },
-    "dependencies": {
-        "matman": "^4.0.7"
-    }
-}
-```
+- 第一步：加载页面
+- 第二步：在输入框内输入 `matman`
+- 第三步：点击搜索按钮
 
-## 2. 配置 matman.config.js
+每一个动作都会带来一定的变化，我们将其称之为一个新的"数据快照"。通过对比动作前后的两个快照变化，如果变化是符合预期的，则说明该次动作的端对端测试通过。为了更好的处理快照，我们为快照命名：
 
-在目录下增加一个 `matman.config.js` 文件，与 `package.json` 同级目录，内容如下：
+- 第一步：加载页面之后，产生的快照命名为 `init`
+- 第二步：在输入框内输入 `matman` 之后，产生的快照命名为 `input_key_word`
+- 第三步：点击搜索按钮之后，产生的快照命名为 `click_to_search`
 
-```js
-const path = require('path');
+![](./img/baidu_02_01.jpg)
 
-module.exports = {
-    rootPath: __dirname,
-    testerPath: path.join(__dirname, './src')
-};
-```
+### 2.1 编写爬虫脚本
 
-其中 `testerPath` 指定了我们的测试用例存放在那个目录下，这里我们指定为 `src` ，因此需要手动增加 `src` 文件夹。
-
-## 3. 编写端对端测试模块
-
-### 3.1 编写爬虫脚本
-
-新增 `src/page_baidu_index/crawlers/get-page-info.js` 文件，内容如下：
+新增 `src/page_baidu_index/crawlers/get-page-info-for-search.js` 文件，内容如下：
 
 ```
 module.exports = () => {
     return {
         title: document.title,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        userAgent: navigator.userAgent,
-        _version: Date.now(),
-        searchBtnTxt: document.querySelector('#su').value,
-        navInfo: getNavInfo()
+        searchInputInfo: getSearchInputInfo(),
+        searchResultInfo: getSearchResultInfo()
     };
 };
 
 /**
- * 获取导航模块的信息
+ * 获取搜索框相关的信息
  */
-function getNavInfo() {
-    const jqContainer = $('#u1');
-    let result = {
-        isExist: !!jqContainer.length
+function getSearchInputInfo() {
+    return {
+        keyWorld: $('#kw').val(),
+        searchBtnText: $('#su').val()
+    };
+}
+
+/**
+ * 获取搜索结果相关的信息
+ */
+function getSearchResultInfo() {
+    const jqContainer = $('#content_left');
+    const result = {
+        isExist: !!jqContainer.length,
+        list: []
     };
 
-    function getNavData(nameAttr) {
-        const jqItem = $(`a[name=${nameAttr}]`, jqContainer);
-
-        const data = {
-            isExist: !!jqItem.length
+    function getItemData(jqItem) {
+        return {
+            title: $('.t', jqItem).text().trim(),
+            describe: $('.c-abstract', jqItem).text().trim(),
+            tpl: jqItem.attr('tpl')
         };
-
-        if (data.isExist) {
-            data.name = jqItem.text();
-            data.href = jqItem.attr('href');
-        }
-
-        return data;
     }
 
-    if (result.isExist) {
-        result.setting = getNavData('tj_settingicon');
-        result.moreProduct = getNavData('tj_briicon');
-    }
+    $('.c-container', jqContainer).each(function () {
+        result.list.push(getItemData($(this)));
+    });
 
     return result;
 }
@@ -103,14 +81,12 @@ function getNavInfo() {
 $ npm run build-dev
 ```
 
-上述命令会生成一个调试脚本 `build/crawler-script_dev/page_baidu_index/crawlers/get-page-info.js` ，拷贝所有的内容在浏览器 `console` 控制台，查看输出：
-
-![](./img/baidu_01_01.jpg)
+上述命令会生成一个调试脚本 `build/crawler-script_dev/page_baidu_index/crawlers/get-page-info-for-search.js` ，拷贝所有的内容在浏览器 `console` 控制台，然后查看输出即可。
 
 
-### 3.2 编写执行脚本
+### 2.2 编写执行脚本
 
-新增 `src/page_baidu_index/cases/basic-check/index.js` 文件，内容如下：
+新增 `src/page_baidu_index/cases/search-check/index.js` 文件，内容如下：
 
 ```
 const matman = require('matman');
