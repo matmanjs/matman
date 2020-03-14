@@ -2,7 +2,7 @@
 sidebarDepth: 2
 ---
 
-# 01. 最简单的一个端对端测试
+# 01. 第一个端对端测试
 
 本节我们将实现：测试 [https://www.baidu.com](https://www.baidu.com) 首页的UI布局。
 
@@ -108,7 +108,7 @@ $ npm run build-dev
 ![](./img/baidu_01_01.png)
 
 
-### 3.2 编写端对端测试执行脚本
+### 3.2 编写执行脚本
 
 新增 `src/page_baidu_index/cases/basic-check/index.js` 文件，内容如下：
 
