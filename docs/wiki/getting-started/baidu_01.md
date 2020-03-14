@@ -1,3 +1,7 @@
+---
+sidebarDepth: 2
+---
+
 # 01. 最简单的一个端对端测试
 
 本节我们将实现：测试 [https://www.baidu.com](https://www.baidu.com) 首页的UI布局。
@@ -101,58 +105,137 @@ $ npm run build-dev
 
 上述命令会生成一个调试脚本 `build/crawler-script_dev/page_baidu_index/crawlers/get-page-info.js` ，拷贝所有的内容在浏览器 `console` 控制台，查看输出：
 
-![matman项目结构](./img/baidu_01_01.png)
+![](./img/baidu_01_01.png)
 
-## 1. 初始化测试项目
 
-运行如下命令初始化一个测试项目：
+### 3.2 编写端对端测试执行脚本
 
-```bash
-$ matman init project
+新增 `src/page_baidu_index/cases/basic-check/index.js` 文件，内容如下：
+
+```
+const matman = require('matman');
+
+function getResult(opts) {
+    // 1. 获取 caseParser 对象
+    const caseParser = new matman.CaseParser(__dirname);
+
+    // 2. 获取页面的 url
+    const pageUrl = 'https://www.baidu.com';
+
+    // 3. 获取 crawlerScript 爬虫脚本路径
+    const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-page-info');
+
+    // 4. 获得一些配置参数
+    const reqOpts = Object.assign({
+        device: {
+            'UA': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36',
+            'width': 1250,
+            'height': 400
+        },
+        wait: '#su',
+        screenshot: true
+    }, opts);
+
+    // 5. 执行并返回 Promise 结果
+    return caseParser.handleScan(pageUrl, crawlerScriptPath, reqOpts);
+}
+
+module.exports = getResult;
+
+// getResult({ show: true, doNotEnd: true, useRecorder: false })
+//     .then(function (result) {
+//         console.log(JSON.stringify(result));
+//     })
+//     .catch(function (error) {
+//         console.error('failed:', error);
+//     });
 ```
 
-提示输入测试项目的名字，默认测试项目文件夹名字为 `matman-app`。初始化之后，会生成一个示例项目，结构如下：
+编写之后，如果要自测，则可以将文件最末尾的注释去掉，然后用 node 执行该文件。
 
-![matman项目结构](./img/matmanproject.png)
 
-- `matman.config.js`：配置文件
-- `src` ：测试代码源代码
-  - `lib`： 公共方法和配置
-  - `testers`：测试代码
-    - `demo_tester`：一个典型的测试对象，我们建议按照"测试页面"为维度划分
-      - `cases/xx/index.js` 中编写端对端测试执行函数
-      - `cases/xx/index.test.js` 中编写测试用例
-      - `crawlers/get-page-info.js` 中编写爬虫脚本
-      - `env/index.js` 中存放环境相关参数如爬取页面链接等
+### 3.3 编写测试脚本
 
-## 2. 安装 npm 依赖
+新增 `src/page_baidu_index/cases/basic-check/index.test.js` 文件，内容如下：
 
-初始化完成之后，进入到我们的测试项目中，手动安装 npm 包依赖。假设我们的项目名称为 `matman-app`，则：
+```
+const expect = require('chai').expect;
 
-```bash
-$ cd matman-app
-$ npm install
+const checkPage = require('.');
+
+describe('百度首页：常规检查', function () {
+    this.timeout(30000);
+
+    let resultData;
+
+    before(function () {
+        return checkPage({ show: false, doNotEnd: false, useRecorder: true })
+            .then(function (result) {
+                // console.log(JSON.stringify(result));
+                resultData = result;
+            });
+    });
+
+    describe('检查基本信息', function () {
+        let data;
+
+        before(function () {
+            data = resultData.data;
+        });
+
+        it('网站title应该为：百度一下，你就知道', function () {
+            expect(data.title).to.equal('百度一下，你就知道');
+        });
+
+        it('搜索按钮的文字应该为：百度一下', function () {
+            expect(data.searchBtnTxt).to.equal('百度一下');
+        });
+
+        it('顶部导航信息正确', function () {
+            expect(data.navInfo).to.eql({
+                'isExist': true,
+                'moreProduct': { 'href': 'http://www.baidu.com/more/', 'isExist': true, 'name': '更多产品' },
+                'setting': { 'href': 'http://www.baidu.com/gaoji/preferences.html', 'isExist': true, 'name': '设置' }
+            });
+        });
+    });
+});
+
 ```
 
-## 3. 试运行
+安装 [mocha](http://npmjs.com/package/mocha) 和 [chai](http://npmjs.com/package/chai) ：
 
-执行如下命令即完成项目的启动了：
-
-```bash
-$ npm build #修改过爬虫文件后，如果只是修改测试用例则无需执行该步骤
-
-# 之后
-$ npm run test
+```
+$ npm i mocha chai --save-dev
 ```
 
-## 6. 新增 tester 测试对象
+配置 npm scripts 命令，最后的 package.json 长这样：
 
-在 `testers` 目录下，执行如下命令来快速新建一个 tester:
-
-```bash
-$ matman init tester
+```
+{
+    "name": "baidu_01",
+    "version": "1.0.0",
+    "scripts": {
+        "build": "matman build",
+        "build-dev": "matman build --dev",
+        "test": "npm run build && mocha src/**/*.test.js"
+    },
+    "dependencies": {
+        "matman": "^4.0.7"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^7.1.0"
+    }
+}
 ```
 
-> 我们推荐为 tester 设置一个容易识别的名字，一般建议与页面相关，例如取页面的名字为 tester 名字，这样容易查找。
+### 3.4 执行端对端测试
 
-新建完成之后，我们唯一必须要修改的是目录下的 `env/index.js` 文件，设置其中的 `getPageUrl` 函数中页面链接参数的值，该值用于匹配测试用的页面，还有 `WAIT` 值，该值用于控制爬虫开始执行的时间点。
+运行如下命令，执行端对端测试：
+
+```
+$ npm test
+```
+
+![](./img/baidu_01_02.png)
