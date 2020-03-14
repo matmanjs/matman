@@ -46,11 +46,14 @@ export default function build(rootPath, config) {
                     if (!isDevBuild) {
                         prependCodePromiseList.push(getNightmareClientCode());
 
-                        // 插入 jQuery
-                        prependCodePromiseList.push(getJqueryCode('jQueryCode'));
-                        evalList.push('jQueryCode');
+                        if (crawlerParser.crawlerInjectJQuery) {
+                            // 插入 jQuery
+                            prependCodePromiseList.push(getJqueryCode('jQueryCode'));
+                            evalList.push('jQueryCode');
+                        }
+
                     } else {
-                        prependCodePromiseList.push(getDevPrependCode());
+                        prependCodePromiseList.push(getDevPrependCode(crawlerParser.crawlerInjectJQuery));
                     }
 
                     // 获得所有的代码之后，追加在头部
@@ -95,9 +98,11 @@ function getNightmareClientCode() {
     });
 }
 
-function getDevPrependCode() {
+function getDevPrependCode(crawlerInjectJQuery) {
     return new Promise((resolve, reject) => {
-        fs.readFile(path.join(__dirname, './builder-webpack3/libs/dev-prepend.js'), 'utf8', (err, data) => {
+        const injectFile = crawlerInjectJQuery ? 'dev-prepend-with-jquery.js' : 'dev-prepend.js';
+
+        fs.readFile(path.join(__dirname, `./builder-webpack3/libs/${injectFile}`), 'utf8', (err, data) => {
             if (err) {
                 return reject(err);
             }
