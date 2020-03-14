@@ -32,7 +32,15 @@ module.exports = {
                             title: '安装和升级',
                             path: '/wiki/install',
                             collapsable: false
-                        }
+                        },
+                        {
+                            title: '快速入门',
+                            path: '/wiki/getting-started/',
+                            collapsable: false,
+                            children: [
+                                'getting-started/baidu_01'
+                            ]
+                        },
                     ],
                     '/release/': true
                 }
