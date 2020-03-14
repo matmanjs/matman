@@ -2,9 +2,24 @@
 sidebarDepth: 0
 ---
 
-# 关于matman
+# 关于 matman
 
-[matman](https://github.com/matmanjs/matman)提供了一套 web 端对端测试（E2E，End-to-End Testing）的解决方案。
+你可能在此之前或多或少听说过端对端测试（E2E，End-to-End Testing），在网上也有一些可选方案。每种方案都有自己的优势没有最优秀的，只有相对适合的。 [matman](https://github.com/matmanjs/matman) 也是其中之一，它提供了一套 web 端对端测试（E2E，End-to-End Testing）的解决方案。
+
+## 更适合 web 前端开发者使用
+
+matman 可能是**最适合 web 前端开发人员编写端对端测试的方案**。
+
+- 整个过程无需去学习 python 等新语言，只需要了解 html/js/css 即可
+- 没有繁杂的安装配置，你所需要的只是 `npm install`
+- 无需高深的编程技能，框架提供了众多测试工具，只需要你安心写自己的逻辑
+
+## 更适合单页面的精细化测试
+
+matman 方案推荐基于白盒数据做端对端测试方案，尤其适合适合单页面的精细化测试，例如移动端 h5 页等。
+
+精细化测试的意思是：对 UI 展示和行为交互进行深度测试。而单页面测试是相对而言的，毕竟有些业务是那种需要测试多个页面之间交互（例如淘宝页面之间的跳转），这种场景 matman 方案也可以做，但是并不擅长。
+
 
 ## 特性
 
