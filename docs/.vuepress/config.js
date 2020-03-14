@@ -38,7 +38,8 @@ module.exports = {
                             path: '/wiki/getting-started/',
                             collapsable: false,
                             children: [
-                                'getting-started/baidu_01'
+                                'getting-started/baidu_01',
+                                'getting-started/baidu_02',
                             ]
                         },
                     ],
