@@ -1,24 +1,34 @@
 {
-  "name": "matman",
-  "private": true,
-  "scripts": {
-    "publish": "git pull && lerna publish --cd-version patch",
-    "force-publish": "lerna publish --cd-version patch --force-publish=*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/matmanjs/matman.git"
-  },
-  "keywords": [
-    "e2e",
-    "test"
-  ],
-  "author": "helinjiang",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/matmanjs/matman/issues"
-  },
-  "devDependencies": {
-    "lerna": "^3.4.3"
-  }
+    "name": "matman",
+    "private": true,
+    "scripts": {
+        "publish": "git pull && lerna publish --cd-version patch",
+        "force-publish": "lerna publish --cd-version patch --force-publish=*",
+        "docs:dev": "vuepress dev docs",
+        "docs:build": "vuepress build docs",
+        "docs:deploy": "npm run docs:build && gh-pages -d docs-dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/matmanjs/matman.git"
+    },
+    "keywords": [
+        "e2e",
+        "test"
+    ],
+    "author": "helinjiang",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/matmanjs/matman/issues"
+    },
+    "devDependencies": {
+        "element-ui": "^2.13.0",
+        "gh-pages": "^2.2.0",
+        "lerna": "^3.20.2",
+        "less": "^3.11.1",
+        "less-loader": "^5.0.0",
+        "vue": "^2.6.11",
+        "vue-particles": "^1.0.9",
+        "vuepress": "^1.3.1"
+    }
 }
