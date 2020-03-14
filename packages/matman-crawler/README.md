@@ -16,9 +16,9 @@ nightmare 提供了 [custom preload script](https://github.com/segmentio/nightma
 
 但我们开发时，大多时候是基于 CommonJS 规范来组织项目，存在多个组件和多个文件。因此，基于 webpack3， 我们开发了这个工具来将源代码打包成一个文件。
 
-### 2.2 已自动注入了 jQuery
+### 2.2 可配置注入 jQuery
 
-为了更好的爬取 DOM 上的信息，我们构建前端爬虫脚本时，已注入了 [jQuery 3.3.1 slim 版本](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/asserts/jquery.slim.min.js)。因此在写前端爬虫脚本时，可以直接用 jQuery 了。
+为了更好的爬取 DOM 上的信息，我们构建前端爬虫脚本时，如果传递 `crawlerInjectJQuery` 值为 `true` ，则将注入 [jQuery 3.3.1 slim 版本](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/asserts/jquery.slim.min.js)。这样在写前端爬虫脚本时，可以直接用 jQuery 了。
 
 ### 2.3 已自动注入了 nightmare 需要的前置脚本
 
@@ -34,12 +34,13 @@ nightmare 提供了 [custom preload script](https://github.com/segmentio/nightma
 
 - `rootPath`: `String`， 项目的根目录，必填项
 - `opts`: 额外参数
-  - `opts.testerPath`: `String`， 测试对象的根目录，默认值为 `path.resolve(rootPath, './src/testers')` 
-  - `opts.crawlerBuildPath`: `String`， 前端爬虫脚本构建之后的目录，默认值为 `path.resolve(rootPath, './build/crawler-script')` 
+  - `opts.testerPath`: `String`， 测试对象的根目录，默认值为 `path.resolve(rootPath, './src/testers')`
+  - `opts.crawlerBuildPath`: `String`， 前端爬虫脚本构建之后的目录，默认值为 `path.resolve(rootPath, './build/crawler-script')`
   - `opts.crawlerMatch`: `RegExp`， 用于匹配是否为前端爬虫脚本的正则表达式，默认值为 `/[\/|\\]crawlers[\/|\\].*\.js$/`
+  - `opts.crawlerInjectJQuery`: `Boolean`， 前端爬虫脚本中是否注入jQuery，默认值为 `false`
   - `opts.screenshotPath`: `String`， 屏幕截图保存的路径，默认值为 `path.resolve(rootPath, './build/screenshot')`
   - `opts.isDevBuild`: `Boolean`， 是否为开发模式，默认值为 `false`
-  
+
 #### 3.1.2 check()
 
 检验参数是否合理，返回一个对象：
