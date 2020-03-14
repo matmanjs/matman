@@ -46,11 +46,17 @@ export default function build(rootPath, config) {
                     if (!isDevBuild) {
                         prependCodePromiseList.push(getNightmareClientCode());
 
-                        // 插入 jQuery
-                        prependCodePromiseList.push(getJqueryCode('jQueryCode'));
-                        evalList.push('jQueryCode');
+                        if (crawlerParser.crawlerInjectJQuery) {
+                            // 插入 jQuery
+                            prependCodePromiseList.push(getJqueryCode('jQueryCode'));
+                            evalList.push('jQueryCode');
+                        }
+
                     } else {
-                        prependCodePromiseList.push(getDevPrependCode());
+                        if (crawlerParser.crawlerInjectJQuery) {
+                            // 插入 jQuery
+                            prependCodePromiseList.push(getDevPrependCode());
+                        }
                     }
 
                     // 获得所有的代码之后，追加在头部
