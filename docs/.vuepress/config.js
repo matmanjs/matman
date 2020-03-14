@@ -24,8 +24,13 @@ module.exports = {
                 sidebar: {
                     '/wiki/': [
                         {
-                            title: '关于 matman.js',
+                            title: '关于 matman',
                             path: '/wiki/',
+                            collapsable: false
+                        },
+                        {
+                            title: '安装和升级',
+                            path: '/wiki/install',
                             collapsable: false
                         }
                     ],
