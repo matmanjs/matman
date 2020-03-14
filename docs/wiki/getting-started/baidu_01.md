@@ -6,6 +6,8 @@ sidebarDepth: 2
 
 本节我们将实现：测试 [https://www.baidu.com](https://www.baidu.com) 首页的UI布局。
 
+> 最终的代码参考： [https://github.com/matmanjs/matman-demo-getting-started/tree/master/baidu_01](https://github.com/matmanjs/matman-demo-getting-started/tree/master/baidu_01)
+
 ## 1. 创建项目 baidu_01，安装 matman 依赖
 
 新建一个目录，例如 `baidu_01` ，使用 `npm init` 命令初始化，然后安装 [matman](http://npmjs.com/package/matman):
@@ -239,3 +241,7 @@ $ npm test
 ```
 
 ![](./img/baidu_01_02.jpg)
+
+同时，由于我们配置了测试过程截图，因此可以在 `build/screenshot/page_baidu_index_cases` 目录下看到截图：
+
+![](./img/baidu_01_basic-check_1.jpg)
