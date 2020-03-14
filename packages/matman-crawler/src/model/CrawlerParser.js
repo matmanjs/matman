@@ -15,7 +15,7 @@ export default class CrawlerParser {
      * @param {String} [opts.testPath] 即将废弃，同 testerPath
      * @param {String} [opts.crawlerBuildPath] 前端爬虫脚本构建之后的目录
      * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为前端爬虫脚本的正则表达式
-     * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery
+     * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery，默认值为 true
      * @param {String} [opts.screenshotPath] 屏幕截图保存的路径
      * @param {Boolean} [opts.isDevBuild] 是否为开发模式
      */
@@ -32,7 +32,7 @@ export default class CrawlerParser {
         // 用于匹配是否为 crawler script 的正则
         this.crawlerMatch = opts.crawlerMatch || /[\/|\\]crawlers[\/|\\].*\.js$/;
 
-        this.crawlerInjectJQuery = !!opts.crawlerInjectJQuery;
+        this.crawlerInjectJQuery = (typeof opts.crawlerInjectJQuery === 'boolean' ? opts.crawlerInjectJQuery : true);
 
         this.isDevBuild = !!opts.isDevBuild;
 
