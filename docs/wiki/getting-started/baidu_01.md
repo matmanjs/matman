@@ -105,7 +105,7 @@ $ npm run build-dev
 
 上述命令会生成一个调试脚本 `build/crawler-script_dev/page_baidu_index/crawlers/get-page-info.js` ，拷贝所有的内容在浏览器 `console` 控制台，查看输出：
 
-![](./img/baidu_01_01.png)
+![](./img/baidu_01_01.jpg)
 
 
 ### 3.2 编写执行脚本
@@ -238,4 +238,4 @@ $ npm i mocha chai --save-dev
 $ npm test
 ```
 
-![](./img/baidu_01_02.png)
+![](./img/baidu_01_02.jpg)
