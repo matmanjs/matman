@@ -39,9 +39,19 @@ module.exports = {
                             collapsable: false,
                             children: [
                                 'getting-started/baidu_01',
-                                'getting-started/baidu_02',
+                                'getting-started/baidu_02'
                             ]
                         },
+                        {
+                            title: '基本理论',
+                            path: '/wiki/basic-concepts/',
+                            collapsable: false,
+                            children: [
+                                'basic-concepts/page-snapshot',
+                                'basic-concepts/data-snapshot',
+                                'basic-concepts/test-by-mock'
+                            ]
+                        }
                     ],
                     '/release/': true
                 }
