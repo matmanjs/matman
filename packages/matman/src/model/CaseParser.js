@@ -19,14 +19,14 @@ export default class CaseParser {
      *
      * @param {String} basePath  测试用例的脚本目录
      * @param {Object} [opts] 参数
-     * @param {Object} [opts.delayBeforeStart] 延时多少ms再启动
+     * @param {Object} [opts.delayBeforeRun] 延时多少ms再启动
      */
     constructor(basePath, opts = {}) {
         // 项目根目录
         this.basePath = this._getBasePath(basePath);
 
         // 延时多少ms再启动
-        this.delayBeforeStart = (typeof opts.delayBeforeStart === 'number' ? opts.delayBeforeStart : 10);
+        this.delayBeforeRun = (typeof opts.delayBeforeRun === 'number' ? opts.delayBeforeRun : 0);
     }
 
     /**
@@ -115,6 +115,10 @@ export default class CaseParser {
      */
     handleOperate(pageUrl, crawlerScriptPath, opts = {}, callAction) {
         return new Promise((resolve, reject) => {
+            if (this.delayBeforeRun) {
+                console.log(`CaseParser will run after ${this.delayBeforeRun}ms`);
+            }
+
             setTimeout(() => {
                 this._handleOperate(pageUrl, crawlerScriptPath, opts, callAction)
                     .then((data) => {
@@ -123,7 +127,7 @@ export default class CaseParser {
                     .catch((err) => {
                         reject(err);
                     });
-            }, this.delayBeforeStart);
+            }, this.delayBeforeRun);
         });
     }
 
