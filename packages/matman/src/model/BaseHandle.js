@@ -103,7 +103,11 @@ export default class BaseHandle {
         // 设置代理服务器
         if (this.proxyServer) {
             nightmareConfig.switches = {
-                'proxy-server': this.proxyServer
+                'proxy-server': this.proxyServer,
+
+                // 必须设置一下这个，否则在某些情况下 https 地址无法使用
+                // https://github.com/matmanjs/matman/issues/159
+                'ignore-certificate-errors': true
             };
         }
 
