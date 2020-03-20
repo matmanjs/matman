@@ -42,7 +42,7 @@
     "fs-handler": "^0.1.2",
     "hexo-fs": "^0.2.3",
     "matman": "^4.0.13",
-    "matman-crawler": "^4.0.12",
+    "matman-crawler": "^4.0.13",
     "meow": "^3.7.0",
     "minimist": "^1.2.0",
     "ora": "^3.0.0",
