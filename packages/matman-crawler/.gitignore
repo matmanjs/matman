@@ -47,5 +47,3 @@ yarn-error.log*
 tmp
 
 logs
-
-package-lock.json
