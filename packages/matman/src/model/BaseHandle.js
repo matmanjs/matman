@@ -73,6 +73,10 @@ export default class BaseHandle {
 
         };
 
+        this.onElectronClose = (self) => {
+
+        };
+
         this.actionList = [];
 
         this._dataIndexMap = {};
@@ -99,7 +103,11 @@ export default class BaseHandle {
         // 设置代理服务器
         if (this.proxyServer) {
             nightmareConfig.switches = {
-                'proxy-server': this.proxyServer
+                'proxy-server': this.proxyServer,
+
+                // 必须设置一下这个，否则在某些情况下 https 地址无法使用
+                // https://github.com/matmanjs/matman/issues/159
+                'ignore-certificate-errors': true
             };
         }
 
@@ -166,6 +174,19 @@ export default class BaseHandle {
             let t = await curRun.evaluate(evaluate);
 
             result.push(t);
+        }
+
+        // 暴露 electron 关闭时间，注意它在 nightmareRun.end() 之后才会触发
+        if ((typeof this.onElectronClose === 'function') && this.nightmareRun.proc && this.nightmareRun.proc.on) {
+            this.nightmareRun.proc.on('close', code => {
+                // var code = {
+                //     127: 'command not found - you may not have electron installed correctly',
+                //     126: 'permission problem or command is not an executable - you may not have all the necessary dependencies for electron',
+                //     1: 'general error - you may need xvfb',
+                //     0: 'success!'
+                // }
+                this.onElectronClose(code);
+            });
         }
 
         // 不关闭界面
