@@ -6,6 +6,7 @@ import _ from 'lodash';
 import BaseHandle from './BaseHandle';
 import ScreenshotConfig from './SceenshotConfig';
 import DeviceConfig from './DeviceConfig';
+import CoverageConfig from './CoverageConfig';
 import CaseParserOperateResult from './CaseParserOperateResult';
 
 import { findCrawlerParser } from '../util';
@@ -66,7 +67,8 @@ export default class CaseParser {
      * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
      * @param {String | Boolean | Object} [opts.screenshot] 截图设置
      * @param {String | Object} [opts.deviceConfig] 设备设置
-     * @param {String | Object} [opts.device] 设备设置
+     * @param {String | Object} [opts.device] 设备设置，即将废弃
+     * @param {String} [opts.tag] 额外标记，用于区分不同的执行，在截图等场景做区分
      * @param {Function} callAction 定义用户交互行为的函数，接受一个BaseHandle对象参数
      * @returns {Promise<*>}
      */
@@ -75,11 +77,14 @@ export default class CaseParser {
 
         // 如果配置了截图，则需要特殊处理下
         if (opts.screenshot) {
-            baseHandleOpts.screenshotConfig = new ScreenshotConfig(opts.screenshot, this.basePath);
+            baseHandleOpts.screenshotConfig = new ScreenshotConfig(opts.screenshot, this.basePath, opts.tag);
         }
 
         // 设备信息，默认为 mobile
         baseHandleOpts.deviceConfig = new DeviceConfig(opts.deviceConfig || opts.device || 'mobile');
+
+        // 测试覆盖率
+        baseHandleOpts.coverageConfig = new CoverageConfig(this.basePath, opts.tag);
 
         let baseHandle = new BaseHandle(pageUrl, crawlerScriptPath, baseHandleOpts);
 
