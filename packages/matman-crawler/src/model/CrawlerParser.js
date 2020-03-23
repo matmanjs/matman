@@ -17,6 +17,7 @@ export default class CrawlerParser {
      * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为前端爬虫脚本的正则表达式
      * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery，默认值为 true
      * @param {String} [opts.screenshotPath] 屏幕截图保存的路径
+     * @param {String} [opts.coveragePath] 覆盖率数据保存的路径
      * @param {Boolean} [opts.isDevBuild] 是否为开发模式
      */
     constructor(rootPath, opts = {}) {
@@ -43,6 +44,7 @@ export default class CrawlerParser {
 
         // 屏幕截图保存的路径
         this.screenshotPath = this._getScreenshotPath(opts.screenshotPath || './build/screenshot');
+        this.coveragePath = this._getScreenshotPath(opts.coveragePath || './build/coverage');
     }
 
     /**

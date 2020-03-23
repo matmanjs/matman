@@ -6,6 +6,7 @@ import _ from 'lodash';
 import BaseHandle from './BaseHandle';
 import ScreenshotConfig from './SceenshotConfig';
 import DeviceConfig from './DeviceConfig';
+import CoverageConfig from './CoverageConfig';
 import CaseParserOperateResult from './CaseParserOperateResult';
 
 import { findCrawlerParser } from '../util';
@@ -80,6 +81,9 @@ export default class CaseParser {
 
         // 设备信息，默认为 mobile
         baseHandleOpts.deviceConfig = new DeviceConfig(opts.deviceConfig || opts.device || 'mobile');
+
+        // 测试覆盖率
+        baseHandleOpts.coverageConfig = new CoverageConfig(this.basePath);
 
         let baseHandle = new BaseHandle(pageUrl, crawlerScriptPath, baseHandleOpts);
 

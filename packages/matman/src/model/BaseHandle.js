@@ -1,7 +1,9 @@
 import fs from 'fs';
+import fse from 'fs-extra';
 
 import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
 import ScreenshotConfig from './SceenshotConfig';
+import CoverageConfig from './CoverageConfig';
 import DeviceConfig from './DeviceConfig';
 
 export default class BaseHandle {
@@ -20,6 +22,7 @@ export default class BaseHandle {
      * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
      * @param {undefined | ScreenshotConfig} [opts.screenshotConfig] 截图设置
      * @param {undefined | DeviceConfig} [opts.deviceConfig] 设备设置
+     * @param {undefined | CoverageConfig} [opts.coverageConfig] 测试覆盖率设置
      */
     constructor(pageUrl, crawlerScriptPath, opts = {}) {
         this.pageUrl = pageUrl;
@@ -62,6 +65,9 @@ export default class BaseHandle {
 
         // 设备设置
         this.deviceConfig = opts.deviceConfig;
+
+        // 测试覆盖率
+        this.coverageConfig = opts.coverageConfig;
 
         this.globalInfo = {};
 
@@ -173,6 +179,21 @@ export default class BaseHandle {
 
             let t = await curRun.evaluate(evaluate);
 
+            console.log('=======222coverageFilePath i========', i, typeof t.__coverage__, typeof this.screenshotConfig);
+
+            // 覆盖率数据
+            if (t.__coverage__ && this.coverageConfig) {
+                try {
+                    const coverageFilePath = this.coverageConfig.getPathWithId(i + 1);
+                    console.log('=======coverageFilePath========', coverageFilePath);
+                    await fse.outputJson(coverageFilePath, t.__coverage__);
+
+                    delete t.__coverage__;
+                } catch (e) {
+                    console.log('======catch=======', e);
+                }
+            }
+
             result.push(t);
         }
 
@@ -248,7 +269,13 @@ function evaluate() {
         });
     }
 
-    return window.getPageInfo();
+    const pageInfo = window.getPageInfo();
+
+    if (window.__coverage__ && pageInfo) {
+        pageInfo.__coverage__ = window.__coverage__;
+    }
+
+    return pageInfo;
 }
 
 function getMainUrl(url) {
