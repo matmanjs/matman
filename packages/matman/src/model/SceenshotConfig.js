@@ -1,5 +1,6 @@
 import path from 'path';
 import fse from 'fs-extra';
+import fs from 'fs';
 
 import { findCrawlerParser, getFolderNameFromPath } from '../util';
 
@@ -17,6 +18,11 @@ export default class SceenshotConfig {
      */
     constructor(opts, basePath, tag) {
         this.tag = tag;
+
+        // 如果 this.tag 是存在的文件，则获取文件名
+        if (fs.existsSync(this.tag)) {
+            this.tag = path.basename(this.tag).replace(/\./gi, '_');
+        }
 
         if (opts && (typeof opts === 'object')) {
             this.path = opts.path;
