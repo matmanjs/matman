@@ -52,6 +52,7 @@ const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-pa
   - `opts.mockstarQuery`：`Object`，指定 mockstar 的query参数，用于数据打桩，为 [mockstar](https://www.npmjs.com/package/mockstar) 中的 `MockStarQuery` 对象
   - `opts.screenshot`：`String | Boolean | Object`，截图设置，如果是 `Object` 值，则需要包含 `path` 和 `clip` 两个属性，处理之后会直接透传给 [nightmare 的 screenshot 配置项](https://github.com/segmentio/nightmare#screenshotpath-clip)
   - `opts.device`：`String | Object`，设备设置，如果是 `Object` 值，则需要包含 `name`、 `UA`、 `width` 和 `height` 两个属性，处理之后会直接透传给 [nightmare-handler 的 exDevice 配置项](https://github.com/helinjiang/nightmare-handler/blob/HEAD/docs/exDevice.md)
+  - `opts.tag`：`String`，特定标记，例如两个 test 脚本都使用同一个行为脚本，那么如果定义了 `tag`，则截图命名中会将其加入其中，避免覆盖
 - `callAction`：`Function`，定义用户交互行为的函数，接受一个 `BaseHandle` 对象参数
 
 返回一个 `Promise`， `resolve` 返回的值为 `CaseParserOperateResult` 对象，除了包含了 `{data: Array, _dataIndexMap:Object, globalInfo: Object}` ，同时提供了以下方法：

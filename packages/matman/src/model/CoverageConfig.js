@@ -3,29 +3,17 @@ import fse from 'fs-extra';
 
 import { findCrawlerParser, getFolderNameFromPath } from '../util';
 
-export default class SceenshotConfig {
+export default class CoverageConfig {
     /**
      * 构造函数
      *
-     * https://github.com/segmentio/nightmare#screenshotpath-clip
-     *
-     * @param {String | Boolean | Object} opts 是否启用截图，或者截图保存的文件路径，或者截图配置
-     * @param {String} [opts.path] 截图保存的完成文件名，如果不填写，则将根据当前路径自动生成名字
-     * @param {String} [opts.clip] 截图的区域
      * @param {String} basePath 测试用例的脚本目录
      * @param {String} [tag] 标记
      */
-    constructor(opts, basePath, tag) {
+    constructor(basePath, tag) {
         this.tag = tag;
 
-        if (opts && (typeof opts === 'object')) {
-            this.path = opts.path;
-            this.clip = opts.clip;
-        } else if (typeof opts === 'string') {
-            this.path = this._getPath(opts, basePath);
-        } else {
-            this.path = this._getPath(undefined, basePath);
-        }
+        this.path = this._getPath(basePath);
     }
 
     getPathWithId(id) {
@@ -34,13 +22,7 @@ export default class SceenshotConfig {
         });
     }
 
-    _getPath(paramsPath, basePath) {
-        // 如果传递了path，则直接使用 path
-        // TODO 需要支持非绝对路径
-        if (paramsPath) {
-            return paramsPath;
-        }
-
+    _getPath(basePath) {
         // 根据配置内容获得 crawlerParser 的对象
         const crawlerParser = findCrawlerParser(basePath);
 
@@ -62,12 +44,11 @@ export default class SceenshotConfig {
         }
 
         // 需要保存的文件夹路径
-        const saveDir = path.join(crawlerParser.screenshotPath, getFolderNameFromPath(arr.join(path.sep)));
+        const saveDir = path.join(crawlerParser.coveragePath, getFolderNameFromPath(arr.join(path.sep)));
 
         // 要保证这个目录存在，否则保存时会报错
         fse.ensureDirSync(saveDir);
 
-        return path.join(saveDir, folderName + '.png');
+        return path.join(saveDir, folderName + '.json');
     }
-
 }
