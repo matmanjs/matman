@@ -1,6 +1,6 @@
 {
   "name": "matman",
-  "version": "4.0.15",
+  "version": "4.0.16",
   "description": "Easy to write e2e test2",
   "main": "lib/index.js",
   "scripts": {
