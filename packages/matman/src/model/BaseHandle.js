@@ -20,6 +20,7 @@ export default class BaseHandle {
      * @param {String} [opts.cookie] 为浏览器注入cookie，格式与 document.cookie 一致
      * @param {Object} [opts.mockstarQuery] 指定 mockstar 的query参数，用于数据打桩
      * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
+     * @param {String} [opts.tag] 额外标记，用于区分不同的执行，在截图等场景做区分
      * @param {undefined | ScreenshotConfig} [opts.screenshotConfig] 截图设置
      * @param {undefined | DeviceConfig} [opts.deviceConfig] 设备设置
      * @param {undefined | CoverageConfig} [opts.coverageConfig] 测试覆盖率设置
@@ -179,18 +180,16 @@ export default class BaseHandle {
 
             let t = await curRun.evaluate(evaluate);
 
-            console.log('=======222coverageFilePath i========', i, typeof t.__coverage__, typeof this.screenshotConfig);
-
             // 覆盖率数据
             if (t.__coverage__ && this.coverageConfig) {
+                const coverageFilePath = this.coverageConfig.getPathWithId(i + 1);
                 try {
-                    const coverageFilePath = this.coverageConfig.getPathWithId(i + 1);
-                    console.log('=======coverageFilePath========', coverageFilePath);
                     await fse.outputJson(coverageFilePath, t.__coverage__);
 
+                    // 记录之后就删除之
                     delete t.__coverage__;
                 } catch (e) {
-                    console.log('======catch=======', e);
+                    console.log('save coverage file fail', coverageFilePath, e);
                 }
             }
 
