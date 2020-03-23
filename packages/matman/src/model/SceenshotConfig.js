@@ -13,8 +13,11 @@ export default class SceenshotConfig {
      * @param {String} [opts.path] 截图保存的完成文件名，如果不填写，则将根据当前路径自动生成名字
      * @param {String} [opts.clip] 截图的区域
      * @param {String} basePath 测试用例的脚本目录
+     * @param {String} [tag] 标记
      */
-    constructor(opts, basePath) {
+    constructor(opts, basePath, tag) {
+        this.tag = tag;
+
         if (opts && (typeof opts === 'object')) {
             this.path = opts.path;
             this.clip = opts.clip;
@@ -52,7 +55,11 @@ export default class SceenshotConfig {
         let arr = relativePath.split(path.sep);
 
         // 文件名
-        const folderName = arr.pop();
+        let folderName = arr.pop();
+
+        if (this.tag) {
+            folderName = `${folderName}_${this.tag}`;
+        }
 
         // 需要保存的文件夹路径
         const saveDir = path.join(crawlerParser.screenshotPath, getFolderNameFromPath(arr.join(path.sep)));

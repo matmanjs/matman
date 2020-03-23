@@ -8,8 +8,11 @@ export default class CoverageConfig {
      * 构造函数
      *
      * @param {String} basePath 测试用例的脚本目录
+     * @param {String} [tag] 标记
      */
-    constructor(basePath) {
+    constructor(basePath, tag) {
+        this.tag = tag;
+
         this.path = this._getPath(basePath);
     }
 
@@ -34,7 +37,11 @@ export default class CoverageConfig {
         let arr = relativePath.split(path.sep);
 
         // 文件名
-        const folderName = arr.pop();
+        let folderName = arr.pop();
+
+        if (this.tag) {
+            folderName = `${folderName}_${this.tag}`;
+        }
 
         // 需要保存的文件夹路径
         const saveDir = path.join(crawlerParser.coveragePath, getFolderNameFromPath(arr.join(path.sep)));
