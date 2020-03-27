@@ -12,7 +12,7 @@ sidebarDepth: 2
 
 新建一个目录，例如 `baidu_01` ，使用 `npm init` 命令初始化，然后安装 [matman](http://npmjs.com/package/matman):
 
-```
+```bash
 $ npm i matman --save
 ```
 
@@ -53,7 +53,7 @@ module.exports = {
 
 新增 `src/page_baidu_index/crawlers/get-page-info.js` 文件，内容如下：
 
-```
+```js
 module.exports = () => {
     return {
         title: document.title,
@@ -101,7 +101,7 @@ function getNavInfo() {
 
 编写完成之后，我们可以在浏览器内进行验证，执行爬虫脚本的打包命令：
 
-```
+```bash
 $ npm run build-dev
 ```
 
@@ -114,7 +114,7 @@ $ npm run build-dev
 
 新增 `src/page_baidu_index/cases/basic-check/index.js` 文件，内容如下：
 
-```
+```js
 const matman = require('matman');
 
 function getResult(opts) {
@@ -160,7 +160,7 @@ module.exports = getResult;
 
 新增 `src/page_baidu_index/cases/basic-check/index.test.js` 文件，内容如下：
 
-```
+```js
 const expect = require('chai').expect;
 
 const checkPage = require('.');
@@ -207,13 +207,13 @@ describe('百度首页：常规检查', function () {
 
 安装 [mocha](http://npmjs.com/package/mocha) 和 [chai](http://npmjs.com/package/chai) ：
 
-```
+```bash
 $ npm i mocha chai --save-dev
 ```
 
 配置 npm scripts 命令，最后的 package.json 长这样：
 
-```
+```json
 {
     "name": "baidu_01",
     "version": "1.0.0",
@@ -236,7 +236,7 @@ $ npm i mocha chai --save-dev
 
 运行如下命令，执行端对端测试：
 
-```
+```bash
 $ npm test
 ```
 
