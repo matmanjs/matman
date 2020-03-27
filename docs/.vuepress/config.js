@@ -51,6 +51,13 @@ module.exports = {
                                 'basic-concepts/data-snapshot',
                                 'basic-concepts/test-by-mock'
                             ]
+                        },
+                        {
+                            title: 'FAQ',
+                            collapsable: false,
+                            children: [
+                                'faq/common'
+                            ]
                         }
                     ],
                     '/api/': [
