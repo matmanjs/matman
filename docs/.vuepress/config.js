@@ -19,6 +19,7 @@ module.exports = {
                 navs: [
                     { text: 'web端对端测试方案', link: '/wiki/' },
                     { text: 'API手册', link: '/api/' },
+                    { text: '工具', link: '/tool/' },
                     { text: '发布日志', link: '/release/' },
                     { text: 'Issues', link: 'https://github.com/matmanjs/matman/issues' }
                 ],
@@ -76,6 +77,20 @@ module.exports = {
                         {
                             title: '页面交互函数',
                             path: '/api/interact-with-the-page'
+                        }
+                    ],
+                    '/tool/': [
+                        {
+                            title: '说明',
+                            path: '/tool/'
+                        },
+                        {
+                            title: 'Proxy SwitchyOmega',
+                            path: '/tool/proxy-switchyomega'
+                        },
+                        {
+                            title: 'Whistle',
+                            path: '/tool/whistle'
                         }
                     ],
                     '/release/': true
