@@ -1,6 +1,6 @@
 # matman
 
-matman 是一个用于端对端测试的工具。更多文档详见 https://matmanjs.gitbook.io/cookbook/ 。
+matman 是一个用于端对端测试的工具。更多文档详见 https://matmanjs.github.io/matman 。
 
 > 文档正在补齐中
 
@@ -31,4 +31,4 @@ sudo npm install matman-cli -g --unsafe-perm=true --allow-root
 
 ## 文档
 
-- [中文文档](https://matmanjs.gitbook.io/cookbook/)
+- [中文文档](https://matmanjs.github.io/matman)
