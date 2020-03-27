@@ -85,7 +85,7 @@ function getSearchResultInfo() {
 
 编写完成之后，我们可以在浏览器内进行验证，执行爬虫脚本的打包命令：
 
-```
+```bash
 $ npm run build-dev
 ```
 
@@ -131,7 +131,7 @@ $ npm run build-dev
 
 运行如下命令，执行端对端测试：
 
-```
+```bash
 $ npm test
 ```
 
