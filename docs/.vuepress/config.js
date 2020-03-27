@@ -17,7 +17,8 @@ module.exports = {
         locales: {
             '/': {
                 navs: [
-                    { text: '帮助文档', link: '/wiki/' },
+                    { text: 'web端对端测试方案', link: '/wiki/' },
+                    { text: 'API手册', link: '/api/' },
                     { text: '发布日志', link: '/release/' },
                     { text: 'Issues', link: 'https://github.com/matmanjs/matman/issues' }
                 ],
@@ -44,13 +45,19 @@ module.exports = {
                         },
                         {
                             title: '基本理论',
-                            path: '/wiki/basic-concepts/',
                             collapsable: false,
                             children: [
                                 'basic-concepts/page-snapshot',
                                 'basic-concepts/data-snapshot',
                                 'basic-concepts/test-by-mock'
                             ]
+                        }
+                    ],
+                    '/api/': [
+                        {
+                            title: 'API说明',
+                            path: '/api/',
+                            collapsable: false
                         }
                     ],
                     '/release/': true
