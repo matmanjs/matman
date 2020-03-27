@@ -17,16 +17,65 @@ module.exports = {
         locales: {
             '/': {
                 navs: [
-                    { text: '帮助文档', link: '/wiki/' },
+                    { text: 'web端对端测试方案', link: '/wiki/' },
+                    { text: 'API手册', link: '/api/' },
                     { text: '发布日志', link: '/release/' },
                     { text: 'Issues', link: 'https://github.com/matmanjs/matman/issues' }
                 ],
                 sidebar: {
                     '/wiki/': [
                         {
-                            title: '关于 matman.js',
+                            title: '关于 matman',
                             path: '/wiki/',
                             collapsable: false
+                        },
+                        {
+                            title: '安装和升级',
+                            path: '/wiki/install',
+                            collapsable: false
+                        },
+                        {
+                            title: '快速入门',
+                            path: '/wiki/getting-started/',
+                            collapsable: false,
+                            children: [
+                                'getting-started/baidu_01',
+                                'getting-started/baidu_02'
+                            ]
+                        },
+                        {
+                            title: '基本理论',
+                            collapsable: false,
+                            children: [
+                                'basic-concepts/page-snapshot',
+                                'basic-concepts/data-snapshot',
+                                'basic-concepts/test-by-mock'
+                            ]
+                        },
+                        {
+                            title: 'FAQ',
+                            collapsable: false,
+                            children: [
+                                'faq/common'
+                            ]
+                        }
+                    ],
+                    '/api/': [
+                        {
+                            title: 'API说明',
+                            path: '/api/'
+                        },
+                        {
+                            title: 'matman.config.js 配置',
+                            path: '/api/matman-config'
+                        },
+                        {
+                            title: '爬虫工具：web-crawl-util',
+                            path: '/api/web-crawl-util'
+                        },
+                        {
+                            title: '页面交互函数',
+                            path: '/api/interact-with-the-page'
                         }
                     ],
                     '/release/': true
