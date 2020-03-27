@@ -56,8 +56,19 @@ module.exports = {
                     '/api/': [
                         {
                             title: 'API说明',
-                            path: '/api/',
-                            collapsable: false
+                            path: '/api/'
+                        },
+                        {
+                            title: 'matman.config.js 配置',
+                            path: '/api/matman-config'
+                        },
+                        {
+                            title: '爬虫工具：web-crawl-util',
+                            path: '/api/web-crawl-util'
+                        },
+                        {
+                            title: '页面交互函数',
+                            path: '/api/interact-with-the-page'
                         }
                     ],
                     '/release/': true
