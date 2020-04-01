@@ -80,13 +80,21 @@ function getCoverageInfo(collector) {
  * @param {String} [opts.dir] 覆盖率文件输出目录，默认值为 ./coverage
  */
 function createE2ECoverage(globPattern, opts = {}) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const collector = new istanbul.Collector();
         let coverage;
 
         // options is optional
-        glob(globPattern, {}, function (er, files) {
+        glob(globPattern, {}, function (err, files) {
             // console.log(files);
+            if (err) {
+                return reject(err);
+            }
+
+            // 如果没有过滤出文件，则返回错误
+            if (!files || files.length) {
+                return reject(new Error(`Not exist files by pattern=${globPattern}`));
+            }
 
             // 合并不同的覆盖率生产物
             files.forEach((file) => {
