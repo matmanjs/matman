@@ -44,7 +44,7 @@ export default class CrawlerParser {
 
         // 屏幕截图保存的路径
         this.screenshotPath = this._getScreenshotPath(opts.screenshotPath || './build/screenshot');
-        this.coveragePath = this._getScreenshotPath(opts.coveragePath || './build/coverage');
+        this.coveragePath = this._getScreenshotPath(opts.coveragePath || './build/coverage_output');
     }
 
     /**
