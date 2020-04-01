@@ -92,7 +92,7 @@ function createE2ECoverage(globPattern, opts = {}) {
             }
 
             // 如果没有过滤出文件，则返回错误
-            if (!files || files.length) {
+            if (!files || !files.length) {
                 return reject(new Error(`Not exist files by pattern=${globPattern}`));
             }
 
