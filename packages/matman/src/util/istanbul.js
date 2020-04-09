@@ -1,6 +1,8 @@
 const fs = require('fs');
 const istanbul = require('istanbul');
 const glob = require('glob');
+const libCoverage = require('istanbul-lib-coverage');
+const mapStore = require('istanbul-lib-source-maps').createSourceMapStore({});
 
 function getTreeSummary(collector) {
     const summarizer = new istanbul.TreeSummarizer();
@@ -102,12 +104,20 @@ function createE2ECoverage(globPattern, opts = {}) {
                 coverage = mergeClientCoverage(fileData, coverage);
             });
 
+            console.log("sourcemap转换")
+
+            const coverageMap = libCoverage.createCoverageMap(coverage);
+            const transformed = mapStore.transformCoverage(coverageMap).then(function (result){
+                // console.log(JSON.stringify(transformed['map']));
+            const final_coverage = JSON.parse(JSON.stringify(result['map']));
+
             // 追加
-            collector.add(coverage);
+            collector.add(final_coverage);
 
             // 获取关键信息
             const coverageInfo = getCoverageInfo(collector);
             // console.log(coverageInfo);
+
 
             // 输出产物
             const sync = true;
@@ -122,6 +132,8 @@ function createE2ECoverage(globPattern, opts = {}) {
                     reporterDir: reporter.dir
                 });
             });
+            });
+
         });
     });
 }
