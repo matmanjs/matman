@@ -104,36 +104,39 @@ function createE2ECoverage(globPattern, opts = {}) {
                 coverage = mergeClientCoverage(fileData, coverage);
             });
 
-            console.log("sourcemap转换")
+            // console.log(coverage)
 
             const coverageMap = libCoverage.createCoverageMap(coverage);
-            const transformed = mapStore.transformCoverage(coverageMap).then(function (result){
-                // console.log(JSON.stringify(transformed['map']));
-            const final_coverage = JSON.parse(JSON.stringify(result['map']));
+            const transformed = mapStore.transformCoverage(coverageMap)
+                .then((result) => {
+                    // console.log(JSON.stringify(transformed['map']));
+                    // console.log(JSON.parse(JSON.stringify(result)))
+                    const final_coverage = JSON.parse(JSON.stringify(result));
 
-            // 追加
-            collector.add(final_coverage);
+                    // 追加
+                    collector.add(final_coverage);
 
-            // 获取关键信息
-            const coverageInfo = getCoverageInfo(collector);
-            // console.log(coverageInfo);
+                    // 获取关键信息
+                    const coverageInfo = getCoverageInfo(collector);
+                    // console.log(coverageInfo);
 
-
-            // 输出产物
-            const sync = true;
-            const reporter = new istanbul.Reporter();
-            reporter.dir = opts.dir || './coverage';
-            reporter.add('lcovonly');
-            reporter.addAll(['clover', 'cobertura']);
-            reporter.write(collector, sync, function () {
-                // console.log('done');
-                resolve({
-                    data: coverageInfo,
-                    reporterDir: reporter.dir
+                    // 输出产物
+                    const sync = true;
+                    const reporter = new istanbul.Reporter();
+                    reporter.dir = opts.dir || './coverage';
+                    reporter.add('lcovonly');
+                    reporter.addAll(['clover', 'cobertura']);
+                    reporter.write(collector, sync, function () {
+                        // console.log('done');
+                        resolve({
+                            data: coverageInfo,
+                            reporterDir: reporter.dir
+                        });
+                    });
+                })
+                .catch((err) => {
+                    reject(err);
                 });
-            });
-            });
-
         });
     });
 }
