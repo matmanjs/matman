@@ -8,9 +8,9 @@ sidebarDepth: 2
 
 > 最终的代码参考： [https://github.com/matmanjs/matman-demo-getting-started/tree/master/baidu_01](https://github.com/matmanjs/matman-demo-getting-started/tree/master/baidu_01)
 
-## 1. 创建项目 baidu_01，安装 matman 依赖
+## 1. 创建项目 baidu_01 并初始化
 
-新建一个目录，例如 `baidu_01` ，使用 `npm init` 命令初始化，然后安装 [matman](http://npmjs.com/package/matman):
+新建一个目录命名为 `baidu_01` ，使用 `npm init` 命令初始化，然后安装 [matman](http://npmjs.com/package/matman):
 
 ```bash
 $ npm i matman --save
@@ -45,9 +45,29 @@ module.exports = {
 };
 ```
 
-其中 `testerPath` 指定了我们的测试用例存放在那个目录下，这里我们指定为 `src` ，因此需要手动增加 `src` 文件夹。
+其中 `testerPath` 指定了我们的测试用例存放在那个目录下，这里我们指定为 `src` ，因此还需要手动增加 `src` 文件夹。
 
 ## 3. 编写端对端测试模块
+
+编写完成之后的代码结构如下，其中最关键的时以下三种脚本文件：
+              
+- 页面快照爬虫脚本 `crawlers/get-page-info.js`： 被加载到无头浏览器中，可用于爬取页面信息、网络请求和其他信息，将 [页面快照](../basic-concepts/page-snapshot.md) 转为 [数据快照](../basic-concepts/data-snapshot.md) 
+- 测试行为脚本 `cases/index.js`： 定义了被测试的页面加载到无头浏览器之后的行为，例如模拟用户点击操作等
+- 测试用例脚本 `cases/index.test.js`： 测试脚本用于测试数据快照的合法性
+
+```text
+.
+├── matman.config.js
+├── package.json
+└── src
+    └── page_baidu_index
+        ├── cases
+        │   └── basic-check
+        │       ├── index.js
+        │       └── index.test.js
+        └── crawlers
+            └── get-page-info.js
+```
 
 ### 3.1 编写爬虫脚本
 
@@ -153,7 +173,7 @@ module.exports = getResult;
 //     });
 ```
 
-编写之后，如果要自测，则可以将文件最末尾的注释去掉，然后用 node 执行该文件。
+编写之后，如果要自测，则可以将文件最末尾的注释去掉，然后用 node 执行该文件，即执行 `node index.js`。
 
 
 ### 3.3 编写测试脚本
