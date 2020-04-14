@@ -195,6 +195,15 @@
 
     .fastest-docs-container .theme-default-content {
         max-width: inherit !important;
+
+        a {
+            color: #415b94
+        }
+
+        code {
+            color: #c7254e;
+            background-color: #f9f2f4;
+        }
     }
 
     .fastest-docs-container .page-edit {
@@ -203,6 +212,10 @@
 
     .fastest-docs-container .page-nav {
         max-width: inherit !important;
+
+        a {
+            color: #415b94
+        }
     }
 
     .copyright__group {
