@@ -39,7 +39,7 @@ $ cnpm install -g matman-cli
 $ npm install -g matman-cli --registry=https://registry.npm.taobao.org
 ```
 
-全局安装 matman-cli 时，可能会出现以下错误。错误是由 electron 安装时造成的，详见 https://github.com/matmanjs/matman-cli/issues/30 。此时需要增加一些额外参数来安装：
+全局安装 matman-cli 时，如果遇到 electron 安装权限问题，则需要增加一些额外参数来安装，原因可以查看 [#30]( https://github.com/matmanjs/matman-cli/issues/30)：
 
 ```
 $ npm install matman-cli -g --unsafe-perm=true --allow-root
