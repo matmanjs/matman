@@ -51,8 +51,8 @@ module.exports = {
 
 编写完成之后的代码结构如下，其中最关键的时以下三种脚本文件：
               
-- 页面快照爬虫脚本 `crawlers/get-page-info.js`： 被加载到无头浏览器中，可用于爬取页面信息、网络请求和其他信息，将 [页面快照](../basic-concepts/page-snapshot.md) 转为 [数据快照](../basic-concepts/data-snapshot.md) 
-- 测试行为脚本 `cases/index.js`： 定义了被测试的页面加载到无头浏览器之后的行为，例如模拟用户点击操作等
+- 数据快照爬虫脚本 `crawlers/get-page-info.js`： 被加载到无头浏览器中，可用于爬取页面信息、网络请求和其他信息，将 [页面快照](../basic-concepts/page-snapshot.md) 转为 [数据快照](../basic-concepts/data-snapshot.md) 
+- 测试行为模块 `cases/index.js`： 定义了被测试的页面加载到无头浏览器之后的行为，例如模拟用户点击操作等
 - 测试用例脚本 `cases/index.test.js`： 测试脚本用于测试数据快照的合法性
 
 ```text
@@ -69,7 +69,7 @@ module.exports = {
             └── get-page-info.js
 ```
 
-### 3.1 编写爬虫脚本
+### 3.1 编写数据快照爬虫脚本
 
 新增 `src/page_baidu_index/crawlers/get-page-info.js` 文件，内容如下：
 
@@ -130,7 +130,7 @@ $ npm run build-dev
 ![](./img/baidu_01_01.jpg)
 
 
-### 3.2 编写执行脚本
+### 3.2 编写测试行为模块
 
 新增 `src/page_baidu_index/cases/basic-check/index.js` 文件，内容如下：
 
@@ -176,7 +176,7 @@ module.exports = getResult;
 编写之后，如果要自测，则可以将文件最末尾的注释去掉，然后用 node 执行该文件，即执行 `node index.js`。
 
 
-### 3.3 编写测试脚本
+### 3.3 编写测试用例脚本
 
 新增 `src/page_baidu_index/cases/basic-check/index.test.js` 文件，内容如下：
 

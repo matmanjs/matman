@@ -4,23 +4,28 @@ sidebarDepth: 2
 
 # 02. 测试用户交互
 
-本节我们将实现：在 [https://www.baidu.com](https://www.baidu.com) 中输入 `matman` ，并且验证交互逻辑。
+本节我们将实现：在 [https://www.baidu.com](https://www.baidu.com) 中输入 `matman` 搜索，并且验证搜索结果。
 
 > 最终的代码参考： [https://github.com/matmanjs/matman-demo-getting-started/tree/master/baidu_02](https://github.com/matmanjs/matman-demo-getting-started/tree/master/baidu_02)
 
 ## 1. 创建项目 baidu_02
 
-复制 `baidu_01` 目录，命名为 `baidu_02`，并安装依赖。
+为了简化，我们在 [01. 第一个端对端测试](./baidu_01.md) 基础上继续进行，复制 `baidu_01` 目录，并命名为 `baidu_02`，安装依赖。
 
 ## 2. 编写端对端测试模块
 
-本次测试中，一共将发生三个动作，依次是：
+对于测试"用户交互"的场景，我们的基础理论为：
 
-- 第一步：加载页面
-- 第二步：在输入框内输入 `matman`
+- 测试方案：通过对比动作前后的两个快照变化，如果变化是符合预期的，则说明该次动作的端对端测试通过
+- 处理策略：但由于 [页面快照](../basic-concepts/page-snapshot.md) 是抽象的，无法进行比对，因此，我们做 web 端对端测试的时候，通过数据快照爬虫脚本将其转为 [数据快照](../basic-concepts/data-snapshot.md) 。 
+
+就本 demo 而言，一共将发生三个动作，依次是：
+
+- 第一步：加载 [https://www.baidu.com](https://www.baidu.com) 页面
+- 第二步：在搜索框内输入 `matman`
 - 第三步：点击搜索按钮
 
-每一个动作都会带来一定的变化，我们将其称之为一个新的"数据快照"。通过对比动作前后的两个快照变化，如果变化是符合预期的，则说明该次动作的端对端测试通过。为了更好的处理快照，我们为快照命名：
+每一个动作都会带来一定的变化，我们将其称之为一个新的 [页面快照](../basic-concepts/page-snapshot.md)。为了区分不同阶段的快照，我们可以为快照命名：
 
 - 第一步：加载页面之后，产生的快照命名为 `init`
 - 第二步：在输入框内输入 `matman` 之后，产生的快照命名为 `input_key_word`
@@ -28,11 +33,32 @@ sidebarDepth: 2
 
 ![](./img/baidu_02_01.jpg)
 
-### 2.1 编写爬虫脚本
+完成之后的目录结构如下：
+
+```text
+.
+├── matman.config.js
+├── package.json
+└── src
+    └── page_baidu_index
+        ├── cases
+        │   ├── basic-check
+        │   │   ├── index.js
+        │   │   └── index.test.js
+        │   └── search-check
+        │       ├── index.js
+        │       └── index.test.js
+        └── crawlers
+            ├── get-page-info-for-search.js
+            └── get-page-info.js
+```
+
+
+### 2.1 编写数据快照爬虫脚本
 
 新增 `src/page_baidu_index/crawlers/get-page-info-for-search.js` 文件。
 
-每一次动作之后产生的信息是非常多的，大部分时候我们不需要全部爬取出来，我们只需要选择我们关注的点即可。例如，本次测试过程，我们选取了三个部分来验证功能，接下来会简单介绍为什么我们这么考虑。
+每一次动作之后产生的信息是非常多的，大部分情况下我们不需要全部爬取出来，我们只需要选择我们关注的点即可，一般与要测试的目的有关系。例如，本次测试过程，我们就只选取了三个部分来验证功能。接下来我们简单介绍下为何这么选择：
 
 第一部分：页面的 title 。我们发现在搜索之前 title 值为 `百度一下，你就知道`，而搜索之后，title 会变为 `matman_百度搜索` 这种。
 
@@ -93,7 +119,7 @@ $ npm run build-dev
 
 > 编写爬虫脚本的过程，就是梳理业务的过程。爬取什么样的内容完全依据你的业务逻辑。
 
-### 2.2 编写执行脚本
+### 2.2 编写测试行为模块
 
 新增 `src/page_baidu_index/cases/search-check/index.js` 文件。
 
@@ -119,7 +145,7 @@ $ npm run build-dev
     });
 ```
 
-### 2.3 编写测试脚本
+### 2.3 编写测试用例脚本
 
 新增 `src/page_baidu_index/cases/search-check/index.test.js` 文件。
 
@@ -140,10 +166,13 @@ $ npm test
 同时，由于我们配置了测试过程截图，因此可以在 `build/screenshot/page_baidu_index_cases` 目录下看到截图：
 
 - 第一步：加载页面
+
 ![](./img/baidu_02_search-check_1.jpg)
 
 - 第二步：在输入框内输入 `matman`
+
 ![](./img/baidu_02_search-check_2.jpg)
 
 - 第三步：点击搜索按钮
+
 ![](./img/baidu_02_search-check_3.jpg)
