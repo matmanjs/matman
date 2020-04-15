@@ -125,7 +125,7 @@ function createE2ECoverage(globPattern, opts = {}) {
                     const reporter = new istanbul.Reporter();
                     reporter.dir = opts.dir || './coverage';
                     reporter.add('lcovonly');
-                    reporter.addAll(['clover', 'cobertura']);
+                    reporter.addAll(['clover', 'cobertura', 'html']);
                     reporter.write(collector, sync, function () {
                         // console.log('done');
                         resolve({
