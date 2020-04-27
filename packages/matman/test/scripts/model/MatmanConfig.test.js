@@ -1,7 +1,7 @@
 import path from 'path';
 import { expect } from 'chai';
 
-import MatmanConfig, { getAbsolutePath } from '../../src/MatmanConfig';
+import MatmanConfig from '../../../src/model/MatmanConfig';
 
 describe('check MatmanConfig.js', () => {
     describe('check constructor(rootPath, opts = {})', () => {
@@ -27,7 +27,7 @@ describe('check MatmanConfig.js', () => {
         });
 
         it('check demo1: default value', () => {
-            let rootPath = path.join(__dirname, '../data/fixtures/demo1');
+            let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
 
             let matmanConfig = new MatmanConfig(rootPath);
 
@@ -45,7 +45,7 @@ describe('check MatmanConfig.js', () => {
         });
 
         it('check demo2: custom value', () => {
-            let rootPath = path.join(__dirname, '../data/fixtures/demo2');
+            let rootPath = path.join(__dirname, '../../data/fixtures/demo2');
 
             let matmanConfig = new MatmanConfig(rootPath, {
                 testerPath: './src-testers',
@@ -68,32 +68,6 @@ describe('check MatmanConfig.js', () => {
             expect(matmanConfig.coveragePath).to.equal(path.join(rootPath, './build/my-coverage_output'));
 
             expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'screenshotPath', 'coveragePath');
-        });
-    });
-
-    describe('check getAbsolutePath(targetPath, basePath)', () => {
-        it('targetPath is absolute and basePath is undefined', () => {
-            expect(getAbsolutePath('/home/i/am/absolute/path')).to.equal('/home/i/am/absolute/path');
-        });
-
-        it('targetPath is absolute and basePath is relative', () => {
-            expect(getAbsolutePath('/home/i/am/absolute/path', './relative/path')).to.equal('/home/i/am/absolute/path');
-        });
-
-        it('targetPath is absolute and basePath is absolute', () => {
-            expect(getAbsolutePath('/home/i/am/absolute/path', '/data/another/absolute/path')).to.equal('/home/i/am/absolute/path');
-        });
-
-        it('targetPath is relative and basePath is undefined', () => {
-            expect(getAbsolutePath('./i/am/relative/path')).to.equal(path.resolve('./i/am/relative/path'));
-        });
-
-        it('targetPath is relative and basePath is relative', () => {
-            expect(getAbsolutePath('./i/am/relative/path', './relative2/path')).to.equal(path.resolve('./relative2/path', './i/am/relative/path'));
-        });
-
-        it('targetPath is relative and basePath is absolute', () => {
-            expect(getAbsolutePath('./i/am/relative/path', '/data/another/absolute/path')).to.equal('/data/another/absolute/path/i/am/relative/path');
         });
     });
 });

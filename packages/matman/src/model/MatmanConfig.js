@@ -1,24 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-/**
- * 获得绝对路径地址
- *
- * @param {String} targetPath 目标路径
- * @param {String} [basePath] 根路径
- * @return {String}
- */
-export function getAbsolutePath(targetPath, basePath) {
-    if (!targetPath) {
-        return '';
-    }
-
-    if (path.isAbsolute(targetPath)) {
-        return targetPath;
-    }
-
-    return basePath ? path.resolve(basePath, targetPath) : path.resolve(targetPath);
-}
+import { getAbsolutePath } from '../util';
 
 /**
  * 爬虫脚本类，用于处理所有的前端爬虫脚本
