@@ -1,5 +1,5 @@
 module.exports = () => {
     return {
-        say: 'hello, p2/c1.js!'
+        say: 'hello, test/data/fixtures/demo2/src-testers/c1.js'
     };
 };
