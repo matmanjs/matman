@@ -2,7 +2,7 @@ import fs from 'fs';
 import fse from 'fs-extra';
 
 import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
-import ScreenshotConfig from './SceenshotConfig';
+import ScreenshotConfig from './ScreenshotConfig';
 import CoverageConfig from './CoverageConfig';
 import DeviceConfig from './DeviceConfig';
 

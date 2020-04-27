@@ -4,7 +4,7 @@ import path from 'path';
 import { getAbsolutePath } from '../util';
 
 /**
- * 爬虫脚本类，用于处理所有的前端爬虫脚本
+ * matman.config.js 的配置
  */
 export default class MatmanConfig {
     /**
