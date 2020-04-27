@@ -4,7 +4,7 @@ import fs from 'fs';
 
 import { findCrawlerParser, getFolderNameFromPath } from '../util';
 
-export default class SceenshotConfig {
+export default class ScreenshotConfig {
     /**
      * 构造函数
      *

@@ -4,7 +4,7 @@ import path from 'path';
 import _ from 'lodash';
 
 import BaseHandle from './BaseHandle';
-import ScreenshotConfig from './SceenshotConfig';
+import ScreenshotConfig from './ScreenshotConfig';
 import DeviceConfig from './DeviceConfig';
 import CoverageConfig from './CoverageConfig';
 import CaseParserOperateResult from './CaseParserOperateResult';
