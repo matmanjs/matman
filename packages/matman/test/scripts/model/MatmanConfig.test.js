@@ -3,7 +3,7 @@ import { expect } from 'chai';
 
 import MatmanConfig from '../../../src/model/MatmanConfig';
 
-describe('check MatmanConfig.js', () => {
+describe('check model/MatmanConfig.js', () => {
     describe('check constructor(rootPath, opts = {})', () => {
         it('if rootPath is undefined return false', () => {
             let checkResult = new MatmanConfig().check();
