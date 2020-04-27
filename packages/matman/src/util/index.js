@@ -6,6 +6,25 @@ import { CrawlerParser } from 'matman-crawler';
 import { MATMAN_CONFIG_FILE as configFileName } from '../config';
 
 /**
+ * 获得绝对路径地址
+ *
+ * @param {String} targetPath 目标路径
+ * @param {String} [basePath] 根路径
+ * @return {String}
+ */
+export function getAbsolutePath(targetPath, basePath) {
+    if (!targetPath) {
+        return '';
+    }
+
+    if (path.isAbsolute(targetPath)) {
+        return targetPath;
+    }
+
+    return basePath ? path.resolve(basePath, targetPath) : path.resolve(targetPath);
+}
+
+/**
  * 从指定目录开始向上查找 config 配置文件。
  *
  * @param {String} configPath 起始路径，如果非法路径，则默认从当前文件的路径向上查找
