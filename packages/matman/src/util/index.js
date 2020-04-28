@@ -31,7 +31,7 @@ export function getAbsolutePath(targetPath, basePath) {
  * @param {String} [tag] 标签
  * @return {String}
  */
-export function getNewFileNameWithTag(filePath, tag) {
+export function getNewFilePathWithTag(filePath, tag) {
     if (!tag) {
         return filePath;
     }

@@ -2,7 +2,7 @@ import path from 'path';
 import fse from 'fs-extra';
 import fs from 'fs';
 
-import { findCrawlerParser, getAbsolutePath, getFolderNameFromPath } from '../util';
+import { findCrawlerParser, getAbsolutePath, getFolderNameFromPath, getNewFilePathWithTag } from '../util';
 
 export default class ScreenshotConfig {
     /**
@@ -43,7 +43,7 @@ export default class ScreenshotConfig {
     _getPath(paramsPath, basePath) {
         // 如果传递了path，则直接使用 path
         if (paramsPath) {
-            return getAbsolutePath(paramsPath, basePath);
+            return getNewFilePathWithTag(getAbsolutePath(paramsPath, basePath), this.tag);
         }
 
         // 根据配置内容获得 crawlerParser 的对象
