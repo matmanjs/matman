@@ -2,7 +2,7 @@ import path from 'path';
 import fse from 'fs-extra';
 import fs from 'fs';
 
-import { findCrawlerParser, getFolderNameFromPath } from '../util';
+import { findCrawlerParser, getAbsolutePath, getFolderNameFromPath } from '../util';
 
 export default class ScreenshotConfig {
     /**
@@ -10,10 +10,10 @@ export default class ScreenshotConfig {
      *
      * https://github.com/segmentio/nightmare#screenshotpath-clip
      *
-     * @param {String | Boolean | Object} opts 是否启用截图，或者截图保存的文件路径，或者截图配置
+     * @param {String | Boolean | Object} opts 是否启用截图，或者截图保存的文件名路径(如果想对路径，则相对于basePath 而言)，或者截图配置
      * @param {String} [opts.path] 截图保存的完成文件名，如果不填写，则将根据当前路径自动生成名字
      * @param {String} [opts.clip] 截图的区域
-     * @param {String} basePath 测试用例的脚本目录
+     * @param {String} basePath 测试行为模块的目录
      * @param {String} [tag] 标记
      */
     constructor(opts, basePath, tag) {
@@ -42,9 +42,8 @@ export default class ScreenshotConfig {
 
     _getPath(paramsPath, basePath) {
         // 如果传递了path，则直接使用 path
-        // TODO 需要支持非绝对路径
         if (paramsPath) {
-            return paramsPath;
+            return getAbsolutePath(paramsPath, basePath);
         }
 
         // 根据配置内容获得 crawlerParser 的对象
