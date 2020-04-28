@@ -25,6 +25,26 @@ export function getAbsolutePath(targetPath, basePath) {
 }
 
 /**
+ * 通过追加标签，获得新的文件名
+ *
+ * @param {String} filePath 文件名路径
+ * @param {String} [tag] 标签
+ * @return {String}
+ */
+export function getNewFileNameWithTag(filePath, tag) {
+    if (!tag) {
+        return filePath;
+    }
+
+    const dirname = path.dirname(filePath);
+    const basename = path.basename(filePath);
+    const extname = path.extname(filePath);
+    const gap = '_';
+
+    return path.join(dirname, basename.replace(new RegExp(extname), `${gap}${tag}${extname}`));
+}
+
+/**
  * 从指定目录开始向上查找 config 配置文件。
  *
  * @param {String} configPath 起始路径，如果非法路径，则默认从当前文件的路径向上查找
