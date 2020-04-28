@@ -22,16 +22,30 @@ describe('check model/ScreenshotConfig.js', () => {
             });
         });
 
+        it('if opts is String(relative path) and tag is undefined', () => {
+            expect(new ScreenshotConfig('./is/relative/file.png', BASE_PATH)).to.eql({
+                path: path.join(BASE_PATH, './is/relative/file.png'),
+                tag: undefined
+            });
+        });
+
         it('if opts is String(relative path) and tag is "mytag"', () => {
-            expect(new ScreenshotConfig('./is/relative/file', BASE_PATH, 'mytag')).to.eql({
-                path: path.join(BASE_PATH, './is/relative/file'),
+            expect(new ScreenshotConfig('./is/relative/file.png', BASE_PATH, 'mytag')).to.eql({
+                path: path.join(BASE_PATH, './is/relative/file_mytag.png'),
                 tag: 'mytag'
             });
         });
 
+        it('if opts is String(absolute path) and tag is undefined', () => {
+            expect(new ScreenshotConfig('/is/absolute/file.png', BASE_PATH)).to.eql({
+                path: '/is/absolute/file.png',
+                tag: undefined
+            });
+        });
+
         it('if opts is String(absolute path) and tag is "mytag"', () => {
-            expect(new ScreenshotConfig('/is/absolute/file', BASE_PATH, 'mytag')).to.eql({
-                path: '/is/absolute/file',
+            expect(new ScreenshotConfig('/is/absolute/file.png', BASE_PATH, 'mytag')).to.eql({
+                path: '/is/absolute/file_mytag.png',
                 tag: 'mytag'
             });
         });
