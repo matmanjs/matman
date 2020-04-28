@@ -21,6 +21,20 @@ describe('check model/ScreenshotConfig.js', () => {
                 tag: 'mytag'
             });
         });
+
+        it('if opts is String(relative path) and tag is "mytag"', () => {
+            expect(new ScreenshotConfig('./is/relative/file', BASE_PATH, 'mytag')).to.eql({
+                path: path.join(BASE_PATH, './is/relative/file'),
+                tag: 'mytag'
+            });
+        });
+
+        it('if opts is String(absolute path) and tag is "mytag"', () => {
+            expect(new ScreenshotConfig('/is/absolute/file', BASE_PATH, 'mytag')).to.eql({
+                path: '/is/absolute/file',
+                tag: 'mytag'
+            });
+        });
     });
 });
 
