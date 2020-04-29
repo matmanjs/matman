@@ -108,32 +108,39 @@ export function findCrawlerParser(basePath) {
  *
  * 例如：
  *
+ * /a/b/path -> root_a_b_path
  * a/b/path -> a_b_path
  * a/b/path/file.js -> a_b_path_file_js
  * ./a/b/path -> a_b_path
  * ../a/b/path -> parent_a_b_path
+ * d:\\i\\am\\absolute -> d_i_am_absolute
  *
  * @param {String} targetPath 路径
  * @return {String}
  * @author {helinjiang}
  */
 export function getFolderNameFromPath(targetPath) {
-    // 路径为 ./xxx 类型时要先去掉 ./，然后再将所有的 / 替换为 _
-    return targetPath
-        .replace(/\.\./gi, 'parent')
-        .replace(/^\.([^[\\||\/])*[\\||\/]/gi, '')
-        .replace(new RegExp(path.sep.replace(/\\/gi, '\\\\'), 'gi'), '_')
+    return getSaveDirFromPath(targetPath)
+        // linux 下的 / 修改为 _
+        .replace(/\//gi, '_')
+
+        // windows 下的 \\ 修改为 _
+        .replace(/\\/gi, '_')
+        .replace(/\\\\/gi, '_')
+
+        // 将文件后缀的 . 修改为 _
         .replace(/\./, '_');
 }
 
 /**
- * 根据相对路径获得保存路径
+ * 根据目标路径获得保存路径
  *
  * 例如：
  * /a/b/path -> root/a/b/path
  * a/b/path -> a/b/path
  * ../a/b/path -> parent/a/b/path
  * .. -> parent
+ * d:\\i\\am\\absolute -> d\\i\\am\\absolute
  *
  * @param {String} targetPath 路径
  * @return {String}
@@ -148,18 +155,19 @@ export function getSaveDirFromPath(targetPath) {
     // 截图保存的路径与源码路径一致，如果有 .. 则替换为 parent
     let changedPath = targetPath;
 
-    if (path.isAbsolute(changedPath)) {
-        if (/:\\/.test(changedPath)) {
-            // windows 下，将 d:\a\path 修改为 d\a\path
-            changedPath = changedPath.replace(/:/gi, '');
-        } else {
-            // linux / macOS 下，将 /a/path 修改为 root/a/path
-            changedPath = `root${changedPath}`;
-        }
+    // windows 下，去掉 : 符号，即将 d:\\a\\path 修改为 d\\a\\path
+    if (/:\\/gi.test(changedPath)) {
+        changedPath = changedPath.replace(/:\\/gi, '\\');
+    } else if (path.isAbsolute(changedPath)) {
+        // linux / macOS 下，将 /a/path 修改为 root/a/path
+        changedPath = `root${changedPath}`;
     }
 
     return changedPath
+        // 将 .. 修改为 parent，例如 ../a/b 修改为 parent/a/b
         .replace(/\.\./gi, 'parent')
+
+        // 去掉 ./ ，例如 ./a/b 修改为 a/b
         .replace(/^\.([^[\\||\/])*[\\||\/]/gi, '');
 }
 
