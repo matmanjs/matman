@@ -36,12 +36,33 @@ export function getNewFilePathWithTag(filePath, tag) {
         return filePath;
     }
 
-    const dirname = path.dirname(filePath);
-    const basename = path.basename(filePath);
-    const extname = path.extname(filePath);
+    // 去掉 ./ ，例如 ./a/b 修改为 a/b
+    const changedPath = filePath
+        // linux 中去掉 ./ ，例如 ./a/b 修改为 a/b
+        .replace(/^\.\//gi, '')
+        // windows 中去掉 .\\ ，例如 .\\a\\b 修改为 a\\b
+        .replace(/^\.\\\\/gi, '')
+        // windows 中去掉 .\ ，例如 .\a\b 修改为 a\b
+        .replace(/^\.\\/gi, '');
+
     const gap = '_';
 
-    return path.join(dirname, basename.replace(new RegExp(extname), `${gap}${tag}${extname}`));
+    const curSep = /\//.test(changedPath) ? '/' : '\\';
+    const arr = changedPath.split(curSep);
+
+    // 获得新的文件名
+    let newFileName = arr.pop();
+    const fileNameArr = newFileName.split('.');
+    if (fileNameArr.length > 1) {
+        const lastOne = fileNameArr.pop();
+        newFileName = fileNameArr.join('.') + gap + tag + '.' + lastOne;
+    } else {
+        newFileName = newFileName + gap + tag;
+    }
+
+    arr.push(newFileName);
+
+    return arr.join(curSep);
 }
 
 /**
