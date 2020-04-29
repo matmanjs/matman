@@ -81,28 +81,52 @@ describe('./util/index.js', () => {
     });
 
     describe('check getNewFilePathWithTag(filePath, tag)', () => {
-        it('filePath is absolute and basePath is undefined', () => {
+        it('linux: filePath is absolute and basePath is undefined', () => {
             expect(getNewFilePathWithTag('/home/i/am/absolute/myfile.png')).to.equal('/home/i/am/absolute/myfile.png');
         });
 
-        it('filePath is absolute and basePath is "mytag"', () => {
+        it('linux: filePath is absolute and basePath is "mytag"', () => {
             expect(getNewFilePathWithTag('/home/i/am/absolute/myfile.png', 'mytag')).to.equal('/home/i/am/absolute/myfile_mytag.png');
         });
 
-        it('filePath is absolute without extname and basePath is "mytag"', () => {
-            expect(getNewFilePathWithTag('/home/i/am/absolute/myfile', 'mytag')).to.equal('/home/i/am/absolute/_mytagmyfile');
+        it('linux: filePath is absolute without extname and basePath is "mytag"', () => {
+            expect(getNewFilePathWithTag('/home/i/am/absolute/myfile', 'mytag')).to.equal('/home/i/am/absolute/myfile_mytag');
         });
 
-        it('filePath is relative and basePath is undefined', () => {
+        it('linux: filePath is relative and basePath is undefined', () => {
             expect(getNewFilePathWithTag('./i/am/relative/myfile.png')).to.equal('./i/am/relative/myfile.png');
         });
 
-        it('filePath is relative and basePath is "mytag"', () => {
+        it('linux: filePath is relative and basePath is "mytag"', () => {
             expect(getNewFilePathWithTag('./i/am/relative/myfile.png', 'mytag')).to.equal('i/am/relative/myfile_mytag.png');
         });
 
-        it('filePath is relative without extname and basePath is "mytag"', () => {
-            expect(getNewFilePathWithTag('./i/am/relative/myfile', 'mytag')).to.equal('i/am/relative/_mytagmyfile');
+        it('linux: filePath is relative without extname and basePath is "mytag"', () => {
+            expect(getNewFilePathWithTag('./i/am/relative/myfile', 'mytag')).to.equal('i/am/relative/myfile_mytag');
+        });
+
+        it('windows: filePath is absolute and basePath is undefined', () => {
+            expect(getNewFilePathWithTag('d:\\i\\am\\absolute\\myfile.png')).to.equal('d:\\i\\am\\absolute\\myfile.png');
+        });
+
+        it('windows: filePath is absolute and basePath is "mytag"', () => {
+            expect(getNewFilePathWithTag('d:\\i\\am\\absolute\\myfile.png', 'mytag')).to.equal('d:\\i\\am\\absolute\\myfile_mytag.png');
+        });
+
+        it('windows: filePath is absolute without extname and basePath is "mytag"', () => {
+            expect(getNewFilePathWithTag('d:\\i\\am\\absolute\\myfile', 'mytag')).to.equal('d:\\i\\am\\absolute\\myfile_mytag');
+        });
+
+        it('windows: filePath is relative and basePath is undefined', () => {
+            expect(getNewFilePathWithTag('.\\i\\am\\relative\\myfile.png')).to.equal('.\\i\\am\\relative\\myfile.png');
+        });
+
+        it('windows: filePath is relative and basePath is "mytag"', () => {
+            expect(getNewFilePathWithTag('.\\i\\am\\relative\\myfile.png', 'mytag')).to.equal('i\\am\\relative\\myfile_mytag.png');
+        });
+
+        it('windows: filePath is relative without extname and basePath is "mytag"', () => {
+            expect(getNewFilePathWithTag('.\\i\\am\\relative\\myfile', 'mytag')).to.equal('i\\am\\relative\\myfile_mytag');
         });
     });
 
