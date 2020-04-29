@@ -1,7 +1,13 @@
 import path from 'path';
 import { expect } from 'chai';
 
-import { findCrawlerParser, getAbsolutePath, getConfigFilePath,getNewFilePathWithTag } from '../../../src/util';
+import {
+    findCrawlerParser,
+    getAbsolutePath,
+    getConfigFilePath,
+    getFolderNameFromPath,
+    getNewFilePathWithTag
+} from '../../../src/util';
 
 let targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
 
@@ -72,17 +78,18 @@ describe('./util/index.js', () => {
             expect(getAbsolutePath('./i/am/relative/path', '/data/another/absolute/path')).to.equal('/data/another/absolute/path/i/am/relative/path');
         });
     });
+
     describe('check getNewFilePathWithTag(filePath, tag)', () => {
         it('filePath is absolute and basePath is undefined', () => {
             expect(getNewFilePathWithTag('/home/i/am/absolute/myfile.png')).to.equal('/home/i/am/absolute/myfile.png');
         });
 
         it('filePath is absolute and basePath is "mytag"', () => {
-            expect(getNewFilePathWithTag('/home/i/am/absolute/myfile.png','mytag')).to.equal('/home/i/am/absolute/myfile_mytag.png');
+            expect(getNewFilePathWithTag('/home/i/am/absolute/myfile.png', 'mytag')).to.equal('/home/i/am/absolute/myfile_mytag.png');
         });
 
         it('filePath is absolute without extname and basePath is "mytag"', () => {
-            expect(getNewFilePathWithTag('/home/i/am/absolute/myfile','mytag')).to.equal('/home/i/am/absolute/_mytagmyfile');
+            expect(getNewFilePathWithTag('/home/i/am/absolute/myfile', 'mytag')).to.equal('/home/i/am/absolute/_mytagmyfile');
         });
 
         it('filePath is relative and basePath is undefined', () => {
@@ -90,12 +97,45 @@ describe('./util/index.js', () => {
         });
 
         it('filePath is relative and basePath is "mytag"', () => {
-            expect(getNewFilePathWithTag('./i/am/relative/myfile.png','mytag')).to.equal('i/am/relative/myfile_mytag.png');
+            expect(getNewFilePathWithTag('./i/am/relative/myfile.png', 'mytag')).to.equal('i/am/relative/myfile_mytag.png');
         });
 
         it('filePath is relative without extname and basePath is "mytag"', () => {
-            expect(getNewFilePathWithTag('./i/am/relative/myfile','mytag')).to.equal('i/am/relative/_mytagmyfile');
+            expect(getNewFilePathWithTag('./i/am/relative/myfile', 'mytag')).to.equal('i/am/relative/_mytagmyfile');
+        });
+    });
+
+    describe('check getFolderNameFromPath(targetPath)', () => {
+        it('targetPath is absolute folder', () => {
+            expect(getFolderNameFromPath('/home/i/am/absolute')).to.equal('_home_i_am_absolute');
         });
 
+        it('targetPath is absolute file', () => {
+            expect(getFolderNameFromPath('/home/i/am/absolute/myfile.png')).to.equal('_home_i_am_absolute_myfile_png');
+        });
+
+        it('targetPath is relative folder with ./', () => {
+            expect(getFolderNameFromPath('./i/am/relative/path')).to.equal('i_am_relative_path');
+        });
+
+        it('targetPath is relative folder with ../', () => {
+            expect(getFolderNameFromPath('../i/am/relative/path')).to.equal('parent_i_am_relative_path');
+        });
+
+        it('targetPath is relative folder with ../../', () => {
+            expect(getFolderNameFromPath('../../i/am/relative/path')).to.equal('parent_parent_i_am_relative_path');
+        });
+
+        it('targetPath is relative folder', () => {
+            expect(getFolderNameFromPath('i/am/relative/path')).to.equal('i_am_relative_path');
+        });
+
+        it('targetPath is fileName with extname', () => {
+            expect(getFolderNameFromPath('myscript.js')).to.equal('myscript_js');
+        });
+
+        it('targetPath is fileName without extname', () => {
+            expect(getFolderNameFromPath('myscript')).to.equal('myscript');
+        });
     });
 });

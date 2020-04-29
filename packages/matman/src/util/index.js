@@ -9,7 +9,7 @@ import { MATMAN_CONFIG_FILE as configFileName } from '../config';
  * 获得绝对路径地址
  *
  * @param {String} targetPath 目标路径
- * @param {String} [basePath] 根路径
+ * @param {String} [basePath] 根路径，如果目标路径为相对路径，则将用该路径作为其根路径
  * @return {String}
  */
 export function getAbsolutePath(targetPath, basePath) {
@@ -103,12 +103,49 @@ export function findCrawlerParser(basePath) {
     return crawlerParser;
 }
 
+/**
+ * 根据路径生成不带文件后缀的文件名
+ *
+ * 例如：
+ *
+ * a/b/path -> a_b_path
+ * a/b/path/file.js -> a_b_path_file_js
+ * ./a/b/path -> a_b_path
+ * ../a/b/path -> parent_a_b_path
+ *
+ * @param {String} targetPath 路径
+ * @return {String}
+ * @author {helinjiang}
+ */
 export function getFolderNameFromPath(targetPath) {
     // 路径为 ./xxx 类型时要先去掉 ./，然后再将所有的 / 替换为 _
     return targetPath
+        .replace(/\.\./gi, 'parent')
         .replace(/^\.([^[\\||\/])*[\\||\/]/gi, '')
         .replace(new RegExp(path.sep.replace(/\\/gi, '\\\\'), 'gi'), '_')
         .replace(/\./, '_');
+}
+
+/**
+ * 根据相对路径获得保存路径
+ *
+ * 例如：
+ * a/b/path -> a/b/path
+ * ../a/b/path -> parent/a/b/path
+ * .. -> parent
+ *
+ * @param {String} relativePath 相对路径
+ * @return {String}
+ * @author {helinjiang}
+ */
+export function getSaveDirFromRelativePath(relativePath) {
+    // 找到相对路径，即从测试项目根目录到行为模块文件的路径，例如： page-xxx/cases/basic-check
+    // 极端情况下可能存在下面几种类型的结果：
+    //   a/b/path
+    //   ../a/b/path
+    //   ..
+    // 截图保存的路径与源码路径一致，如果有 .. 则替换为 parent
+    return relativePath.replace(/\.\./gi, 'parent');
 }
 
 /**
