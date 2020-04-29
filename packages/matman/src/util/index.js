@@ -130,22 +130,37 @@ export function getFolderNameFromPath(targetPath) {
  * 根据相对路径获得保存路径
  *
  * 例如：
+ * /a/b/path -> root/a/b/path
  * a/b/path -> a/b/path
  * ../a/b/path -> parent/a/b/path
  * .. -> parent
  *
- * @param {String} relativePath 相对路径
+ * @param {String} targetPath 路径
  * @return {String}
  * @author {helinjiang}
  */
-export function getSaveDirFromRelativePath(relativePath) {
+export function getSaveDirFromPath(targetPath) {
     // 找到相对路径，即从测试项目根目录到行为模块文件的路径，例如： page-xxx/cases/basic-check
     // 极端情况下可能存在下面几种类型的结果：
     //   a/b/path
     //   ../a/b/path
     //   ..
     // 截图保存的路径与源码路径一致，如果有 .. 则替换为 parent
-    return relativePath.replace(/\.\./gi, 'parent');
+    let changedPath = targetPath;
+
+    if (path.isAbsolute(changedPath)) {
+        if (/:\\/.test(changedPath)) {
+            // windows 下，将 d:\a\path 修改为 d\a\path
+            changedPath = changedPath.replace(/:/gi, '');
+        } else {
+            // linux / macOS 下，将 /a/path 修改为 root/a/path
+            changedPath = `root${changedPath}`;
+        }
+    }
+
+    return changedPath
+        .replace(/\.\./gi, 'parent')
+        .replace(/^\.([^[\\||\/])*[\\||\/]/gi, '');
 }
 
 /**

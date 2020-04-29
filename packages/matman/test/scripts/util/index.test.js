@@ -6,7 +6,8 @@ import {
     getAbsolutePath,
     getConfigFilePath,
     getFolderNameFromPath,
-    getNewFilePathWithTag
+    getNewFilePathWithTag,
+    getSaveDirFromPath
 } from '../../../src/util';
 
 let targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
@@ -136,6 +137,40 @@ describe('./util/index.js', () => {
 
         it('targetPath is fileName without extname', () => {
             expect(getFolderNameFromPath('myscript')).to.equal('myscript');
+        });
+    });
+
+    describe('check getSaveDirFromPath(relativePath)', () => {
+        it('relativePath is absolute folder', () => {
+            expect(getSaveDirFromPath('/home/i/am/absolute')).to.equal('root/home/i/am/absolute');
+        });
+
+        it('relativePath is absolute file', () => {
+            expect(getSaveDirFromPath('/home/i/am/absolute/myfile.png')).to.equal('root/home/i/am/absolute/myfile.png');
+        });
+
+        it('relativePath is relative folder with ./', () => {
+            expect(getSaveDirFromPath('./i/am/relative/path')).to.equal('i/am/relative/path');
+        });
+
+        it('relativePath is relative folder with ../', () => {
+            expect(getSaveDirFromPath('../i/am/relative/path')).to.equal('parent/i/am/relative/path');
+        });
+
+        it('relativePath is relative folder with ../../', () => {
+            expect(getSaveDirFromPath('../../i/am/relative/path')).to.equal('parent/parent/i/am/relative/path');
+        });
+
+        it('relativePath is relative folder', () => {
+            expect(getSaveDirFromPath('i/am/relative/path')).to.equal('i/am/relative/path');
+        });
+
+        it('targetPath is fileName with extname', () => {
+            expect(getSaveDirFromPath('myscript.js')).to.equal('myscript.js');
+        });
+
+        it('targetPath is fileName without extname', () => {
+            expect(getSaveDirFromPath('myscript')).to.equal('myscript');
         });
     });
 });
