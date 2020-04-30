@@ -6,7 +6,8 @@
         "force-publish": "lerna publish --cd-version patch --force-publish=*",
         "docs:dev": "vuepress dev docs",
         "docs:build": "vuepress build docs",
-        "docs:deploy": "npm run docs:build && gh-pages -d docs-dist"
+        "docs:deploy": "npm run docs:build && gh-pages -d docs-dist",
+        "test": "node ./node_modules/mocha/bin/_mocha"
     },
     "repository": {
         "type": "git",
@@ -28,8 +29,10 @@
         "vue-particles": "^1.0.9"
     },
     "devDependencies": {
+        "chai": "^4.2.0",
         "gh-pages": "^2.2.0",
         "lerna": "^3.20.2",
+        "mocha": "^7.1.2",
         "vuepress": "^1.3.1"
     }
 }
