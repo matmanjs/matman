@@ -159,6 +159,10 @@ describe('./util/index.js', () => {
             expect(getFolderNameFromPath('myscript.js')).to.equal('myscript_js');
         });
 
+        it('linux: targetPath is fileName with two extname', () => {
+            expect(getFolderNameFromPath('my.script.js')).to.equal('my_script_js');
+        });
+
         it('linux: targetPath is fileName without extname', () => {
             expect(getFolderNameFromPath('myscript')).to.equal('myscript');
         });
@@ -190,7 +194,7 @@ describe('./util/index.js', () => {
         });
 
         it('linux: targetPath is absolute file', () => {
-            expect(getSaveDirFromPath('/home/i/am/absolute/myfile.png')).to.equal('root/home/i/am/absolute/myfile.png');
+            expect(getSaveDirFromPath('/home/i/am/absolute/myfile.png')).to.equal('root/home/i/am/absolute/myfile_png');
         });
 
         it('linux: targetPath is relative folder', () => {
@@ -210,7 +214,11 @@ describe('./util/index.js', () => {
         });
 
         it('linux: targetPath is fileName with extname', () => {
-            expect(getSaveDirFromPath('myscript.js')).to.equal('myscript.js');
+            expect(getSaveDirFromPath('myscript.js')).to.equal('myscript_js');
+        });
+
+        it('linux: targetPath is fileName with two extname', () => {
+            expect(getSaveDirFromPath('my.script.js')).to.equal('my_script_js');
         });
 
         it('linux: targetPath is fileName without extname', () => {

@@ -150,7 +150,7 @@ export function getFolderNameFromPath(targetPath) {
         .replace(/\\\\/gi, '_')
 
         // 将文件后缀的 . 修改为 _
-        .replace(/\./, '_');
+        .replace(/\./gi, '_');
 }
 
 /**
@@ -189,7 +189,10 @@ export function getSaveDirFromPath(targetPath) {
         .replace(/\.\./gi, 'parent')
 
         // 去掉 ./ ，例如 ./a/b 修改为 a/b
-        .replace(/^\.([^[\\||\/])*[\\||\/]/gi, '');
+        .replace(/^\.([^[\\||\/])*[\\||\/]/gi, '')
+
+        // 将文件后缀的 . 修改为 _
+        .replace(/\./gi, '_');
 }
 
 /**
