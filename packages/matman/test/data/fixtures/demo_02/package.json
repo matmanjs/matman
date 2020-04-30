@@ -1,0 +1,8 @@
+{
+    "name": "demo_01",
+    "version": "1.0.0",
+    "scripts": {
+        "build": "matman build",
+        "build-dev": "matman build --dev"
+    }
+}
