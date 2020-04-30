@@ -7,7 +7,7 @@
         "docs:dev": "vuepress dev docs",
         "docs:build": "vuepress build docs",
         "docs:deploy": "npm run docs:build && gh-pages -d docs-dist",
-        "test": "node ./node_modules/mocha/bin/_mocha"
+        "test": "cross-env DEBUG=nightmare node ./node_modules/mocha/bin/_mocha"
     },
     "repository": {
         "type": "git",
@@ -30,6 +30,7 @@
     },
     "devDependencies": {
         "chai": "^4.2.0",
+        "cross-env": "^7.0.2",
         "gh-pages": "^2.2.0",
         "lerna": "^3.20.2",
         "mocha": "^7.1.2",

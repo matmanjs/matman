@@ -1,7 +1,0 @@
-{
-    "name": "demo_01",
-    "version": "1.0.0",
-    "scripts": {
-        "test": "node ../../../node_modules/mocha/bin/_mocha src/**/test/**/*.test.js"
-    }
-}
