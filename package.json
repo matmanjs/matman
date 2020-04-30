@@ -7,7 +7,8 @@
         "docs:dev": "vuepress dev docs",
         "docs:build": "vuepress build docs",
         "docs:deploy": "npm run docs:build && gh-pages -d docs-dist",
-        "test": "cross-env DEBUG=nightmare node ./node_modules/mocha/bin/_mocha"
+        "test": "node ./test/run-test.js",
+        "test:direct": "cross-env DEBUG=nightmare node ./node_modules/mocha/bin/_mocha"
     },
     "repository": {
         "type": "git",
