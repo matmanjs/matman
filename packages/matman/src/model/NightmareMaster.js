@@ -224,27 +224,6 @@ export default class NightmareMaster {
             globalInfo: this.globalInfo
         };
     }
-
-    // addAction(actionName, actionCall) {
-    //     if (typeof actionCall === 'function') {
-    //         this.actionList.push(actionCall);
-    //         this._dataIndexMap[actionName + ''] = this.actionList.length - 1;
-    //     } else if (typeof actionName === 'function') {
-    //         this.actionList.push(actionName);
-    //     } else {
-    //         throw new Error('addAction should assign function!');
-    //     }
-    // }
-
-    //
-    // onNightmareCreated(callback) {
-    //     if (typeof callback === 'function') {
-    //         return callback(this.nightmare);
-    //     }
-    //
-    //     return this.nightmare;
-    // }
-
 }
 
 function evaluate() {
