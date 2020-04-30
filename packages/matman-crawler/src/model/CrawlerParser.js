@@ -9,67 +9,11 @@ export default class CrawlerParser {
     /**
      * 构造函数
      *
-     * @param {String} rootPath  项目的根目录
-     * @param {Object} opts 参数
-     * @param {String} [opts.testerPath] 测试对象的根目录
-     * @param {String} [opts.testPath] 即将废弃，同 testerPath
-     * @param {String} [opts.crawlerBuildPath] 前端爬虫脚本构建之后的目录
-     * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为前端爬虫脚本的正则表达式
-     * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery，默认值为 true
-     * @param {String} [opts.screenshotPath] 屏幕截图保存的路径
-     * @param {String} [opts.coveragePath] 覆盖率数据保存的路径
-     * @param {Boolean} [opts.isDevBuild] 是否为开发模式
+     * @param {MatmanConfig} matmanConfig
      */
-    constructor(rootPath, opts = {}) {
+    constructor(matmanConfig) {
         // 项目根目录
-        this.rootPath = this._getRootPath(rootPath);
-
-        // 端对端测试代码的目录
-        this.testerPath = this._getTestPath(opts.testerPath || opts.testPath || './src/testers');
-
-        // crawler script 构建之后的目录
-        this.crawlerBuildPath = this._getCrawlerBuildPath(opts.crawlerBuildPath || './build/crawler-script');
-
-        // 用于匹配是否为 crawler script 的正则
-        this.crawlerMatch = opts.crawlerMatch || /[\/|\\]crawlers[\/|\\].*\.js$/;
-
-        this.crawlerInjectJQuery = (typeof opts.crawlerInjectJQuery === 'boolean' ? opts.crawlerInjectJQuery : true);
-
-        this.isDevBuild = !!opts.isDevBuild;
-
-        // 如果是开发模式下，则修改构建之后的路径，使之与原构建路径同目录，且文件夹增加 _dev 后缀
-        if (this.isDevBuild) {
-            this.crawlerBuildPath = path.join(path.dirname(this.crawlerBuildPath), path.basename(this.crawlerBuildPath) + '_dev');
-        }
-
-        // 屏幕截图保存的路径
-        this.screenshotPath = this._getScreenshotPath(opts.screenshotPath || './build/screenshot');
-        this.coveragePath = this._getScreenshotPath(opts.coveragePath || './build/coverage_output');
-    }
-
-    /**
-     * 校验参数是否合法有效
-     *
-     * @return {{result:Boolean, [msg]:String}}
-     */
-    check() {
-        if (!fs.existsSync(this.rootPath)) {
-            return {
-                result: false,
-                msg: 'Unknown rootPath=' + this.rootPath
-            };
-        }
-
-        if (!fs.existsSync(this.testerPath)) {
-            return {
-                result: false,
-                msg: 'Unknown testerPath=' + this.testerPath
-            };
-        }
-
-        return {
-            result: true
-        };
+        this.matmanConfig = matmanConfig;
     }
 
     /**
@@ -79,12 +23,12 @@ export default class CrawlerParser {
         let entry = {};
 
         // 获取所有的 js 文件
-        let globResult = glob.sync(path.resolve(this.testerPath, './**/**.js'));
+        let globResult = glob.sync(path.resolve(this.matmanConfig.testerPath, './**/**.js'));
 
         globResult
             .filter((item) => {
                 // 过滤出符合条件的 js 文件
-                return item.match(this.crawlerMatch);
+                return item.match(this.matmanConfig.crawlerMatch);
             })
             .forEach((item) => {
                 entry[this.getEntryName(item)] = item;
@@ -101,7 +45,7 @@ export default class CrawlerParser {
      */
     getEntryName(fullPath) {
         // 获取相对于 testerPath 的相对路径，且去掉 .js 后缀
-        return path.relative(this.testerPath, fullPath).replace('.js', '');
+        return path.relative(this.matmanConfig.testerPath, fullPath).replace('.js', '');
     }
 
     /**
@@ -124,7 +68,7 @@ export default class CrawlerParser {
         let result = '';
 
         try {
-            let webpackConfig = require(path.resolve(this.crawlerBuildPath, './webpack-config'));
+            let webpackConfig = require(path.resolve(this.matmanConfig.crawlerBuildPath, './webpack-config'));
             result = path.join(webpackConfig.output.path, webpackConfig.output.filename.replace('[name]', entryName));
 
             // 如果替换之后的本地文件路径不存在，则将其置空
@@ -137,21 +81,5 @@ export default class CrawlerParser {
         }
 
         return result;
-    }
-
-    _getRootPath(rootPath) {
-        return rootPath ? (path.isAbsolute(rootPath) ? rootPath : path.resolve(rootPath)) : '';
-    }
-
-    _getTestPath(testerPath) {
-        return path.isAbsolute(testerPath) ? testerPath : path.join(this.rootPath, testerPath);
-    }
-
-    _getCrawlerBuildPath(crawlerBuildPath) {
-        return path.isAbsolute(crawlerBuildPath) ? crawlerBuildPath : path.join(this.rootPath, crawlerBuildPath);
-    }
-
-    _getScreenshotPath(screenshotPath) {
-        return path.isAbsolute(screenshotPath) ? screenshotPath : path.join(this.rootPath, screenshotPath);
     }
 }
