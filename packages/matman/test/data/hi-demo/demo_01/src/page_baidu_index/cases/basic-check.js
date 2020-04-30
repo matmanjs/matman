@@ -1,4 +1,4 @@
-const matman = require('../../../../../../packages/matman');
+const matman = require('../../../../../../../');
 
 function getResult(opts) {
     return matman
