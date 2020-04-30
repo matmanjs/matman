@@ -2,8 +2,7 @@
     "name": "demo_02",
     "version": "1.0.0",
     "scripts": {
-        "build": "node ../../../packages/matman-cli/bin/matman build",
-        "build-dev": "node ../../../packages/matman-cli/bin/matman build --dev",
-        "test": "node ../../../node_modules/mocha/bin/_mocha src/**/test/**/*.test.js"
+        "build": "node ../../../../../matman-cli/bin/matman build",
+        "build-dev": "node ./../../../..//matman-cli/bin/matman build --dev"
     }
 }

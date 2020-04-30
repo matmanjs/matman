@@ -1,6 +1,7 @@
 const expect = require('chai').expect;
 
-const checkPage = require('../cases/search-check');
+const checkPage = require('../../../packages/matman/test/data/hi-demo/demo_02/src/page_baidu_index/cases/search-check');
+
 
 describe('百度首页：搜索', function () {
     this.timeout(30000);
@@ -8,7 +9,7 @@ describe('百度首页：搜索', function () {
     let resultData;
 
     before(function () {
-        return checkPage({ show: false, doNotEnd: false, useRecorder: true })
+        return checkPage({ show: false, doNotCloseBrowser: false, useRecorder: true })
             .then(function (result) {
                 // console.log(JSON.stringify(result));
                 resultData = result;
