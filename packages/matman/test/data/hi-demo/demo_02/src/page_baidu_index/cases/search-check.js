@@ -1,5 +1,4 @@
-const matman = require('../../../../../../packages/matman');
-// const matman = require('matman');
+const matman = require('../../../../../../../');
 
 function getResult(opts) {
     return matman
@@ -48,7 +47,10 @@ function getResult(opts) {
 
         // 执行自定义的方法
         .executeCustomFn((pageDriver) => {
-            console.log(pageDriver);
+            // 没有其他的意义，只是为了 debug
+            if (opts.show) {
+                console.log(pageDriver);
+            }
         })
 
         // 结束，获取结果
@@ -57,12 +59,12 @@ function getResult(opts) {
 
 module.exports = getResult;
 
-getResult({ show: true, doNotCloseBrowser: true, useRecorder: false })
-    .then(function (result) {
-        console.log(JSON.stringify(result));
-    })
-    .catch(function (error) {
-        console.error('failed:', error);
-    });
+// getResult({ show: true, doNotCloseBrowser: true, useRecorder: false })
+//     .then(function (result) {
+//         console.log(JSON.stringify(result));
+//     })
+//     .catch(function (error) {
+//         console.error('failed:', error);
+//     });
 
 
