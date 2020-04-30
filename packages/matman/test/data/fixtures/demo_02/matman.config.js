@@ -2,5 +2,6 @@ const path = require('path');
 
 module.exports = {
     rootPath: __dirname,
-    testerPath: path.join(__dirname, './src')
+    testerPath: path.join(__dirname, './src'),
+    crawlerInjectJQuery: false
 };

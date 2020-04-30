@@ -22,6 +22,11 @@ function getResult(opts) {
         // 加载页面地址
         .goto('https://www.baidu.com')
 
+        // 执行自定义的方法
+        .executeCustomFn((pageDriver) => {
+            console.log(pageDriver);
+        })
+
         .run('init', function (nightmareRun) {
             // nightmareRun 支持所有的原始 nightmare 语法和对其定制的扩展功能
             return nightmareRun.wait(500);
