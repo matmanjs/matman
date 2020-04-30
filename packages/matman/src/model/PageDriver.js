@@ -1,4 +1,5 @@
 import fs from 'fs';
+import fse from 'fs-extra';
 import path from 'path';
 
 import _ from 'lodash';
@@ -150,6 +151,9 @@ export default class PageDriver {
     setScreenshotConfig(screenshotConfig) {
         if (screenshotConfig) {
             this.screenshotConfig = new ScreenshotConfig(this.matmanConfig, screenshotConfig, this.caseModuleFilePath, this.tag);
+
+            // 要保证这个目录存在，否则保存时会报错
+            fse.ensureDirSync(path.dirname(this.screenshotConfig.path));
         }
         return this;
     }
