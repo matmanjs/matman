@@ -3,26 +3,28 @@ import webpack from 'webpack';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import StringReplaceWebpackPlugin from 'string-replace-webpack-plugin';
 
+import CrawlerParser from '../../model/CrawlerParser';
+
 /**
  * 创建用于生产环境中的webpack打包配置
  *
- * @param {Object} crawlerParser
+ * @param {MatmanConfig} matmanConfig
  * @param {Object} [opts] 额外选项
  * @return {Object}
  */
-export function createProdConfig(crawlerParser, opts = {}) {
+export function createProdConfig(matmanConfig, opts = {}) {
     // 设置打包规则
     const prodRules = [];
 
     // 设置一些entry文件的代码，比如自动打包 jQuery 库进去
-    prodRules.push(_getAppendBeforeRule(crawlerParser.crawlerMatch));
+    prodRules.push(_getAppendBeforeRule(matmanConfig.crawlerMatch));
 
     // 设置打包插件
     let prodPlugins = [];
 
     // 清空, https://github.com/johnagan/clean-webpack-plugin/issues/17
-    prodPlugins.push(new CleanWebpackPlugin([crawlerParser.crawlerBuildPath], {
-        root: crawlerParser.rootPath,
+    prodPlugins.push(new CleanWebpackPlugin([matmanConfig.crawlerBuildPath], {
+        root: matmanConfig.rootPath,
         verbose: true,
         dry: false
     }));
@@ -44,11 +46,11 @@ export function createProdConfig(crawlerParser, opts = {}) {
     const prodConfig = {};
 
     // 这里的 entry 需要自动生成
-    prodConfig.entry = crawlerParser.getEntry();
+    prodConfig.entry = new CrawlerParser(matmanConfig).getEntry();
 
     prodConfig.output = {
         filename: '[name].js',
-        path: crawlerParser.crawlerBuildPath
+        path: matmanConfig.crawlerBuildPath
     };
     prodConfig.module = {
         rules: prodRules

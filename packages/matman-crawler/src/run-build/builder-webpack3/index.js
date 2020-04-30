@@ -4,12 +4,12 @@ import { createProdConfig } from './builder';
 /**
  * 获得 webpack 的配置结果
  *
- * @param {Object} crawlerParser
+ * @param {MatmanConfig} matmanConfig
  * @param {Object} [opts] 额外选项
  * @return {Object}
  */
-export function getWebpackConfig(crawlerParser, opts) {
-    return Promise.resolve(createProdConfig(crawlerParser, opts));
+export function getWebpackConfig(matmanConfig, opts) {
+    return Promise.resolve(createProdConfig(matmanConfig, opts));
 }
 
 /**

@@ -1,9 +1,7 @@
-'use strict';
-
 const path = require('path');
-const fs = require('fs');
 
 const matmanCrawler = require('matman-crawler');
+const { MATMAN_CONFIG_FILE, findMatmanConfig } = require('matman');
 
 /**
  *
@@ -15,26 +13,25 @@ module.exports = function (args) {
     // console.log(args);
     const cwd = process.cwd();
     const isDevBuild = !!args.dev;
-    const config = args.config || 'matman.config.js';
+    const config = args.config || MATMAN_CONFIG_FILE;
 
     // 绝对路径
     let configAbsolutePath = path.resolve(cwd, config);
 
-    // 一定要检查config文件是否存在
-    if (fs.existsSync(configAbsolutePath)) {
-        console.log('Load config file:', configAbsolutePath);
-    } else {
-        console.error('Unkown config file: ', configAbsolutePath);
-        return Promise.reject();
+    // 获取 matman.config.js 配置文件中的内容
+    let matmanConfig = findMatmanConfig(configAbsolutePath);
+
+    // 校验是否找得到 matman.config.js
+    if (!matmanConfig) {
+        return Promise.reject(`'Unknown config file: ${configAbsolutePath}`);
     }
 
-    // 获取 matman.config.js 配置文件中的内容
-    let matmanConfig = require(configAbsolutePath);
+    console.log(`Success load config file:  ${configAbsolutePath}`);
 
     // 开发模式
     if (isDevBuild) {
-        matmanConfig.isDevBuild = isDevBuild;
+        matmanConfig.setIsDevBuild(isDevBuild);
     }
 
-    return matmanCrawler.build(matmanConfig.rootPath, matmanConfig);
+    return matmanCrawler.build(matmanConfig);
 };
