@@ -259,6 +259,19 @@ export default class PageDriver {
     }
 
     /**
+     * 执行自定义的方法，适用于 debug 和自定义扩展等场景
+     *
+     * @param customFn
+     * @return {PageDriver}
+     */
+    executeCustomFn(customFn) {
+        if (typeof customFn === 'function') {
+            customFn(this);
+        }
+        return this;
+    }
+
+    /**
      * 模拟用户进行交互操作
      *
      * @param {String} pageUrl 页面的 URL 地址
