@@ -11,6 +11,7 @@ import CoverageConfig from './CoverageConfig';
 import CaseParserOperateResult from './CaseParserOperateResult';
 import NightmareMaster from './NightmareMaster';
 import MatmanConfig from './MatmanConfig';
+import { CrawlerParser } from 'matman-crawler';
 
 /**
  * 测试用例处理类
@@ -189,6 +190,8 @@ export default class PageDriver {
         } else {
             throw new Error('addAction should assign function!');
         }
+
+        return this;
     }
 
     /**
@@ -217,7 +220,11 @@ export default class PageDriver {
      */
     evaluate(fn, ...args) {
         if (typeof fn === 'string') {
-            this.crawlerScriptPath = fn;
+            // 获取 crawler script 的源文件目录
+            const crawlerScriptSrcPath = path.resolve(path.dirname(this.caseModuleFilePath), fn);
+
+            // 调用 crawlerParser 的方法获得该脚本构建之后的路径
+            this.nightmareEvaluateFn = new CrawlerParser(this.matmanConfig).getCrawlerScriptPath(crawlerScriptSrcPath);
         } else {
             this.nightmareEvaluateFn = fn;
             this.nightmareEvaluateFnArgs = args;
