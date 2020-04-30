@@ -1,6 +1,3 @@
-import fs from 'fs';
-import fse from 'fs-extra';
-
 import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
 import ScreenshotConfig from './ScreenshotConfig';
 import CoverageConfig from './CoverageConfig';
@@ -109,6 +106,15 @@ export default class NightmareMaster {
                 // 必须设置一下这个，否则在某些情况下 https 地址无法使用
                 // https://github.com/matmanjs/matman/issues/159
                 'ignore-certificate-errors': true
+            };
+        }
+
+        // 如果传递给 evaluate 的是一个本地绝对路径文件，则需要设置 preload
+        if (typeof this.pageDriver.nightmareEvaluateFn === 'string') {
+            nightmareConfig.webPreferences = {
+                // 用例过多且频繁启动测试时可能会存在失败的场景 #154
+                partition: 'nopersist',
+                preload: this.pageDriver.nightmareEvaluateFn
             };
         }
 
