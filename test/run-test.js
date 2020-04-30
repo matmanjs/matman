@@ -2,8 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const runCmd = require('./run-cmd');
 
-const promiseList = [];
-
 /**
  * 运行 lerna bootstrap 来初始
  * @return {Promise}
@@ -26,18 +24,46 @@ function runLernaBootstrap() {
 }
 
 /**
- * 执行构建
+ * 执行构建 packages
  *
  * @return {Promise<>}
  */
-function runBuild() {
+function runBuildPackages() {
     const t = Date.now();
 
-    console.error('开始执行构建...');
+    console.error('开始执行构建 packages ...');
+
+    const PACKAGES_ROOT = path.join(__dirname, '../packages');
+
+    const promiseList = [];
+    promiseList.push(runCmd.runByExec('npm run build', { cwd: path.join(PACKAGES_ROOT, 'matman') }));
+    promiseList.push(runCmd.runByExec('npm run build', { cwd: path.join(PACKAGES_ROOT, 'matman-crawler') }));
+
+    return Promise.all(promiseList)
+        .then((data) => {
+            console.log(`构建 packages 完成，耗时${Date.now() - t}ms`);
+            return data;
+        })
+        .catch((err) => {
+            console.error('构建 packages 时失败', err);
+            return Promise.reject(err);
+        });
+}
+
+/**
+ * 执行构建爬虫脚本
+ *
+ * @return {Promise<>}
+ */
+function runBuildCrawlerScript() {
+    const t = Date.now();
+
+    console.error('开始执行构建爬虫脚本...');
 
     // 自动获取所有参与测试demo的路径
     const HI_DEMO_ROOT = path.join(__dirname, '../packages/matman/test/data/hi-demo');
     const demoArr = fs.readdirSync(HI_DEMO_ROOT);
+    const promiseList = [];
 
     demoArr.forEach((demoName) => {
         //获取当前文件的绝对路径
@@ -54,11 +80,11 @@ function runBuild() {
 
     return Promise.all(promiseList)
         .then((data) => {
-            console.log(`构建完成，耗时${Date.now() - t}ms`);
+            console.log(`爬虫脚本构建完成，耗时${Date.now() - t}ms`);
             return data;
         })
         .catch((err) => {
-            console.error('构建项目时失败', err);
+            console.error('爬虫脚本构建时失败', err);
             return Promise.reject(err);
         });
 }
@@ -90,13 +116,16 @@ const t = Date.now();
 
 runLernaBootstrap()
     .then((data) => {
-        return runBuild()
+        return runBuildPackages()
             .then((data) => {
-                return runTestDirect()
+                return runBuildCrawlerScript()
                     .then((data) => {
-                        console.log(`============执行结束，总耗时${Date.now() - t}ms===========`);
+                        return runTestDirect();
                     });
             });
+    })
+    .then((data) => {
+        console.log(`============执行结束，总耗时${Date.now() - t}ms===========`);
     })
     .catch(() => {
         console.log(`============执行过程遇到异常，总耗时${Date.now() - t}ms===========`);
