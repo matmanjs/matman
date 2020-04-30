@@ -37,17 +37,22 @@ export default class MatmanConfig {
         // 前端爬虫脚本中是否注入jQuery，默认值为 true
         this.crawlerInjectJQuery = (typeof opts.crawlerInjectJQuery === 'boolean' ? opts.crawlerInjectJQuery : true);
 
+        // 屏幕截图保存的路径
+        this.screenshotPath = getAbsolutePath(opts.screenshotPath || './build/screenshot', this.rootPath);
+        this.coveragePath = getAbsolutePath(opts.coveragePath || './build/coverage_output', this.rootPath);
+
+        // 设置 dev 开发模式
+        this.setIsDevBuild(!!opts.isDevBuild);
+    }
+
+    setIsDevBuild(isDevBuild) {
         // 是否为开发模式
-        this.isDevBuild = !!opts.isDevBuild;
+        this.isDevBuild = isDevBuild;
 
         // 如果是开发模式下，则修改构建之后的路径，使之与原构建路径同目录，且文件夹增加 _dev 后缀
         if (this.isDevBuild) {
             this.crawlerBuildPath = path.join(path.dirname(this.crawlerBuildPath), path.basename(this.crawlerBuildPath) + '_dev');
         }
-
-        // 屏幕截图保存的路径
-        this.screenshotPath = getAbsolutePath(opts.screenshotPath || './build/screenshot', this.rootPath);
-        this.coveragePath = getAbsolutePath(opts.coveragePath || './build/coverage_output', this.rootPath);
     }
 
     /**
