@@ -17,7 +17,7 @@ function getResult(opts) {
         })
 
         // 设置截屏，默认不截图
-        // .setScreenshotConfig(true)
+        .setScreenshotConfig(true)
 
         // 加载页面地址
         .goto('https://www.baidu.com')

@@ -3,7 +3,7 @@ import { findMatmanConfig } from './util';
 import { MATMAN_CONFIG_FILE } from './config';
 
 export function createPageDriver(caseFilePath, opts) {
-    const matmanConfig = findMatmanConfig(this.caseModuleFilePath);
+    const matmanConfig = findMatmanConfig(caseFilePath);
 
     if (!matmanConfig) {
         throw new Error(`Could not find ${MATMAN_CONFIG_FILE}!`);

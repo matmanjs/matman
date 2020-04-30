@@ -165,9 +165,9 @@ export default class NightmareMaster {
         for (let i = 0, length = this.pageDriver.actionList.length; i < length; i++) {
             let curRun = this.pageDriver.actionList[i](this.nightmareRun);
 
-            // if (this.screenshotConfig) {
-            //     curRun.screenshot(this.screenshotConfig.getPathWithId(i + 1), this.screenshotConfig.clip);
-            // }
+            if (this.pageDriver.screenshotConfig) {
+                curRun.screenshot(this.pageDriver.screenshotConfig.getPathWithId(i + 1), this.pageDriver.screenshotConfig.clip);
+            }
 
             let t;
             if (typeof this.pageDriver.nightmareEvaluateFn === 'function') {
