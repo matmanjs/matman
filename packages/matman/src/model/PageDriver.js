@@ -144,11 +144,13 @@ export default class PageDriver {
     /**
      * 设置截屏，默认不截图
      *
-     * @param screenshotConfig
+     * @param {Boolean | String | Object} screenshotConfig
      * @return {PageDriver}
      */
     setScreenshotConfig(screenshotConfig) {
-        this.screenshotConfig = new ScreenshotConfig(this.matmanConfig, screenshotConfig, this.caseModuleFilePath, this.tag);
+        if (screenshotConfig) {
+            this.screenshotConfig = new ScreenshotConfig(this.matmanConfig, screenshotConfig, this.caseModuleFilePath, this.tag);
+        }
         return this;
     }
 
