@@ -50,5 +50,6 @@ logs
 packages/*/lib/
 packages/*/test/**/build
 tmp/
+test/**/build
 
 docs-dist
