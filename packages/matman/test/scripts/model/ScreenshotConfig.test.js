@@ -170,5 +170,39 @@ describe('check model/ScreenshotConfig.js', () => {
             });
         });
     });
+
+    describe('check getPathWithId(id)', () => {
+        const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/fixtures/demo_01');
+        const caseModuleFilePath = path.join(MATMAN_ROOT_PATH, './src/page_baidu_index/cases/basic-check.js');
+        const matmanConfig = findMatmanConfig(caseModuleFilePath);
+
+        it('if opts is Boolean and tag is "mytag"', () => {
+            expect(new ScreenshotConfig(matmanConfig, true, caseModuleFilePath, 'mytag').getPathWithId(1024)).to.equal(path.join(matmanConfig.screenshotPath, './page_baidu_index/cases/basic-check_js/basic-check_js_mytag_1024.png'));
+        });
+
+        it('if opts is String(relative path) and tag is "mytag"', () => {
+            expect(new ScreenshotConfig(matmanConfig, './is/relative/file.png', caseModuleFilePath, 'mytag').getPathWithId(1024)).to.equal(path.join(matmanConfig.screenshotPath, './is/relative/file_mytag_1024.png'));
+        });
+
+        it('if opts is String(absolute path) and tag is "mytag"', () => {
+            expect(new ScreenshotConfig(matmanConfig, '/is/absolute/file.png', caseModuleFilePath, 'mytag').getPathWithId(1024)).to.equal('/is/absolute/file_mytag_1024.png');
+        });
+
+        it('if opts is Object(relative path, clip, tag) and tag is "mytag"', () => {
+            expect(new ScreenshotConfig(matmanConfig, {
+                path: './is/relative/file.png',
+                clip: { x: 1, y: 2, width: 3, height: 4 },
+                tag: 'customtag'
+            }, caseModuleFilePath, 'mytag').getPathWithId(1024)).to.equal(path.join(matmanConfig.screenshotPath, './is/relative/file_customtag_1024.png'));
+        });
+
+        it('if opts is Object(absolute path, clip, tag) and tag is "mytag"', () => {
+            expect(new ScreenshotConfig(matmanConfig, {
+                path: '/is/absolute/file.png',
+                clip: { x: 1, y: 2, width: 3, height: 4 },
+                tag: 'customtag'
+            }, caseModuleFilePath, 'mytag').getPathWithId(1024)).to.equal('/is/absolute/file_customtag_1024.png');
+        });
+    });
 });
 
