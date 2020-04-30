@@ -17,8 +17,6 @@ export default class ScreenshotConfig {
      * @param {String} [tag] 标记
      */
     constructor(matmanConfig, opts, caseModuleFilePath, tag) {
-        this.matmanConfig = matmanConfig;
-
         this.tag = tag;
 
         if (opts && (typeof opts === 'object')) {
@@ -28,7 +26,7 @@ export default class ScreenshotConfig {
             }
 
             // 如果传递了对象
-            this.path = this._getScreenshotFullPath(opts.path);
+            this.path = this._getScreenshotFullPath(opts.path, matmanConfig.screenshotPath);
 
             // 截图的区域，例如 { x: 0, y: 0, width: 0, height: 0 }
             // https://github.com/electron/electron/blob/master/docs/api/browser-window.md#winsetthumbnailclipregion-windows
@@ -36,12 +34,12 @@ export default class ScreenshotConfig {
 
         } else if (typeof opts === 'string') {
             // 如果 opts 为字符串，则代表设置的是截图保存路径
-            this.path = this._getScreenshotFullPath(opts);
+            this.path = this._getScreenshotFullPath(opts, matmanConfig.screenshotPath);
         } else {
             // 其他情况自动生成截图保存路径
             const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.testerPath, caseModuleFilePath));
             const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.png';
-            this.path = this._getScreenshotFullPath(path.join(relativeSavePath, saveFileName));
+            this.path = this._getScreenshotFullPath(path.join(relativeSavePath, saveFileName), matmanConfig.screenshotPath);
         }
     }
 
@@ -51,7 +49,7 @@ export default class ScreenshotConfig {
         });
     }
 
-    _getScreenshotFullPath(targetPath) {
-        return getNewFilePathWithTag(getAbsolutePath(targetPath, this.matmanConfig.screenshotPath), this.tag);
+    _getScreenshotFullPath(targetPath, basePath) {
+        return getNewFilePathWithTag(getAbsolutePath(targetPath, basePath), this.tag);
     }
 }
