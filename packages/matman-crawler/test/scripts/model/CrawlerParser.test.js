@@ -30,6 +30,19 @@ describe('check CrawlerParser', () => {
         });
     });
 
+    describe('check getEntryName(fullPath)', () => {
+        const matmanConfig = findMatmanConfig(path.join(__dirname, '../../data/fixtures/demo1'));
+        const crawlerParser = new CrawlerParser(matmanConfig);
+
+        it('check demo1: getEntry(crawler script)', () => {
+            expect(crawlerParser.getEntryName(path.join(crawlerParser.matmanConfig.testerPath, 'crawlers/c1.js'))).to.equal('crawlers/c1');
+        });
+
+        it('check demo1: getEntry(not crawler script)', () => {
+            expect(crawlerParser.getEntryName(path.join(crawlerParser.matmanConfig.testerPath, 'q1/c1.js'))).to.equal('q1/c1');
+        });
+    });
+
     // describe('check getCrawlerScriptPathByName(name)', () => {
     //     let rootPath = path.join(__dirname, '../../data/fixtures/demo1');
     //     let tmpCrawlerBuildPath = path.join(__dirname, '../../data/tmp/demo1_getCrawlerScriptPathByName');
