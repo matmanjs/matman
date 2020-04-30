@@ -9,6 +9,7 @@ import DeviceConfig from './DeviceConfig';
 import CoverageConfig from './CoverageConfig';
 import CaseParserOperateResult from './CaseParserOperateResult';
 import NightmareMaster from './NightmareMaster';
+import MatmanConfig from './MatmanConfig';
 
 /**
  * 测试用例处理类
@@ -17,18 +18,31 @@ export default class PageDriver {
     /**
      * 构造函数
      *
-     * @param {String} basePath  测试用例的脚本目录
+     * @param {MatmanConfig} matmanConfig
+     * @param {String} caseModuleFilePath  测试case文件的路径
      * @param {Object} [opts] 参数
      * @param {Object} [opts.delayBeforeRun] 延时多少ms再启动
+     * @param {String} [opts.tag] 标记，在某些场景下追加
      * @param {Boolean} [opts.useRecorder] 是否使用记录器
      * @param {Boolean} [opts.doNotCloseBrowser] 是否在执行完成之后不要关闭浏览器，默认为 false
      */
-    constructor(basePath, opts = {}) {
-        // 项目根目录
-        this.basePath = this._getBasePath(basePath);
+    constructor(matmanConfig, caseModuleFilePath, opts = {}) {
+
+        this.matmanConfig = matmanConfig;
+
+        // 测试case文件的路径
+        // TODO 需要确保存在
+        this.caseModuleFilePath = caseModuleFilePath;
 
         this.useRecorder = opts.useRecorder;
         this.doNotCloseBrowser = opts.doNotCloseBrowser;
+
+        this.tag = opts.tag;
+
+        // 特殊处理：如果 this.tag 是存在的文件，则获取文件名
+        if (this.tag && fs.existsSync(this.tag)) {
+            this.tag = path.basename(this.tag).replace(/\./gi, '_');
+        }
 
         // 延时多少ms再启动
         this.delayBeforeRun = (typeof opts.delayBeforeRun === 'number' ? opts.delayBeforeRun : 0);
@@ -130,11 +144,11 @@ export default class PageDriver {
     /**
      * 设置截屏，默认不截图
      *
-     * @param screenConfig
+     * @param screenshotConfig
      * @return {PageDriver}
      */
-    setScreenshotConfig(screenConfig) {
-        this.screenConfig = screenConfig;
+    setScreenshotConfig(screenshotConfig) {
+        this.screenshotConfig = new ScreenshotConfig(this.matmanConfig, screenshotConfig, this.caseModuleFilePath, this.tag);
         return this;
     }
 
@@ -219,10 +233,10 @@ export default class PageDriver {
         // }
 
         // 兼容没有定义 run 方法的场景
-        if(!this.actionList.length){
+        if (!this.actionList.length) {
             this.run('_load_page_', function (nightmareRun) {
                 return nightmareRun.wait(500);
-            })
+            });
         }
 
         return nightmareMaster.getResult()
