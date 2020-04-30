@@ -4,7 +4,7 @@ const fse = require('fs-extra');
 
 const expect = chai.expect;
 
-const { CrawlerParser, build } = require('../../../lib');
+const { CrawlerParser, build } = require('../../../src');
 
 describe('check CrawlerParser', () => {
 

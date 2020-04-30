@@ -6,14 +6,11 @@
     "matman": "./bin/matman"
   },
   "scripts": {
-    "test-mocha": "node ./node_modules/mocha/bin/_mocha",
-    "test": "npm run eslint && npm run test-cov",
-    "eslint": "eslint libs/",
-    "test-cov": "istanbul cover ./node_modules/mocha/bin/_mocha"
+    "test": "node ./node_modules/mocha/bin/_mocha"
   },
   "keywords": [
-    "mock",
-    "server"
+    "e2e",
+    "test"
   ],
   "author": "helinjiang",
   "license": "MIT",
@@ -55,10 +52,8 @@
     "yeoman-generator": "^3.1.1"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
     "chai": "^4.2.0",
-    "eslint": "^5.7.0",
-    "mocha": "^5.2.0",
+    "mocha": "^7.1.2",
     "superagent": "^3.8.3"
   }
 }
