@@ -52,7 +52,7 @@ export default class PageDriver {
 
         this.nightmareConfig = {};
         this.proxyServer = '';
-        this.mockstarOpts = null;
+        this.mockstarQuery = null;
 
         this.cookies = '';
         this.deviceConfig = null;
@@ -127,12 +127,17 @@ export default class PageDriver {
     /**
      * 使用 mockstar 工具来做接口 mock 数据
      *
-     * @param opts
+     * @param {MockStarQuery} mockstarQuery 详见 matman 组件的定义
      * @return {PageDriver}
      * @author helinjiang
      */
-    useMockstar(opts) {
-        this.mockstarOpts = opts;
+    useMockstar(mockstarQuery) {
+        if (!mockstarQuery || (typeof mockstarQuery.getQueryString !== 'function')) {
+            throw new Error('请传递正确的 MockStarQuery 对象，请参考： https://www.npmjs.com/package/mockstar');
+        }
+
+        this.mockstarQuery = mockstarQuery;
+
         return this;
     }
 

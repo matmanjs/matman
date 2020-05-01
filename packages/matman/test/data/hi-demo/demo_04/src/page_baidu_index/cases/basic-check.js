@@ -1,3 +1,4 @@
+const { createMockStarQuery } = require('mockstar');
 const matman = require('../../../../../../../');
 
 function getResult(opts) {
@@ -11,6 +12,10 @@ function getResult(opts) {
 
         // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
         .useProxyServer(`127.0.0.1:${process.env.PORT || 8899}`)
+
+        .useMockstar(createMockStarQuery({
+            'demo_cgi': 'success_type_2'
+        }))
 
         // 加载页面地址
         .goto('https://www.baidu.com/index.html')
