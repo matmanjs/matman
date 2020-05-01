@@ -45,7 +45,7 @@ export default class CrawlerParser {
      * 通过 crawler script 的源文件路径获得其构建之后的文件路径
      *
      * @param {String} srcPath 构建之前的文件路径
-     * @return {String} 构建之后的文件路径
+     * @return {String} 构建之后的文件路径，如果未找到则返回空值
      * @author helinjiang
      */
     getCrawlerScriptPath(srcPath) {

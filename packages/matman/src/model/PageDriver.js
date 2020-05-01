@@ -60,7 +60,6 @@ export default class PageDriver {
         this.nightmareWaitFn = 500;
         this.nightmareWaitFnArgs = [];
 
-        this.crawlerScriptPath = '';
         this.nightmareEvaluateFn = null;
         this.nightmareEvaluateFnArgs = [];
 
@@ -220,10 +219,17 @@ export default class PageDriver {
     evaluate(fn, ...args) {
         if (typeof fn === 'string') {
             // 获取 crawler script 的源文件目录
+            // fn 有可能是绝对路径，也可能是相对路径，但都要转为绝对路径
+            // 如果是相对路径，则是相对于 caseModuleFilePath 而言的
             const crawlerScriptSrcPath = path.resolve(path.dirname(this.caseModuleFilePath), fn);
 
             // 调用 crawlerParser 的方法获得该脚本构建之后的路径
             this.nightmareEvaluateFn = new CrawlerParser(this.matmanConfig).getCrawlerScriptPath(crawlerScriptSrcPath);
+
+            // 有可能地址不存在脚本构建地址，此时给与提示
+            if (!this.nightmareEvaluateFn) {
+                new Error(`无法根据 ${fn} 获得构建之后的爬虫脚本文件，请检查文件路径是否正确，或者检查是否执行过构建！`);
+            }
         } else {
             this.nightmareEvaluateFn = fn;
             this.nightmareEvaluateFnArgs = args;
