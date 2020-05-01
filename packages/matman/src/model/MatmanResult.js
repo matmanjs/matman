@@ -5,6 +5,7 @@ export default class MatmanResult {
      * matman 框架执行的结果
      *
      * @param {Object} result
+     * @author helinjiang
      */
     constructor(result = {}) {
         /**
@@ -28,8 +29,10 @@ export default class MatmanResult {
 
     /**
      * 获得数据
+     *
      * @param {String || Number} key 结果的key值，可以是自定义的名字，也可以是数组索引
      * @return {Object}
+     * @author helinjiang
      */
     get(key) {
         const i = this._dataIndexMap[key];
@@ -41,6 +44,7 @@ export default class MatmanResult {
      *
      * @param {String} [globalInfoRecorderKey]
      * @return {Array}
+     * @author helinjiang
      */
     getQueue(globalInfoRecorderKey = 'recorder') {
         return (this.globalInfo[globalInfoRecorderKey] && this.globalInfo[globalInfoRecorderKey].queue) || [];
@@ -61,6 +65,7 @@ export default class MatmanResult {
             OTHER: 'other'
         }
      * @return {Array}
+     * @author helinjiang
      */
     getNetwork(resourceType) {
         const queue = this.getQueue();
@@ -86,10 +91,12 @@ export default class MatmanResult {
 
     /**
      * 是否存在某个网络请求
-     * @param {String} partialURL
-     * @param query
-     * @param resourceType
-     * @return {boolean}
+     *
+     * @param {String} partialURL 用于匹配的部分url
+     * @param {Object} [query] 请求携带的 query 参数
+     * @param {String} [resourceType] 资源类型
+     * @return {Boolean}
+     * @author helinjiang
      */
     isExistInNetwork(partialURL, query = {}, resourceType) {
         const queue = this.getNetwork(resourceType);
@@ -106,9 +113,11 @@ export default class MatmanResult {
 
     /**
      * 是否存在某个页面
-     * @param {String} partialURL
-     * @param query
-     * @return {boolean}
+     *
+     * @param {String} partialURL 用于匹配的部分url
+     * @param {Object} [query] 请求携带的 query 参数
+     * @return {Boolean}
+     * @author helinjiang
      */
     isExistPage(partialURL, query = {}) {
         return this.isExistInNetwork(partialURL, query, 'mainFrame');
@@ -116,9 +125,11 @@ export default class MatmanResult {
 
     /**
      * 是否存在某个xhr请求
-     * @param {String} partialURL
-     * @param query
-     * @return {boolean}
+     *
+     * @param {String} partialURL 用于匹配的部分url
+     * @param {Object} [query] 请求携带的 query 参数
+     * @return {Boolean}
+     * @author helinjiang
      */
     isExistXHR(partialURL, query = {}) {
         return this.isExistInNetwork(partialURL, query, 'xhr');

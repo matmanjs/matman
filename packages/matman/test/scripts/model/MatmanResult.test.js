@@ -113,5 +113,45 @@ describe('check model/MatmanResult.js', () => {
             expect(matmanResult.getNetwork('other')).to.have.lengthOf(1);
         });
     });
+
+    describe('check isExistInNetwork(partialURL, query = {}, resourceType)', () => {
+        const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+
+        it('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif should return true', () => {
+            expect(matmanResult.isExistInNetwork('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif')).to.be.true;
+        });
+
+        it('https://www.baidu.com should return true', () => {
+            expect(matmanResult.isExistInNetwork('https://www.baidu.com')).to.be.true;
+        });
+
+        it('https://www.baidu.com/sugrec should return true', () => {
+            expect(matmanResult.isExistInNetwork('www.baidu.com/sugrec', { prod: 'pc_his' })).to.be.true;
+        });
+    });
+
+    describe('check isExistPage(partialURL, query = {})', () => {
+        const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+
+        it('https://www.baidu.com should return true', () => {
+            expect(matmanResult.isExistPage('https://www.baidu.com')).to.be.true;
+        });
+
+        it('https://www.baidu.com/sugrec should return false', () => {
+            expect(matmanResult.isExistPage('www.baidu.com/sugrec', { prod: 'pc_his' })).to.be.false;
+        });
+    });
+
+    describe('check isExistXHR(partialURL, query = {})', () => {
+        const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+
+        it('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif should return false', () => {
+            expect(matmanResult.isExistXHR('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif')).to.be.false;
+        });
+
+        it('https://www.baidu.com/sugrec should return true', () => {
+            expect(matmanResult.isExistXHR('www.baidu.com/sugrec', { prod: 'pc_his' })).to.be.true;
+        });
+    });
 });
 
