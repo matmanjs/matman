@@ -112,8 +112,8 @@ export default class NightmareMaster {
         }
 
         // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下
-        if (this.pageDriver.mockstarQuery && (typeof this.pageDriver.mockstarQuery.getQueryString === 'function')) {
-            this.pageDriver.pageUrl = this.pageDriver.pageUrl + ((this.pageDriver.pageUrl.indexOf('?') > -1) ? '&' : '?') + this.pageDriver.mockstarQuery.getQueryString();
+        if (this.pageDriver.mockstarQuery && (typeof this.pageDriver.mockstarQuery.appendToUrl === 'function')) {
+            this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
         }
 
         //  钩子事件：加载页面之前要执行的方法

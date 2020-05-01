@@ -13,9 +13,8 @@ function getResult(opts) {
         // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
         .useProxyServer(`127.0.0.1:${process.env.PORT || 8899}`)
 
-        .useMockstar(createMockStarQuery({
-            'demo_cgi': 'success_type_2'
-        }))
+        // 使用 mockstar 来做构造假数据
+        .useMockstar(createMockStarQuery(opts.queryDataMap))
 
         // 加载页面地址
         .goto('https://www.baidu.com/index.html')
@@ -39,7 +38,14 @@ function getResult(opts) {
 
 module.exports = getResult;
 
-// getResult({ show: true, doNotCloseBrowser: true, useRecorder: false })
+// getResult({
+//     show: true,
+//     doNotCloseBrowser: true,
+//     useRecorder: false,
+//     queryDataMap: {
+//         'demo_cgi': 'success_type_2'
+//     }
+// })
 //     .then(function (result) {
 //         console.log(JSON.stringify(result));
 //     })

@@ -2,13 +2,20 @@ const expect = require('chai').expect;
 
 const checkPage = require('../../../packages/matman/test/data/hi-demo/demo_04/src/page_baidu_index/cases/basic-check');
 
-describe('百度首页：使用本地项目和mockstar', function () {
+describe('使用本地项目和mockstar: success_type_2', function () {
     this.timeout(30000);
 
     let resultData;
 
     before(function () {
-        return checkPage({ show: false, doNotCloseBrowser: false, useRecorder: false })
+        return checkPage({
+            show: false,
+            doNotCloseBrowser: false,
+            useRecorder: false,
+            queryDataMap: {
+                'demo_cgi': 'success_type_2'
+            }
+        })
             .then(function (result) {
                 // console.log(JSON.stringify(result));
                 resultData = result;
@@ -31,7 +38,7 @@ describe('百度首页：使用本地项目和mockstar', function () {
         });
 
         it('消息文字应该为：我是学生', function () {
-            expect(data.msgText).to.equal('我是学生');
+            expect(data.msgText).to.equal('我是老师');
         });
 
         it('加载完成提示文字应该为：loaded!', function () {
