@@ -147,9 +147,9 @@ export default class NightmareMaster {
         }
 
         // 设置 cookie
-        // if (this.cookie) {
-        //     this.nightmareRun = this.nightmareRun.exCookies(this.cookie, getMainUrl(this.pageUrl));
-        // }
+        if (this.pageDriver.cookies) {
+            this.nightmareRun = this.nightmareRun.exCookies(this.pageDriver.cookies, getMainUrl(this.pageDriver.pageUrl));
+        }
 
         //  钩子事件：加载页面之前要执行的方法
         this.onBeforeGotoPage(this);

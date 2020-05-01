@@ -1,6 +1,7 @@
 module.exports = () => {
     return {
         title: document.title,
+        cookie: document.cookie,
         searchInputInfo: getSearchInputInfo(),
         searchResultInfo: getSearchResultInfo()
     };

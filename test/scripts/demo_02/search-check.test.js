@@ -2,7 +2,6 @@ const expect = require('chai').expect;
 
 const checkPage = require('../../../packages/matman/test/data/hi-demo/demo_02/src/page_baidu_index/cases/search-check');
 
-
 describe('百度首页：搜索', function () {
     this.timeout(30000);
 
@@ -25,6 +24,10 @@ describe('百度首页：搜索', function () {
 
         it('title 应该为： 百度一下，你就知道', function () {
             expect(data.title).to.equal('百度一下，你就知道');
+        });
+
+        it('cookie： 应该包含 mykey1=myvalue1; mykey2=myvalue2', function () {
+            expect(data.cookie).to.match(new RegExp('mykey1=myvalue1; mykey2=myvalue2', 'gi'));
         });
 
         it('searchInputInfo： 搜索框为空', function () {
