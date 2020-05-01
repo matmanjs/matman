@@ -13,7 +13,7 @@ function getResult(opts) {
         .useProxyServer(`127.0.0.1:${process.env.PORT || 8899}`)
 
         // 加载页面地址
-        .goto('https://www.baidu.com')
+        .goto('https://www.baidu.com/somepage.html')
 
         // 执行爬虫脚本之前，需要等待某些条件达成，与 nightmare 的 wait 含义和用法一致
         .wait('#say-hello')
