@@ -159,13 +159,19 @@ export default class PageDriver {
     }
 
     /**
-     * 设置覆盖率配置，有默认值
+     * 设置覆盖率配置
      *
-     * @param coverageConfig
+     * @param {Boolean | String | Object} coverageConfig
      * @return {PageDriver}
      */
     setCoverageConfig(coverageConfig) {
-        this.coverageConfig = new CoverageConfig(this.matmanConfig, coverageConfig, this.caseModuleFilePath, this.tag);
+        if (coverageConfig) {
+            this.coverageConfig = new CoverageConfig(this.matmanConfig, coverageConfig, this.caseModuleFilePath, this.tag);
+
+            // 要保证这个目录存在，否则保存时会报错
+            fse.ensureDirSync(path.dirname(this.coverageConfig.path));
+        }
+
         return this;
     }
 
@@ -246,10 +252,10 @@ export default class PageDriver {
     end() {
         let nightmareMaster = new NightmareMaster(this);
 
-        // 用户的自定义行为
-        // if (typeof callAction === 'function') {
-        //     callAction(nightmareMaster);
-        // }
+        // 默认处理 coverage，根据 window.__coverage__
+        if (!this.coverageConfig) {
+            this.setCoverageConfig(true);
+        }
 
         // 兼容没有定义 run 方法的场景
         if (!this.actionList.length) {
