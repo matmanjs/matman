@@ -1,26 +1,10 @@
 import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
-import ScreenshotConfig from './ScreenshotConfig';
-import CoverageConfig from './CoverageConfig';
-import DeviceConfig from './DeviceConfig';
 
 export default class NightmareMaster {
     /**
      * 构造函数
      *
-     * @param {String} pageUrl 页面的 URL 地址
-     * @param {String} crawlerScriptPath 运行在浏览器中的前端爬虫脚本，需要是绝对路径
-     * @param {Object} [opts] 额外参数
-     * @param {Boolean} [opts.show] 是否需要展示浏览器，默认为 false
-     * @param {String} [opts.proxyServer] 代理服务器，例如 127.0.0.1:8899，或者 `my_proxy_server.example.com:8080`，详见 https://github.com/segmentio/nightmare#switches
-     * @param {String | Number} [opts.wait] wait配置，会直接透传给 nightmare 的 wait 配置项，详细请查看 https://github.com/segmentio/nightmare#waitms
-     * @param {Boolean} [opts.doNotEnd] 是否在执行完成之后不要关闭浏览器，默认为 false
-     * @param {String} [opts.cookie] 为浏览器注入cookie，格式与 document.cookie 一致
-     * @param {Object} [opts.mockstarQuery] 指定 mockstar 的query参数，用于数据打桩
-     * @param {Boolean} [opts.useRecorder] 是否使用记录器记录所有浏览器行为，包括请求等
-     * @param {String} [opts.tag] 额外标记，用于区分不同的执行，在截图等场景做区分
-     * @param {undefined | ScreenshotConfig} [opts.screenshotConfig] 截图设置
-     * @param {undefined | DeviceConfig} [opts.deviceConfig] 设备设置
-     * @param {undefined | CoverageConfig} [opts.coverageConfig] 测试覆盖率设置
+     * @param {PageDriver} pageDriver
      */
     constructor(pageDriver) {
         this.pageDriver = pageDriver;
@@ -36,41 +20,15 @@ export default class NightmareMaster {
             return (typeof useRecorder === 'boolean') ? 'recorder' : useRecorder + '';
         })(this.pageDriver.useRecorder);
 
+        // nightmare 对象
         this.nightmare = null;
 
-        // this.pageUrl = pageUrl;
-        // this.crawlerScriptPath = crawlerScriptPath;
-        //
-        // // 校验 crawlerScriptPath 必须是存在的，否则后续的逻辑也执行不了
-        // // 如果获取 client script 地址不存在，则抛出异常提示
-        // if (!fs.existsSync(crawlerScriptPath)) {
-        //     throw new Error('Unknown crawlerScriptPath=' + crawlerScriptPath);
-        // }
-        //
-        // this.show = opts.show;
-        // this.wait = opts.wait;
-        // this.doNotEnd = opts.doNotEnd;
-        // this.cookie = opts.cookie;
-        //
-        // /**
-        //  * 设置代理服务器。
-        //  * https://github.com/segmentio/nightmare#switches
-        //  *
-        //  * @type {String} 代理服务器，类似 my_proxy_server.example.com:8080
-        //  */
-        // this.proxyServer = opts.proxyServer;
-        //
         // this.mockstarQuery = opts.mockstarQuery || null;
-        //
-        // // 截屏设置
-        // this.screenshotConfig = opts.screenshotConfig;
-        //
-        // // 设备设置
-        // this.deviceConfig = opts.deviceConfig;
-        //
+
         // // 测试覆盖率
         // this.coverageConfig = opts.coverageConfig;
 
+        // 存储网络请求和浏览器事件等信息
         this.globalInfo = {};
 
         this.onNightmareCreated = (self) => {
