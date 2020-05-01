@@ -1,3 +1,4 @@
+import path from 'path';
 import fse from 'fs-extra';
 import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
 
@@ -130,13 +131,18 @@ export default class NightmareMaster {
         }
 
         // 循环处理多个 action
-        let result = [];
+        const result = [];
 
         for (let i = 0, length = this.pageDriver.actionList.length; i < length; i++) {
             let curRun = this.pageDriver.actionList[i](this.nightmareRun);
 
             if (this.pageDriver.screenshotConfig) {
-                curRun.screenshot(this.pageDriver.screenshotConfig.getPathWithId(i + 1), this.pageDriver.screenshotConfig.clip);
+                const screenshotFilePath = this.pageDriver.screenshotConfig.getPathWithId(i + 1);
+
+                // 要保证这个目录存在，否则保存时会报错
+                fse.ensureDirSync(path.dirname(screenshotFilePath));
+
+                curRun.screenshot(screenshotFilePath, this.pageDriver.screenshotConfig.clip);
             }
 
             let t;
@@ -149,10 +155,14 @@ export default class NightmareMaster {
             // 覆盖率数据
             if (t.__coverage__ && this.pageDriver.coverageConfig) {
                 const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
+
                 try {
                     await fse.outputJson(coverageFilePath, t.__coverage__);
 
-                    // 记录之后就删除之
+                    // 设置存在的标志
+                    this.globalInfo.isExistCoverageReport = true;
+
+                    // 记录之后就删除之，否则返回的数据太大了
                     delete t.__coverage__;
                 } catch (e) {
                     console.log('save coverage file fail', coverageFilePath, e);

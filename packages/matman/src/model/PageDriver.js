@@ -167,9 +167,6 @@ export default class PageDriver {
     setScreenshotConfig(screenshotConfig) {
         if (screenshotConfig) {
             this.screenshotConfig = new ScreenshotConfig(this.matmanConfig, screenshotConfig, this.caseModuleFilePath, this.tag);
-
-            // 要保证这个目录存在，否则保存时会报错
-            fse.ensureDirSync(path.dirname(this.screenshotConfig.path));
         }
         return this;
     }
@@ -184,9 +181,6 @@ export default class PageDriver {
     setCoverageConfig(coverageConfig) {
         if (coverageConfig) {
             this.coverageConfig = new CoverageConfig(this.matmanConfig, coverageConfig, this.caseModuleFilePath, this.tag);
-
-            // 要保证这个目录存在，否则保存时会报错
-            fse.ensureDirSync(path.dirname(this.coverageConfig.path));
         }
 
         return this;
@@ -298,13 +292,13 @@ export default class PageDriver {
             .then((resultData) => {
                 return new MatmanResult(resultData);
             })
-            .then((result) => {
+            .then((matmanResult) => {
                 // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回
                 if (this._isDefaultScanMode) {
-                    result.data = result.get(0);
+                    matmanResult.data = matmanResult.get(0);
                 }
 
-                return result;
+                return matmanResult;
             });
     }
 
