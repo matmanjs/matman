@@ -1,6 +1,8 @@
 const fs = require('fs');
+const fse = require('fs-extra');
 const path = require('path');
 const runCmd = require('./run-cmd');
+const { startWhistle } = require('./start-whistle');
 
 /**
  * 运行 lerna bootstrap 来初始
@@ -129,16 +131,64 @@ function runBuildForEachDemoProject() {
 }
 
 /**
+ * 执行设置 whistle
+ *
+ * @return {Promise<>}
+ */
+function runUseWhistle() {
+    const t = Date.now();
+
+    console.error('开始设置 whistle...');
+
+    return new Promise((resolve, reject) => {
+        startWhistle()
+            .then((port) => {
+                console.log(`whistle 已启动，端口为 ${port}！耗时${Date.now() - t}ms`);
+
+                const whistleOfDemo03 = require('../packages/matman/test/data/hi-demo/demo_03/whistle');
+                const whistleRules = whistleOfDemo03.getDevRules({ port });
+                const tmpWhistleConfigPath = path.join(__dirname, 'tmp/whistle.dev.js');
+
+                // 文件内容
+                const configFileContent = `module.exports = ${JSON.stringify(whistleRules, null, 2)};`;
+
+                // 保存文件
+                fse.outputFileSync(tmpWhistleConfigPath, configFileContent);
+
+                runCmd.runByExec('w2 add tmp/whistle.dev.js --force', { cwd: __dirname })
+                    .then((data) => {
+                        console.log(`whistle 设置完成！耗时${Date.now() - t}ms`);
+                        resolve(port);
+                    })
+                    .catch((err) => {
+                        console.error('whistle 设置失败', err);
+                        reject(err);
+                    });
+            })
+            .catch((err) => {
+                console.error('whistle 启动失败', err);
+                reject(err);
+            });
+    });
+}
+
+/**
  * 执行端对端测试用例
  *
  * @return {Promise<>}
  */
-function runTestDirect() {
+function runTestDirect(whistlePort) {
     const t = Date.now();
 
     console.error('开始执行端对端测试用例...');
 
-    return runCmd.runByExec('npm run test:direct', { cwd: path.join(__dirname, '../') })
+    let cmd = 'npm run test:direct';
+
+    if (whistlePort) {
+        cmd = `cross-env PORT=${whistlePort} ${cmd}`;
+    }
+
+    return runCmd.runByExec(cmd, { cwd: path.join(__dirname, '../') })
         .then((data) => {
             console.log(`端对端测试用例执行执行完成！耗时${Date.now() - t}ms`);
             return data;
@@ -160,19 +210,24 @@ const t = Date.now();
 //==================================================================
 // 1. 安装依赖和处理 package 之间的依赖
 runLernaBootstrap()
-    .then((data) => {
+    .then(() => {
         // 2. 为各个 package 执行构建，因为后续测试流程都直接引用的是同源代码构建产物
         return runBuildForEachPackage()
-            .then((data) => {
+            .then(() => {
                 // 3. 为各个 package 执行单元测试
-                return runTestForEachPackage().then(() => {
-                    // 4. 构建爬虫脚本，否则执行的时候爬虫脚本若不存在则会报错
-                    return runBuildForEachDemoProject()
-                        .then((data) => {
-                            // 5. 执行端对端自动化测试
-                            return runTestDirect();
-                        });
-                });
+                return runTestForEachPackage()
+                    .then(() => {
+                        // 4. 构建爬虫脚本，否则执行的时候爬虫脚本若不存在则会报错
+                        return runBuildForEachDemoProject()
+                            .then(() => {
+                                // 5. 启动 whistle
+                                return runUseWhistle()
+                                    .then((whistlePort) => {
+                                        // 6. 执行端对端自动化测试
+                                        return runTestDirect(whistlePort);
+                                    });
+                            });
+                    });
             });
     })
     .then((data) => {
