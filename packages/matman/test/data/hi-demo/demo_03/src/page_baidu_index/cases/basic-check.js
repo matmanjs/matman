@@ -32,12 +32,12 @@ function getResult(opts) {
 
 module.exports = getResult;
 
-getResult({ show: true, doNotCloseBrowser: true, useRecorder: false })
-    .then(function (result) {
-        console.log(JSON.stringify(result));
-    })
-    .catch(function (error) {
-        console.error('failed:', error);
-    });
+// getResult({ show: true, doNotCloseBrowser: true, useRecorder: false })
+//     .then(function (result) {
+//         console.log(JSON.stringify(result));
+//     })
+//     .catch(function (error) {
+//         console.error('failed:', error);
+//     });
 
 
