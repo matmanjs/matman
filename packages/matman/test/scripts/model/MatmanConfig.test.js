@@ -38,10 +38,10 @@ describe('check model/MatmanConfig.js', () => {
             expect(matmanConfig.crawlerMatch).to.eql(/[\/|\\]crawlers[\/|\\].*\.js$/);
             expect(matmanConfig.crawlerInjectJQuery).to.be.true;
             expect(matmanConfig.isDevBuild).to.be.false;
-            expect(matmanConfig.screenshotPath).to.equal(path.join(rootPath, './build/screenshot'));
+            expect(matmanConfig.screenshotPath).to.equal(path.join(rootPath, './build/screenshot_output'));
             expect(matmanConfig.coveragePath).to.equal(path.join(rootPath, './build/coverage_output'));
 
-            expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'screenshotPath', 'coveragePath');
+            expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'matmanResultPath', 'screenshotPath', 'coveragePath');
         });
 
         it('check demo2: custom value', () => {
@@ -67,7 +67,7 @@ describe('check model/MatmanConfig.js', () => {
             expect(matmanConfig.screenshotPath).to.equal(path.join(rootPath, './build/my-screenshot'));
             expect(matmanConfig.coveragePath).to.equal(path.join(rootPath, './build/my-coverage_output'));
 
-            expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'screenshotPath', 'coveragePath');
+            expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'matmanResultPath', 'screenshotPath', 'coveragePath');
         });
     });
 });
