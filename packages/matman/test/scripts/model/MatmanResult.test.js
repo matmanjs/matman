@@ -121,6 +121,14 @@ describe('check model/MatmanResult.js', () => {
             expect(matmanResult.isExistInNetwork('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif')).to.be.true;
         });
 
+        it('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif and status=200 should return true', () => {
+            expect(matmanResult.isExistInNetwork('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif', {}, '', 200)).to.be.true;
+        });
+
+        it('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif and status=404  should return false', () => {
+            expect(matmanResult.isExistInNetwork('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif', {}, '', 404)).to.be.false;
+        });
+
         it('https://www.baidu.com should return true', () => {
             expect(matmanResult.isExistInNetwork('https://www.baidu.com')).to.be.true;
         });
@@ -137,6 +145,14 @@ describe('check model/MatmanResult.js', () => {
             expect(matmanResult.isExistPage('https://www.baidu.com')).to.be.true;
         });
 
+        it('https://www.baidu.com and status=200 should return true', () => {
+            expect(matmanResult.isExistPage('https://www.baidu.com', {}, 200)).to.be.true;
+        });
+
+        it('https://www.baidu.com and status=404 should return true', () => {
+            expect(matmanResult.isExistPage('https://www.baidu.com', {}, 404)).to.be.false;
+        });
+
         it('https://www.baidu.com/sugrec should return false', () => {
             expect(matmanResult.isExistPage('www.baidu.com/sugrec', { prod: 'pc_his' })).to.be.false;
         });
@@ -151,6 +167,14 @@ describe('check model/MatmanResult.js', () => {
 
         it('https://www.baidu.com/sugrec should return true', () => {
             expect(matmanResult.isExistXHR('www.baidu.com/sugrec', { prod: 'pc_his' })).to.be.true;
+        });
+
+        it('https://www.baidu.com/sugrec and status=200 should return true', () => {
+            expect(matmanResult.isExistXHR('www.baidu.com/sugrec', { prod: 'pc_his' }, 200)).to.be.true;
+        });
+
+        it('https://www.baidu.com/sugrec and status=500 should return true', () => {
+            expect(matmanResult.isExistXHR('www.baidu.com/sugrec', { prod: 'pc_his' }, 500)).to.be.false;
         });
     });
 });

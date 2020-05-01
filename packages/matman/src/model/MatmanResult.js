@@ -95,20 +95,34 @@ export default class MatmanResult {
      * @param {String} partialURL 用于匹配的部分url
      * @param {Object} [query] 请求携带的 query 参数
      * @param {String} [resourceType] 资源类型
+     * @param {Number} [status] 状态码
      * @return {Boolean}
      * @author helinjiang
      */
-    isExistInNetwork(partialURL, query = {}, resourceType) {
+    isExistInNetwork(partialURL, query = {}, resourceType, status) {
         const queue = this.getNetwork(resourceType);
+
+        let result = false;
 
         // 只要找到其中一个匹配即可返回
         for (let i = 0; i < queue.length; i++) {
-            if (isURLMatch(queue[i].args[3], partialURL, query)) {
-                return true;
+            const queueItem = queue[i];
+
+            // 如果没有匹配到链接则执行下一个
+            if (!isURLMatch(queueItem.args[3], partialURL, query)) {
+                continue;
             }
+
+            // 如果匹配了链接，但未匹配 status，也算失败
+            if (status && (queueItem.args[4] !== status)) {
+                continue;
+            }
+
+            result = true;
+            break;
         }
 
-        return false;
+        return result;
     }
 
     /**
@@ -116,22 +130,63 @@ export default class MatmanResult {
      *
      * @param {String} partialURL 用于匹配的部分url
      * @param {Object} [query] 请求携带的 query 参数
+     * @param {Number} [status] 状态码
      * @return {Boolean}
      * @author helinjiang
      */
-    isExistPage(partialURL, query = {}) {
-        return this.isExistInNetwork(partialURL, query, 'mainFrame');
+    isExistPage(partialURL, query = {}, status) {
+        return this.isExistInNetwork(partialURL, query, 'mainFrame', status);
     }
 
     /**
-     * 是否存在某个xhr请求
+     * 是否存在某个 xhr 请求
      *
      * @param {String} partialURL 用于匹配的部分url
      * @param {Object} [query] 请求携带的 query 参数
+     * @param {Number} [status] 状态码
      * @return {Boolean}
      * @author helinjiang
      */
-    isExistXHR(partialURL, query = {}) {
-        return this.isExistInNetwork(partialURL, query, 'xhr');
+    isExistXHR(partialURL, query = {}, status) {
+        return this.isExistInNetwork(partialURL, query, 'xhr', status);
+    }
+
+    /**
+     * 是否存在某个 image 请求
+     *
+     * @param {String} partialURL 用于匹配的部分url
+     * @param {Object} [query] 请求携带的 query 参数
+     * @param {Number} [status] 状态码
+     * @return {Boolean}
+     * @author helinjiang
+     */
+    isExistImage(partialURL, query = {}, status) {
+        return this.isExistInNetwork(partialURL, query, 'image', status);
+    }
+
+    /**
+     * 是否存在某个 stylesheet 请求
+     *
+     * @param {String} partialURL 用于匹配的部分url
+     * @param {Object} [query] 请求携带的 query 参数
+     * @param {Number} [status] 状态码
+     * @return {Boolean}
+     * @author helinjiang
+     */
+    isExistStylesheet(partialURL, query = {}, status) {
+        return this.isExistInNetwork(partialURL, query, 'stylesheet', status);
+    }
+
+    /**
+     * 是否存在某个 script 请求
+     *
+     * @param {String} partialURL 用于匹配的部分url
+     * @param {Object} [query] 请求携带的 query 参数
+     * @param {Number} [status] 状态码
+     * @return {Boolean}
+     * @author helinjiang
+     */
+    isExistScript(partialURL, query = {}, status) {
+        return this.isExistInNetwork(partialURL, query, 'script', status);
     }
 };
