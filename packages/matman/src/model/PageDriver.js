@@ -1,5 +1,4 @@
 import fs from 'fs';
-import fse from 'fs-extra';
 import path from 'path';
 
 import _ from 'lodash';
@@ -257,7 +256,7 @@ export default class PageDriver {
 
             // 有可能地址不存在脚本构建地址，此时给与提示
             if (!this.nightmareEvaluateFn) {
-                new Error(`无法根据 ${fn} 获得构建之后的爬虫脚本文件，请检查文件路径是否正确，或者检查是否执行过构建！`);
+                throw new Error(`无法根据 ${fn} 获得构建之后的爬虫脚本文件，请检查文件路径是否正确，或者检查是否执行过构建！`);
             }
         } else {
             this.nightmareEvaluateFn = fn;

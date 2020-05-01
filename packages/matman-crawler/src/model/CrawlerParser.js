@@ -62,11 +62,11 @@ export default class CrawlerParser {
 
             // 如果替换之后的本地文件路径不存在，则将其置空
             if (!fs.existsSync(result)) {
-                console.error(`getCrawlerScriptPath(${srcPath}) not exist build file`, result);
+                // console.error(`getCrawlerScriptPath(${srcPath}) not exist build file`, result);
                 result = '';
             }
         } catch (err) {
-            console.error(`getCrawlerScriptPath(${srcPath}) catch err`, entryName, err);
+            // console.error(`getCrawlerScriptPath(${srcPath}) catch err`, entryName, err);
         }
 
         return result;
