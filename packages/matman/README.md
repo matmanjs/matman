@@ -55,7 +55,7 @@ const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-pa
   - `opts.tag`：`String`，特定标记，例如两个 test 脚本都使用同一个行为脚本，那么如果定义了 `tag`，则截图命名中会将其加入其中，避免覆盖，特别的，如果传入 `__dirname` ，我们将自动获取当前文件名，可以简化使用
 - `callAction`：`Function`，定义用户交互行为的函数，接受一个 `BaseHandle` 对象参数
 
-返回一个 `Promise`， `resolve` 返回的值为 `CaseParserOperateResult` 对象，除了包含了 `{data: Array, _dataIndexMap:Object, globalInfo: Object}` ，同时提供了以下方法：
+返回一个 `Promise`， `resolve` 返回的值为 `MatmanResult` 对象，除了包含了 `{data: Array, _dataIndexMap:Object, globalInfo: Object}` ，同时提供了以下方法：
 
 - `get(key)` ，获得指定自定义行为名字的数据结果
 - `getQueue()`，获得所有的事件结果
