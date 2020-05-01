@@ -16,6 +16,9 @@ function getResult(opts) {
             'height': 400
         })
 
+        // 设置 cookie
+        .setCookies('mykey1=myvalue1; mykey2=myvalue2')
+
         // 设置截屏，默认不截图
         .setScreenshotConfig(true)
 

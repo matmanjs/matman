@@ -50,7 +50,7 @@ export default class PageDriver {
         this.proxyServer = '';
         this.mockstarOpts = null;
 
-        this.cookie = '';
+        this.cookies = '';
         this.deviceConfig = null;
         this.screenshotConfig = null;
         this.coverageConfig = null;
@@ -120,13 +120,14 @@ export default class PageDriver {
     }
 
     /**
-     * 为浏览器注入cookie，格式与 document.cookie 一致
+     * 为浏览器注入cookie
+     * 参考 https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
      *
-     * @param cookie
+     * @param {String | Object } cookies
      * @return {PageDriver}
      */
-    setCookie(cookie) {
-        this.cookie = cookie;
+    setCookies(cookies) {
+        this.cookies = cookies;
         return this;
     }
 
