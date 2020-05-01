@@ -28,7 +28,7 @@ function runLernaBootstrap() {
  *
  * @return {Promise<>}
  */
-function runBuildPackages() {
+function runBuildForEachPackage() {
     const t = Date.now();
 
     console.error('开始执行构建 packages ...');
@@ -51,11 +51,50 @@ function runBuildPackages() {
 }
 
 /**
- * 执行构建爬虫脚本
+ * 执行各 package 中测试用例
  *
  * @return {Promise<>}
  */
-function runBuildCrawlerScript() {
+function runTestForEachPackage() {
+    const t = Date.now();
+
+    console.error('开始执行各 package 中测试用例...');
+
+    // 自动获取
+    const PACKAGES_ROOT = path.join(__dirname, '../packages');
+    const demoArr = fs.readdirSync(PACKAGES_ROOT);
+    const promiseList = [];
+
+    demoArr.forEach((demoName) => {
+        //获取当前文件的绝对路径
+        const fileDir = path.join(PACKAGES_ROOT, demoName);
+
+        if (!fs.statSync(fileDir).isDirectory()) {
+            return;
+        }
+
+        promiseList.push(runCmd.runByExec('npm test', { cwd: fileDir }));
+    });
+
+    console.log(`待测试的 package 总数量为：${promiseList.length} 个！`);
+
+    return Promise.all(promiseList)
+        .then((data) => {
+            console.log(`执行各 package 中测试用例完成，耗时${Date.now() - t}ms`);
+            return data;
+        })
+        .catch((err) => {
+            console.error('执行各 package 中测试用例时失败', err);
+            return Promise.reject(err);
+        });
+}
+
+/**
+ * 执行各demo中构建爬虫脚本
+ *
+ * @return {Promise<>}
+ */
+function runBuildForEachDemoProject() {
     const t = Date.now();
 
     console.error('开始执行构建爬虫脚本...');
@@ -90,22 +129,22 @@ function runBuildCrawlerScript() {
 }
 
 /**
- * 执行测试用例
+ * 执行端对端测试用例
  *
  * @return {Promise<>}
  */
 function runTestDirect() {
     const t = Date.now();
 
-    console.error('开始执行测试用例...');
+    console.error('开始执行端对端测试用例...');
 
     return runCmd.runByExec('npm run test:direct', { cwd: path.join(__dirname, '../') })
         .then((data) => {
-            console.log(`测试用例执行执行完成！耗时${Date.now() - t}ms`);
+            console.log(`端对端测试用例执行执行完成！耗时${Date.now() - t}ms`);
             return data;
         })
         .catch((err) => {
-            console.error('执行测试时失败', err);
+            console.error('执行端对端测试时失败', err);
             return Promise.reject(err);
         });
 }
@@ -119,14 +158,21 @@ const t = Date.now();
 // 因此在公司内网运行时需要配置好 npm 的 registry: npm config set registry http://r.tnpm.oa.com
 // 详见 http://tnpm.oa.com/
 //==================================================================
+// 1. 安装依赖和处理 package 之间的依赖
 runLernaBootstrap()
     .then((data) => {
-        return runBuildPackages()
+        // 2. 为各个 package 执行构建，因为后续测试流程都直接引用的是同源代码构建产物
+        return runBuildForEachPackage()
             .then((data) => {
-                return runBuildCrawlerScript()
-                    .then((data) => {
-                        return runTestDirect();
-                    });
+                // 3. 为各个 package 执行单元测试
+                return runTestForEachPackage().then(() => {
+                    // 4. 构建爬虫脚本，否则执行的时候爬虫脚本若不存在则会报错
+                    return runBuildForEachDemoProject()
+                        .then((data) => {
+                            // 5. 执行端对端自动化测试
+                            return runTestDirect();
+                        });
+                });
             });
     })
     .then((data) => {
