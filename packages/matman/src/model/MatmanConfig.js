@@ -19,6 +19,7 @@ export default class MatmanConfig {
      * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery，默认值为 true
      * @param {String} [opts.screenshotPath] 屏幕截图保存的路径
      * @param {String} [opts.coveragePath] 覆盖率数据保存的路径
+     * @param {String} [opts.matmanResultPath] 执行结果数据保存的路径
      * @param {Boolean} [opts.isDevBuild] 是否为开发模式
      */
     constructor(rootPath, opts = {}) {
@@ -38,8 +39,9 @@ export default class MatmanConfig {
         this.crawlerInjectJQuery = (typeof opts.crawlerInjectJQuery === 'boolean' ? opts.crawlerInjectJQuery : true);
 
         // 屏幕截图保存的路径
-        this.screenshotPath = getAbsolutePath(opts.screenshotPath || './build/screenshot', this.rootPath);
+        this.screenshotPath = getAbsolutePath(opts.screenshotPath || './build/screenshot_output', this.rootPath);
         this.coveragePath = getAbsolutePath(opts.coveragePath || './build/coverage_output', this.rootPath);
+        this.matmanResultPath = getAbsolutePath(opts.matmanResultPath || './build/matman_result_output', this.rootPath);
 
         // 设置 dev 开发模式
         this.setIsDevBuild(!!opts.isDevBuild);
