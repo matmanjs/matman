@@ -1,7 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-
-import { CrawlerParser } from 'matman-crawler';
 import MatmanConfig from '../model/MatmanConfig';
 
 import { MATMAN_CONFIG_FILE as configFileName } from '../config';
@@ -92,37 +90,6 @@ export function getConfigFilePath(configPath) {
     }
 
     return configPath;
-}
-
-/**
- * 通过某个路径，找到 crawlerParser 对象
- * @param {String} basePath 起始路径
- * @return {null | CrawlerParser}
- */
-export function findCrawlerParser(basePath) {
-    // 获得 matman.config.js 的文件路径
-    const configFilePath = getConfigFilePath(basePath);
-
-    // 如果不是 config file，则从当前路径往上找 config file
-    if (!configFilePath) {
-        console.error('Can not find config file by basePath=' + basePath);
-        return null;
-    }
-
-    // 获取 matman.config.js 中的配置项
-    const configData = require(configFilePath) || {};
-
-    // 根据配置内容获得 crawlerParser 的对象
-    const crawlerParser = new CrawlerParser(configData.rootPath, configData);
-
-    // 如果参数不合理
-    let checkResult = crawlerParser.check();
-    if (!checkResult.result) {
-        console.error(checkResult.msg);
-        return null;
-    }
-
-    return crawlerParser;
 }
 
 /**

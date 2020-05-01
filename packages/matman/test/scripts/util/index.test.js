@@ -2,7 +2,7 @@ import path from 'path';
 import { expect } from 'chai';
 
 import {
-    findCrawlerParser,
+    findMatmanConfig,
     getAbsolutePath,
     getConfigFilePath,
     getFolderNameFromPath,
@@ -10,46 +10,71 @@ import {
     getSaveDirFromPath
 } from '../../../src/util';
 
-let targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
-
 describe('./util/index.js', () => {
     describe('check getConfigFilePath(configPath)', () => {
         it('getConfigFilePath(data/fixtures/util) should return current', () => {
-            let targetDir = path.join(__dirname, '../../data/fixtures/util');
+            const targetDir = path.join(__dirname, '../../data/fixtures/util');
             expect(getConfigFilePath(targetDir)).to.equal(path.join(targetDir, 'matman.config.js'));
         });
 
         it('getConfigFilePath(data/fixtures/util/dir_exist) should return current', () => {
-            let targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
+            const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
             expect(getConfigFilePath(targetDir)).to.equal(path.join(targetDir, 'matman.config.js'));
         });
 
         it('getConfigFilePath(data/fixtures/util/dir_lost) should return parent', () => {
-            let targetDir = path.join(__dirname, '../../data/fixtures/util/dir_lost');
+            const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_lost');
             expect(getConfigFilePath(targetDir)).to.equal(path.join(targetDir, '../matman.config.js'));
         });
 
         it('getConfigFilePath(data/fixtures) should return empty', () => {
-            let targetDir = path.join(__dirname, '../../data/fixtures');
+            const targetDir = path.join(__dirname, '../../data/fixtures');
             expect(getConfigFilePath(targetDir)).to.be.empty;
         });
     });
 
-    describe('check findCrawlerParser(basePath)', () => {
-        it('findCrawlerParser(data/fixtures) should return null', () => {
-            let targetDir = path.join(__dirname, '../../data/fixtures');
-            expect(findCrawlerParser(targetDir)).to.be.null;
+    describe('check findMatmanConfig(basePath, matmanConfigOpts)', () => {
+        it('findMatmanConfig(data/fixtures) should return null', () => {
+            const targetDir = path.join(__dirname, '../../data/fixtures');
+            expect(findMatmanConfig(targetDir)).to.be.null;
         });
 
-        it('findCrawlerParser(data/fixtures/util) should return null', () => {
-            let targetDir = path.join(__dirname, '../../data/fixtures/util');
-            expect(findCrawlerParser(targetDir)).to.be.null;
+        it('findMatmanConfig(data/fixtures/util) should return null because testerPath not exist', () => {
+            const targetDir = path.join(__dirname, '../../data/fixtures/util');
+            expect(findMatmanConfig(targetDir)).to.be.null;
         });
 
-        it('findCrawlerParser(data/fixtures/util/dir_exist) should not return null', () => {
-            let targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
+        it('findMatmanConfig(data/fixtures/util/dir_exist) should not return null', () => {
+            const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
 
-            expect(findCrawlerParser(targetDir)).not.to.be.null;
+            expect(findMatmanConfig(targetDir)).not.to.be.null;
+        });
+
+        it('findMatmanConfig(data/fixtures/util/dir_exist,opts) should rewrite ok', () => {
+            const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
+            const newRootPath = path.join(__dirname, '../../data/fixtures/demo2');
+            const matmanConfig = findMatmanConfig(targetDir, {
+                rootPath: newRootPath,
+                testerPath: './src-testers',
+                crawlerBuildPath: path.join(newRootPath, './build/my-crawler-script'),
+                crawlerMatch: /[\/|\\]my-crawlers[\/|\\].*\.js$/,
+                crawlerInjectJQuery: false,
+                screenshotPath: './build/my-screenshot',
+                coveragePath: './build/my-coverage_output',
+                isDevBuild: true
+            });
+
+            expect(matmanConfig.check().result).to.be.true;
+            expect(matmanConfig.rootPath).to.equal(newRootPath);
+            expect(matmanConfig.testerPath).to.equal(path.join(newRootPath, './src-testers'));
+            expect(matmanConfig.crawlerBuildPath).to.equal(path.join(newRootPath, './build/my-crawler-script_dev'));
+            expect(matmanConfig.crawlerMatch).to.eql(/[\/|\\]my-crawlers[\/|\\].*\.js$/);
+            expect(matmanConfig.crawlerInjectJQuery).to.be.false;
+            expect(matmanConfig.isDevBuild).to.be.true;
+            expect(matmanConfig.screenshotPath).to.equal(path.join(newRootPath, './build/my-screenshot'));
+            expect(matmanConfig.coveragePath).to.equal(path.join(newRootPath, './build/my-coverage_output'));
+
+            expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'screenshotPath', 'coveragePath');
         });
 
     });
