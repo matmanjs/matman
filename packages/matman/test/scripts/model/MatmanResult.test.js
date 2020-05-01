@@ -55,9 +55,62 @@ describe('check model/MatmanResult.js', () => {
             expect(matmanResult.getQueue()).to.be.empty;
         });
 
-        it('matman-result-01-with-global-info getQueue() should return 76', () => {
+        it('matman-result-01-with-global-info getQueue() should return 78', () => {
             const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
             expect(matmanResult.getQueue()).to.have.lengthOf(78);
+        });
+    });
+
+    describe('check getNetwork(resourceType)', () => {
+        it('matman-result-01-no-global-info getNetwork() should return 0', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-no-global-info'));
+
+            expect(matmanResult.getNetwork()).to.have.lengthOf(0);
+        });
+
+        it('matman-result-01-with-global-info getNetwork() should return 67', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork()).to.have.lengthOf(67);
+        });
+
+        it('matman-result-01-with-global-info getNetwork(mainFrame) should return 1', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork('mainFrame')).to.have.lengthOf(1);
+        });
+
+        it('matman-result-01-with-global-info getNetwork(subFrame) should return 0', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork('subFrame')).to.have.lengthOf(0);
+        });
+
+        it('matman-result-01-with-global-info getNetwork(stylesheet) should return 4', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork('stylesheet')).to.have.lengthOf(4);
+        });
+
+        it('matman-result-01-with-global-info getNetwork(script) should return 14', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork('script')).to.have.lengthOf(14);
+        });
+
+        it('matman-result-01-with-global-info getNetwork(image) should return 33', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork('image')).to.have.lengthOf(33);
+        });
+
+        it('matman-result-01-with-global-info getNetwork(object) should return 0', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork('object')).to.have.lengthOf(0);
+        });
+
+        it('matman-result-01-with-global-info getNetwork(xhr) should return 14', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork('xhr')).to.have.lengthOf(14);
+        });
+
+        it('matman-result-01-with-global-info getNetwork(other) should return 1', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getNetwork('other')).to.have.lengthOf(1);
         });
     });
 });
