@@ -35,7 +35,7 @@ export default class CrawlerParser {
                 return item.match(this.matmanConfig.crawlerMatch);
             })
             .forEach((item) => {
-                entry[this._getEntryName(item)] = item;
+                entry[this.getEntryName(item)] = item;
             });
 
         return entry;
@@ -49,7 +49,7 @@ export default class CrawlerParser {
      * @author helinjiang
      */
     getCrawlerScriptPath(srcPath) {
-        const entryName = this._getEntryName(srcPath);
+        const entryName = this.getEntryName(srcPath);
 
         let result = '';
 
@@ -78,9 +78,8 @@ export default class CrawlerParser {
      * @param {String} fullPath 源文件的绝对路径
      * @return {String}
      * @author helinjiang
-     * @private
      */
-    _getEntryName(fullPath) {
+    getEntryName(fullPath) {
         // 获取相对于 testerPath 的相对路径，且去掉 .js 后缀
         return path.relative(this.matmanConfig.testerPath, fullPath).replace('.js', '');
     }
