@@ -100,14 +100,23 @@ export default class PageDriver {
     }
 
     /**
-     * 支持动态设置本次请求动态设置规则，
+     * TODO 支持动态设置本次请求动态设置规则，
      * 这样可以支持自定义的代理mock数据等场景
      *
+     * @param getRulesCall
      * @param opts
      * @return {PageDriver}
      * @author helinjiang
      */
-    useWhistle(opts) {
+    useWhistle(getRulesCall, opts = {}) {
+        // .useWhistle((data) => {
+        //     return {
+        //         name: `[auto]matman_demo_03_${data.port}`,
+        //         rules: [
+        //             `www.baidu.com ${path.join(__dirname, '../../../local-project')}/baidu.html`
+        //         ]
+        //     };
+        // }, { autoStartWhistle: true })
         return this;
     }
 
