@@ -1,10 +1,29 @@
 import { isURLMatch } from '../util/url';
 
 export default class MatmanResult {
-    constructor(baseHandleResult) {
-        this.data = baseHandleResult.data || [];
-        this._dataIndexMap = baseHandleResult._dataIndexMap || {};
-        this.globalInfo = baseHandleResult.globalInfo || {};
+    /**
+     * matman 框架执行的结果
+     *
+     * @param {Object} result
+     */
+    constructor(result = {}) {
+        /**
+         * 从页面获得的数据
+         * @type {Array}
+         */
+        this.data = result.data || [];
+
+        /**
+         * actionName 和数据映射表
+         * @type {Object}
+         */
+        this._dataIndexMap = result._dataIndexMap || {};
+
+        /**
+         * 网络请求和浏览器事件等信息
+         * @type {Object}
+         */
+        this.globalInfo = result.globalInfo || {};
     }
 
     /**
