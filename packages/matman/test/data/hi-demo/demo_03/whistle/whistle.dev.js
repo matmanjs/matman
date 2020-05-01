@@ -1,4 +1,4 @@
-const path = require('path');
+const { getDevRules } = require('./index');
 
 /**
  * 动态生成 whistle 规则
@@ -11,16 +11,11 @@ const path = require('path');
 module.exports = (cb, util) => {
     console.log('即将动态设置 whistle 规则...');
 
-    // 规则内容，具体语法请参考： http://wproxy.org/whistle/
-    // 注意：如果涉及到正则表达式，则 \ 需要修改为 \\ (用两个反斜杠)，否则自动设置到 whistle 时会被丢失
-    const ruleList = [
-        `www.baidu.com ${path.join(__dirname, '../local-project')}/baidu.html`
-    ];
+    const result = getDevRules(util);
 
-    cb({
-        name: `matman_demo_03_${util.port}`,
-        rules: ruleList.join('\n')
-    });
+    console.log('whistle 规则信息为：\n', JSON.stringify(result, null, 2));
+
+    cb(result);
 
     console.log('动态设置 whistle 规则已完成！');
 };
