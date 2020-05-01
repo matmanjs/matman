@@ -6,7 +6,7 @@ import { findMatmanConfig } from '../../../src/util';
 
 describe('check model/ScreenshotConfig.js', () => {
     describe('check constructor(opts, basePath, tag)', () => {
-        const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/fixtures/demo_01');
+        const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/hi-demo/demo_01');
         const caseModuleFilePath = path.join(MATMAN_ROOT_PATH, './src/page_baidu_index/cases/basic-check.js');
         const matmanConfig = findMatmanConfig(caseModuleFilePath);
 
@@ -156,7 +156,7 @@ describe('check model/ScreenshotConfig.js', () => {
     });
 
     describe('check getPathWithId(id)', () => {
-        const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/fixtures/demo_01');
+        const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/hi-demo/demo_01');
         const caseModuleFilePath = path.join(MATMAN_ROOT_PATH, './src/page_baidu_index/cases/basic-check.js');
         const matmanConfig = findMatmanConfig(caseModuleFilePath);
 
