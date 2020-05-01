@@ -35,11 +35,11 @@ describe('check CrawlerParser', () => {
         const crawlerParser = new CrawlerParser(matmanConfig);
 
         it('check demo1: getEntry(crawler script)', () => {
-            expect(crawlerParser.getEntryName(path.join(crawlerParser.matmanConfig.testerPath, 'crawlers/c1.js'))).to.equal('crawlers/c1');
+            expect(crawlerParser._getEntryName(path.join(crawlerParser.matmanConfig.testerPath, 'crawlers/c1.js'))).to.equal('crawlers/c1');
         });
 
         it('check demo1: getEntry(not crawler script)', () => {
-            expect(crawlerParser.getEntryName(path.join(crawlerParser.matmanConfig.testerPath, 'q1/c1.js'))).to.equal('q1/c1');
+            expect(crawlerParser._getEntryName(path.join(crawlerParser.matmanConfig.testerPath, 'q1/c1.js'))).to.equal('q1/c1');
         });
     });
 

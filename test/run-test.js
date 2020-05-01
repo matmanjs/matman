@@ -114,6 +114,11 @@ console.log(`============开始执行===========`);
 
 const t = Date.now();
 
+//==================================================================
+// 注意，执行 lerna bootstrap 时会执行 npm install 命令（而不是 tnpm install）
+// 因此在公司内网运行时需要配置好 npm 的 registry: npm config set registry http://r.tnpm.oa.com
+// 详见 http://tnpm.oa.com/
+//==================================================================
 runLernaBootstrap()
     .then((data) => {
         return runBuildPackages()
