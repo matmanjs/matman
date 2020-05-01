@@ -146,7 +146,14 @@ function runUseWhistle() {
                 console.log(`whistle 已启动，端口为 ${port}！耗时${Date.now() - t}ms`);
 
                 const whistleOfDemo03 = require('../packages/matman/test/data/hi-demo/demo_03/whistle');
-                const whistleRules = whistleOfDemo03.getDevRules({ port });
+                const whistleOfDemo04 = require('../packages/matman/test/data/hi-demo/demo_04/whistle');
+                const whistleRulesOfDemo03 = whistleOfDemo03.getDevRules({ port });
+                const whistleRulesOfDemo04 = whistleOfDemo04.getDevRules({ port });
+                const whistleRules = {
+                    name: `${whistleRulesOfDemo03.name}-${whistleRulesOfDemo04.name}`,
+                    rules: [whistleRulesOfDemo03.rules, whistleRulesOfDemo04.rules].join('\n')
+                };
+
                 const tmpWhistleConfigPath = path.join(__dirname, 'tmp/whistle.dev.js');
 
                 // 文件内容
