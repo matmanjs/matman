@@ -48,5 +48,17 @@ describe('check model/MatmanResult.js', () => {
             expect(matmanResult.get('i_am_not_exist')).to.be.undefined;
         });
     });
+
+    describe('check getQueue(globalInfoRecorderKey)', () => {
+        it('matman-result-01-no-global-info getQueue() should return empty', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-no-global-info'));
+            expect(matmanResult.getQueue()).to.be.empty;
+        });
+
+        it('matman-result-01-with-global-info getQueue() should return 76', () => {
+            const matmanResult = new MatmanResult(require('../../data/fixtures/model/matman-result-01-with-global-info'));
+            expect(matmanResult.getQueue()).to.have.lengthOf(78);
+        });
+    });
 });
 

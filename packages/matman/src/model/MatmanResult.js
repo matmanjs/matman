@@ -39,10 +39,11 @@ export default class MatmanResult {
     /**
      * 获得捕获到的请求队列
      *
+     * @param {String} [globalInfoRecorderKey]
      * @return {Array}
      */
-    getQueue() {
-        return (this.globalInfo.recorder && this.globalInfo.recorder.queue) || [];
+    getQueue(globalInfoRecorderKey = 'recorder') {
+        return (this.globalInfo[globalInfoRecorderKey] && this.globalInfo[globalInfoRecorderKey].queue) || [];
     }
 
     /**
