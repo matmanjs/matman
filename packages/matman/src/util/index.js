@@ -129,9 +129,10 @@ export function findCrawlerParser(basePath) {
  * 通过某个路径一直往上找，直到找到 matman.config.js 文件为止，并返回 matmanConfig 对象
  *
  * @param {String} basePath 起始路径
+ * @param {Object} [matmanConfigOpts] 额外传递给 MatmanConfig 的参数，可覆盖 matman.config.js 中配置内容
  * @return {null | MatmanConfig}
  */
-export function findMatmanConfig(basePath) {
+export function findMatmanConfig(basePath, matmanConfigOpts) {
     // 获得 matman.config.js 的文件路径
     const configFilePath = getConfigFilePath(basePath);
 
@@ -142,7 +143,7 @@ export function findMatmanConfig(basePath) {
     }
 
     // 获取 matman.config.js 中的配置项
-    const configData = require(configFilePath) || {};
+    const configData = Object.assign({}, require(configFilePath), matmanConfigOpts);
 
     // 根据配置内容获得 matmanConfig 的对象
     const matmanConfig = new MatmanConfig(configData.rootPath, configData);
