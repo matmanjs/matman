@@ -5,5 +5,8 @@
         "build": "echo \"No need to build\"",
         "build-dev": "echo \"No need to build\"",
         "use-whistle": "w2 add whistle/whistle.dev.js --force"
+    },
+    "dependencies": {
+        "mockstar": "^1.1.4"
     }
 }
