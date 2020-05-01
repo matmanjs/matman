@@ -43,13 +43,13 @@ function getResult(opts) {
         .goto(env.getPageUrl(true))
 
         // 第一步：开始操作之前
-        .run('init', function (nightmareRun) {
+        .addAction('init', function (nightmareRun) {
             // nightmareRun 支持所有的原始 nightmare 语法和对其定制的扩展功能
             return nightmareRun.wait(500);
         })
 
         // 第二步：身份证输入框输入: 至尊宝
-        .run('input-name', function (nightmareRun) {
+        .addAction('input-name', function (nightmareRun) {
             // nightmareRun 支持所有的原始 nightmare 语法和对其定制的扩展功能
             return nightmareRun.type('#name-value', '至尊宝').wait(500);
         })
