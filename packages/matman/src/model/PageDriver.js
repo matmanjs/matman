@@ -5,7 +5,7 @@ import path from 'path';
 import _ from 'lodash';
 import ScreenshotConfig from './ScreenshotConfig';
 import DeviceConfig from './DeviceConfig';
-import CaseParserOperateResult from './CaseParserOperateResult';
+import MatmanResult from './MatmanResult';
 import NightmareMaster from './NightmareMaster';
 import MatmanConfig from './MatmanConfig';
 import { CrawlerParser } from 'matman-crawler';
@@ -287,7 +287,7 @@ export default class PageDriver {
 
         return nightmareMaster.getResult()
             .then((resultData) => {
-                return new CaseParserOperateResult(resultData);
+                return new MatmanResult(resultData);
             })
             .then((result) => {
                 // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回

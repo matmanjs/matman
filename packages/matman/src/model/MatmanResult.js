@@ -1,6 +1,6 @@
 import { isURLMatch } from '../util/url';
 
-export default class CaseParserOperateResult {
+export default class MatmanResult {
     constructor(baseHandleResult) {
         this.data = baseHandleResult.data || [];
         this._dataIndexMap = baseHandleResult._dataIndexMap || {};
