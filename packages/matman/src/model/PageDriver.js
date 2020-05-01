@@ -1,14 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 
+import fse from 'fs-extra';
 import _ from 'lodash';
-import ScreenshotConfig from './ScreenshotConfig';
-import DeviceConfig from './DeviceConfig';
+import { CrawlerParser } from 'matman-crawler';
+
 import MatmanResult from './MatmanResult';
 import NightmareMaster from './NightmareMaster';
 import MatmanConfig from './MatmanConfig';
-import { CrawlerParser } from 'matman-crawler';
+
+import ScreenshotConfig from './ScreenshotConfig';
+import DeviceConfig from './DeviceConfig';
 import CoverageConfig from './CoverageConfig';
+import MatmanResultConfig from './MatmanResultConfig';
 
 /**
  * 测试用例处理类
@@ -54,6 +58,7 @@ export default class PageDriver {
         this.deviceConfig = null;
         this.screenshotConfig = null;
         this.coverageConfig = null;
+        this.matmanResultConfig = null;
 
         this.pageUrl = '';
 
@@ -186,6 +191,21 @@ export default class PageDriver {
     }
 
     /**
+     * 设置执行结果配置
+     *
+     * @param {Boolean | String | Object} matmanResultConfig
+     * @return {PageDriver}
+     * @author helinjiang
+     */
+    setMatmanResultConfig(matmanResultConfig) {
+        if (matmanResultConfig) {
+            this.matmanResultConfig = new MatmanResultConfig(this.matmanConfig, matmanResultConfig, this.caseModuleFilePath, this.tag);
+        }
+
+        return this;
+    }
+
+    /**
      * 加载页面地址
      *
      * @param pageUrl
@@ -279,6 +299,11 @@ export default class PageDriver {
             this.setCoverageConfig(true);
         }
 
+        // 默认处理 matmanResult
+        if (!this.matmanResultConfig) {
+            this.setMatmanResultConfig(true);
+        }
+
         // 兼容没有定义 run 方法的场景
         if (!this.actionList.length) {
             this._isDefaultScanMode = true;
@@ -295,6 +320,14 @@ export default class PageDriver {
                 // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回
                 if (this._isDefaultScanMode) {
                     matmanResult.data = matmanResult.get(0);
+                }
+
+                return matmanResult;
+            })
+            .then((matmanResult) => {
+                // 保存数据快照
+                if (this.matmanResultConfig) {
+                    fse.outputJsonSync(this.matmanResultConfig.path, matmanResult);
                 }
 
                 return matmanResult;
