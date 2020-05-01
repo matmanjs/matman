@@ -12,8 +12,8 @@ function getDevRules(opts = {}) {
     // 规则内容，具体语法请参考： http://wproxy.org/whistle/
     // 注意：如果涉及到正则表达式，则 \ 需要修改为 \\ (用两个反斜杠)，否则自动设置到 whistle 时会被丢失
     const ruleList = [
-        `www.baidu.com ${projectRootPath}/baidu.html`,
-        `/cgi-bin/a/b/demo_cgi 127.0.0.1:9527`,
+        `www.baidu.com/cgi-bin/a/b/demo_cgi 127.0.0.1:9527`,
+        `www.baidu.com/index.html ${projectRootPath}/baidu.html`,
     ];
 
     return {
