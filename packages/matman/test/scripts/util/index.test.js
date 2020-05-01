@@ -74,7 +74,7 @@ describe('./util/index.js', () => {
             expect(matmanConfig.screenshotPath).to.equal(path.join(newRootPath, './build/my-screenshot'));
             expect(matmanConfig.coveragePath).to.equal(path.join(newRootPath, './build/my-coverage_output'));
 
-            expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'screenshotPath', 'coveragePath');
+            expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'matmanResultPath', 'screenshotPath', 'coveragePath');
         });
 
     });
