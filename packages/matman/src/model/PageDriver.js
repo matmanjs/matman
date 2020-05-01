@@ -132,7 +132,7 @@ export default class PageDriver {
      * @author helinjiang
      */
     useMockstar(mockstarQuery) {
-        if (!mockstarQuery || (typeof mockstarQuery.getQueryString !== 'function')) {
+        if (!mockstarQuery || (typeof mockstarQuery.appendToUrl !== 'function')) {
             throw new Error('请传递正确的 MockStarQuery 对象，请参考： https://www.npmjs.com/package/mockstar');
         }
 
