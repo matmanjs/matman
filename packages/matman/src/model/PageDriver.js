@@ -9,6 +9,7 @@ import CaseParserOperateResult from './CaseParserOperateResult';
 import NightmareMaster from './NightmareMaster';
 import MatmanConfig from './MatmanConfig';
 import { CrawlerParser } from 'matman-crawler';
+import CoverageConfig from './CoverageConfig';
 
 /**
  * 测试用例处理类
@@ -164,7 +165,7 @@ export default class PageDriver {
      * @return {PageDriver}
      */
     setCoverageConfig(coverageConfig) {
-        this.coverageConfig = coverageConfig;
+        this.coverageConfig = new CoverageConfig(this.matmanConfig, coverageConfig, this.caseModuleFilePath, this.tag);
         return this;
     }
 

@@ -15,6 +15,7 @@ export default class ScreenshotConfig {
      * @param {Object} [opts.tag] 标记
      * @param {String} [caseModuleFilePath] 测试行为模块的目录
      * @param {String} [tag] 标记
+     * @author helinjiang
      */
     constructor(matmanConfig, opts, caseModuleFilePath, tag) {
         this.tag = tag;
@@ -43,12 +44,28 @@ export default class ScreenshotConfig {
         }
     }
 
+    /**
+     * 根据一个标志获得新的路径
+     *
+     * @param {String | Number} id 标志
+     * @return {string} 新的路径
+     * @author helinjiang
+     */
     getPathWithId(id) {
         return this.path.replace(/(.*)\.(.*)/, function (match, p1, p2) {
             return [p1, `${id}.${p2}`].join('_');
         });
     }
 
+    /**
+     * 获得完整的截图文件保存路径
+     *
+     * @param targetPath 原始路径
+     * @param basePath 根目录
+     * @return {String} 新的路径
+     * @author helinjiang
+     * @private
+     */
     _getScreenshotFullPath(targetPath, basePath) {
         return getNewFilePathWithTag(getAbsolutePath(targetPath, basePath), this.tag);
     }

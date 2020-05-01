@@ -1,3 +1,9 @@
+// 注意这里的 window.__coverage__ 只是为了模拟端对端测试覆盖率结果
+// 实际场景时是需要借助其他工具来实现的
+window.__coverage__ = {
+    msg: 'i am coverage for e2e test'
+};
+
 module.exports = () => {
     return {
         title: document.title,

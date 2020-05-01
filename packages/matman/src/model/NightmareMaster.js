@@ -1,3 +1,4 @@
+import fse from 'fs-extra';
 import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
 
 export default class NightmareMaster {
@@ -141,17 +142,17 @@ export default class NightmareMaster {
             }
 
             // 覆盖率数据
-            // if (t.__coverage__ && this.coverageConfig) {
-            //     const coverageFilePath = this.coverageConfig.getPathWithId(i + 1);
-            //     try {
-            //         await fse.outputJson(coverageFilePath, t.__coverage__);
-            //
-            //         // 记录之后就删除之
-            //         delete t.__coverage__;
-            //     } catch (e) {
-            //         console.log('save coverage file fail', coverageFilePath, e);
-            //     }
-            // }
+            if (t.__coverage__ && this.pageDriver.coverageConfig) {
+                const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
+                try {
+                    await fse.outputJson(coverageFilePath, t.__coverage__);
+
+                    // 记录之后就删除之
+                    delete t.__coverage__;
+                } catch (e) {
+                    console.log('save coverage file fail', coverageFilePath, e);
+                }
+            }
 
             result.push(t);
         }
