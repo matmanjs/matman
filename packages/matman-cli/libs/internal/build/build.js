@@ -16,10 +16,15 @@ module.exports = function (args) {
     const config = args.config || MATMAN_CONFIG_FILE;
 
     // 绝对路径
-    let configAbsolutePath = path.resolve(cwd, config);
+    const configAbsolutePath = path.resolve(cwd, config);
+
+    // matmanConfig 额外的参数
+    const matmanConfigOpts = {
+        isDevBuild
+    };
 
     // 获取 matman.config.js 配置文件中的内容
-    let matmanConfig = findMatmanConfig(configAbsolutePath);
+    const matmanConfig = findMatmanConfig(configAbsolutePath, matmanConfigOpts);
 
     // 校验是否找得到 matman.config.js
     if (!matmanConfig) {
@@ -27,11 +32,6 @@ module.exports = function (args) {
     }
 
     console.log(`Success load config file:  ${configAbsolutePath}`);
-
-    // 开发模式
-    if (isDevBuild) {
-        matmanConfig.setIsDevBuild(isDevBuild);
-    }
 
     return matmanCrawler.build(matmanConfig);
 };
