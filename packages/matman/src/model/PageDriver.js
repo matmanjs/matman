@@ -75,6 +75,7 @@ export default class PageDriver {
      *
      * @param {Object || undefined} nightmareConfig 传递给原生的 Nightmare constructor 的参数
      * @return {PageDriver}
+     * @author helinjiang
      */
     useNightmare(nightmareConfig) {
         this.nightmareConfig = nightmareConfig || {};
@@ -90,6 +91,7 @@ export default class PageDriver {
      *
      * @param {String} proxyServer 代理服务器，类似 my_proxy_server.example.com:8080，例如 127.0.0.1:8899
      * @return {PageDriver}
+     * @author helinjiang
      */
     useProxyServer(proxyServer) {
         this.proxyServer = proxyServer;
@@ -103,6 +105,7 @@ export default class PageDriver {
      *
      * @param opts
      * @return {PageDriver}
+     * @author helinjiang
      */
     useWhistle(opts) {
         return this;
@@ -113,6 +116,7 @@ export default class PageDriver {
      *
      * @param opts
      * @return {PageDriver}
+     * @author helinjiang
      */
     useMockstar(opts) {
         this.mockstarOpts = opts;
@@ -125,6 +129,7 @@ export default class PageDriver {
      *
      * @param {String | Object } cookies
      * @return {PageDriver}
+     * @author helinjiang
      */
     setCookies(cookies) {
         this.cookies = cookies;
@@ -136,6 +141,7 @@ export default class PageDriver {
      *
      * @param deviceConfig
      * @return {PageDriver}
+     * @author helinjiang
      */
     setDeviceConfig(deviceConfig) {
         this.deviceConfig = new DeviceConfig(deviceConfig || 'mobile');
@@ -147,6 +153,7 @@ export default class PageDriver {
      *
      * @param {Boolean | String | Object} screenshotConfig
      * @return {PageDriver}
+     * @author helinjiang
      */
     setScreenshotConfig(screenshotConfig) {
         if (screenshotConfig) {
@@ -163,6 +170,7 @@ export default class PageDriver {
      *
      * @param {Boolean | String | Object} coverageConfig
      * @return {PageDriver}
+     * @author helinjiang
      */
     setCoverageConfig(coverageConfig) {
         if (coverageConfig) {
@@ -180,13 +188,22 @@ export default class PageDriver {
      *
      * @param pageUrl
      * @return {PageDriver}
+     * @author helinjiang
      */
     goto(pageUrl) {
         this.pageUrl = pageUrl;
         return this;
     }
 
-    run(actionName, actionCall) {
+    /**
+     * 增加行为过程
+     *
+     * @param {String} actionName 行为名，可通过它来获得最后的数据
+     * @param {Function} actionCall 执行函数，接受一个 nightmare 对象，可以直接操作
+     * @return {PageDriver}
+     * @author helinjiang
+     */
+    addAction(actionName, actionCall) {
         if (typeof actionCall === 'function') {
             this.actionList.push(actionCall);
             this._dataIndexMap[actionName + ''] = this.actionList.length - 1;
@@ -206,6 +223,7 @@ export default class PageDriver {
      * @param {String | Function} fn
      * @param [args]
      * @return {PageDriver}
+     * @author helinjiang
      */
     wait(fn, ...args) {
         this.nightmareWaitFn = fn;
@@ -222,6 +240,7 @@ export default class PageDriver {
      * @param {String | Function} fn
      * @param [args]
      * @return {PageDriver}
+     * @author helinjiang
      */
     evaluate(fn, ...args) {
         if (typeof fn === 'string') {
@@ -248,6 +267,7 @@ export default class PageDriver {
     /**
      * 结束，获取结果
      * @return {Promise<{}>}
+     * @author helinjiang
      */
     end() {
         let nightmareMaster = new NightmareMaster(this);
@@ -260,7 +280,7 @@ export default class PageDriver {
         // 兼容没有定义 run 方法的场景
         if (!this.actionList.length) {
             this._isDefaultScanMode = true;
-            this.run('_scan_page_', function (nightmareRun) {
+            this.addAction('_scan_page_', function (nightmareRun) {
                 return nightmareRun.wait(500);
             });
         }
@@ -284,6 +304,7 @@ export default class PageDriver {
      *
      * @param customFn
      * @return {PageDriver}
+     * @author helinjiang
      */
     executeCustomFn(customFn) {
         if (typeof customFn === 'function') {

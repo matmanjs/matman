@@ -26,19 +26,19 @@ function getResult(opts) {
         .goto('https://www.baidu.com')
 
         // 第一步：开始操作之前
-        .run('init', function (nightmareRun) {
+        .addAction('init', function (nightmareRun) {
             // nightmareRun 支持所有的原始 nightmare 语法和对其定制的扩展功能
             return nightmareRun.wait(500);
         })
 
         // 第二步：搜索输入框输入: matman
-        .run('input_key_word', function (nightmareRun) {
+        .addAction('input_key_word', function (nightmareRun) {
             // nightmareRun 支持所有的原始 nightmare 语法和对其定制的扩展功能
             return nightmareRun.type('#kw', 'matman').wait(500);
         })
 
         // 第三步：点击搜索按钮，获得搜索结果
-        .run('click_to_search', function (nightmareRun) {
+        .addAction('click_to_search', function (nightmareRun) {
             return nightmareRun.click('#su').wait('#content_left');
         })
 
