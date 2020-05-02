@@ -1,6 +1,6 @@
 # matman-cli
 
-matman 项目的 CLI 工具。
+matman 项目的 CLI 工具，更多资料请参考： [matman 官方文档](https://matmanjs.github.io/matman/) 。
 
 ## 安装
 
@@ -14,7 +14,7 @@ npm install matman-cli -g
 
 ### matman.config.js
 
-项目的配置文件，类似 `webpack.config.js` 的功能。
+每个 matman 项目的根目录下必须要 `matman.config.js` 文件，就像每个需要 `webpack` 构建的项目得有 `webpack.config.js` 一样。
 
 ### 参数选项
 
@@ -25,14 +25,8 @@ npm install matman-cli -g
 
 #### matman build [path]
 
-构建命令，将 matman 项目构建为完整可运行的项目，以便 `matman start` 命令能够直接运行。
+执行构建命令，构建过程主要处理以下事情：
 
-构建过程主要处理以下事情：
-
-- 将运行在 nightmare 中的脚本进行构建打包，注入 nightmare 的特定代码和 jQuery 等，并且提供方式能够快速引用
-- 将 mocker 序列化
-
-
-#### matman start [--config]
-
-启动本地服务。如果不传入 `config` 参数选项，则会在当前目录寻找 `matman.config.js` 配置文件。
+- 利用 webpack 分析依赖，将前端爬虫脚本打包成一个文件
+- 注入 nightmare 的特定代码以便完成通信
+- 注入 jQuery 等脚本，方便调用
