@@ -20,7 +20,7 @@ $ sudo npm install matman-cli -g --unsafe-perm=true --allow-root
 
 ### 2.1 matman.config.js
 
-每个 matman 项目的根目录下必须要 `matman.config.js` 文件，就像每个需要 `webpack` 构建的项目得有 `webpack.config.js` 一样。
+每个需要构建爬虫脚本的 matman 项目的根目录下必须要 `matman.config.js` 文件，就像每个需要 `webpack` 构建的项目得有 `webpack.config.js` 一样。
 
 ### 2.2 参数选项
 
