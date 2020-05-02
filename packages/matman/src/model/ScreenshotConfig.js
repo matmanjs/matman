@@ -13,7 +13,7 @@ export default class ScreenshotConfig {
      * @param {String} [opts.path] 截图保存的完成文件名，绝对路径，例如 `/root/xyz.png`，如果不填写，则将根据当前路径自动生成截图文件名字
      * @param {Object} [opts.clip] 截图的区域，例如 { x: 0, y: 0, width: 0, height: 0 }
      * @param {String} [opts.tag] 标记
-     * @param {String} [caseModuleFilePath] 测试行为模块的目录
+     * @param {String} [caseModuleFilePath] 测试案例模块的目录
      * @param {String} [tag] 标记
      * @author helinjiang
      */

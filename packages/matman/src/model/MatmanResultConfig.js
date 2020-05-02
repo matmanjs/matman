@@ -10,7 +10,7 @@ export default class MatmanResultConfig {
      * @param {String | Boolean | Object} opts 是否启用执行结果，或者执行结果保存的文件名路径(如果想对路径，则相对于basePath 而言)，或者执行结果配置
      * @param {String} [opts.path] 执行结果保存的完成文件名，如果不填写，则将根据当前路径自动生成名字
      * @param {Object} [opts.tag] 标记
-     * @param {String} [caseModuleFilePath] 测试行为模块的目录
+     * @param {String} [caseModuleFilePath] 测试案例模块的目录
      * @param {String} [tag] 标记
      * @author helinjiang
      */

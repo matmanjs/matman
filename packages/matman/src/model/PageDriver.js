@@ -194,7 +194,7 @@ export default class PageDriver {
     }
 
     /**
-     * 设置覆盖率配置
+     * 设置覆盖率参数
      *
      * @param {Boolean | String | Object} coverageConfig
      * @return {PageDriver}
@@ -209,7 +209,7 @@ export default class PageDriver {
     }
 
     /**
-     * 设置执行结果配置
+     * 设置 MatmanResult 执行结果参数
      *
      * @param {Boolean | String | Object} matmanResultConfig
      * @return {PageDriver}
@@ -224,7 +224,7 @@ export default class PageDriver {
     }
 
     /**
-     * 加载页面地址
+     * 加载指定的页面地址
      *
      * @param pageUrl
      * @return {PageDriver}
@@ -236,9 +236,9 @@ export default class PageDriver {
     }
 
     /**
-     * 增加行为过程
+     * 增加测试动作
      *
-     * @param {String} actionName 行为名，可通过它来获得最后的数据
+     * @param {String} actionName 动作名称，后续可通过它来获得最后的数据
      * @param {Function} actionCall 执行函数，接受一个 nightmare 对象，可以直接操作
      * @return {PageDriver}
      * @author helinjiang
@@ -257,8 +257,11 @@ export default class PageDriver {
     }
 
     /**
-     * 执行爬虫脚本之前，需要等待某些条件达成，
-     * 与 nightmare 的 wait 含义和用法一致
+     * 需要等待某些条件达成，才开始运行爬虫脚本，与 nightmare 的 wait 含义和用法一致
+     *
+     * https://www.npmjs.com/package/nightmare#waitms
+     * https://www.npmjs.com/package/nightmare#waitselector
+     * https://www.npmjs.com/package/nightmare#waitfn-arg1-arg2
      *
      * @param {String | Function} fn
      * @param [args]
@@ -273,9 +276,9 @@ export default class PageDriver {
     }
 
     /**
-     * 执行爬虫脚本，
-     * 这里要么是约定的相对路径，要么是绝对路径，只支持本地文件
-     * TODO 需要支持原生的自定义函数脚本，这样在某些场景下可以不用单独写爬虫脚本
+     * 执行爬虫脚本或者方法
+     *
+     * https://www.npmjs.com/package/nightmare#evaluatefn-arg1-arg2
      *
      * @param {String | Function} fn
      * @param [args]
@@ -301,6 +304,20 @@ export default class PageDriver {
             this.nightmareEvaluateFnArgs = args;
         }
 
+        return this;
+    }
+
+    /**
+     * 执行自定义的方法，适用于 debug 和自定义扩展等场景
+     *
+     * @param {Function} customFn 自定义函数，会传递 PageDriver 给它
+     * @return {PageDriver}
+     * @author helinjiang
+     */
+    executeCustomFn(customFn) {
+        if (typeof customFn === 'function') {
+            customFn(this);
+        }
         return this;
     }
 
@@ -352,17 +369,4 @@ export default class PageDriver {
             });
     }
 
-    /**
-     * 执行自定义的方法，适用于 debug 和自定义扩展等场景
-     *
-     * @param customFn
-     * @return {PageDriver}
-     * @author helinjiang
-     */
-    executeCustomFn(customFn) {
-        if (typeof customFn === 'function') {
-            customFn(this);
-        }
-        return this;
-    }
 }
