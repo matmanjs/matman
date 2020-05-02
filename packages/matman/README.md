@@ -268,7 +268,98 @@ matman
     // ....
 ```
 
-
 #### 2.3.15 end()
 
 启动 PageDriver ，返回一个 `Promise` ，结果值为 `MatmanResult` 对象。
+
+
+### 2.4 MatmanResult 类
+
+#### 2.4.1 constructor(result)
+
+- `data`: `Array | Object`，数据快照，如果使用 `addAction(actionName, actionCall)` 追加的测试动作，则该值为数组，可以通过 `get(actionName)` 获得指定动作的数据
+- `globalInfo`: `Object`，网络请求和浏览器事件等全局信息
+
+
+#### 2.4.2 get(actionName)
+
+通过测试动作名字获得数据。
+
+当 `actionName` 为 `String` 时，则该名字来自 `addAction(actionName, actionCall)` 定义的名字。
+
+当 `actionName` 为 `Number` 时，则其相对于数组索引，会从 `matmanResult.data` 这个数组中获取。
+
+
+#### 2.4.3 getQueue(globalInfoRecorderKey = 'recorder')
+
+获得捕获到的请求队列。返回一个数组，数组元素为网络请求和浏览器事件等信息。
+
+
+#### 2.4.4 getNetwork(resourceType)
+
+从结果队列中过滤出网络请求。
+
+
+`resourceType` 详见 [nightmare-handler RESOURCE_TYPE](https://github.com/helinjiang/nightmare-handler/blob/master/src/models/response-detail.js) ，即：
+
+```js
+const RESOURCE_TYPE = {
+    MAIN_FRAME: 'mainFrame',
+    SUB_FRAME: 'subFrame',
+    STYLESHEET: 'stylesheet',
+    SCRIPT: 'script',
+    IMAGE: 'image',
+    OBJECT: 'object',
+    XHR: 'xhr',
+    OTHER: 'other'
+};
+```
+
+#### 2.4.5 isExistInNetwork(partialURL, query = {}, resourceType, status)
+
+根据条件，从网络请求中匹配指定的请求。
+
+- `partialURL`: `String`，用于匹配的部分url
+- `query`: `Object`，请求携带的 query 参数
+- `resourceType`: `String`，资源类型
+- `status`: `Number`，http 状态码
+
+#### 2.4.6 isExistPage(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'mainFrame', status)`。
+
+使用场景：
+- 测试跳转页面的场景，通过它可以判断是否加载了目标的页面
+
+#### 2.4.7 isExistXHR(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'xhr', status)`。
+
+使用场景：
+- 测试接口请求是否正确，可以利用 `query` 来指定请求参数，确保不会发送一个错误的请求
+- 利用 `status` 可以验证接口是否可能 `500` 等
+- 有些数据上报也是用 `xhr` 的，可以测试数据上报的字段是否正确
+
+#### 2.4.8 isExistImage(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'image', status)`。
+
+使用场景：
+- 测试是否加载了某张图片
+- 利用 `status` 可以验证图片请求是否有可能 `404` 等
+
+#### 2.4.9 isExistStylesheet(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'stylesheet', status)`。
+
+使用场景：
+- 测试是否加载了 `css` 文件
+- 利用 `status` 可以验证 `css` 文件是否有可能 `404` 等
+
+#### 2.4.10 isExistScript(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'script', status)`。
+
+使用场景：
+- 测试是否加载了 `js` 文件
+- 利用 `status` 可以验证 `js` 文件是否有可能 `404` 等

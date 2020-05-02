@@ -28,15 +28,15 @@ export default class MatmanResult {
     }
 
     /**
-     * 获得数据
+     * 通过测试动作名字获得数据
      *
-     * @param {String || Number} key 结果的key值，可以是自定义的名字，也可以是数组索引
+     * @param {String || Number} actionName 测试动作名字，可以是自定义的名字，也可以是数组索引
      * @return {Object}
      * @author helinjiang
      */
-    get(key) {
-        const i = this._dataIndexMap[key];
-        return this.data[typeof i === 'number' ? i : key];
+    get(actionName) {
+        const i = this._dataIndexMap[actionName];
+        return this.data[typeof i === 'number' ? i : actionName];
     }
 
     /**
@@ -51,7 +51,7 @@ export default class MatmanResult {
     }
 
     /**
-     * 获得网络请求
+     * 从结果队列中过滤出网络请求
      *
      * @param {String} [resourceType] 资源类型，详见 nightmare-handler 组件中的 RESOURCE_TYPE
      * {
