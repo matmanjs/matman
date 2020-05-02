@@ -1,7 +1,6 @@
-const chai = require('chai');
-const expect = chai.expect;
+import { expect } from 'chai';
 
-const { isURLMatch } = require('../../../lib/util/url');
+import { isURLMatch } from '../../../src/util/url';
 
 describe('./util/url.js', () => {
     describe('check isURLMatch(URLToCheck, partialURL, query)', () => {

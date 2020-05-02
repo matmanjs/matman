@@ -1,7 +1,6 @@
-const chai = require('chai');
-const expect = chai.expect;
+import { expect } from 'chai';
 
-const { MATMAN_CONFIG_FILE } = require('../../lib/config');
+import { MATMAN_CONFIG_FILE } from '../../src/config';
 
 describe('./config.js', () => {
     it('MATMAN_CONFIG_FILE should be correct', () => {

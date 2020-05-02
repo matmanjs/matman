@@ -43,6 +43,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+.yo-repository
 .idea
 
 logs
@@ -50,5 +51,6 @@ logs
 packages/*/lib/
 packages/*/test/**/build
 tmp/
+test/**/build
 
 docs-dist

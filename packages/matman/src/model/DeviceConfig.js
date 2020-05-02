@@ -1,11 +1,12 @@
 export default class DeviceConfig {
     /**
      * 构造函数
-     * @param {String || Object} opts 设备名或者设备配置
+     * @param {String | Object} opts 设备名或者设备配置
      * @param {String} [opts.name] 设备名字
      * @param {String} [opts.UA] userAgent
-     * @param {String} [opts.width] 视窗宽度
-     * @param {String} [opts.height] 视窗高度
+     * @param {Number} [opts.width] 视窗宽度
+     * @param {Number} [opts.height] 视窗高度，注意这里不是指页面的高度，页面高度要小于这个值
+     * @author helinjiang
      */
     constructor(opts) {
         if (opts && (typeof opts === 'object')) {

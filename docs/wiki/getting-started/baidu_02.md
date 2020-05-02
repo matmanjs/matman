@@ -119,7 +119,7 @@ $ npm run build-dev
 
 > 编写爬虫脚本的过程，就是梳理业务的过程。爬取什么样的内容完全依据你的业务逻辑。
 
-### 2.2 编写测试行为模块
+### 2.2 编写测试案例模块
 
 新增 `src/page_baidu_index/cases/search-check/index.js` 文件。
 

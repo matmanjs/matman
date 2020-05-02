@@ -4,5 +4,5 @@ module.exports = function (ctx) {
 
   const cmd = ctx.cmd;
 
-  cmd.register('build', 'Build matman project', {}, require('./build'));
+  cmd.register('build', 'Build crawler script', {}, require('./build'));
 };
