@@ -78,6 +78,8 @@ export default class PageDriver {
     /**
      * 基于 nightmare.js 框架，未来可以扩展其他的端对端测试工具
      *
+     * 无头浏览器使用 nightmare.js 框架提供，其底层用的是 Google 的 electron，基于 chromium 内核
+     *
      * https://www.npmjs.com/package/nightmare#nightmareoptions
      *
      * @param {Object || undefined} nightmareConfig 传递给原生的 Nightmare constructor 的参数
