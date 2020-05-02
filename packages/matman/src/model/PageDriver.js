@@ -15,7 +15,7 @@ import CoverageConfig from './CoverageConfig';
 import MatmanResultConfig from './MatmanResultConfig';
 
 /**
- * 测试用例处理类
+ * 页面控制器
  */
 export default class PageDriver {
     /**
@@ -25,9 +25,10 @@ export default class PageDriver {
      * @param {String} caseModuleFilePath  测试case文件的路径
      * @param {Object} [opts] 参数
      * @param {Object} [opts.delayBeforeRun] 延时多少ms再启动
-     * @param {String} [opts.tag] 标记，在某些场景下追加
+     * @param {String} [opts.tag] 标记，在某些场景下使用，例如截图保存文件中追加该标记，用于做区分
      * @param {Boolean} [opts.useRecorder] 是否使用记录器
      * @param {Boolean} [opts.doNotCloseBrowser] 是否在执行完成之后不要关闭浏览器，默认为 false
+     * @author helinjiang
      */
     constructor(matmanConfig, caseModuleFilePath, opts = {}) {
 
@@ -77,6 +78,8 @@ export default class PageDriver {
     /**
      * 基于 nightmare.js 框架，未来可以扩展其他的端对端测试工具
      *
+     * https://www.npmjs.com/package/nightmare#nightmareoptions
+     *
      * @param {Object || undefined} nightmareConfig 传递给原生的 Nightmare constructor 的参数
      * @return {PageDriver}
      * @author helinjiang
@@ -93,7 +96,7 @@ export default class PageDriver {
      *
      * https://github.com/segmentio/nightmare#switches
      *
-     * @param {String} proxyServer 代理服务器，类似 my_proxy_server.example.com:8080，例如 127.0.0.1:8899
+     * @param {String} proxyServer 代理服务器，格式为 my_proxy_server.example.com:8080，例如 127.0.0.1:8899
      * @return {PageDriver}
      * @author helinjiang
      */
@@ -127,6 +130,8 @@ export default class PageDriver {
     /**
      * 使用 mockstar 工具来做接口 mock 数据
      *
+     * https://github.com/mockstarjs/mockstar
+     *
      * @param {MockStarQuery} mockstarQuery 详见 matman 组件的定义
      * @return {PageDriver}
      * @author helinjiang
@@ -142,10 +147,12 @@ export default class PageDriver {
     }
 
     /**
-     * 为浏览器注入cookie
-     * 参考 https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
+     * 注入 cookie
      *
-     * @param {String | Object } cookies
+     * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md
+     * https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
+     *
+     * @param {String | Object } cookies 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
      * @return {PageDriver}
      * @author helinjiang
      */
@@ -155,9 +162,15 @@ export default class PageDriver {
     }
 
     /**
-     * 设置当前设备参数，有默认值
+     * 设置无头浏览器设备参数
      *
-     * @param deviceConfig
+     * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exDevice.md
+     *
+     * @param {String | Object} deviceConfig 设备名或者设备配置，默认值为 mobile
+     * @param {String} [deviceConfig.name] 设备名字
+     * @param {String} [deviceConfig.UA] userAgent
+     * @param {Number} [deviceConfig.width] 视窗宽度
+     * @param {Number} [deviceConfig.height] 视窗高度，注意这里不是指页面的高度，页面高度要小于这个值
      * @return {PageDriver}
      * @author helinjiang
      */
@@ -167,7 +180,7 @@ export default class PageDriver {
     }
 
     /**
-     * 设置截屏，默认不截图
+     * 设置截屏参数，默认不截图
      *
      * @param {Boolean | String | Object} screenshotConfig
      * @return {PageDriver}
