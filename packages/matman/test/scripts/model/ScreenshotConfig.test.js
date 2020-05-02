@@ -8,7 +8,10 @@ describe('check model/ScreenshotConfig.js', () => {
     describe('check constructor(opts, basePath, tag)', () => {
         const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/hi-demo/demo_01');
         const caseModuleFilePath = path.join(MATMAN_ROOT_PATH, './src/page_baidu_index/cases/basic-check.js');
-        const matmanConfig = findMatmanConfig(caseModuleFilePath);
+        const matmanConfig = findMatmanConfig(caseModuleFilePath,{
+            rootPath: MATMAN_ROOT_PATH,
+            testerPath: path.join(MATMAN_ROOT_PATH, './src')
+        });
 
         it('if opts is Boolean and tag is undefined', () => {
             expect(new ScreenshotConfig(matmanConfig, true, caseModuleFilePath)).to.eql({
@@ -158,7 +161,10 @@ describe('check model/ScreenshotConfig.js', () => {
     describe('check getPathWithId(id)', () => {
         const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/hi-demo/demo_01');
         const caseModuleFilePath = path.join(MATMAN_ROOT_PATH, './src/page_baidu_index/cases/basic-check.js');
-        const matmanConfig = findMatmanConfig(caseModuleFilePath);
+        const matmanConfig = findMatmanConfig(caseModuleFilePath,{
+            rootPath: MATMAN_ROOT_PATH,
+            testerPath: path.join(MATMAN_ROOT_PATH, './src')
+        });
 
         it('if opts is Boolean and tag is "mytag"', () => {
             expect(new ScreenshotConfig(matmanConfig, true, caseModuleFilePath, 'mytag').getPathWithId(1024)).to.equal(path.join(matmanConfig.screenshotPath, './page_baidu_index/cases/basic-check_js/basic-check_js_mytag_1024.png'));
