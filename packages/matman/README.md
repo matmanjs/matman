@@ -39,9 +39,13 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `testerPath` 必须真实存在
 
 
-### 2.1 CaseParser 类
+### 2.2 createPageDriver(caseFilePath, opts)
 
-测试用例处理类。每一个测试用例都是一个 CaseParser 对象。
+创建 `PageDriver` 对象。
+
+- `caseFilePath`: `String`， 测试案例文件的绝对路径
+- `opts`: 额外参数，传递给 `MatmanConfig` 和 `PageDriver` 使用
+
 
 #### 2.1.1 constructor(rootPath, opts)
 
