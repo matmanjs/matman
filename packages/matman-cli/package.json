@@ -9,8 +9,10 @@
     "test": "node ./node_modules/mocha/bin/_mocha"
   },
   "keywords": [
+    "matman",
     "e2e",
-    "test"
+    "test",
+    "end-to-end"
   ],
   "author": "helinjiang",
   "license": "MIT",

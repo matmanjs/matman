@@ -11,8 +11,10 @@
     "test": "node ./node_modules/mocha/bin/_mocha"
   },
   "keywords": [
-    "mock",
-    "server"
+    "matman",
+    "e2e",
+    "test",
+    "end-to-end"
   ],
   "author": "helinjiang",
   "license": "MIT",

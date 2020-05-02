@@ -10,9 +10,9 @@ export default class ScreenshotConfig {
      *
      * @param {MatmanConfig} matmanConfig
      * @param {String | Boolean | Object} opts 是否启用截图，或者截图保存的文件名路径(如果想对路径，则相对于basePath 而言)，或者截图配置
-     * @param {String} [opts.path] 截图保存的完成文件名，如果不填写，则将根据当前路径自动生成名字
+     * @param {String} [opts.path] 截图保存的完成文件名，绝对路径，例如 `/root/xyz.png`，如果不填写，则将根据当前路径自动生成截图文件名字
      * @param {Object} [opts.clip] 截图的区域，例如 { x: 0, y: 0, width: 0, height: 0 }
-     * @param {Object} [opts.tag] 标记
+     * @param {String} [opts.tag] 标记
      * @param {String} [caseModuleFilePath] 测试行为模块的目录
      * @param {String} [tag] 标记
      * @author helinjiang

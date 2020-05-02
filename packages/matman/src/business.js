@@ -6,44 +6,44 @@ import { MATMAN_CONFIG_FILE } from './config';
 /**
  * 创建 pageDriver
  *
- * @param {String} caseFilePath 当前 case 的文件名
+ * @param {String} caseModuleFilePath 当前 case 的文件名
  * @param {Object} [opts] 额外参数，传递给 MatmanConfig 和 PageDriver 使用
  * @return {PageDriver}
  * @author helinjiang
  */
-export function createPageDriver(caseFilePath, opts) {
+export function createPageDriver(caseModuleFilePath, opts) {
     // 自动计算是哪个文件在调用 case 脚本，然后以调用者的文件名来做标记
     // 由于调用者脚本本身已经按目录存储，且同一个目录中不同调用者脚本文件名肯定不一样
     // 这样就能够区分标记了
     if (!opts.tag) {
-        const caseCallerPath = getCaseCallerPath(caseFilePath);
+        const caseCallerPath = getCaseCallerPath(caseModuleFilePath);
 
-        // 注意如果找到的调用文件就是 caseFilePath 本身，则无需设置 tag ，否则就会造成生成的文件名重叠
-        if (caseCallerPath && (caseCallerPath !== caseFilePath)) {
+        // 注意如果找到的调用文件就是 caseModuleFilePath 本身，则无需设置 tag ，否则就会造成生成的文件名重叠
+        if (caseCallerPath && (caseCallerPath !== caseModuleFilePath)) {
             opts.tag = caseCallerPath;
         }
-        // console.log('==caseFilePath==', caseFilePath);
+        // console.log('==caseModuleFilePath==', caseModuleFilePath);
         // console.log('==caseCallerPath==', caseCallerPath);
         // console.log('==opts.tag==', opts.tag);
     }
 
-    const matmanConfig = findMatmanConfig(caseFilePath, opts);
+    const matmanConfig = findMatmanConfig(caseModuleFilePath, opts);
 
     if (!matmanConfig) {
         throw new Error(`Could not find ${MATMAN_CONFIG_FILE}!`);
     }
 
-    return new PageDriver(matmanConfig, caseFilePath, opts);
+    return new PageDriver(matmanConfig, caseModuleFilePath, opts);
 }
 
 /**
  * 获得调用 case 的文件路径
  *
- * @param {String} caseFilePath 当前 case 的文件名
+ * @param {String} caseModuleFilePath 当前 case 的文件名
  * @return {String}
  * @author helinjiang
  */
-function getCaseCallerPath(caseFilePath) {
+function getCaseCallerPath(caseModuleFilePath) {
     let err = new Error();
 
     try {
@@ -109,10 +109,10 @@ function getCaseCallerPath(caseFilePath) {
     }
     // console.log(callStackFileArr);
 
-    const index = callStackFileArr.indexOf(caseFilePath);
+    const index = callStackFileArr.indexOf(caseModuleFilePath);
 
     if (index < 0 || (index >= callStackFileArr.length - 1)) {
-        return caseFilePath;
+        return caseModuleFilePath;
     } else {
         return callStackFileArr[index + 1];
     }
