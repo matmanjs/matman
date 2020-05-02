@@ -135,7 +135,7 @@ function runBuildForEachDemoProject() {
  *
  * @return {Promise<>}
  */
-function runUseWhistle() {
+function runUseWhistle(mockstarPort) {
     const t = Date.now();
 
     console.error('开始设置 whistle...');
@@ -148,7 +148,7 @@ function runUseWhistle() {
                 const whistleOfDemo03 = require('../packages/matman/test/data/hi-demo/demo_03/whistle');
                 const whistleOfDemo04 = require('../packages/matman/test/data/hi-demo/demo_04/whistle');
                 const whistleRulesOfDemo03 = whistleOfDemo03.getDevRules({ port });
-                const whistleRulesOfDemo04 = whistleOfDemo04.getDevRules({ port });
+                const whistleRulesOfDemo04 = whistleOfDemo04.getDevRules({ port, mockstarPort });
                 const whistleRules = {
                     name: `${whistleRulesOfDemo03.name}-${whistleRulesOfDemo04.name}`,
                     rules: [whistleRulesOfDemo03.rules, whistleRulesOfDemo04.rules].join('\n')
@@ -177,6 +177,33 @@ function runUseWhistle() {
                 reject(err);
             });
     });
+}
+
+/**
+ * 为 demo04 启动 mockstar
+ *
+ * @return {Promise<>}
+ */
+function runMockstarForDemo04() {
+    const matmanAppPath = path.join(__dirname, '../packages/matman/test/data/hi-demo/demo_04/mockstar-app');
+
+    return runCmd.runByExec('npm i', { cwd: matmanAppPath })
+        .then(() => {
+            console.log(`mockstar-app npm i 完成`);
+            return runCmd.runByExec('npm start', { cwd: matmanAppPath })
+                .then(() => {
+                    console.log(`mockstar 已经启动，端口为 9527`);
+                    return 9527;
+                })
+                .catch((err) => {
+                    console.error('mockstar 启动失败：', err);
+                    return Promise.reject(err);
+                });
+        })
+        .catch((err) => {
+            console.error('mockstar-app npm i 失败：', err);
+            return Promise.reject(err);
+        });
 }
 
 /**
@@ -227,11 +254,15 @@ runLernaBootstrap()
                         // 4. 构建爬虫脚本，否则执行的时候爬虫脚本若不存在则会报错
                         return runBuildForEachDemoProject()
                             .then(() => {
-                                // 5. 启动 whistle
-                                return runUseWhistle()
-                                    .then((whistlePort) => {
-                                        // 6. 执行端对端自动化测试
-                                        return runTestDirect(whistlePort);
+                                // 5. 为 demo04 启动 mockstar
+                                return runMockstarForDemo04()
+                                    .then((mockstarPort) => {
+                                        // 6. 启动 whistle
+                                        return runUseWhistle(mockstarPort)
+                                            .then((whistlePort) => {
+                                                // 7. 执行端对端自动化测试
+                                                return runTestDirect(whistlePort);
+                                            });
                                     });
                             });
                     });
