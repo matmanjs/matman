@@ -3,33 +3,21 @@ import path from 'path';
 import fse from 'fs-extra';
 import glob from 'glob';
 
-import CrawlerParser from '../model/CrawlerParser';
 import { getWebpackConfig, runBuild } from './builder-webpack3';
 
 /**
  * 构建
  *
- * @param {String} rootPath 项目根目录
- * @param {Object} config config文件内容
+ * @param {MatmanConfig} matmanConfig
  * @return {Promise}
  */
-export default function build(rootPath, config) {
+export default function build(matmanConfig) {
     return new Promise((resolve, reject) => {
-        const crawlerParser = new CrawlerParser(rootPath, config);
-
-        // 校验 crawlerParser 参数合法性
-        let checkResult = crawlerParser.check();
-        if (!checkResult.result) {
-            return reject(checkResult.msg);
-        }
-
-        const isDevBuild = crawlerParser.isDevBuild;
-
         // 获得 webpack 构建选项
-        getWebpackConfig(crawlerParser)
+        getWebpackConfig(matmanConfig)
             .then((webpackConfig) => {
 
-                if (isDevBuild) {
+                if (matmanConfig.isDevBuild) {
                     // 获取到 webpack 配置项结果
                     console.log('webpackConfig: \n', webpackConfig);
                 }
@@ -37,23 +25,25 @@ export default function build(rootPath, config) {
                 // 执行构建
                 runBuild(webpackConfig, () => {
                     // 构建完成之后保存一份配置到构建目录中
-                    saveWebpackConfig(crawlerParser.crawlerBuildPath, webpackConfig);
+                    saveWebpackConfig(matmanConfig.crawlerBuildPath, webpackConfig);
 
-                    let prependCodePromiseList = [];
-                    let evalList = [];
+                    const prependCodePromiseList = [];
+                    const evalList = [];
 
-                    // 如果是非简单模式下，则为打包之后的文件手动增加 nightmare client script
-                    if (!isDevBuild) {
+                    if (!matmanConfig.isDevBuild) {
+                        // 如果是非开发模式下
+                        // 为打包之后的文件手动增加 nightmare client script，以便能与 nightmare 通信
                         prependCodePromiseList.push(getNightmareClientCode());
 
-                        if (crawlerParser.crawlerInjectJQuery) {
-                            // 插入 jQuery
+                        // 插入 jQuery
+                        if (matmanConfig.crawlerInjectJQuery) {
                             prependCodePromiseList.push(getJqueryCode('jQueryCode'));
                             evalList.push('jQueryCode');
                         }
-
                     } else {
-                        prependCodePromiseList.push(getDevPrependCode(crawlerParser.crawlerInjectJQuery));
+                        // 如果是开发模式下
+                        // 追加开发模式下需要的代码，例如 jQuery
+                        prependCodePromiseList.push(getDevPrependCode(matmanConfig.crawlerInjectJQuery));
                     }
 
                     // 获得所有的代码之后，追加在头部
@@ -63,7 +53,7 @@ export default function build(rootPath, config) {
                                 result.push(`window.evalList=[${evalList.map(item => `"${item}"`).join(',')}]`);
 
                                 // 每段插入的代码之后，注意要加一个换行符号，否则在支持 source map 之后，可能会被其"注释"掉
-                                prependCodeToDistFile(crawlerParser.crawlerBuildPath, result.join(';\n'))
+                                prependCodeToDistFile(matmanConfig.crawlerBuildPath, result.join(';\n'))
                                     .then(() => {
                                         resolve();
                                     })

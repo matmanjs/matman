@@ -1,9 +1,6 @@
 # matman
 
-matman 是一个用于端对端测试的工具。更多文档详见 https://matmanjs.github.io/matman 。
-
-> 文档正在补齐中
-
+matman 是一个用于端对端测试的工具，更多资料请参考： [matman 官方文档](https://matmanjs.github.io/matman/) 。
 
 ## 特性
 
@@ -11,19 +8,11 @@ matman 是一个用于端对端测试的工具。更多文档详见 https://matm
 - 支持模拟用户的操作
 - 支持获取页面加载的事件，包括接口请求等
 
-## 安装
+## 优势
 
-```
-$ npm install matman-cli -g
-```
-
-## FAQ
-
-全局安装 `matman-cli` 时，可能会出现以下错误。错误是由 electron 安装时造成的，详见 https://github.com/matmanjs/matman-cli/issues/30 。此时需要增加一些额外参数来安装：
-
-```bash
-sudo npm install matman-cli -g --unsafe-perm=true --allow-root
-```
+- 纯 JavaScript： 使用 JS 语言来写用例，无额外学习成本
+- 简单易用 告别繁琐： 测试框架提供多种场景支持，拿来即用
+- 不只是测试UI： 独有的数据快照模型，不仅可以测UI，还可以测接口请求、性能分析等
 
 ## 参与协作开发
 

@@ -1,6 +1,6 @@
 # matman
 
-[matman](https://github.com/matmanjs/matman) 端对端测试方案中的核心操作库。
+[matman](https://github.com/matmanjs/matman) 端对端测试方案中的核心操作库，更多资料请参考： [matman 官方文档](https://matmanjs.github.io/matman/) 。
 
 ## 1. 安装
 
@@ -10,76 +10,356 @@ $ npm install matman --save
 
 ## 2. API
 
-### 2.1 CaseParser 类
+### 2.1 MatmanConfig 类
 
-测试用例处理类。每一个测试用例都是一个 CaseParser 对象。
+matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提供。
 
 #### 2.1.1 constructor(rootPath, opts)
 
-- `rootPath`: `String`， 测试用例的脚本目录，必填项
+- `rootPath`: `String`， 项目的根目录，必填项
+- `opts`: 额外参数，一般情况下是由项目中的 `matman.config.js` 来定义，详见 `MatmanConfig` 类的字段说明
+
+`MatmanConfig` 类的字段如下：
+
+| 字段名 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `rootPath` | `String` | 无 | 端对端项目的根目录，一般情况是 `matman.config.js` 的目录 |
+| `testerPath` | `String` | `path.resolve(rootPath, './build/crawler-script')` | 测试目标的根目录 |
+| `crawlerBuildPath` | `String` | `path.resolve(rootPath, './build/crawler-script')` | 前端爬虫脚本构建之后的目录 |
+| `crawlerMatch` | `RegExp` | <code>/[\\/&#124;\\\\]crawlers[\\/&#124;\\\\].*\\.js$/</code> | 用于匹配是否为前端爬虫脚本的正则表达式，默认识别 `crawlers` 文件夹下的js |
+| `crawlerInjectJQuery` | `Boolean` | `true` | 前端爬虫脚本中是否注入jQuery |
+| `screenshotPath` | `String` | `path.resolve(rootPath, './build/screenshot_output')` | 屏幕截图保存的路径 |
+| `coveragePath` | `String` | `path.resolve(rootPath, './build/coverage_output')` | 测试覆盖率文件保存的路径 |
+| `matmanResultPath` | `String` | `path.resolve(rootPath, './build/matman_result_output')` | `MatmanResult` 执行结果数据保存的路径 |
+| `isDevBuild` | `Boolean` | `false` | 是否为开发模式，若值为 `true`，则构建之后的前端爬虫脚本可用于代码调试 |
+
+注意，必须要满足以下条件，否则会直接报错：
+
+- `rootPath` 必须真实存在
+- `testerPath` 必须真实存在
+
+
+### 2.2 createPageDriver(caseModuleFilePath, opts)
+
+创建 `PageDriver` 对象。
+
+- `caseModuleFilePath`: `String`， 测试案例文件的绝对路径
+- `opts`: 额外参数，传递给 `MatmanConfig` 和 `PageDriver` 使用
+
+
+### 2.3 PageDriver 类
+
+页面控制器。
+
+#### 2.3.1 constructor(matmanConfig, caseModuleFilePath, opts)
+
+- `matmanConfig`: `MatmanConfig`， 必填项
+- `caseModuleFilePath`: `String`， 测试案例文件的绝对路径，必填项
 - `opts`: 额外参数
+  - `opts.doNotCloseBrowser`: `Boolean`， 是否在执行完成之后不要关闭浏览器，默认为 `false`
+  - `opts.useRecorder`: `Boolean`， 是否使用记录器，若为 `true`，则在结果中会返回网络请求和浏览器事件等额外信息，默认为 `false`
+  - `opts.tag`: `String`， 标记，在某些场景下使用，例如截图保存文件中追加该标记，用于做区分
 
-#### 2.1.2 getCrawlerScriptPath(relativePath)
 
-获得构建之后的爬虫脚本文件的绝对路径路径。
+#### 2.3.2 useNightmare(nightmareConfig)
 
-`relativePath` 是一个相对路径，而返回的是该文件的绝对路径。在确定 `relativePath` 值时，可以参考 CommonJS 规范中的 `require` 方法。
+> 支持链式调用。
 
-```javascript
+使用 nightmare.js 框架来做端对端测试。
 
-const { CaseParser } = require('matman');
-const caseParser =  new CaseParser(__dirname);
+- `nightmareConfig`: `Object`， 可选项，传递给原生的 [Nightmare constructor](https://www.npmjs.com/package/nightmare#nightmareoptions) 的参数
 
-// 获取 crawlerScript 爬虫脚本路径，返回构建之后文件的绝对路径，例如： /user/xxx/yyy/crawlers/get-page-info
-const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-page-info');
+#### 2.3.3 useProxyServer(proxyServer)
 
+> 支持链式调用。
+
+走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的；若不配置，则之前请求现网，亦可直接测试现网的服务。
+
+- `proxyServer`: `String`， 代理服务器，格式为 `my_proxy_server.example.com:8080`，例如 `127.0.0.1:8899`
+
+
+#### 2.3.4 useMockstar(mockstarQuery)
+
+> 支持链式调用。
+
+使用 [mockstar](https://github.com/mockstarjs/mockstar) 来做桩数据(假数据，mock 数据)。
+
+- `mockstarQuery`: `MockStarQuery`，mockstar 方案中用于指定桩数据的请求对象
+
+
+#### 2.3.5 setCookies(cookies)
+
+> 支持链式调用。
+
+注入 cookie。相关内容可以阅读 [nightmare-handler exCookies](https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md)  。
+
+当 `cookies` 为 `String` ，即格式与 `document.cookie` 输出形式一直，例如 `mykey1=myvalue1; mykey2=myvalue2` 。
+
+当 `cookies` 为 `Object` 时，可以支持多个 cookie 键值对，例如 `{mykey1:'myvalue1', mykey2:'myvalue'}` 。
+
+
+#### 2.3.6 setDeviceConfig(deviceConfig)
+
+> 支持链式调用。
+
+设置无头浏览器设备参数。相关内容可以阅读 [nightmare-handler exDevice](https://github.com/helinjiang/nightmare-handler/blob/master/docs/exDevice.md)  。
+
+当 `deviceConfig` 为 `String` ，即为指定用哪种预定义的设备名字，默认值为 `mobile`
+
+当 `deviceConfig` 为 `Object` 时：
+- `deviceConfig.name`: `String`， 设备名字
+- `deviceConfig.UA`: `String`， 是userAgent
+- `deviceConfig.width`: `Number`， 视窗宽度
+- `deviceConfig.height`: `Number`， 视窗高度，注意这里不是指页面的高度，页面高度要小于这个值
+
+
+#### 2.3.7 setScreenshotConfig(screenshotConfig)
+
+> 支持链式调用。
+
+设置截屏参数。相关内容可以阅读 [nightmare#screenshotpath-clip](https://github.com/segmentio/nightmare#screenshotpath-clip) 。
+
+
+当 `screenshotConfig` 为 `Boolean` ，且为 `true` 时，则将根据当前路径自动生成截图文件路径，推荐用该方式。
+
+当 `screenshotConfig` 为 `String` ，即为截图保存的文件路径，绝对路径，例如 `/root/xyz.png`。
+
+当 `screenshotConfig` 为 `Object` 时：
+- `screenshotConfig.path`: `String`， 截图保存的文件路径，绝对路径，例如 `/root/xyz.png`，如果不填写，则将根据当前路径自动生成截图文件路径
+- `screenshotConfig.clip`: `String`， 截图的区域，例如 `{ x: 0, y: 0, width: 0, height: 0 }`
+- `screenshotConfig.tag`: `String`， 标记，会追加到 `screenshotConfig.path` 中，用作自定义的区分
+
+
+#### 2.3.8 setCoverageConfig(coverageConfig)
+
+> 支持链式调用。
+
+设置覆盖率参数。
+
+当 `coverageConfig` 为 `Boolean` ，且为 `true` 时，则将根据当前路径自动生成覆盖率文件路径，推荐用该方式。
+
+当 `coverageConfig` 为 `String` ，即为覆盖率文件路径，绝对路径，例如 `/root/xyz.json`。
+
+当 `coverageConfig` 为 `Object` 时：
+- `coverageConfig.path`: `String`， 覆盖率文件路径，绝对路径，例如 `/root/xyz.json`，如果不填写，则将根据当前路径自动生成覆盖率文件路径
+- `coverageConfig.tag`: `String`， 标记，会追加到 `coverageConfig.path` 中，用作自定义的区分
+
+
+#### 2.3.9 setMatmanResultConfig(matmanResultConfig)
+
+> 支持链式调用。
+
+设置 `MatmanResult` 执行结果参数。
+
+当 `matmanResultConfig` 为 `Boolean` ，且为 `true` 时，则将根据当前路径自动生成 `MatmanResult` 执行结果文件路径，推荐用该方式。
+
+当 `matmanResultConfig` 为 `String` ，即为 `MatmanResult` 执行结果路径，绝对路径，例如 `/root/xyz.json`。
+
+当 `matmanResultConfig` 为 `Object` 时：
+- `matmanResultConfig.path`: `String`，  `MatmanResult` 执行结果文件路径，绝对路径，例如 `/root/xyz.json`，如果不填写，则将根据当前路径自动生成 `MatmanResult` 执行结果
+- `matmanResultConfig.tag`: `String`， 标记，会追加到 `matmanResultConfig.path` 中，用作自定义的区分
+
+#### 2.3.10 goto(pageUrl)
+
+> 支持链式调用。
+
+加载指定的页面地址。
+
+- `pageUrl`: `String`，页面的 url 地址
+
+
+#### 2.3.11 addAction(actionName, actionCall)
+
+> 支持链式调用。
+
+增加测试动作集。
+
+- `actionName`: `String`，动作名称，后续可通过它来获得最后的数据
+- `actionCall`: `Function`，执行函数，入参中接受一个 `nightmare` 对象，可以直接操作使用 [nightmare Interact with the Page](https://www.npmjs.com/package/nightmare#interact-with-the-page) 的方法
+
+以下代码来自： [demo_02](https://github.com/matmanjs/matman/blob/refactor_4.1.0/packages/matman/test/data/hi-demo/demo_02/src/page_baidu_index/cases/search-check.js) :
+
+```js
+const matman = require('matman');
+
+matman
+    // 创建 PageDriver，页面驱动控制器
+    .createPageDriver(__filename, opts)
+
+    // 基于 nightmare.js 框架，未来可以扩展其他的端对端测试工具
+    .useNightmare({ show: opts.show })
+
+    // 其他操作，省略
+    // ....
+
+    // 加载页面地址
+    .goto('https://www.baidu.com')
+
+    // 第一步：开始操作之前
+    .addAction('init', function (nightmareRun) {
+        // nightmareRun 支持所有的原始 nightmare 语法和对其定制的扩展功能
+        return nightmareRun.wait(500);
+    })
+
+    // 第二步：搜索输入框输入: matman
+    .addAction('input_key_word', function (nightmareRun) {
+        // nightmareRun 支持所有的原始 nightmare 语法和对其定制的扩展功能
+        return nightmareRun.type('#kw', 'matman').wait(500);
+    })
+
+    // 第三步：点击搜索按钮，获得搜索结果
+    .addAction('click_to_search', function (nightmareRun) {
+        return nightmareRun.click('#su').wait('#content_left');
+    })
+
+    //  其他操作，省略
+    // ....
+
+    // 结束，获取结果
+    .end();
 ```
 
-#### 2.1.3 handleOperate(pageUrl, crawlerScriptPath, opts = {}, callAction)
+#### 2.3.12 wait(fn, ...args)
 
-模拟用户进行交互操作。
+> 支持链式调用。
 
-请求参数：
+需要等待某些条件达成，才开始运行爬虫脚本，与 nightmare 的 wait 含义和用法一致。
 
-- `pageUrl`：`String`，必填，页面的 URL 地址
-- `crawlerScriptPath`：`String`，必填，运行在浏览器中的前端爬虫脚本的绝对路径，建议使用 `getCrawlerScriptPath(relativePath)` 方法来动态获取
-- `opts`：`Object`，额外参数
-  - `opts.show`：`Boolean`，运行时的无头浏览器是否需要可见，默认为 `false`，即隐藏在后台运行
-  - `opts.proxyServer`：`String`，代理服务器，例如 `127.0.0.1:8899`，或者 `my_proxy_server.example.com:8080` ，会直接透传给 [nightmare 的 switches 配置项](https://github.com/segmentio/nightmare#switches) 中的 `proxy-server` 字段
-  - `opts.wait`：`String | Number`，wait 配置，会直接透传给 [nightmare 的 wait 配置项](https://github.com/segmentio/nightmare#waitms)
-  - `opts.doNotEnd`：`Boolean`，是否在执行完成之后不要关闭浏览器，默认为 `false`
-  - `opts.cookie`：`String`，为浏览器注入cookie，格式与 `document.cookie` 一致
-  - `opts.mockstarQuery`：`Object`，指定 mockstar 的query参数，用于数据打桩，为 [mockstar](https://www.npmjs.com/package/mockstar) 中的 `MockStarQuery` 对象
-  - `opts.screenshot`：`String | Boolean | Object`，截图设置，如果是 `Object` 值，则需要包含 `path` 和 `clip` 两个属性，处理之后会直接透传给 [nightmare 的 screenshot 配置项](https://github.com/segmentio/nightmare#screenshotpath-clip)
-  - `opts.device`：`String | Object`，设备设置，如果是 `Object` 值，则需要包含 `name`、 `UA`、 `width` 和 `height` 两个属性，处理之后会直接透传给 [nightmare-handler 的 exDevice 配置项](https://github.com/helinjiang/nightmare-handler/blob/HEAD/docs/exDevice.md)
-  - `opts.tag`：`String`，特定标记，例如两个 test 脚本都使用同一个行为脚本，那么如果定义了 `tag`，则截图命名中会将其加入其中，避免覆盖，特别的，如果传入 `__dirname` ，我们将自动获取当前文件名，可以简化使用
-- `callAction`：`Function`，定义用户交互行为的函数，接受一个 `BaseHandle` 对象参数
-
-返回一个 `Promise`， `resolve` 返回的值为 `CaseParserOperateResult` 对象，除了包含了 `{data: Array, _dataIndexMap:Object, globalInfo: Object}` ，同时提供了以下方法：
-
-- `get(key)` ，获得指定自定义行为名字的数据结果
-- `getQueue()`，获得所有的事件结果
-- `getNetwork(resourceType)`，获得指定 `resourceType` 的网络请求列表，若 `resourceType` 为空，则返回所有。`resourceType` 目前支持八种：`mainFrame`、`subFrame`、`stylesheet`、`script`、`image`、`object`、`xhr`、`other`
-- `isExistInNetwork(partialURL, query, resourceType)`，从网络请求列表过滤出匹配的结果
-- `isExistPage(partialURL, query)`，从网络请求列表过滤出匹配的结果，且指定 `resourceType` 为 `mainFrame`
-- `isExistXHR(partialURL, query)`，从网络请求列表过滤出匹配的结果，且指定 `resourceType` 为 `xhr`
+- [.wait(selector)](https://www.npmjs.com/package/nightmare#waitselector) : 等待某个元素出现，最常用 ，例如 `.wait('#pay-button')` 
+- [.wait(ms)](https://www.npmjs.com/package/nightmare#waitms) : 等待多少 `ms` ，例如 `.wait(5000)` 
+- [.wait(fn[, arg1, arg2,...])](https://www.npmjs.com/package/nightmare#waitfn-arg1-arg2) : 使用函数来判断条件 
 
 
-#### 3.1.4 handleScan(pageUrl, crawlerScriptPath, opts, delayBeforeClose)
+#### 2.3.13 evaluate(fn, ...args)
 
-获取页面信息，适合无交互行为的场景。
+> 支持链式调用。
 
-请求参数和返回请参考 `handleOperate` 方法，也是返回一个 `Promise`， 但 `resolve` 返回的值结构为 `{data: Object, globalInfo: Object}` 。
+执行爬虫脚本或者方法。
 
-另外定义了一个 `delayBeforeClose` 参数，该值会在 `opts.useRecorder` 为 `true` 时启用，用于延迟关闭窗口，以便能够完整收集一些异步请求信息。
+当 `fn` 为 `String` 时，即代表的是加载本地的爬虫脚本文件，支持绝对路径和相对路径，如果是相对路径，则其相对于当前文件而言，可以等效于 `require` 的语法。 **特别注意的是，本地的爬虫脚本文件，是通过 `matman build` 命令构建产生的，因此该场景下一定要先提前构建出本地的爬虫脚本文件，否则会出错** 。
 
-它本质上是 `handleOperate` 的一个特殊场景，近似等效于：
+当 `fn` 为 `Function` 时，则与 nightmare 的 evaluate 含义和用法一致，详见 [nightmare .evaluate(fn[, arg1, arg2,...])](https://www.npmjs.com/package/nightmare#evaluatefn-arg1-arg2) 。
 
+
+#### 2.3.14 executeCustomFn(customFn)
+
+> 支持链式调用。
+
+执行自定义的方法，适用于 debug 和自定义扩展等场景。
+
+- `customFn`: `Function`，入参中接受一个 `PageDriver` 对象
+
+```js
+const matman = require('matman');
+
+matman 
+    //  其他操作，省略
+    // ....
+
+    // 执行自定义的方法
+    .executeCustomFn((pageDriver) => {
+        // 没有其他的意义，只是为了 debug
+        if (opts.show) {
+            console.log(pageDriver);
+        }
+    })
+
+    //  其他操作，省略
+    // ....
 ```
-return this.handleOperate(pageUrl, crawlerScriptPath, opts, (testAction) => {
-    // scan 行为是一种特殊的操作，因为它只有一个行为，且结果也不再是数组
-    testAction.addAction(function (nightmareRun) {
-        return nightmareRun.wait(opts.wait || 500);
-    });
-})
+
+#### 2.3.15 end()
+
+启动 PageDriver ，返回一个 `Promise` ，结果值为 `MatmanResult` 对象。
+
+
+### 2.4 MatmanResult 类
+
+#### 2.4.1 constructor(result)
+
+- `data`: `Array | Object`，数据快照，如果使用 `addAction(actionName, actionCall)` 追加的测试动作，则该值为数组，可以通过 `get(actionName)` 获得指定动作的数据
+- `globalInfo`: `Object`，网络请求和浏览器事件等全局信息
+
+
+#### 2.4.2 get(actionName)
+
+通过测试动作名字获得数据。
+
+当 `actionName` 为 `String` 时，则该名字来自 `addAction(actionName, actionCall)` 定义的名字。
+
+当 `actionName` 为 `Number` 时，则其相对于数组索引，会从 `matmanResult.data` 这个数组中获取。
+
+
+#### 2.4.3 getQueue(globalInfoRecorderKey = 'recorder')
+
+获得捕获到的请求队列。返回一个数组，数组元素为网络请求和浏览器事件等信息。
+
+
+#### 2.4.4 getNetwork(resourceType)
+
+从结果队列中过滤出网络请求。
+
+
+`resourceType` 详见 [nightmare-handler RESOURCE_TYPE](https://github.com/helinjiang/nightmare-handler/blob/master/src/models/response-detail.js) ，即：
+
+```js
+const RESOURCE_TYPE = {
+    MAIN_FRAME: 'mainFrame',
+    SUB_FRAME: 'subFrame',
+    STYLESHEET: 'stylesheet',
+    SCRIPT: 'script',
+    IMAGE: 'image',
+    OBJECT: 'object',
+    XHR: 'xhr',
+    OTHER: 'other'
+};
 ```
+
+#### 2.4.5 isExistInNetwork(partialURL, query = {}, resourceType, status)
+
+根据条件，从网络请求中匹配指定的请求。
+
+- `partialURL`: `String`，用于匹配的部分url
+- `query`: `Object`，请求携带的 query 参数
+- `resourceType`: `String`，资源类型
+- `status`: `Number`，http 状态码
+
+#### 2.4.6 isExistPage(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'mainFrame', status)`。
+
+使用场景：
+- 测试跳转页面的场景，通过它可以判断是否加载了目标的页面
+
+#### 2.4.7 isExistXHR(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'xhr', status)`。
+
+使用场景：
+- 测试接口请求是否正确，可以利用 `query` 来指定请求参数，确保不会发送一个错误的请求
+- 利用 `status` 可以验证接口是否可能 `500` 等
+- 有些数据上报也是用 `xhr` 的，可以测试数据上报的字段是否正确
+
+#### 2.4.8 isExistImage(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'image', status)`。
+
+使用场景：
+- 测试是否加载了某张图片
+- 利用 `status` 可以验证图片请求是否有可能 `404` 等
+
+#### 2.4.9 isExistStylesheet(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'stylesheet', status)`。
+
+使用场景：
+- 测试是否加载了 `css` 文件
+- 利用 `status` 可以验证 `css` 文件是否有可能 `404` 等
+
+#### 2.4.10 isExistScript(partialURL, query = {}, status)
+
+根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'script', status)`。
+
+使用场景：
+- 测试是否加载了 `js` 文件
+- 利用 `status` 可以验证 `js` 文件是否有可能 `404` 等

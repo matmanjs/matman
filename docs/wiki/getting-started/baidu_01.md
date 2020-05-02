@@ -52,7 +52,7 @@ module.exports = {
 编写完成之后的代码结构如下，其中最关键的时以下三种脚本文件：
               
 - 数据快照爬虫脚本 `crawlers/get-page-info.js`： 被加载到无头浏览器中，可用于爬取页面信息、网络请求和其他信息，将 [页面快照](../basic-concepts/page-snapshot.md) 转为 [数据快照](../basic-concepts/data-snapshot.md) 
-- 测试行为模块 `cases/index.js`： 定义了被测试的页面加载到无头浏览器之后的行为，例如模拟用户点击操作等
+- 测试案例模块 `cases/index.js`： 定义了被测试的页面加载到无头浏览器之后的行为，例如模拟用户点击操作等
 - 测试用例脚本 `cases/index.test.js`： 测试脚本用于测试数据快照的合法性
 
 ```text
@@ -130,7 +130,7 @@ $ npm run build-dev
 ![](./img/baidu_01_01.jpg)
 
 
-### 3.2 编写测试行为模块
+### 3.2 编写测试案例模块
 
 新增 `src/page_baidu_index/cases/basic-check/index.js` 文件，内容如下：
 

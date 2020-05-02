@@ -1,60 +1,65 @@
 import path from 'path';
-import fse from 'fs-extra';
-import fs from 'fs';
 
-import { findCrawlerParser, getFolderNameFromPath } from '../util';
+import { getAbsolutePath, getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath } from '../util';
 
 export default class CoverageConfig {
     /**
      * 构造函数
      *
-     * @param {String} basePath 测试用例的脚本目录
+     * @param {MatmanConfig} matmanConfig
+     * @param {String | Boolean | Object} opts 是否启用覆盖率，或者覆盖率保存的文件名路径(如果想对路径，则相对于basePath 而言)，或者覆盖率配置
+     * @param {String} [opts.path] 覆盖率保存的完成文件名，如果不填写，则将根据当前路径自动生成名字
+     * @param {Object} [opts.tag] 标记
+     * @param {String} [caseModuleFilePath] 测试案例模块的目录
      * @param {String} [tag] 标记
+     * @author helinjiang
      */
-    constructor(basePath, tag) {
+    constructor(matmanConfig, opts, caseModuleFilePath, tag) {
         this.tag = tag;
 
-        // 如果 this.tag 是存在的文件，则获取文件名
-        if (fs.existsSync(this.tag)) {
-            this.tag = path.basename(this.tag).replace(/\./gi, '_');
-        }
+        if (opts && (typeof opts === 'object')) {
+            // 对象中传递的标记优先
+            if (opts.tag) {
+                this.tag = opts.tag;
+            }
 
-        this.path = this._getPath(basePath);
+            // 如果传递了对象
+            this.path = this._getCoverageFullPath(opts.path, matmanConfig.coveragePath);
+
+        } else if (typeof opts === 'string') {
+            // 如果 opts 为字符串，则代表设置的是覆盖率文件保存路径
+            this.path = this._getCoverageFullPath(opts, matmanConfig.coveragePath);
+        } else {
+            // 其他情况自动生成覆盖率文件保存路径
+            const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.testerPath, caseModuleFilePath));
+            const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.json';
+            this.path = this._getCoverageFullPath(path.join(relativeSavePath, saveFileName), matmanConfig.coveragePath);
+        }
     }
 
+    /**
+     * 根据一个标志获得新的路径
+     *
+     * @param {String | Number} id 标志
+     * @return {string} 新的路径
+     * @author helinjiang
+     */
     getPathWithId(id) {
         return this.path.replace(/(.*)\.(.*)/, function (match, p1, p2) {
             return [p1, `${id}.${p2}`].join('_');
         });
     }
 
-    _getPath(basePath) {
-        // 根据配置内容获得 crawlerParser 的对象
-        const crawlerParser = findCrawlerParser(basePath);
-
-        // 有可能找不到
-        if (!crawlerParser) {
-            console.error('Can not find crawlerParser by basePath', basePath);
-            return '';
-        }
-
-        // 相对路径
-        let relativePath = path.relative(crawlerParser.testerPath, basePath);
-        let arr = relativePath.split(path.sep);
-
-        // 文件名
-        let folderName = arr.pop();
-
-        if (this.tag) {
-            folderName = `${folderName}_${this.tag}`;
-        }
-
-        // 需要保存的文件夹路径
-        const saveDir = path.join(crawlerParser.coveragePath, getFolderNameFromPath(arr.join(path.sep)));
-
-        // 要保证这个目录存在，否则保存时会报错
-        fse.ensureDirSync(saveDir);
-
-        return path.join(saveDir, folderName + '.json');
+    /**
+     * 获得完整的覆盖率文件保存路径
+     *
+     * @param targetPath 原始路径
+     * @param basePath 根目录
+     * @return {String} 新的路径
+     * @author helinjiang
+     * @private
+     */
+    _getCoverageFullPath(targetPath, basePath) {
+        return getNewFilePathWithTag(getAbsolutePath(targetPath, basePath), this.tag);
     }
 }
