@@ -26,14 +26,14 @@ function getResult(opts) {
         // 为浏览器注入cookie，格式与 document.cookie 一致
         .setCookie('uin=o012345678')
 
-        // 设置当前设备参数，有默认值
+        // 设置浏览器参数
         .setDeviceConfig({
             'UA': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36',
             'width': 1250,
             'height': 400
         })
 
-        // 设置截屏，默认不截图
+        // 设置截屏
         .setScreenshotConfig(true)
 
         // 设置覆盖率配置，有默认值

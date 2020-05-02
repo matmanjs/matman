@@ -4,12 +4,12 @@ function getResult(opts) {
     return matman
 
         // 创建 PageDriver，页面驱动控制器
-        .createPageDriver(__filename, { doNotCloseBrowser: opts.doNotCloseBrowser, useRecorder: opts.useRecorder })
+        .createPageDriver(__filename, opts)
 
-        // 基于 nightmare.js 框架，未来可以扩展其他的端对端测试工具
+        // 无头浏览器使用 nightmare.js 框架提供，其底层用的是 Google 的 electron，基于 chromium 内核
         .useNightmare({ show: opts.show })
 
-        // 设置当前设备参数，有默认值
+        // 设置浏览器参数
         .setDeviceConfig({
             'UA': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua',
             'width': 1250,
@@ -19,7 +19,7 @@ function getResult(opts) {
         // 设置 cookie
         .setCookies('mykey1=myvalue1; mykey2=myvalue2')
 
-        // 设置截屏，默认不截图
+        // 设置截屏
         .setScreenshotConfig(true)
 
         // 加载页面地址
@@ -42,10 +42,10 @@ function getResult(opts) {
             return nightmareRun.click('#su').wait('#content_left');
         })
 
-        // 执行爬虫脚本之前，需要等待某些条件达成，与 nightmare 的 wait 含义和用法一致
+        // 需要等待某些条件达成，才开始运行爬虫脚本
         .wait('#su')
 
-        // 执行爬虫脚本，这里要么是约定的相对路径，要么是绝对路径，只支持本地文件
+        // 执行爬虫脚本文件或者爬虫脚本函数
         .evaluate('../crawlers/get-page-info-for-search.js')
 
         // 执行自定义的方法
