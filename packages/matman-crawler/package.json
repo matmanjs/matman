@@ -1,6 +1,6 @@
 {
   "name": "matman-crawler",
-  "version": "4.0.20",
+  "version": "5.0.0",
   "description": "Easy to write build preload script in nightmare",
   "main": "lib/index.js",
   "scripts": {
