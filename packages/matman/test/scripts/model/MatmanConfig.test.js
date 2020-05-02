@@ -6,24 +6,15 @@ import MatmanConfig from '../../../src/model/MatmanConfig';
 describe('check model/MatmanConfig.js', () => {
     describe('check constructor(rootPath, opts = {})', () => {
         it('if rootPath is undefined return false', () => {
-            let checkResult = new MatmanConfig().check();
-
-            expect(checkResult.result).to.be.false;
-            expect(checkResult.msg).to.match(/Unknown rootPath=.*/);
+            expect(() => new MatmanConfig()).to.throw('Unknown rootPath=');
         });
 
         it('if rootPath is not exist return false', () => {
-            let checkResult = new MatmanConfig('not/exist/rootPath').check();
-
-            expect(checkResult.result).to.be.false;
-            expect(checkResult.msg).to.match(/Unknown rootPath=.*not\/exist\/rootPath/);
+            expect(() => new MatmanConfig('not/exist/rootPath')).to.throw(`Unknown rootPath=${path.join(__dirname, '../../../not/exist/rootPath')}`);
         });
 
         it('if params.testerPath is not exist return false', () => {
-            let checkResult = new MatmanConfig(__dirname, { testerPath: 'not/exist/testerPath' }).check();
-
-            expect(checkResult.result).to.be.false;
-            expect(checkResult.msg).to.match(/Unknown testerPath=.*not\/exist\/testerPath/);
+            expect(() => new MatmanConfig(__dirname, { testerPath: 'not/exist/testerPath' })).to.throw(`Unknown testerPath=${path.join(__dirname, 'not/exist/testerPath')}`);
         });
 
         it('check demo1: default value', () => {
@@ -31,7 +22,6 @@ describe('check model/MatmanConfig.js', () => {
 
             let matmanConfig = new MatmanConfig(rootPath);
 
-            expect(matmanConfig.check().result).to.be.true;
             expect(matmanConfig.rootPath).to.equal(rootPath);
             expect(matmanConfig.testerPath).to.equal(path.join(rootPath, './src/testers'));
             expect(matmanConfig.crawlerBuildPath).to.equal(path.join(rootPath, './build/crawler-script'));
@@ -57,7 +47,6 @@ describe('check model/MatmanConfig.js', () => {
                 isDevBuild: true
             });
 
-            expect(matmanConfig.check().result).to.be.true;
             expect(matmanConfig.rootPath).to.equal(rootPath);
             expect(matmanConfig.testerPath).to.equal(path.join(rootPath, './src-testers'));
             expect(matmanConfig.crawlerBuildPath).to.equal(path.join(rootPath, './build/my-crawler-script_dev'));

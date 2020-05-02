@@ -112,17 +112,13 @@ export function findMatmanConfig(basePath, matmanConfigOpts) {
     // 获取 matman.config.js 中的配置项
     const configData = Object.assign({}, require(configFilePath), matmanConfigOpts);
 
-    // 根据配置内容获得 matmanConfig 的对象
-    const matmanConfig = new MatmanConfig(configData.rootPath, configData);
-
-    // 如果参数不合理
-    let checkResult = matmanConfig.check();
-    if (!checkResult.result) {
-        console.error(checkResult.msg);
+    try {
+        // 根据配置内容获得 matmanConfig 的对象
+        return new MatmanConfig(configData.rootPath, configData);
+    } catch (err) {
+        console.error(err);
         return null;
     }
-
-    return matmanConfig;
 }
 
 /**
