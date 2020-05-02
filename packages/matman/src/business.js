@@ -7,8 +7,9 @@ import { MATMAN_CONFIG_FILE } from './config';
  * 创建 pageDriver
  *
  * @param {String} caseFilePath 当前 case 的文件名
- * @param {Object} [opts] 额外参数，可以传递给 matman config
+ * @param {Object} [opts] 额外参数，传递给 MatmanConfig 和 PageDriver 使用
  * @return {PageDriver}
+ * @author helinjiang
  */
 export function createPageDriver(caseFilePath, opts) {
     // 自动计算是哪个文件在调用 case 脚本，然后以调用者的文件名来做标记
@@ -16,6 +17,8 @@ export function createPageDriver(caseFilePath, opts) {
     // 这样就能够区分标记了
     if (!opts.tag) {
         const caseCallerPath = getCaseCallerPath(caseFilePath);
+
+        // 注意如果找到的调用文件就是 caseFilePath 本身，则无需设置 tag ，否则就会造成生成的文件名重叠
         if (caseCallerPath && (caseCallerPath !== caseFilePath)) {
             opts.tag = caseCallerPath;
         }
@@ -38,6 +41,7 @@ export function createPageDriver(caseFilePath, opts) {
  *
  * @param {String} caseFilePath 当前 case 的文件名
  * @return {String}
+ * @author helinjiang
  */
 function getCaseCallerPath(caseFilePath) {
     let err = new Error();
