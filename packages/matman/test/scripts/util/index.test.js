@@ -64,7 +64,6 @@ describe('./util/index.js', () => {
                 isDevBuild: true
             });
 
-            expect(matmanConfig.check().result).to.be.true;
             expect(matmanConfig.rootPath).to.equal(newRootPath);
             expect(matmanConfig.testerPath).to.equal(path.join(newRootPath, './src-testers'));
             expect(matmanConfig.crawlerBuildPath).to.equal(path.join(newRootPath, './build/my-crawler-script_dev'));
