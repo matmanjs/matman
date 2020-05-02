@@ -1,6 +1,6 @@
 # matman
 
-[matman](https://github.com/matmanjs/matman) 端对端测试方案中的核心操作库，更多资料请参考： https://matmanjs.github.io/matman/ 。
+[matman](https://github.com/matmanjs/matman) 端对端测试方案中的核心操作库，更多资料请参考： [matman 官方文档](https://matmanjs.github.io/matman/) 。
 
 ## 1. 安装
 

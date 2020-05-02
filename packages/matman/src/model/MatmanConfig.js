@@ -13,7 +13,7 @@ export default class MatmanConfig {
      * @param {String} [opts.testPath] 即将废弃，同 testerPath
      * @param {String} [opts.crawlerBuildPath] 前端爬虫脚本构建之后的目录
      * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为前端爬虫脚本的正则表达式
-     * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery，默认值为 true
+     * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery
      * @param {String} [opts.screenshotPath] 屏幕截图保存的路径
      * @param {String} [opts.coveragePath] 覆盖率文件保存的路径
      * @param {String} [opts.matmanResultPath] MatmanResult 执行结果数据保存的路径
@@ -34,7 +34,7 @@ export default class MatmanConfig {
         this.crawlerMatch = opts.crawlerMatch || /[\/|\\]crawlers[\/|\\].*\.js$/;
 
         // 前端爬虫脚本中是否注入jQuery，默认值为 true
-        this.crawlerInjectJQuery = (typeof opts.crawlerInjectJQuery === 'boolean' ? opts.crawlerInjectJQuery : true);
+        this.crawlerInjectJQuery = !!opts.crawlerInjectJQuery;
 
         // 屏幕截图保存的路径
         this.screenshotPath = getAbsolutePath(opts.screenshotPath || './build/screenshot_output', this.rootPath);
