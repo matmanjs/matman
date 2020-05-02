@@ -116,7 +116,7 @@ export function findMatmanConfig(basePath, matmanConfigOpts) {
         // 根据配置内容获得 matmanConfig 的对象
         return new MatmanConfig(configData.rootPath, configData);
     } catch (err) {
-        console.error(err);
+        console.error(err && err.message || err);
         return null;
     }
 }
