@@ -26,7 +26,7 @@ describe('check model/MatmanConfig.js', () => {
             expect(matmanConfig.testerPath).to.equal(path.join(rootPath, './src/testers'));
             expect(matmanConfig.crawlerBuildPath).to.equal(path.join(rootPath, './build/crawler-script'));
             expect(matmanConfig.crawlerMatch).to.eql(/[\/|\\]crawlers[\/|\\].*\.js$/);
-            expect(matmanConfig.crawlerInjectJQuery).to.be.true;
+            expect(matmanConfig.crawlerInjectJQuery).to.be.false;
             expect(matmanConfig.isDevBuild).to.be.false;
             expect(matmanConfig.screenshotPath).to.equal(path.join(rootPath, './build/screenshot_output'));
             expect(matmanConfig.coveragePath).to.equal(path.join(rootPath, './build/coverage_output'));
@@ -41,7 +41,7 @@ describe('check model/MatmanConfig.js', () => {
                 testerPath: './src-testers',
                 crawlerBuildPath: path.join(rootPath, './build/my-crawler-script'),
                 crawlerMatch: /[\/|\\]my-crawlers[\/|\\].*\.js$/,
-                crawlerInjectJQuery: false,
+                crawlerInjectJQuery: true,
                 screenshotPath: './build/my-screenshot',
                 coveragePath: './build/my-coverage_output',
                 isDevBuild: true
@@ -51,7 +51,7 @@ describe('check model/MatmanConfig.js', () => {
             expect(matmanConfig.testerPath).to.equal(path.join(rootPath, './src-testers'));
             expect(matmanConfig.crawlerBuildPath).to.equal(path.join(rootPath, './build/my-crawler-script_dev'));
             expect(matmanConfig.crawlerMatch).to.eql(/[\/|\\]my-crawlers[\/|\\].*\.js$/);
-            expect(matmanConfig.crawlerInjectJQuery).to.be.false;
+            expect(matmanConfig.crawlerInjectJQuery).to.be.true;
             expect(matmanConfig.isDevBuild).to.be.true;
             expect(matmanConfig.screenshotPath).to.equal(path.join(rootPath, './build/my-screenshot'));
             expect(matmanConfig.coveragePath).to.equal(path.join(rootPath, './build/my-coverage_output'));

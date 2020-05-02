@@ -1,6 +1,6 @@
 # matman-crawler
 
-[matman](https://github.com/matmanjs/matman) 端对端测试方案中使用到的前端爬虫处理工具。
+[matman](https://github.com/matmanjs/matman) 端对端测试方案中使用到的前端爬虫处理工具，更多资料请参考： [matman 官方文档](https://matmanjs.github.io/matman/) 。
 
 ## 1. 安装
 
