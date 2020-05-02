@@ -27,6 +27,11 @@ export function createPageDriver(caseModuleFilePath, opts) {
         // console.log('==opts.tag==', opts.tag);
     }
 
+    // 如果标签就是 case 文件本身路径，则清空，否则就会造成生成的文件名重叠
+    if (opts.tag === caseModuleFilePath) {
+        opts.tag = '';
+    }
+
     const matmanConfig = findMatmanConfig(caseModuleFilePath, opts);
 
     if (!matmanConfig) {
