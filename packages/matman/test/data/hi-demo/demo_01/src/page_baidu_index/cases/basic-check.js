@@ -9,7 +9,7 @@ function getResult(opts) {
         // 创建 PageDriver，页面驱动控制器
         .createPageDriver(__filename, Object.assign({
             rootPath: MATMAN_ROOT_PATH,
-            testerPath: path.join(MATMAN_ROOT_PATH, './src')
+            caseModulesPath: path.join(MATMAN_ROOT_PATH, './src')
         }, opts))
 
         // 基于 nightmare.js 框架，未来可以扩展其他的端对端测试工具

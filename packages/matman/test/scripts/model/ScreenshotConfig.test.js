@@ -10,7 +10,7 @@ describe('check model/ScreenshotConfig.js', () => {
         const caseModuleFilePath = path.join(MATMAN_ROOT_PATH, './src/page_baidu_index/cases/basic-check.js');
         const matmanConfig = findMatmanConfig(caseModuleFilePath,{
             rootPath: MATMAN_ROOT_PATH,
-            testerPath: path.join(MATMAN_ROOT_PATH, './src')
+            caseModulesPath: path.join(MATMAN_ROOT_PATH, './src')
         });
 
         it('if opts is Boolean and tag is undefined', () => {
@@ -163,7 +163,7 @@ describe('check model/ScreenshotConfig.js', () => {
         const caseModuleFilePath = path.join(MATMAN_ROOT_PATH, './src/page_baidu_index/cases/basic-check.js');
         const matmanConfig = findMatmanConfig(caseModuleFilePath,{
             rootPath: MATMAN_ROOT_PATH,
-            testerPath: path.join(MATMAN_ROOT_PATH, './src')
+            caseModulesPath: path.join(MATMAN_ROOT_PATH, './src')
         });
 
         it('if opts is Boolean and tag is "mytag"', () => {
