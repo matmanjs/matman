@@ -99,18 +99,26 @@ export function getConfigFilePath(configPath) {
  * @param {Object} [matmanConfigOpts] 额外传递给 MatmanConfig 的参数，可覆盖 matman.config.js 中配置内容
  * @return {null | MatmanConfig}
  */
-export function findMatmanConfig(basePath, matmanConfigOpts) {
-    // 获得 matman.config.js 的文件路径
-    const configFilePath = getConfigFilePath(basePath);
+export function findMatmanConfig(basePath, matmanConfigOpts = {}) {
+    let configData;
 
-    // 如果不是 config file，则从当前路径往上找 config file
-    if (!configFilePath) {
-        console.error('Can not find config file from basePath=' + basePath);
-        return null;
+    if (matmanConfigOpts && matmanConfigOpts.rootPath && fs.existsSync(matmanConfigOpts.rootPath)) {
+        // 如果已经传递了 rootPath，且为合法的路径，则直接使用
+        // 此时无需去寻找 matman.config.js 文件
+        configData = Object.assign({}, matmanConfigOpts);
+    } else {
+        // 获得 matman.config.js 的文件路径
+        const configFilePath = getConfigFilePath(basePath);
+
+        // 如果不是 config file，则从当前路径往上找 config file
+        if (!configFilePath) {
+            console.error('Can not find config file from basePath=' + basePath);
+            return null;
+        }
+
+        // 获取 matman.config.js 中的配置项
+        configData = Object.assign({}, require(configFilePath), matmanConfigOpts);
     }
-
-    // 获取 matman.config.js 中的配置项
-    const configData = Object.assign({}, require(configFilePath), matmanConfigOpts);
 
     try {
         // 根据配置内容获得 matmanConfig 的对象
