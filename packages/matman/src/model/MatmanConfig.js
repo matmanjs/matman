@@ -7,10 +7,9 @@ export default class MatmanConfig {
     /**
      * 构造函数
      *
-     * @param {String} rootPath  项目的根目录
+     * @param {String} rootPath  matman 项目的根目录
      * @param {Object} opts 参数
-     * @param {String} [opts.testerPath] 测试目标的根目录
-     * @param {String} [opts.testPath] 即将废弃，同 testerPath
+     * @param {String} [opts.caseModulesPath] 测试案例的根目录
      * @param {String} [opts.crawlerBuildPath] 前端爬虫脚本构建之后的目录
      * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为前端爬虫脚本的正则表达式
      * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery
@@ -24,8 +23,8 @@ export default class MatmanConfig {
         // 项目根目录
         this.rootPath = getAbsolutePath(rootPath);
 
-        // 端对端测试代码的目录
-        this.testerPath = getAbsolutePath(opts.testerPath || opts.testPath || './src/testers', this.rootPath);
+        // 测试案例的根目录
+        this.caseModulesPath = getAbsolutePath(opts.caseModulesPath || './case_modules', this.rootPath);
 
         // crawler script 构建之后的目录
         this.crawlerBuildPath = getAbsolutePath(opts.crawlerBuildPath || './build/crawler-script', this.rootPath);
@@ -50,8 +49,8 @@ export default class MatmanConfig {
 
         // 检查参数是否合法
         const checkResult = this._check();
-        if(!checkResult.result){
-            throw new Error(checkResult.msg)
+        if (!checkResult.result) {
+            throw new Error(checkResult.msg);
         }
     }
 
@@ -86,10 +85,10 @@ export default class MatmanConfig {
             };
         }
 
-        if (!fs.existsSync(this.testerPath)) {
+        if (!fs.existsSync(this.caseModulesPath)) {
             return {
                 result: false,
-                msg: 'Unknown testerPath=' + this.testerPath
+                msg: 'Unknown caseModulesPath=' + this.caseModulesPath
             };
         }
 

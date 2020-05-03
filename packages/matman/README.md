@@ -23,8 +23,8 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 
 | 字段名 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `rootPath` | `String` | 无 | 端对端项目的根目录，一般情况是 `matman.config.js` 的目录 |
-| `testerPath` | `String` | `path.resolve(rootPath, './build/crawler-script')` | 测试目标的根目录 |
+| `rootPath` | `String` | 无 | matman 项目的根目录，一般情况是 `matman.config.js` 的目录 |
+| `caseModulesPath` | `String` | `path.resolve(rootPath, './case_modules')` | 测试案例的根目录 |
 | `crawlerBuildPath` | `String` | `path.resolve(rootPath, './build/crawler-script')` | 前端爬虫脚本构建之后的目录 |
 | `crawlerMatch` | `RegExp` | <code>/[\\/&#124;\\\\]crawlers[\\/&#124;\\\\].*\\.js$/</code> | 用于匹配是否为前端爬虫脚本的正则表达式，默认识别 `crawlers` 文件夹下的js |
 | `crawlerInjectJQuery` | `Boolean` | `true` | 前端爬虫脚本中是否注入jQuery |
@@ -36,7 +36,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 注意，必须要满足以下条件，否则会直接报错：
 
 - `rootPath` 必须真实存在
-- `testerPath` 必须真实存在
+- `caseModulesPath` 必须真实存在
 
 
 ### 2.2 createPageDriver(caseModuleFilePath, opts)
