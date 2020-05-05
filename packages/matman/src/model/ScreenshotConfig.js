@@ -38,7 +38,7 @@ export default class ScreenshotConfig {
             this.path = this._getScreenshotFullPath(opts, matmanConfig.screenshotPath);
         } else {
             // 其他情况自动生成截图保存路径
-            const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.testerPath, caseModuleFilePath));
+            const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.caseModulesPath, caseModuleFilePath));
             const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.png';
             this.path = this._getScreenshotFullPath(path.join(relativeSavePath, saveFileName), matmanConfig.screenshotPath);
         }

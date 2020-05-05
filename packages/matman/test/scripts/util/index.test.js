@@ -39,7 +39,7 @@ describe('./util/index.js', () => {
             expect(findMatmanConfig(targetDir)).to.be.null;
         });
 
-        it('findMatmanConfig(data/fixtures/util) should return null because testerPath not exist', () => {
+        it('findMatmanConfig(data/fixtures/util) should return null because caseModulesPath not exist', () => {
             const targetDir = path.join(__dirname, '../../data/fixtures/util');
             expect(findMatmanConfig(targetDir)).to.be.null;
         });
@@ -55,7 +55,7 @@ describe('./util/index.js', () => {
             const newRootPath = path.join(__dirname, '../../data/fixtures/demo2');
             const matmanConfig = findMatmanConfig(targetDir, {
                 rootPath: newRootPath,
-                testerPath: './src-testers',
+                caseModulesPath: './my_case_modules',
                 crawlerBuildPath: path.join(newRootPath, './build/my-crawler-script'),
                 crawlerMatch: /[\/|\\]my-crawlers[\/|\\].*\.js$/,
                 crawlerInjectJQuery: false,
@@ -65,7 +65,7 @@ describe('./util/index.js', () => {
             });
 
             expect(matmanConfig.rootPath).to.equal(newRootPath);
-            expect(matmanConfig.testerPath).to.equal(path.join(newRootPath, './src-testers'));
+            expect(matmanConfig.caseModulesPath).to.equal(path.join(newRootPath, './my_case_modules'));
             expect(matmanConfig.crawlerBuildPath).to.equal(path.join(newRootPath, './build/my-crawler-script_dev'));
             expect(matmanConfig.crawlerMatch).to.eql(/[\/|\\]my-crawlers[\/|\\].*\.js$/);
             expect(matmanConfig.crawlerInjectJQuery).to.be.false;
@@ -73,7 +73,7 @@ describe('./util/index.js', () => {
             expect(matmanConfig.screenshotPath).to.equal(path.join(newRootPath, './build/my-screenshot'));
             expect(matmanConfig.coveragePath).to.equal(path.join(newRootPath, './build/my-coverage_output'));
 
-            expect(matmanConfig).to.have.all.keys('rootPath', 'testerPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'matmanResultPath', 'screenshotPath', 'coveragePath');
+            expect(matmanConfig).to.have.all.keys('rootPath', 'caseModulesPath', 'crawlerBuildPath', 'crawlerMatch', 'crawlerInjectJQuery', 'isDevBuild', 'matmanResultPath', 'screenshotPath', 'coveragePath');
         });
 
     });

@@ -1,15 +1,12 @@
 const path = require('path');
-const matman = require('../../../../../../../');
+const matman = require('../../../../../../');
 
 function getResult(opts) {
-    const MATMAN_ROOT_PATH = path.join(__dirname, '../../../');
-
     return matman
 
         // 创建 PageDriver，页面驱动控制器
         .createPageDriver(__filename, Object.assign({
-            rootPath: MATMAN_ROOT_PATH,
-            testerPath: path.join(MATMAN_ROOT_PATH, './src')
+            rootPath: path.join(__dirname, '../../')
         }, opts))
 
         // 基于 nightmare.js 框架，未来可以扩展其他的端对端测试工具

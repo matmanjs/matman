@@ -35,7 +35,7 @@ export function createPageDriver(caseModuleFilePath, opts) {
     const matmanConfig = findMatmanConfig(caseModuleFilePath, opts);
 
     if (!matmanConfig) {
-        throw new Error(`Could not find ${MATMAN_CONFIG_FILE}!`);
+        throw new Error(`Could not find ${MATMAN_CONFIG_FILE} or matman config setting!`);
     }
 
     return new PageDriver(matmanConfig, caseModuleFilePath, opts);

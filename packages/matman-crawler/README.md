@@ -47,11 +47,11 @@ nightmare 提供了 [custom preload script](https://github.com/segmentio/nightma
 
 ```
 {
-    'crawlers/c1': path.join(matmanConfig.testerPath, 'crawlers/c1.js'),
-    'crawlers/c2': path.join(matmanConfig.testerPath, 'crawlers/c2.js'),
-    'p1/crawlers/c1': path.join(matmanConfig.testerPath, 'p1/crawlers/c1.js'),
-    'p1/crawlers/p11': path.join(matmanConfig.testerPath, 'p1/crawlers/p11.js'),
-    'p1/crawlers/p12': path.join(matmanConfig.testerPath, 'p1/crawlers/p12.js')
+    'crawlers/c1': path.join(matmanConfig.caseModulesPath, 'crawlers/c1.js'),
+    'crawlers/c2': path.join(matmanConfig.caseModulesPath, 'crawlers/c2.js'),
+    'p1/crawlers/c1': path.join(matmanConfig.caseModulesPath, 'p1/crawlers/c1.js'),
+    'p1/crawlers/p11': path.join(matmanConfig.caseModulesPath, 'p1/crawlers/p11.js'),
+    'p1/crawlers/p12': path.join(matmanConfig.caseModulesPath, 'p1/crawlers/p12.js')
 }
 ```
 
@@ -59,14 +59,14 @@ nightmare 提供了 [custom preload script](https://github.com/segmentio/nightma
 
 根据完整的源文件绝对路径 `fullPath``，反查其在 `entry` 中 key 值。
 
-例如根据上面的 `entry` 结果，则调用 `getEntryName(path.join(matmanConfig.testerPath, 'crawlers/c1.js'))` 会返回 `crawlers/c1` 的结果。
+例如根据上面的 `entry` 结果，则调用 `getEntryName(path.join(matmanConfig.caseModulesPath, 'crawlers/c1.js'))` 会返回 `crawlers/c1` 的结果。
 
 
 #### 3.1.3 getCrawlerScriptPath(srcPath)
 
 通过 crawler script 的源文件路径 `srcPath` ，获得其构建之后的文件路径。
 
-例如根据上面的 `entry` 结果，则调用 `getCrawlerScriptPath(path.join(matmanConfig.testerPath, 'crawlers/c1.js'))` 会返回 `path.join(matmanConfig.crawlerBuildPath, 'crawlers/c1.js')` 的结果。
+例如根据上面的 `entry` 结果，则调用 `getCrawlerScriptPath(path.join(matmanConfig.caseModulesPath, 'crawlers/c1.js'))` 会返回 `path.join(matmanConfig.crawlerBuildPath, 'crawlers/c1.js')` 的结果。
 
 
 ### 3.2 build(matmanConfig)

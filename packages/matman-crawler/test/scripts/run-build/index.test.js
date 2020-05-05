@@ -7,8 +7,8 @@ import CrawlerParser from '../../../src/model/CrawlerParser';
 import { findMatmanConfig } from '../../../../matman/src/util';
 
 describe('check build()', () => {
-    const rootPath = path.join(__dirname, '../../data/fixtures/demo1');
-    const tmpCrawlerBuildPath = path.join(__dirname, '../../data/tmp/demo1_build');
+    const rootPath = path.join(__dirname, '../../data/fixtures/demo_for_crawlers');
+    const tmpCrawlerBuildPath = path.join(__dirname, '../../data/tmp/demo_for_crawlers_build');
 
     const crawlerParser = new CrawlerParser(findMatmanConfig(rootPath, {
         crawlerBuildPath: tmpCrawlerBuildPath
@@ -38,14 +38,14 @@ describe('check build()', () => {
 
     it('check webpack-config entry', () => {
         const config = require(path.join(tmpCrawlerBuildPath, 'webpack-config'));
-        const testerPath = path.join(rootPath, './src/testers');
+        const caseModulesPath = path.join(rootPath, './case_modules');
 
         expect(config.entry).to.eql({
-            'crawlers/c1': path.join(testerPath, 'crawlers/c1.js'),
-            'crawlers/c2': path.join(testerPath, 'crawlers/c2.js'),
-            'p1/crawlers/c1': path.join(testerPath, 'p1/crawlers/c1.js'),
-            'p1/crawlers/p11': path.join(testerPath, 'p1/crawlers/p11.js'),
-            'p1/crawlers/p12': path.join(testerPath, 'p1/crawlers/p12.js')
+            'crawlers/c1': path.join(caseModulesPath, 'crawlers/c1.js'),
+            'crawlers/c2': path.join(caseModulesPath, 'crawlers/c2.js'),
+            'p1/crawlers/c1': path.join(caseModulesPath, 'p1/crawlers/c1.js'),
+            'p1/crawlers/p11': path.join(caseModulesPath, 'p1/crawlers/p11.js'),
+            'p1/crawlers/p12': path.join(caseModulesPath, 'p1/crawlers/p12.js')
         });
     });
 

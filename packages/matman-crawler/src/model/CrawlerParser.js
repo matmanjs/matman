@@ -27,7 +27,7 @@ export default class CrawlerParser {
         let entry = {};
 
         // 获取所有的 js 文件
-        let globResult = glob.sync(path.resolve(this.matmanConfig.testerPath, './**/**.js'));
+        let globResult = glob.sync(path.resolve(this.matmanConfig.caseModulesPath, './**/**.js'));
 
         globResult
             .filter((item) => {
@@ -80,7 +80,7 @@ export default class CrawlerParser {
      * @author helinjiang
      */
     getEntryName(fullPath) {
-        // 获取相对于 testerPath 的相对路径，且去掉 .js 后缀
-        return path.relative(this.matmanConfig.testerPath, fullPath).replace('.js', '');
+        // 获取相对于 caseModulesPath 的相对路径，且去掉 .js 后缀
+        return path.relative(this.matmanConfig.caseModulesPath, fullPath).replace('.js', '');
     }
 }
