@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const checkPage = require('../../../packages/matman/test/data/hi-demo/demo_04/src/page_baidu_index/cases/basic-check');
+const checkPage = require('../../../packages/matman/test/data/hi-demo/demo_04/case_modules/page_baidu_index/basic-check');
 
 describe('使用本地项目和mockstar: success_type_2', function () {
     this.timeout(30000);
