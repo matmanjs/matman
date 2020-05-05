@@ -14,7 +14,7 @@ describe('check model/MatmanConfig.js', () => {
         });
 
         it('if params.caseModulesPath is not exist return false', () => {
-            expect(() => new MatmanConfig(__dirname, { caseModulesPath: 'not/exist/testerPath' })).to.throw(`Unknown caseModulesPath=${path.join(__dirname, 'not/exist/testerPath')}`);
+            expect(() => new MatmanConfig(__dirname, { caseModulesPath: 'not/exist/caseModulesPath' })).to.throw(`Unknown caseModulesPath=${path.join(__dirname, 'not/exist/caseModulesPath')}`);
         });
 
         it('check demo1: default value', () => {
