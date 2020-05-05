@@ -1,5 +1,5 @@
 const { createMockStarQuery } = require('mockstar');
-const matman = require('../../../../../../../');
+const matman = require('../../../../../../');
 
 function getResult(opts) {
     return matman
@@ -52,5 +52,3 @@ module.exports = getResult;
 //     .catch(function (error) {
 //         console.error('failed:', error);
 //     });
-
-
