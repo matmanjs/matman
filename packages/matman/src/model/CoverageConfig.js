@@ -31,7 +31,7 @@ export default class CoverageConfig {
             this.path = this._getCoverageFullPath(opts, matmanConfig.coveragePath);
         } else {
             // 其他情况自动生成覆盖率文件保存路径
-            const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.testerPath, caseModuleFilePath));
+            const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.caseModulesPath, caseModuleFilePath));
             const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.json';
             this.path = this._getCoverageFullPath(path.join(relativeSavePath, saveFileName), matmanConfig.coveragePath);
         }

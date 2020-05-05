@@ -31,7 +31,7 @@ export default class MatmanResultConfig {
             this.path = this._getMatmanResultFullPath(opts, matmanConfig.matmanResultPath);
         } else {
             // 其他情况自动生成执行结果文件保存路径
-            const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.testerPath, path.dirname(caseModuleFilePath)));
+            const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.caseModulesPath, path.dirname(caseModuleFilePath)));
             const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.json';
             this.path = this._getMatmanResultFullPath(path.join(relativeSavePath, saveFileName), matmanConfig.matmanResultPath);
         }

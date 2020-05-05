@@ -1,6 +1,6 @@
 {
   "name": "matman",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Easy to write e2e test2",
   "main": "lib/index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "istanbul-lib-coverage": "^3.0.0",
     "istanbul-lib-source-maps": "^4.0.0",
     "lodash": "^4.17.15",
-    "matman-crawler": "^5.0.0",
+    "matman-crawler": "^5.0.2",
     "nightmare-handler": "^1.0.9"
   },
   "devDependencies": {
