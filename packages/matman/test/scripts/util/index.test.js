@@ -55,7 +55,7 @@ describe('./util/index.js', () => {
             const newRootPath = path.join(__dirname, '../../data/fixtures/demo2');
             const matmanConfig = findMatmanConfig(targetDir, {
                 rootPath: newRootPath,
-                caseModulesPath: './some_case_modules',
+                caseModulesPath: './my_case_modules',
                 crawlerBuildPath: path.join(newRootPath, './build/my-crawler-script'),
                 crawlerMatch: /[\/|\\]my-crawlers[\/|\\].*\.js$/,
                 crawlerInjectJQuery: false,
@@ -65,7 +65,7 @@ describe('./util/index.js', () => {
             });
 
             expect(matmanConfig.rootPath).to.equal(newRootPath);
-            expect(matmanConfig.caseModulesPath).to.equal(path.join(newRootPath, './some_case_modules'));
+            expect(matmanConfig.caseModulesPath).to.equal(path.join(newRootPath, './my_case_modules'));
             expect(matmanConfig.crawlerBuildPath).to.equal(path.join(newRootPath, './build/my-crawler-script_dev'));
             expect(matmanConfig.crawlerMatch).to.eql(/[\/|\\]my-crawlers[\/|\\].*\.js$/);
             expect(matmanConfig.crawlerInjectJQuery).to.be.false;
