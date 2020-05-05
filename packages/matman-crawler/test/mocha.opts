@@ -1,4 +1,4 @@
 test/scripts
 --require babel-core/register
---reporter spec
+--reporter min
 --recursive

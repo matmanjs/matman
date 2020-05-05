@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 
-const checkPage = require('../../../packages/matman/test/data/hi-demo/demo_03/src/page_baidu_index/cases/basic-check');
+const checkPage = require('../../../packages/matman/test/data/hi-demo/demo_03/src/page_baidu_index/basic-check');
 
 describe('百度首页：使用本地项目测试', function () {
     this.timeout(30000);
