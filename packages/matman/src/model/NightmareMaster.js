@@ -145,6 +145,12 @@ export default class NightmareMaster {
                 curRun.screenshot(screenshotFilePath, this.pageDriver.screenshotConfig.clip);
             }
 
+            // 如果使用了记录器，则每个请求都延迟 50ms，注意是因为 network 是异步的
+            // TODO 这里的处理过于粗暴，还可以优化
+            if (this.globalInfoRecorderKey) {
+                curRun = curRun.wait(50);
+            }
+
             let t;
             if (typeof this.pageDriver.nightmareEvaluateFn === 'function') {
                 t = await curRun.evaluate(this.pageDriver.nightmareEvaluateFn, ...this.pageDriver.nightmareEvaluateFnArgs);
