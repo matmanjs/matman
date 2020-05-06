@@ -3,7 +3,7 @@ import path from 'path';
 import fse from 'fs-extra';
 import glob from 'glob';
 
-import { getWebpackConfig, runBuild } from './builder-webpack3';
+import { getWebpackConfig, runBuild } from './builder-webpack4';
 
 /**
  * 构建
@@ -92,7 +92,7 @@ function getDevPrependCode(crawlerInjectJQuery) {
     return new Promise((resolve, reject) => {
         const injectFile = crawlerInjectJQuery ? 'dev-prepend-with-jquery.js' : 'dev-prepend.js';
 
-        fs.readFile(path.join(__dirname, `./builder-webpack3/libs/${injectFile}`), 'utf8', (err, data) => {
+        fs.readFile(path.join(__dirname, `./builder-webpack4/libs/${injectFile}`), 'utf8', (err, data) => {
             if (err) {
                 return reject(err);
             }
