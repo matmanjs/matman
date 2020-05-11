@@ -81,8 +81,13 @@ function getCaseCallerPath(caseModuleFilePath) {
      '(/Users/helinjiang/gitproject/matman/tmp/test1.js:11:1)' ]
      * @type {RegExpMatchArray}
      */
-    const stackFileArr = stackStr.match(/\(\/(.*)\)/gi);
+    let stackFileArr = stackStr.match(/\((.*)\)/gi) || [];
     // console.log(stackFileArr);
+
+    // 过滤掉内部js模块的调用，因为没有意义
+    stackFileArr = stackFileArr.filter((item) => {
+        return item.indexOf('(internal') !== 0;
+    })
 
     /**
      * 文件调用栈列表
