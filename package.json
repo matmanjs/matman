@@ -9,7 +9,7 @@
         "docs:deploy": "npm run docs:build && gh-pages -d docs-dist",
         "test": "node ./test/run-test.js",
         "test:direct": "node ./node_modules/mocha/bin/_mocha",
-        "test:direct:debugnightmare": "cross-env DEBUG=nightmare test:direct"
+        "test:direct:debugnightmare": "cross-env DEBUG=nightmare npm run test:direct"
     },
     "repository": {
         "type": "git",
