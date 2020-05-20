@@ -7,6 +7,14 @@ import { MATMAN_CONFIG_FILE } from './config';
 import { findMatmanConfig } from './util';
 
 import { createPageDriver } from './business';
+import Browser from './model/Browser';
+
+/**
+ * 为做兼容，参考 https://github.com/puppeteer/puppeteer/blob/v3.1.0/docs/api.md#puppeteerlaunchoptions
+ */
+function launch(browserOptions) {
+    return new Browser(browserOptions);
+}
 
 module.exports = {
     MatmanConfig,
@@ -16,5 +24,6 @@ module.exports = {
     istanbulUtil,
     createPageDriver,
     findMatmanConfig,
-    MATMAN_CONFIG_FILE
+    MATMAN_CONFIG_FILE,
+    launch
 };

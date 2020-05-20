@@ -87,7 +87,7 @@ function getCaseCallerPath(caseModuleFilePath) {
     // 过滤掉内部js模块的调用，因为没有意义
     stackFileArr = stackFileArr.filter((item) => {
         return item.indexOf('(internal') !== 0;
-    })
+    });
 
     /**
      * 文件调用栈列表
