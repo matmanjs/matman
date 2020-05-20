@@ -1,16 +1,16 @@
 const path = require('path');
 const matman = require('../../../../../../');
 
-function getResult(opts) {
+module.exports = (opts) => {
     return matman
 
-        // 创建 PageDriver，页面驱动控制器
-        .createPageDriver(__filename, Object.assign({
+        // 创建 Browser 对象，使用它对浏览器进行设置
+        .launch({ show: opts.show })
+
+        // 创建 Page 对象，使用它可以实现对浏览器页面的控制
+        .newPage(__filename, Object.assign({
             rootPath: path.join(__dirname, '../../')
         }, opts))
-
-        // 基于 nightmare.js 框架，未来可以扩展其他的端对端测试工具
-        .useNightmare({ show: opts.show })
 
         // 设置浏览器参数
         .setDeviceConfig({
@@ -43,11 +43,9 @@ function getResult(opts) {
 
         // 结束，获取结果
         .end();
-}
+};
 
-module.exports = getResult;
-
-// getResult({ show: true, doNotCloseBrowser: true, useRecorder: false })
+// module.exports({ show: true, doNotCloseBrowser: true, useRecorder: false })
 //     .then(function (result) {
 //         console.log(JSON.stringify(result));
 //     })
