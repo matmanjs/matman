@@ -137,7 +137,7 @@ $ npm run build-dev
 ```js
 const matman = require('matman');
 
-function getResult(opts) {
+module.exports = (opts) => {
     // 1. 获取 caseParser 对象
     const caseParser = new matman.CaseParser(__dirname);
 
@@ -162,9 +162,7 @@ function getResult(opts) {
     return caseParser.handleScan(pageUrl, crawlerScriptPath, reqOpts);
 }
 
-module.exports = getResult;
-
-// getResult({ show: true, doNotEnd: true, useRecorder: false })
+// module.exports({ show: true, doNotEnd: true, useRecorder: false })
 //     .then(function (result) {
 //         console.log(JSON.stringify(result));
 //     })

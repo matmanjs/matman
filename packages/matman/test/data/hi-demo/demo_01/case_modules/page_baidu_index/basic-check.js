@@ -1,7 +1,7 @@
 const path = require('path');
 const matman = require('../../../../../../');
 
-function getResult(opts) {
+module.exports = (opts) => {
     return matman
 
         // 创建 Browser 对象，使用它对浏览器进行设置
@@ -43,16 +43,14 @@ function getResult(opts) {
 
         // 结束，获取结果
         .end();
-}
+};
 
-module.exports = getResult;
-
-getResult({ show: true, doNotCloseBrowser: true, useRecorder: false })
-    .then(function (result) {
-        console.log(JSON.stringify(result));
-    })
-    .catch(function (error) {
-        console.error('failed:', error);
-    });
+// module.exports({ show: true, doNotCloseBrowser: true, useRecorder: false })
+//     .then(function (result) {
+//         console.log(JSON.stringify(result));
+//     })
+//     .catch(function (error) {
+//         console.error('failed:', error);
+//     });
 
 
