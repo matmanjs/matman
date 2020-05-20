@@ -1,7 +1,7 @@
 const { createMockStarQuery } = require('mockstar');
 const matman = require('../../../../../../');
 
-function getResult(opts) {
+module.exports = (opts) => {
     return matman
 
         // 创建 PageDriver，页面驱动控制器
@@ -34,11 +34,9 @@ function getResult(opts) {
 
         // 结束，获取结果
         .end();
-}
+};
 
-module.exports = getResult;
-
-// getResult({
+// module.exports({
 //     show: true,
 //     doNotCloseBrowser: true,
 //     useRecorder: false,
