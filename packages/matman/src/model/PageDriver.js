@@ -15,7 +15,7 @@ import CoverageConfig from './CoverageConfig';
 import MatmanResultConfig from './MatmanResultConfig';
 
 /**
- * 页面控制器
+ * 页面操作类，使用这个类可以实现对浏览器页面的控制
  */
 export default class PageDriver {
     /**
@@ -28,6 +28,7 @@ export default class PageDriver {
      * @param {String} [opts.tag] 标记，在某些场景下使用，例如截图保存文件中追加该标记，用于做区分
      * @param {Boolean} [opts.useRecorder] 是否使用记录器
      * @param {Boolean} [opts.doNotCloseBrowser] 是否在执行完成之后不要关闭浏览器，默认为 false
+     * @param {Boolean} [opts.nightmareConfig] 传递给 nightmare 的配置
      * @author helinjiang
      */
     constructor(matmanConfig, caseModuleFilePath, opts = {}) {
@@ -51,7 +52,7 @@ export default class PageDriver {
         // 延时多少ms再启动
         this.delayBeforeRun = (typeof opts.delayBeforeRun === 'number' ? opts.delayBeforeRun : 0);
 
-        this.nightmareConfig = {};
+        this.nightmareConfig = opts.nightmareConfig || {};
         this.proxyServer = '';
         this.mockstarQuery = null;
 
