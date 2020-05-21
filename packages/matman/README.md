@@ -363,3 +363,7 @@ const RESOURCE_TYPE = {
 使用场景：
 - 测试是否加载了 `js` 文件
 - 利用 `status` 可以验证 `js` 文件是否有可能 `404` 等
+
+#### 2.4.11 isExistJSBridge(partialURL, query = {})
+
+是否存在某个 jsbridge 的调用，支持使用 iframe 和 location.href 两种形式，具体可以查看 https://github.com/matmanjs/matman-demo/tree/master/DevOps/matman-app/case_modules/page-hybrid-app。
