@@ -236,6 +236,8 @@ module.exports = () => {
 };
 ```
 
+#### 3.2.5 浏览器测试
+
 编写完成之后，我们可以在浏览器内进行验证，执行爬虫脚本的打包命令：
 
 ```bash
@@ -244,6 +246,10 @@ $ npm run build-dev
 
 - 上述命令会生成一个调试脚本 `build/crawler-script_dev/page_baidu_index/crawlers/get-page-info-for-search.js` 
 - 拷贝所有的内容在浏览器 `console` 控制台，然后查看输出即可
+
+输出结果如下：
+
+<img src="./img/image-20200521171904196.png" alt="image-20200521171904196" style="zoom:40%;" />
 
 ### 3.2 编写测试案例模块
 
