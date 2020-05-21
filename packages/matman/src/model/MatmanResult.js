@@ -189,4 +189,43 @@ export default class MatmanResult {
     isExistScript(partialURL, query = {}, status) {
         return this.isExistInNetwork(partialURL, query, 'script', status);
     }
+
+    /**
+     * 是否存在某个 jsbridge 的调用
+     *
+     * @param {String} partialURL 用于匹配的部分url
+     * @param {Object} [query] 请求携带的 query 参数
+     * @return {Boolean}
+     * @author helinjiang
+     */
+    isExistJSBridge(partialURL, query = {}) {
+        const queue = this.getQueue();
+
+        let result = false;
+
+        // 只要找到其中一个匹配即可返回
+        for (let i = 0; i < queue.length; i++) {
+            const queueItem = queue[i];
+
+            if (queueItem.eventName !== 'did-fail-provisional-load') {
+                continue;
+            }
+
+            if (!queueItem.args || queueItem.args.length < 4) {
+                continue;
+            }
+
+            const jsbridge = queueItem.args[3];
+
+            // 如果没有匹配到链接则执行下一个
+            if (!isURLMatch(jsbridge, partialURL, query)) {
+                continue;
+            }
+
+            result = true;
+            break;
+        }
+
+        return result;
+    }
 };

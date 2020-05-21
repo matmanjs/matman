@@ -35,7 +35,7 @@
     "istanbul-lib-source-maps": "^4.0.0",
     "lodash": "^4.17.15",
     "matman-crawler": "^5.0.4",
-    "nightmare-handler": "^1.0.9"
+    "nightmare-handler": "^1.0.10"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
