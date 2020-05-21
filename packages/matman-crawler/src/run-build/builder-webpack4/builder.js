@@ -45,6 +45,10 @@ export function createProdConfig(matmanConfig, opts = {}) {
     // 设置 webpack 配置
     const prodConfig = {};
 
+    // 关闭 sourceMap
+    // https://webpack.js.org/configuration/devtool/
+    // prodConfig.devtool = 'hidden-source-map';
+
     // 这里的 entry 需要自动生成
     prodConfig.entry = new CrawlerParser(matmanConfig).getEntry();
 
