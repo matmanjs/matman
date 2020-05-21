@@ -151,7 +151,7 @@ function _prependCodeToOneFile(filePath, code) {
                 return reject('read file err! filePath=' + filePath);
             }
 
-            fse.outputFile(filePath, code + ';' + fileContent, err => {
+            fse.outputFile(filePath, code + '\n;' + fileContent, err => {
                 if (err) {
                     console.error('prepend fail!', filePath, err);
                     reject('prepend err! filePath=' + filePath);
