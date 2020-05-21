@@ -242,7 +242,8 @@ module.exports = () => {
 $ npm run build-dev
 ```
 
-上述命令会生成一个调试脚本 `build/crawler-script/page_baidu_index/crawlers/get-page-info-for-search.js` ，拷贝所有的内容在浏览器 `console` 控制台，然后查看输出即可。
+- 上述命令会生成一个调试脚本 `build/crawler-script_dev/page_baidu_index/crawlers/get-page-info-for-search.js` 
+- 拷贝所有的内容在浏览器 `console` 控制台，然后查看输出即可
 
 ### 3.2 编写测试案例模块
 
