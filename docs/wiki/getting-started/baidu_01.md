@@ -14,7 +14,10 @@ sidebarDepth: 2
 
 ```bash
 $ npm i matman
-$ npm i -D chai cross-env mocha 
+$ npm i -D chai cross-env mocha
+# or
+$ yarn add matman
+$ yarn add -D chai cross-env mocha
 ```
 
 你也可以手动新建一个 `package.json` ，拷贝下面的内容，然后执行 `npm i` 命令：
