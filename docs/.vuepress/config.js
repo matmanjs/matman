@@ -45,6 +45,15 @@ module.exports = {
                             ]
                         },
                         {
+                            title: '深入',
+                            collapsable: false,
+                            children: [
+                                'improve/summary',
+                                'improve/get-start',
+                                'improve/simple'
+                            ]
+                        },
+                        {
                             title: '基本理论',
                             collapsable: false,
                             children: [
