@@ -10,71 +10,74 @@ sidebarDepth: 2
 
 ## 1. 创建项目 baidu_01 并初始化
 
-新建一个目录命名为 `baidu_01` ，使用 `npm init` 命令初始化，然后安装 [matman](http://npmjs.com/package/matman):
+新建一个目录命名为 `baidu_01` ，使用 `npm init` 命令初始化，然后安装 [matman](http://npmjs.com/package/matman) 与支持单元测试必要的包（在这里选用了 [mocha](http://npmjs.com/package/mocha) +  [chai](http://npmjs.com/package/chai)）：
 
 ```bash
-$ npm i matman --save
+$ npm i matman
+$ npm i -D chai cross-env mocha
+# or
+$ yarn add matman
+$ yarn add -D chai cross-env mocha
 ```
 
-你也可以手动新建一个 `package.json` ，拷贝下面的内容：
+你也可以手动新建一个 `package.json` ，拷贝下面的内容，然后执行 `npm i` 命令：
 
 ```json
 {
     "name": "baidu_01",
     "version": "1.0.0",
     "scripts": {
-        "build": "matman build",
-        "build-dev": "matman build --dev"
+        "test": "mocha",
+        "test:show": "cross-env SHOW_BROWSER=1 npm run test"
     },
     "dependencies": {
-        "matman": "^4.0.7"
+        "matman": "^5.0.6"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "cross-env": "^7.0.2",
+        "mocha": "^7.1.2"
     }
 }
 ```
 
-## 2. 配置 matman.config.js
-
-在目录下增加一个 `matman.config.js` 文件，与 `package.json` 同级目录，内容如下：
-
-```js
-const path = require('path');
-
-module.exports = {
-    rootPath: __dirname,
-    testerPath: path.join(__dirname, './src')
-};
-```
-
-其中 `testerPath` 指定了我们的测试用例存放在那个目录下，这里我们指定为 `src` ，因此还需要手动增加 `src` 文件夹。
-
-## 3. 编写端对端测试模块
-
-编写完成之后的代码结构如下，其中最关键的时以下三种脚本文件：
-              
-- 数据快照爬虫脚本 `crawlers/get-page-info.js`： 被加载到无头浏览器中，可用于爬取页面信息、网络请求和其他信息，将 [页面快照](../basic-concepts/page-snapshot.md) 转为 [数据快照](../basic-concepts/data-snapshot.md) 
-- 测试案例模块 `cases/index.js`： 定义了被测试的页面加载到无头浏览器之后的行为，例如模拟用户点击操作等
-- 测试用例脚本 `cases/index.test.js`： 测试脚本用于测试数据快照的合法性
+## 2. 目录结构
 
 ```text
 .
-├── matman.config.js
+├── case_modules
+│   └── page_baidu_index
+│       └── basic-check.js
 ├── package.json
-└── src
-    └── page_baidu_index
-        ├── cases
-        │   └── basic-check
-        │       ├── index.js
-        │       └── index.test.js
-        └── crawlers
-            └── get-page-info.js
+└── test
+    ├── basic-check-in-single-file.test.js
+    └── basic-check.test.js
 ```
+
+### 2.1 `test` 目录
+
+> 本目录完成 mocha 的一系列测试文件，用于测试数据快照的合法性
+
+编写 mocha 的测试文件，目录中的两个文件说明如下：
+
+- basic-check-in-single-file：将 matman 获取数据快照与 mocha 测试集集成在一起
+- basic-check：通过 before 获取数据快照，仅包含 mocha 测试集
+
+### 2.2 `case_modules` 目录
+
+> 本目录完成使用 matman 获取页面数据快照逻辑的编写，包括被测试的页面加载到无头浏览器之后的行为、页面信息、网络请求和其他信息的爬虫
+
+- page_baidu_index 目录：我们推荐使用 `page_<二级域名>_<URI>` 命名同一个页面的不同数据快照获取方式
+- basic-check：通过 `matman` 获取数据快照的方法
+
+## 3. 编写端对端测试
 
 ### 3.1 编写数据快照爬虫脚本
 
-新增 `src/page_baidu_index/crawlers/get-page-info.js` 文件，内容如下：
+编写数据快照爬虫，内容如下（需要注意的是在本项目中为出现此函数，而是直接写在了 `matman` 流程中）：
 
 ```js
-module.exports = () => {
+const spider = () => {
     return {
         title: document.title,
         width: window.innerWidth,
@@ -85,114 +88,104 @@ module.exports = () => {
         navInfo: getNavInfo()
     };
 };
-
-/**
- * 获取导航模块的信息
- */
-function getNavInfo() {
-    const jqContainer = $('#u1');
-    let result = {
-        isExist: !!jqContainer.length
-    };
-
-    function getNavData(nameAttr) {
-        const jqItem = $(`a[name=${nameAttr}]`, jqContainer);
-
-        const data = {
-            isExist: !!jqItem.length
-        };
-
-        if (data.isExist) {
-            data.name = jqItem.text();
-            data.href = jqItem.attr('href');
-        }
-
-        return data;
-    }
-
-    if (result.isExist) {
-        result.setting = getNavData('tj_settingicon');
-        result.moreProduct = getNavData('tj_briicon');
-    }
-
-    return result;
-}
 ```
 
-编写完成之后，我们可以在浏览器内进行验证，执行爬虫脚本的打包命令：
+### 3.2 编写无头浏览器操作
 
-```bash
-$ npm run build-dev
-```
+在 `case_modules/page_baidu_index.js` 文件，写入如下内容
 
-上述命令会生成一个调试脚本 `build/crawler-script_dev/page_baidu_index/crawlers/get-page-info.js` ，拷贝所有的内容在浏览器 `console` 控制台，查看输出：
-
-![](./img/baidu_01_01.jpg)
-
-
-### 3.2 编写测试案例模块
-
-新增 `src/page_baidu_index/cases/basic-check/index.js` 文件，内容如下：
-
-```js
-const matman = require('matman');
-
+```javascript
 module.exports = (opts) => {
-    // 1. 获取 caseParser 对象
-    const caseParser = new matman.CaseParser(__dirname);
+    const MATMAN_ROOT_PATH = path.join(__dirname, '../../');
 
-    // 2. 获取页面的 url
-    const pageUrl = 'https://www.baidu.com';
+    return matman
 
-    // 3. 获取 crawlerScript 爬虫脚本路径
-    const crawlerScriptPath = caseParser.getCrawlerScriptPath('../../crawlers/get-page-info');
+        // 创建 Browser 对象，使用它对浏览器进行设置
+        .launch({ show: opts.show })
 
-    // 4. 获得一些配置参数
-    const reqOpts = Object.assign({
-        device: {
-            'UA': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36',
+        // 创建 Page 对象，使用它可以实现对浏览器页面的控制
+        .newPage(__filename, Object.assign({
+            rootPath: MATMAN_ROOT_PATH
+        }, opts))
+
+        // 设置浏览器参数
+        .setDeviceConfig({
+            'UA': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua',
             'width': 1250,
             'height': 400
-        },
-        wait: '#su',
-        screenshot: true
-    }, opts);
+        })
 
-    // 5. 执行并返回 Promise 结果
-    return caseParser.handleScan(pageUrl, crawlerScriptPath, reqOpts);
-}
+        // 设置截屏
+        .setScreenshotConfig(true)
 
-// module.exports({ show: true, doNotEnd: true, useRecorder: false })
-//     .then(function (result) {
-//         console.log(JSON.stringify(result));
-//     })
-//     .catch(function (error) {
-//         console.error('failed:', error);
-//     });
+        // 加载页面地址
+        .goto('https://www.baidu.com')
+
+        // 需要等待某些条件达成，才开始运行爬虫脚本
+        .wait('#su')
+
+        // 爬虫脚本的函数，用于获取页面中的数据
+        .evaluate(() => {
+            return {
+                title: document.title,
+                width: window.innerWidth,
+                height: window.innerHeight,
+                userAgent: navigator.userAgent,
+                _version: Date.now(),
+                searchBtnTxt: document.querySelector('#su').value
+            };
+        })
+
+        // 结束，获取结果
+        .end();
+};
 ```
 
-编写之后，如果要自测，则可以将文件最末尾的注释去掉，然后用 node 执行该文件，即执行 `node index.js`。
+#### 3.2.1 流程概览
 
+> 这里我们只介绍脚本执行的大致流程，具体的 API 可以[参考](../../api)
 
-### 3.3 编写测试用例脚本
+1. launch：创建 Browser 对象，使用它对浏览器进行设置
+2. newPage：创建 Page 对象，使用它可以实现对浏览器页面的控制
+3. setDeviceConfig：设置浏览器参数
+4. setScreenshotConfig：设置截屏（页面截图保存在 `/build/screenshot_output` 中）
+5. goto：加载页面地址
+6. wait：需要等待某些条件达成，才开始运行爬虫脚本
+7. evaluate：爬虫脚本的函数，用于获取页面中的数据
+8. end：结束，获取结果
 
-新增 `src/page_baidu_index/cases/basic-check/index.test.js` 文件，内容如下：
+#### 3.2.2 自测
 
 ```js
-const expect = require('chai').expect;
+module.exports({ show: true, doNotEnd: true, useRecorder: false })
+     .then(function (result) {
+         console.log(JSON.stringify(result));
+     })
+     .catch(function (error) {
+         console.error('failed:', error);
+     });
+```
 
-const checkPage = require('.');
+编写完成后，如果要自测，可以在文件末尾的注释加入如上代码，然后用 node 执行该文件。
 
+
+## 4. 编写测试用例
+
+### 不集成 `matman`
+
+新增 `test/basic-check.test.js` 文件，内容如下：
+
+```js
 describe('百度首页：常规检查', function () {
     this.timeout(30000);
 
     let resultData;
 
     before(function () {
-        return checkPage({ show: false, doNotEnd: false, useRecorder: true })
-            .then(function (result) {
+        return checkPage({ show: process.env.SHOW_BROWSER || false, doNotCloseBrowser: false, useRecorder: true })
+            .then(function (matmanResult) {
                 // console.log(JSON.stringify(result));
-                resultData = result;
+                resultData = matmanResult;
             });
     });
 
@@ -211,46 +204,92 @@ describe('百度首页：常规检查', function () {
             expect(data.searchBtnTxt).to.equal('百度一下');
         });
 
-        it('顶部导航信息正确', function () {
-            expect(data.navInfo).to.eql({
-                'isExist': true,
-                'moreProduct': { 'href': 'http://www.baidu.com/more/', 'isExist': true, 'name': '更多产品' },
-                'setting': { 'href': 'http://www.baidu.com/gaoji/preferences.html', 'isExist': true, 'name': '设置' }
-            });
+        it('userAgent应该正确', function () {
+            expect(data.userAgent).to.equal('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua');
         });
     });
 });
-
 ```
 
-安装 [mocha](http://npmjs.com/package/mocha) 和 [chai](http://npmjs.com/package/chai) ：
+### 集成 `matman`
 
-```bash
-$ npm i mocha chai --save-dev
+新增 `test/basic-check-in-single-file.test.js` 文件，内容如下：
+
+```javascript
+describe('百度首页：常规检查，使用单文件形式', function () {
+    this.timeout(30000);
+
+    it('检查基本信息', function (done) {
+        const MATMAN_ROOT_PATH = path.join(__dirname, '../');
+
+        matman
+
+            // 创建 Browser 对象，使用它对浏览器进行设置
+            .launch({ show: process.env.SHOW_BROWSER || false })
+
+            // 创建 Page 对象，使用它可以实现对浏览器页面的控制
+            .newPage(__filename, {
+                show: process.env.SHOW_BROWSER || false,
+                doNotCloseBrowser: false,
+                useRecorder: true,
+                tag: __filename,
+                rootPath: MATMAN_ROOT_PATH,
+                caseModulesPath: __dirname
+            })
+
+            // 设置浏览器参数
+            .setDeviceConfig({
+                'UA': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua',
+                'width': 1250,
+                'height': 400
+            })
+
+            // 设置截屏
+            .setScreenshotConfig(true)
+
+            // 加载页面地址
+            .goto('https://www.baidu.com')
+
+            // 需要等待某些条件达成，才开始运行爬虫脚本
+            .wait('#su')
+
+            // 爬虫脚本的函数，用于获取页面中的数据
+            .evaluate(() => {
+                return {
+                    title: document.title,
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    userAgent: navigator.userAgent,
+                    _version: Date.now(),
+                    searchBtnTxt: document.querySelector('#su').value
+                };
+            })
+
+            // 结束，获取结果
+            .end()
+            .then(function (matmanResult) {
+                // console.log(JSON.stringify(matmanResult));
+                const { data } = matmanResult;
+
+                // 网站title应该为：百度一下，你就知道
+                expect(data.title).to.equal('百度一下，你就知道');
+
+                // 搜索按钮的文字应该为：百度一下
+                expect(data.searchBtnTxt).to.equal('百度一下');
+
+                //userAgent应该正确
+                expect(data.userAgent).to.equal('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua');
+
+                done();
+            });
+    });
+});
 ```
 
-配置 npm scripts 命令，最后的 package.json 长这样：
+- 集成 `matman` 的部分可以参考[3.2 编写无头浏览器操作](./baidu_01.md#_3-2-编写无头浏览器操作)
+- 我们更推荐将 mocha 或 jest 测试样例与 `matman` e2e 测试分开写
 
-```json
-{
-    "name": "baidu_01",
-    "version": "1.0.0",
-    "scripts": {
-        "build": "matman build",
-        "build-dev": "matman build --dev",
-        "test": "npm run build && mocha src/**/*.test.js"
-    },
-    "dependencies": {
-        "matman": "^4.0.7"
-    },
-    "devDependencies": {
-        "chai": "^4.2.0",
-        "mocha": "^7.1.0"
-    }
-}
-```
-
-### 3.4 执行端对端测试
+## 5. 执行测试
 
 运行如下命令，执行端对端测试：
 
