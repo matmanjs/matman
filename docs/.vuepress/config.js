@@ -48,7 +48,9 @@ module.exports = {
                             title: '深入',
                             collapsable: false,
                             children: [
-                                'improve/summary'
+                                'improve/summary',
+                                'improve/get-start',
+                                'improve/simple'
                             ]
                         },
                         {
