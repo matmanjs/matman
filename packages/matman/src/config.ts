@@ -4,4 +4,3 @@
  * @type {String}
  */
 export const MATMAN_CONFIG_FILE = 'matman.config.js';
-
