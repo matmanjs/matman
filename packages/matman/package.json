@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "prepublishOnly": "npm run build",
-    "build": "babel ./src --out-dir ./lib --source-maps",
+    "build": "tsc -d",
     "watch-compile": "npm run build -- --watch",
     "watch": "npm run watch-compile",
     "test": "node ./node_modules/mocha/bin/_mocha"
@@ -34,6 +34,7 @@
     "nightmare-handler": "^1.0.10"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.1",
     "@types/lodash": "^4.14.155",
     "chai": "^4.2.0",
     "mocha": "^7.1.2"

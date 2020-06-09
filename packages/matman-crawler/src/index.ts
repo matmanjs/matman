@@ -1,7 +1,7 @@
 import CrawlerParser from './model/CrawlerParser';
 import build from './run-build';
 
-module.exports = {
-    CrawlerParser,
-    build
+export default {
+  CrawlerParser,
+  build,
 };

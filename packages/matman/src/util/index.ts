@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import {MatmanConfigType} from '../types';
 import MatmanConfig from '../model/MatmanConfig';
 
 import {MATMAN_CONFIG_FILE as configFileName} from '../config';
@@ -103,8 +104,11 @@ export function getConfigFilePath(configPath: string): string {
  * @param {Object} [matmanConfigOpts] 额外传递给 MatmanConfig 的参数，可覆盖 matman.config.js 中配置内容
  * @return {null | MatmanConfig}
  */
-export function findMatmanConfig(basePath: string, matmanConfigOpts = {}) {
-  let configData;
+export async function findMatmanConfig(
+  basePath: string,
+  matmanConfigOpts?: MatmanConfigType,
+): Promise<null | MatmanConfig> {
+  let configData: MatmanConfigType;
 
   if (matmanConfigOpts && matmanConfigOpts.rootPath && fs.existsSync(matmanConfigOpts.rootPath)) {
     // 如果已经传递了 rootPath，且为合法的路径，则直接使用
@@ -121,11 +125,16 @@ export function findMatmanConfig(basePath: string, matmanConfigOpts = {}) {
     }
 
     // 获取 matman.config.js 中的配置项
-    configData = Object.assign({}, require(configFilePath), matmanConfigOpts);
+    const res = await import(configFilePath);
+    configData = Object.assign({}, res.default, matmanConfigOpts);
   }
 
   try {
     // 根据配置内容获得 matmanConfig 的对象
+    if (!configData.rootPath) {
+      throw new Error('rootPath must be defined');
+    }
+
     return new MatmanConfig(configData.rootPath, configData);
   } catch (err) {
     console.error((err && err.message) || err);
@@ -149,7 +158,7 @@ export function findMatmanConfig(basePath: string, matmanConfigOpts = {}) {
  * @return {String}
  * @author {helinjiang}
  */
-export function getFolderNameFromPath(targetPath) {
+export function getFolderNameFromPath(targetPath: string): string {
   return (
     getSaveDirFromPath(targetPath)
       // linux 下的 / 修改为 _
@@ -178,7 +187,7 @@ export function getFolderNameFromPath(targetPath) {
  * @return {String}
  * @author {helinjiang}
  */
-export function getSaveDirFromPath(targetPath) {
+export function getSaveDirFromPath(targetPath: string): string {
   // 找到相对路径，即从测试项目根目录到行为模块文件的路径，例如： page-xxx/cases/basic-check
   // 极端情况下可能存在下面几种类型的结果：
   //   a/b/path
@@ -201,7 +210,7 @@ export function getSaveDirFromPath(targetPath) {
       .replace(/\.\./gi, 'parent')
 
       // 去掉 ./ ，例如 ./a/b 修改为 a/b
-      .replace(/^\.([^[\\||\/])*[\\||\/]/gi, '')
+      .replace(/^\.([^[\\|/])*[\\|/]/gi, '')
 
       // 将文件后缀的 . 修改为 _
       .replace(/\./gi, '_')
@@ -216,7 +225,7 @@ export function getSaveDirFromPath(targetPath) {
  * @param {String} [targetPath] 目标路径
  * @return {String}
  */
-function _search(targetPath) {
+function _search(targetPath: string): string {
   let currDir = targetPath || process.cwd();
   let isExist = true;
 

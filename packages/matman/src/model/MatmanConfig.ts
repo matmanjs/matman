@@ -2,8 +2,21 @@ import fs from 'fs';
 import path from 'path';
 
 import {getAbsolutePath} from '../util';
+import {MatmanConfigType} from '../types';
+
+type CheckResult = {result: boolean; msg?: string};
 
 export default class MatmanConfig {
+  rootPath: string;
+  caseModulesPath: string;
+  crawlerBuildPath: string;
+  crawlerMatch: RegExp;
+  crawlerInjectJQuery: boolean;
+  screenshotPath: string;
+  coveragePath: string;
+  matmanResultPath: string;
+  isDevBuild: boolean;
+
   /**
    * 构造函数
    *
@@ -19,7 +32,9 @@ export default class MatmanConfig {
    * @param {Boolean} [opts.isDevBuild] 是否为开发模式
    * @author helinjiang
    */
-  constructor(rootPath, opts = {}) {
+  constructor(rootPath: string, opts: MatmanConfigType = {}) {
+    // 消除警告, 其实会被覆盖
+    this.isDevBuild = false;
     // 项目根目录
     this.rootPath = getAbsolutePath(rootPath);
 
@@ -33,7 +48,7 @@ export default class MatmanConfig {
     );
 
     // 用于匹配是否为 crawler script 的正则
-    this.crawlerMatch = opts.crawlerMatch || /[\/|\\]crawlers[\/|\\].*\.js$/;
+    this.crawlerMatch = opts.crawlerMatch || /[/|\\]crawlers[/|\\].*\.js$/;
 
     // 前端爬虫脚本中是否注入jQuery，默认值为 true
     this.crawlerInjectJQuery = !!opts.crawlerInjectJQuery;
@@ -60,7 +75,7 @@ export default class MatmanConfig {
     this.setIsDevBuild(!!opts.isDevBuild);
 
     // 检查参数是否合法
-    const checkResult = this._check();
+    const checkResult = this.check();
     if (!checkResult.result) {
       throw new Error(checkResult.msg);
     }
@@ -72,7 +87,7 @@ export default class MatmanConfig {
    * @param {Boolean} isDevBuild
    * @author helinjiang
    */
-  setIsDevBuild(isDevBuild) {
+  setIsDevBuild(isDevBuild: boolean): void {
     // 是否为开发模式
     this.isDevBuild = isDevBuild;
 
@@ -92,7 +107,7 @@ export default class MatmanConfig {
    * @author helinjiang
    * @private
    */
-  _check() {
+  private check(): CheckResult {
     if (!fs.existsSync(this.rootPath)) {
       return {
         result: false,
