@@ -1,4 +1,5 @@
 import path from 'path';
+import 'mocha';
 import {expect} from 'chai';
 
 import MatmanConfig from '../../src/MatmanConfig';
