@@ -4,16 +4,16 @@ import {isURLMatch} from '../util/url';
 /**
  * 资源类型的枚举
  */
-enum ResourceType {
-  MAIN_FRAME = 'mainFrame',
-  SUB_FRAME = 'subFrame',
-  STYLESHEET = 'stylesheet',
-  SCRIPT = 'script',
-  IMAGE = 'image',
-  OBJECT = 'object',
-  XHR = 'xhr',
-  OTHER = 'other',
-}
+type ResourceType =
+  | 'mainFrame'
+  | 'subFrame'
+  | 'stylesheet'
+  | 'script'
+  | 'image'
+  | 'object'
+  | 'xhr'
+  | 'other'
+  | '';
 
 export default class MatmanResult {
   data: unknown[];
@@ -93,7 +93,7 @@ export default class MatmanResult {
      * @return {Array}
      * @author helinjiang
      */
-  getNetwork(resourceType: ResourceType): NetworkType[] {
+  getNetwork(resourceType?: ResourceType): NetworkType[] {
     const queue = this.getQueue();
 
     return queue.filter(item => {
@@ -128,8 +128,8 @@ export default class MatmanResult {
   isExistInNetwork(
     partialURL: string,
     query = {},
-    resourceType: ResourceType,
-    status: number,
+    resourceType?: ResourceType,
+    status?: number,
   ): boolean {
     const queue = this.getNetwork(resourceType);
 
@@ -165,8 +165,8 @@ export default class MatmanResult {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistPage(partialURL: string, query = {}, status: number): boolean {
-    return this.isExistInNetwork(partialURL, query, ResourceType.MAIN_FRAME, status);
+  isExistPage(partialURL: string, query = {}, status?: number): boolean {
+    return this.isExistInNetwork(partialURL, query, 'mainFrame', status);
   }
 
   /**
@@ -178,8 +178,8 @@ export default class MatmanResult {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistXHR(partialURL: string, query = {}, status: number): boolean {
-    return this.isExistInNetwork(partialURL, query, ResourceType.XHR, status);
+  isExistXHR(partialURL: string, query = {}, status?: number): boolean {
+    return this.isExistInNetwork(partialURL, query, 'xhr', status);
   }
 
   /**
@@ -192,7 +192,7 @@ export default class MatmanResult {
    * @author helinjiang
    */
   isExistImage(partialURL: string, query = {}, status: number): boolean {
-    return this.isExistInNetwork(partialURL, query, ResourceType.IMAGE, status);
+    return this.isExistInNetwork(partialURL, query, 'image', status);
   }
 
   /**
@@ -205,7 +205,7 @@ export default class MatmanResult {
    * @author helinjiang
    */
   isExistStylesheet(partialURL: string, query = {}, status: number): boolean {
-    return this.isExistInNetwork(partialURL, query, ResourceType.STYLESHEET, status);
+    return this.isExistInNetwork(partialURL, query, 'stylesheet', status);
   }
 
   /**
@@ -218,7 +218,7 @@ export default class MatmanResult {
    * @author helinjiang
    */
   isExistScript(partialURL: string, query = {}, status: number): boolean {
-    return this.isExistInNetwork(partialURL, query, ResourceType.SCRIPT, status);
+    return this.isExistInNetwork(partialURL, query, 'script', status);
   }
 
   /**
