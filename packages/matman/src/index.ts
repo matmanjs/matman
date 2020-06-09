@@ -1,27 +1,27 @@
 import MatmanConfig from './model/MatmanConfig';
-// import PageDriver from './model/PageDriver';
-// import MatmanResult from './model/MatmanResult';
+import PageDriver from './model/PageDriver';
+import MatmanResult from './model/MatmanResult';
 import {isURLMatch} from './util/url';
 import {MATMAN_CONFIG_FILE} from './config';
 import {findMatmanConfig} from './util';
 
-// import {createPageDriver} from './business';
-// import Browser from './model/Browser';
+import {createPageDriver} from './business';
+import Browser from './model/Browser';
 
 /**
  * 为做兼容，参考 https://github.com/puppeteer/puppeteer/blob/v3.1.0/docs/api.md#puppeteerlaunchoptions
  */
-// function launch(browserOptions) {
-//   return new Browser(browserOptions);
-// }
+function launch(browserOptions: any): Browser {
+  return new Browser(browserOptions);
+}
 
 export default {
   MatmanConfig,
-  // PageDriver,
-  // MatmanResult,
+  PageDriver,
+  MatmanResult,
   isURLMatch,
-  // createPageDriver,
+  createPageDriver,
   findMatmanConfig,
   MATMAN_CONFIG_FILE,
-  // launch,
+  launch,
 };

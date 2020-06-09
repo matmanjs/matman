@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
-import MatmanConfig from 'matman/lib/model/MatmanConfig';
+import MatmanConfig from 'matman/src/model/MatmanConfig';
 
 /**
  * 爬虫脚本解析器，用于处理前端的爬虫脚本

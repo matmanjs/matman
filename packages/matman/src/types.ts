@@ -42,3 +42,20 @@ export type CoverageOrResultOrScreenOpts =
   | string
   | boolean
   | {tag?: string; path: string; clip?: ClipOpts};
+
+/**
+ * 网络请求队列中的结果
+ */
+export interface NetworkType {
+  eventName: string;
+  args: any[];
+}
+
+/**
+ * 测试的结果
+ */
+export interface MatmanResultType {
+  data?: unknown[];
+  _dataIndexMap?: {[key: string]: number};
+  globalInfo?: {[key: string]: {queue: NetworkType[]}};
+}

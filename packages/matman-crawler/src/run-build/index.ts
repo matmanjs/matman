@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import fse from 'fs-extra';
 import glob from 'glob';
-import MatmanConfig from 'matman/lib/model/MatmanConfig';
+import MatmanConfig from 'matman/src/model/MatmanConfig';
 
 import {getWebpackConfig, runBuild} from './builder-webpack4';
 
