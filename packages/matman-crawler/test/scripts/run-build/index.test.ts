@@ -15,7 +15,7 @@ describe('check build()', async () => {
   const crawlerParser = new CrawlerParser(
     (await findMatmanConfig(rootPath, {
       crawlerBuildPath: tmpCrawlerBuildPath,
-    })) as MatmanConfig,
+    })) as any,
   );
 
   before(() => {

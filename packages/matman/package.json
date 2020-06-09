@@ -8,7 +8,7 @@
     "build": "tsc -d",
     "watch-compile": "npm run build -- --watch",
     "watch": "npm run watch-compile",
-    "test": "node ./node_modules/mocha/bin/_mocha"
+    "test": "mocha"
   },
   "keywords": [
     "matman",
@@ -34,10 +34,13 @@
     "nightmare-handler": "^1.0.10"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.11",
     "@types/fs-extra": "^9.0.1",
     "@types/lodash": "^4.14.155",
+    "@types/mocha": "^7.0.2",
     "@types/nightmare": "^2.10.4",
     "chai": "^4.2.0",
-    "mocha": "^7.1.2"
+    "mocha": "^7.1.2",
+    "ts-node": "^8.10.2"
   }
 }
