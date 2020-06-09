@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import {MatmanConfigOpts} from '../types';
-import MatmanConfig from '../MatmanConfig';
 
+import MatmanConfig from '../MatmanConfig';
 import {MATMAN_CONFIG_FILE as configFileName} from '../config';
+import {MatmanConfigOpts} from '../types';
 
 /**
  * 获得绝对路径地址
