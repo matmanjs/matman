@@ -10,7 +10,7 @@ import {
 
 export default class CoverageConfig {
   path: string;
-  tag: string;
+  tag: string | undefined;
 
   /**
    * 构造函数
@@ -27,7 +27,7 @@ export default class CoverageConfig {
     matmanConfig: MatmanConfig,
     opts: CoverageOrResultOrScreenOpts,
     caseModuleFilePath: string,
-    tag: string,
+    tag?: string,
   ) {
     this.tag = tag;
 

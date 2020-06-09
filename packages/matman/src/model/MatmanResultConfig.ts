@@ -9,7 +9,7 @@ import {
 } from '../util';
 
 export default class MatmanResultConfig {
-  tag: string;
+  tag: string | undefined;
   path: string;
 
   /**
@@ -27,7 +27,7 @@ export default class MatmanResultConfig {
     matmanConfig: MatmanConfig,
     opts: CoverageOrResultOrScreenOpts,
     caseModuleFilePath: string,
-    tag: string,
+    tag?: string,
   ) {
     this.tag = tag;
 

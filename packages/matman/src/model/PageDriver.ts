@@ -2,20 +2,79 @@ import fs from 'fs';
 import path from 'path';
 
 import fse from 'fs-extra';
-import {CrawlerParser} from 'matman-crawler';
+import Nightmare from 'nightmare';
+import crawler from 'matman-crawler';
 
 import MatmanResult from './MatmanResult';
 import NightmareMaster from './NightmareMaster';
 
 import ScreenshotConfig from './ScreenshotConfig';
-import DeviceConfig from './DeviceConfig';
+import DeviceConfig, {DeviceConfigOpts} from './DeviceConfig';
 import CoverageConfig from './CoverageConfig';
 import MatmanResultConfig from './MatmanResultConfig';
+import MatmanConfig from './MatmanConfig';
+
+import {CoverageOrResultOrScreenOpts} from '../types';
+
+const {CrawlerParser} = crawler;
+
+interface NightmareOpts extends Nightmare.IConstructorOptions {
+  switches?: {
+    'proxy-server': string;
+    // 必须设置一下这个，否则在某些情况下 https 地址无法使用
+    // https://github.com/matmanjs/matman/issues/159
+    'ignore-certificate-errors': boolean;
+  };
+  webPreferences?: {
+    // 用例过多且频繁启动测试时可能会存在失败的场景 #154
+    partition: string;
+    preload: null | (() => any) | string;
+  };
+}
+
+export interface PageDriverOpts {
+  useRecorder?: boolean;
+  doNotCloseBrowser?: boolean;
+  tag?: string;
+  delayBeforeRun?: number;
+  nightmareConfig?: NightmareOpts;
+}
 
 /**
  * 页面操作类，使用这个类可以实现对浏览器页面的控制
  */
 export default class PageDriver {
+  matmanConfig: MatmanConfig;
+
+  caseModuleFilePath: string;
+  useRecorder: boolean;
+  doNotCloseBrowser: boolean;
+  tag: string | undefined;
+
+  delayBeforeRun: number;
+  nightmareConfig: NightmareOpts;
+  proxyServer: string;
+  mockstarQuery: null | {appendToUrl: (s: string) => string};
+
+  cookies: string | {[key: string]: any};
+  deviceConfig: null | DeviceConfig;
+  screenshotConfig: null | ScreenshotConfig;
+  coverageConfig: null | CoverageConfig;
+  matmanResultConfig: null | MatmanResultConfig;
+
+  pageUrl: string;
+
+  nightmareWaitFn: number | string | (() => number | string);
+  nightmareWaitFnArgs: any[];
+
+  nightmareEvaluateFn: null | (() => any) | string;
+  nightmareEvaluateFnArgs: any[];
+
+  actionList: ((n: Nightmare) => Nightmare)[];
+
+  _dataIndexMap: {[key: string]: number};
+  _isDefaultScanMode = false;
+
   /**
    * 构造函数
    *
@@ -29,15 +88,15 @@ export default class PageDriver {
    * @param {Boolean} [opts.nightmareConfig] 传递给 nightmare 的配置
    * @author helinjiang
    */
-  constructor(matmanConfig, caseModuleFilePath, opts = {}) {
+  constructor(matmanConfig: MatmanConfig, caseModuleFilePath: string, opts: PageDriverOpts = {}) {
     this.matmanConfig = matmanConfig;
 
     // 测试case文件的路径
     // TODO 需要确保存在
     this.caseModuleFilePath = caseModuleFilePath;
 
-    this.useRecorder = opts.useRecorder;
-    this.doNotCloseBrowser = opts.doNotCloseBrowser;
+    this.useRecorder = !!opts.useRecorder;
+    this.doNotCloseBrowser = !!opts.doNotCloseBrowser;
 
     this.tag = opts.tag;
 
@@ -84,7 +143,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  useNightmare(nightmareConfig) {
+  useNightmare(nightmareConfig: {[key: string]: any}): PageDriver {
     this.nightmareConfig = nightmareConfig || {};
 
     return this;
@@ -100,7 +159,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  useProxyServer(proxyServer) {
+  useProxyServer(proxyServer: string): PageDriver {
     this.proxyServer = proxyServer;
 
     return this;
@@ -115,7 +174,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  useWhistle(getRulesCall, opts = {}) {
+  useWhistle(getRulesCall: () => void, opts = {}): PageDriver {
     // .useWhistle((data) => {
     //     return {
     //         name: `[auto]matman_demo_03_${data.port}`,
@@ -136,7 +195,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  useMockstar(mockstarQuery) {
+  useMockstar(mockstarQuery: {appendToUrl: (s: string) => string}): PageDriver {
     if (!mockstarQuery || typeof mockstarQuery.appendToUrl !== 'function') {
       throw new Error(
         '请传递正确的 MockStarQuery 对象，请参考： https://www.npmjs.com/package/mockstar',
@@ -158,7 +217,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setCookies(cookies) {
+  setCookies(cookies: string | {[key: string]: any}): PageDriver {
     this.cookies = cookies;
     return this;
   }
@@ -176,7 +235,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setDeviceConfig(deviceConfig) {
+  setDeviceConfig(deviceConfig: DeviceConfigOpts): PageDriver {
     this.deviceConfig = new DeviceConfig(deviceConfig || 'mobile');
     return this;
   }
@@ -188,7 +247,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setScreenshotConfig(screenshotConfig) {
+  setScreenshotConfig(screenshotConfig: CoverageOrResultOrScreenOpts): PageDriver {
     if (screenshotConfig) {
       this.screenshotConfig = new ScreenshotConfig(
         this.matmanConfig,
@@ -207,7 +266,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setCoverageConfig(coverageConfig) {
+  setCoverageConfig(coverageConfig: CoverageOrResultOrScreenOpts): PageDriver {
     if (coverageConfig) {
       this.coverageConfig = new CoverageConfig(
         this.matmanConfig,
@@ -227,7 +286,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setMatmanResultConfig(matmanResultConfig) {
+  setMatmanResultConfig(matmanResultConfig: CoverageOrResultOrScreenOpts): PageDriver {
     if (matmanResultConfig) {
       this.matmanResultConfig = new MatmanResultConfig(
         this.matmanConfig,
@@ -247,7 +306,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  goto(pageUrl) {
+  goto(pageUrl: string): PageDriver {
     this.pageUrl = pageUrl;
     return this;
   }
@@ -260,7 +319,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  addAction(actionName, actionCall) {
+  addAction(actionName: string, actionCall: (n: Nightmare) => Nightmare): PageDriver {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
       this._dataIndexMap[actionName + ''] = this.actionList.length - 1;
@@ -285,7 +344,9 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  wait(fn, ...args) {
+  wait(fn: number | string): PageDriver;
+  wait(fn: () => number | string, ...args: any[]): PageDriver;
+  wait(fn: number | string | (() => number | string), ...args: any[]): PageDriver {
     this.nightmareWaitFn = fn;
     this.nightmareWaitFnArgs = args;
 
@@ -302,7 +363,9 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  evaluate(fn, ...args) {
+  evaluate(fn: string): Promise<PageDriver>;
+  evaluate(fn: () => any, ...args: any[]): Promise<PageDriver>;
+  async evaluate(fn: string | (() => any), ...args: any[]): Promise<PageDriver> {
     if (typeof fn === 'string') {
       // 获取 crawler script 的源文件目录
       // fn 有可能是绝对路径，也可能是相对路径，但都要转为绝对路径
@@ -310,9 +373,9 @@ export default class PageDriver {
       const crawlerScriptSrcPath = path.resolve(path.dirname(this.caseModuleFilePath), fn);
 
       // 调用 crawlerParser 的方法获得该脚本构建之后的路径
-      this.nightmareEvaluateFn = new CrawlerParser(this.matmanConfig).getCrawlerScriptPath(
-        crawlerScriptSrcPath,
-      );
+      this.nightmareEvaluateFn = await new CrawlerParser(
+        this.matmanConfig as any,
+      ).getCrawlerScriptPath(crawlerScriptSrcPath);
 
       // 有可能地址不存在脚本构建地址，此时给与提示
       if (!this.nightmareEvaluateFn) {
@@ -335,7 +398,7 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  executeCustomFn(customFn) {
+  executeCustomFn(customFn: (p: PageDriver) => void): PageDriver {
     if (typeof customFn === 'function') {
       customFn(this);
     }
@@ -347,8 +410,8 @@ export default class PageDriver {
    * @return {Promise<{}>}
    * @author helinjiang
    */
-  end() {
-    let nightmareMaster = new NightmareMaster(this);
+  end(): Promise<MatmanResult> {
+    const nightmareMaster = new NightmareMaster(this);
 
     // 默认处理 coverage，根据 window.__coverage__
     if (!this.coverageConfig) {
@@ -376,7 +439,7 @@ export default class PageDriver {
       .then(matmanResult => {
         // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回
         if (this._isDefaultScanMode) {
-          matmanResult.data = matmanResult.get(0);
+          matmanResult.data = matmanResult.get(0) as any;
         }
 
         return matmanResult;

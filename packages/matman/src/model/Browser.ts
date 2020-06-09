@@ -1,17 +1,20 @@
 import _ from 'lodash';
-import {createPageDriver} from '../business';
+import {createPageDriver, CreatePageDriverOpts} from '../business';
+import PageDriver from './PageDriver';
 
 /**
  * 浏览器类，使用这个类对浏览器进行设置并创建页面实例
  */
 export default class Browser {
+  browserOptions: {[key: string]: any};
+
   /**
    * 构造函数
    *
    * @param {Object} [browserOptions] 参数
    * @author helinjiang
    */
-  constructor(browserOptions) {
+  constructor(browserOptions = {}) {
     this.browserOptions = browserOptions;
   }
 
@@ -23,8 +26,8 @@ export default class Browser {
    * @return {PageDriver}
    * @author helinjiang
    */
-  newPage(caseModuleFilePath, opts) {
-    return createPageDriver(
+  async newPage(caseModuleFilePath: string, opts: CreatePageDriverOpts): Promise<PageDriver> {
+    return await createPageDriver(
       caseModuleFilePath,
       _.merge({nightmareConfig: this.browserOptions}, opts),
     );

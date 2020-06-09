@@ -1,16 +1,29 @@
 import path from 'path';
 import fs from 'fs-extra';
+import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
+import PageDriver from './PageDriver';
+import {getMainUrl, evaluate} from '../util/masterUtils';
 
 export default class NightmareMaster {
+  pageDriver: PageDriver;
+  globalInfoRecorderKey: string;
+  nightmare: null | Nightmare;
+  nightmareRun: null | Nightmare;
+  globalInfo: {[key: string]: any};
+
+  onNightmareCreated: (n: NightmareMaster) => void;
+  onBeforeGotoPage: (n: NightmareMaster) => void;
+  onElectronClose: (n: number) => void;
+
   /**
    * 构造函数
    *
    * @param {PageDriver} pageDriver
    */
-  constructor(pageDriver) {
+  constructor(pageDriver: PageDriver) {
     this.pageDriver = pageDriver;
 
     // 是否使用记录器记录整个请求队列
@@ -26,19 +39,23 @@ export default class NightmareMaster {
 
     // nightmare 对象
     this.nightmare = null;
+    this.nightmareRun = null;
 
     // this.mockstarQuery = opts.mockstarQuery || null;
 
-    // // 测试覆盖率
+    // 测试覆盖率
     // this.coverageConfig = opts.coverageConfig;
 
     // 存储网络请求和浏览器事件等信息
     this.globalInfo = {};
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.onNightmareCreated = self => {};
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.onBeforeGotoPage = self => {};
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.onElectronClose = self => {};
   }
 
@@ -88,13 +105,18 @@ export default class NightmareMaster {
       this.globalInfo[this.globalInfoRecorderKey] = new WebEventRecorder(this.nightmare);
     }
 
+    if (!this.nightmare) {
+      throw new Error('nightmare must be defined');
+    }
     // 初始化一些行为
     this.nightmareRun = this.nightmare
       .header('x-mat-from', 'nightmare')
-      .header('x-mat-timestamp', Date.now());
+      .header('x-mat-timestamp', Date.now() + '');
 
     // 设置设备
     if (this.pageDriver.deviceConfig) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.nightmareRun = this.nightmareRun.exDevice(this.pageDriver.deviceConfig.name, {
         UA: this.pageDriver.deviceConfig.UA,
         width: this.pageDriver.deviceConfig.width,
@@ -104,6 +126,8 @@ export default class NightmareMaster {
 
     // 设置 cookie
     if (this.pageDriver.cookies) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.nightmareRun = this.nightmareRun.exCookies(
         this.pageDriver.cookies,
         getMainUrl(this.pageDriver.pageUrl),
@@ -122,6 +146,9 @@ export default class NightmareMaster {
     this.onBeforeGotoPage(this);
 
     // 加载页面
+    if (!this.nightmareRun) {
+      throw new Error('nightmareRun must be defined');
+    }
     this.nightmareRun = this.nightmareRun.goto(this.pageDriver.pageUrl);
 
     // 如果指定了 wait，则会传递给 nightmare 处理，具体使用方法可以参考：
@@ -129,6 +156,8 @@ export default class NightmareMaster {
     // https://github.com/segmentio/nightmare#waitselector
     // https://github.com/segmentio/nightmare#waitfn-arg1-arg2
     if (typeof this.pageDriver.nightmareWaitFn !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.nightmareRun = this.nightmareRun.wait(
         this.pageDriver.nightmareWaitFn,
         ...this.pageDriver.nightmareWaitFnArgs,
@@ -139,6 +168,9 @@ export default class NightmareMaster {
     const result = [];
 
     for (let i = 0, length = this.pageDriver.actionList.length; i < length; i++) {
+      if (!this.nightmareRun) {
+        throw new Error('nightmareRun must be defined');
+      }
       let curRun = this.pageDriver.actionList[i](this.nightmareRun);
 
       if (this.pageDriver.screenshotConfig) {
@@ -156,10 +188,12 @@ export default class NightmareMaster {
         curRun = curRun.wait(50);
       }
 
-      let t;
+      let t: any;
       if (typeof this.pageDriver.nightmareEvaluateFn === 'function') {
         t = await curRun.evaluate(
           this.pageDriver.nightmareEvaluateFn,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           ...this.pageDriver.nightmareEvaluateFnArgs,
         );
       } else {
@@ -186,13 +220,22 @@ export default class NightmareMaster {
       result.push(t);
     }
 
+    if (!this.nightmareRun) {
+      throw new Error('nightmareRun must be defined');
+    }
     // 暴露 electron 关闭时间，注意它在 nightmareRun.end() 之后才会触发
     if (
       typeof this.onElectronClose === 'function' &&
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.nightmareRun.proc &&
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this.nightmareRun.proc.on
     ) {
-      this.nightmareRun.proc.on('close', code => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.nightmareRun.proc.on('close', (code: number) => {
         // var code = {
         //     127: 'command not found - you may not have electron installed correctly',
         //     126: 'permission problem or command is not an executable - you may not have all the necessary dependencies for electron',
@@ -215,49 +258,5 @@ export default class NightmareMaster {
       _dataIndexMap: this.pageDriver._dataIndexMap,
       globalInfo: this.globalInfo,
     };
-  }
-}
-
-function evaluate() {
-  // 如果没有这个变量，说明注入代码失败
-  if (!window.matman_ver) {
-    return {
-      error: 'preload failed!',
-    };
-  }
-
-  // window.getPageInfo 必须是个函数
-  // window.getPageInfo 方法和其他变量均由 preload 配置中的 js 文件引入
-  if (typeof window.getPageInfo !== 'function') {
-    return {
-      error: 'window.getPageInfo is not function!',
-    };
-  }
-
-  // 如果存在需要前端执行的代码，则在所有逻辑开始之前执行
-  if (window.evalList && window.evalList.length) {
-    window.evalList.forEach(item => {
-      eval(window[item]);
-    });
-  }
-
-  const pageInfo = window.getPageInfo();
-
-  if (window.__coverage__ && pageInfo) {
-    pageInfo.__coverage__ = window.__coverage__;
-  }
-
-  return pageInfo;
-}
-
-function getMainUrl(url) {
-  let arr1 = url.split('//');
-
-  if (arr1.length > 1) {
-    let arr2 = arr1[1].split('/');
-    return arr1[0] + '//' + arr2[0];
-  } else {
-    let arr2 = arr1[0].split('/');
-    return arr2[0];
   }
 }

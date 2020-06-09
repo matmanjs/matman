@@ -9,7 +9,7 @@ import {
 } from '../util';
 
 export default class ScreenshotConfig {
-  tag: string;
+  tag: string | undefined;
   path: string;
   clip: ClipOpts | undefined;
 
@@ -31,7 +31,7 @@ export default class ScreenshotConfig {
     matmanConfig: MatmanConfig,
     opts: CoverageOrResultOrScreenOpts,
     caseModuleFilePath: string,
-    tag: string,
+    tag?: string,
   ) {
     this.tag = tag;
 
