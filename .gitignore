@@ -54,3 +54,4 @@ tmp/
 test/**/build
 
 docs-dist
+package-lock.json
