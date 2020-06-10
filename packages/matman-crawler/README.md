@@ -23,11 +23,11 @@ nightmare 提供了 [custom preload script](https://github.com/segmentio/nightma
 
 ### 2.2 可配置注入 jQuery
 
-为了更好地爬取 DOM 上的信息，我们构建前端爬虫脚本时，如果传递 `crawlerInjectJQuery` 值为 `true` ，则将注入 [jQuery 3.3.1 slim 版本](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/asserts/jquery.slim.min.js)。这样在写前端爬虫脚本时，可以直接用 jQuery 了。
+为了更好地爬取 DOM 上的信息，我们构建前端爬虫脚本时，如果传递 `crawlerInjectJQuery` 值为 `true` ，则将注入 [jQuery 3.3.1 slim 版本](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/assets/jquery.slim.min.js)。这样在写前端爬虫脚本时，可以直接用 jQuery 了。
 
 ### 2.3 已自动注入了 nightmare 需要的前置脚本
 
-按照 [custom preload script](https://github.com/segmentio/nightmare#custom-preload-script) 的要求，注入脚本中必须加上一段特殊的代码，以便于与 electron 通信。我们已经在打包时进行了自动处理，已注入了 [nightmare-preload.js](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/asserts/nightmare-preload.js) 。
+按照 [custom preload script](https://github.com/segmentio/nightmare#custom-preload-script) 的要求，注入脚本中必须加上一段特殊的代码，以便于与 electron 通信。我们已经在打包时进行了自动处理，已注入了 [nightmare-preload.js](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/assets/nightmare-preload.js) 。
 
 ## 3. API 说明
 
