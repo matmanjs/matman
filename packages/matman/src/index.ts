@@ -15,7 +15,7 @@ function launch(browserOptions: any): Browser {
   return new Browser(browserOptions);
 }
 
-export default {
+export {
   MatmanConfig,
   PageDriver,
   MatmanResult,

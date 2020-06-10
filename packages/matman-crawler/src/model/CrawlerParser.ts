@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
-import MatmanConfig from 'matman/src/model/MatmanConfig';
+import {MatmanConfig} from 'matman';
 
 /**
  * 爬虫脚本解析器，用于处理前端的爬虫脚本
@@ -51,15 +51,17 @@ export default class CrawlerParser {
    * @return {String} 构建之后的文件路径，如果未找到则返回空值
    * @author helinjiang
    */
-  async getCrawlerScriptPath(srcPath: string): Promise<string> {
+  getCrawlerScriptPath(srcPath: string): string {
     const entryName = this.getEntryName(srcPath);
 
     let result = '';
 
     try {
-      const webpackConfig = (
-        await import(path.resolve(this.matmanConfig.crawlerBuildPath, './webpack-config'))
-      ).default;
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const webpackConfig = require(path.resolve(
+        this.matmanConfig.crawlerBuildPath,
+        './webpack-config',
+      ));
       // 获得 webpack config 文件的内容
 
       // 从 webpack config 中拼装出构建之后的路径

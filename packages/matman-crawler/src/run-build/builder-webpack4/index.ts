@@ -1,5 +1,5 @@
 import webpack from 'webpack';
-import MatmanConfig from 'matman/src/model/MatmanConfig';
+import {MatmanConfig} from 'matman';
 import {createProdConfig} from './builder';
 
 interface RunBuildOpts extends webpack.Configuration {
