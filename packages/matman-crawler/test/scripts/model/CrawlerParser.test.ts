@@ -1,10 +1,11 @@
 import path from 'path';
+import 'mocha';
 import {expect} from 'chai';
 import fse from 'fs-extra';
 
 import CrawlerParser from '../../../src/model/CrawlerParser';
 import {build} from '../../../src/index';
-import {findMatmanConfig} from 'matman/lib/util';
+import {findMatmanConfig} from 'matman-core';
 
 describe('check CrawlerParser', () => {
   describe('check construction', async () => {
