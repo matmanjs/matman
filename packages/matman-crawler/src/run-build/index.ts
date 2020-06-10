@@ -77,7 +77,7 @@ export default function build(matmanConfig: MatmanConfig): Promise<never> {
 
 function getNightmareClientCode() {
   return new Promise((resolve, reject) => {
-    fs.readFile(path.join(__dirname, '../../asserts/nightmare-preload.js'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, '../../assets/nightmare-preload.js'), 'utf8', (err, data) => {
       if (err) {
         return reject(err);
       }
@@ -91,7 +91,7 @@ function getDevPrependCode(crawlerInjectJQuery: boolean) {
   return new Promise((resolve, reject) => {
     const injectFile = crawlerInjectJQuery ? 'dev-prepend-with-jquery.js' : 'dev-prepend.js';
 
-    fs.readFile(path.join(__dirname, `../../asserts/libs/${injectFile}`), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, `../../assets/libs/${injectFile}`), 'utf8', (err, data) => {
       if (err) {
         return reject(err);
       }
@@ -103,7 +103,7 @@ function getDevPrependCode(crawlerInjectJQuery: boolean) {
 
 function getJqueryCode(key: string) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path.join(__dirname, '../../asserts/jquery.slim.min.js'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, '../../assets/jquery.slim.min.js'), 'utf8', (err, data) => {
       if (err) {
         return reject(err);
       }

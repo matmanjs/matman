@@ -83,7 +83,7 @@ export function createProdConfig(matmanConfig: MatmanConfig): webpack.Configurat
 function _getAppendBeforeRule(clientScriptMatch: RegExp) {
   return {
     test: clientScriptMatch,
-    loader: path.join(__dirname, '../../../asserts/webpack/webpack-loader-insert-js'),
+    loader: path.join(__dirname, '../../../assets/webpack/webpack-loader-insert-js'),
   };
 }
 
