@@ -1,77 +1,71 @@
 # matman-core
 
-[matman](https://github.com/matmanjs/matman) 端对端测试方案中使用到的前端爬虫处理工具，更多资料请参考： [matman 官方文档](https://matmanjs.github.io/matman/) 。
+[matman](https://github.com/matmanjs/matman) 端对端测试方案中的基础库，更多资料请参考： [matman 官方文档](https://matmanjs.github.io/matman/) 。
+
+> 该库主要给内部使用，一般情况下不会需要直接使用该库。
 
 ## 1. 安装
 
 ```
-$ npm install matman-crawler --save
+$ npm install matman-core --save
 ```
 
-## 2. 功能介绍
+## 2. API
 
-### 2.1 将多个文件打包成一个单文件
+### 2.1 MatmanConfig 类
 
-nightmare 提供了 [custom preload script](https://github.com/segmentio/nightmare#custom-preload-script) 的能力，支持注入一个单文件脚本（我们称之为**前端爬虫脚本**）。
+matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提供。
 
-但是它有两个限制：
+#### 2.1.1 constructor(rootPath, opts)
 
-- 只支持加载**一个文件**
-- 只支持加载**本地文件**，不能加载网络请求回来的文件
+- `rootPath`: `String`， 项目的根目录，必填项
+- `opts`: 额外参数，一般情况下是由项目中的 `matman.config.js` 来定义，详见 `MatmanConfig` 类的字段说明
 
-而实际情况时，我们更倾向于使用 CommonJS 规范来组织项目，自然会存在多个组件和多个文件的情况。因此，基于 webpack 4，我们开发了这个工具来将源代码打包成一个独立的文件。
+`MatmanConfig` 类的字段如下：
 
-### 2.2 可配置注入 jQuery
+| 字段名 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `rootPath` | `String` | 无 | matman 项目的根目录，一般情况是 `matman.config.js` 的目录 |
+| `caseModulesPath` | `String` | `path.resolve(rootPath, './case_modules')` | 测试案例的根目录 |
+| `crawlerBuildPath` | `String` | `path.resolve(rootPath, './build/crawler-script')` | 前端爬虫脚本构建之后的目录 |
+| `crawlerMatch` | `RegExp` | <code>/[\\/&#124;\\\\]crawlers[\\/&#124;\\\\].*\\.js$/</code> | 用于匹配是否为前端爬虫脚本的正则表达式，默认识别 `crawlers` 文件夹下的js |
+| `crawlerInjectJQuery` | `Boolean` | `true` | 前端爬虫脚本中是否注入jQuery |
+| `screenshotPath` | `String` | `path.resolve(rootPath, './build/screenshot_output')` | 屏幕截图保存的路径 |
+| `coveragePath` | `String` | `path.resolve(rootPath, './build/coverage_output')` | 测试覆盖率文件保存的路径 |
+| `matmanResultPath` | `String` | `path.resolve(rootPath, './build/matman_result_output')` | `MatmanResult` 执行结果数据保存的路径 |
+| `isDevBuild` | `Boolean` | `false` | 是否为开发模式，若值为 `true`，则构建之后的前端爬虫脚本可用于代码调试 |
 
-为了更好地爬取 DOM 上的信息，我们构建前端爬虫脚本时，如果传递 `crawlerInjectJQuery` 值为 `true` ，则将注入 [jQuery 3.3.1 slim 版本](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/asserts/jquery.slim.min.js)。这样在写前端爬虫脚本时，可以直接用 jQuery 了。
+注意，必须要满足以下条件，否则会直接报错：
 
-### 2.3 已自动注入了 nightmare 需要的前置脚本
+- `rootPath` 必须真实存在
+- `caseModulesPath` 必须真实存在
 
-按照 [custom preload script](https://github.com/segmentio/nightmare#custom-preload-script) 的要求，注入脚本中必须加上一段特殊的代码，以便于与 electron 通信。我们已经在打包时进行了自动处理，已注入了 [nightmare-preload.js](https://github.com/matmanjs/matman/blob/master/packages/matman-crawler/asserts/nightmare-preload.js) 。
+### 2.2 MATMAN_CONFIG_FILE
 
-## 3. API 说明
+常量，配置文件名，默认值为 `matman.config.js` 。
 
-### 3.1 CrawlerParser 类
+### 2.3 getAbsolutePath(targetPath, basePath)
 
-前端爬虫脚本处理类。
+获得目标路径的绝对路径。
 
-#### 3.1.1 constructor(matmanConfig)
+- `targetPath`: `String`， 需要处理的目标路径
+- `basePath`: `String`， 如果 `targetPath` 为相对路径，则将相对这个基础路径而言转换
 
-- `matmanConfig`: `MatmanConfig`， 参考 [matman 组件](https://www.npmjs.com/package/matman)
+### 2.4 findMatmanConfig(basePath, matmanConfigOpts)
 
-#### 3.1.2 getEntry()
+从指定的目录开始向上查找 `MatmanConfig`，若找不到则返回 `null`。
 
-获得传递给 webpack 的 `entry` 配置，用于构建之用。返回一个对象。
+- `basePath`: `String`， 从该路径开始查找
+- `matmanConfigOpts`: `Object`， 额外的参数，将与找到的 `matman.config.js` 内容进行合并
 
-根据配置的 `matmanConfig.crawlerMatch` 进行正在匹配，自动获取前端爬虫脚本的构建配置，其结果类似：
+### 2.5 requireSync(filePath: string)
 
-```
-{
-    'crawlers/c1': path.join(matmanConfig.caseModulesPath, 'crawlers/c1.js'),
-    'crawlers/c2': path.join(matmanConfig.caseModulesPath, 'crawlers/c2.js'),
-    'p1/crawlers/c1': path.join(matmanConfig.caseModulesPath, 'p1/crawlers/c1.js'),
-    'p1/crawlers/p11': path.join(matmanConfig.caseModulesPath, 'p1/crawlers/p11.js'),
-    'p1/crawlers/p12': path.join(matmanConfig.caseModulesPath, 'p1/crawlers/p12.js')
-}
-```
+以同步的方式 require 文件。
 
-#### 3.1.2  getEntryName(fullPath)
+- `filePath`: `String`， 模块文件的绝对路径
 
-根据完整的源文件绝对路径 `fullPath``，反查其在 `entry` 中 key 值。
+### 2.6 requireAsync(filePath: string)
 
-例如根据上面的 `entry` 结果，则调用 `getEntryName(path.join(matmanConfig.caseModulesPath, 'crawlers/c1.js'))` 会返回 `crawlers/c1` 的结果。
+以异步的方式 require 文件，返回的是 `Promise`。
 
-
-#### 3.1.3 getCrawlerScriptPath(srcPath)
-
-通过 crawler script 的源文件路径 `srcPath` ，获得其构建之后的文件路径。
-
-例如根据上面的 `entry` 结果，则调用 `getCrawlerScriptPath(path.join(matmanConfig.caseModulesPath, 'crawlers/c1.js'))` 会返回 `path.join(matmanConfig.crawlerBuildPath, 'crawlers/c1.js')` 的结果。
-
-
-### 3.2 build(matmanConfig)
-
-利用 webpack 按照规则进行构建。构建完成之后会生成构建文件。
-
-- `matmanConfig`: `MatmanConfig`， 参考 [matman 组件](https://www.npmjs.com/package/matman)
-
+- `filePath`: `String`， 模块文件的绝对路径
