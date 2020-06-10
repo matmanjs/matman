@@ -5,13 +5,13 @@ import fse from 'fs-extra';
 
 import CrawlerParser from '../../../src/model/CrawlerParser';
 import {build} from '../../../src/index';
-import {findMatmanConfig} from 'matman-core';
+import {findMatmanConfig, MatmanConfig} from 'matman-core';
 
 describe('check CrawlerParser', () => {
   describe('check construction', async () => {
     const matmanConfig = (await findMatmanConfig(
       path.join(__dirname, '../../data/fixtures/demo_for_crawlers'),
-    )) as any;
+    )) as MatmanConfig;
 
     it('check matmanConfig', () => {
       if (matmanConfig) {
@@ -25,7 +25,7 @@ describe('check CrawlerParser', () => {
     it('check demo1: getEntry()', async () => {
       const matmanConfig = (await findMatmanConfig(
         path.join(__dirname, '../../data/fixtures/demo_for_crawlers'),
-      )) as any;
+      )) as MatmanConfig;
       if (matmanConfig === null) {
         expect(matmanConfig).not.to.be.null;
       } else {
@@ -59,7 +59,7 @@ describe('check CrawlerParser', () => {
     const crawlerParser = new CrawlerParser(
       (await findMatmanConfig(rootPath, {
         crawlerBuildPath: tmpCrawlerBuildPath,
-      })) as any,
+      })) as MatmanConfig,
     );
 
     before(() => {
@@ -92,7 +92,7 @@ describe('check CrawlerParser', () => {
   describe('check getEntryName(fullPath)', async () => {
     const matmanConfig = (await findMatmanConfig(
       path.join(__dirname, '../../data/fixtures/demo_for_crawlers'),
-    )) as any;
+    )) as MatmanConfig;
 
     if (matmanConfig === null) {
       expect(matmanConfig).not.to.be.null;

@@ -91,7 +91,7 @@ function _getAppendBeforeRule(clientScriptMatch: RegExp) {
  * 设置NODE_ENV，否则 线上会报 warning.
  * https://stackoverflow.com/questions/30030031
  */
-function _setDefinePlugin(env: any) {
+function _setDefinePlugin(env: string) {
   return new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify(env),
   });
