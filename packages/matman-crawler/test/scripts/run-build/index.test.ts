@@ -3,7 +3,7 @@ import 'mocha';
 import {expect} from 'chai';
 import fse from 'fs-extra';
 import glob from 'glob';
-import {findMatmanConfig} from 'matman-core';
+import {findMatmanConfig, MatmanConfig} from 'matman-core';
 
 import {build} from '../../../src';
 import CrawlerParser from '../../../src/model/CrawlerParser';
@@ -15,7 +15,7 @@ describe('check build()', async () => {
   const crawlerParser = new CrawlerParser(
     (await findMatmanConfig(rootPath, {
       crawlerBuildPath: tmpCrawlerBuildPath,
-    })) as any,
+    })) as MatmanConfig,
   );
 
   before(() => {
