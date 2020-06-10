@@ -3,7 +3,7 @@ import path from 'path';
 
 import fse from 'fs-extra';
 import Nightmare from 'nightmare';
-import crawler from 'matman-crawler';
+import {CrawlerParser} from 'matman-crawler';
 
 import MatmanResult from './MatmanResult';
 import NightmareMaster from './NightmareMaster';
@@ -15,8 +15,6 @@ import MatmanResultConfig from './MatmanResultConfig';
 import MatmanConfig from './MatmanConfig';
 
 import {CoverageOrResultOrScreenOpts} from '../types';
-
-const {CrawlerParser} = crawler;
 
 interface NightmareOpts extends Nightmare.IConstructorOptions {
   switches?: {
