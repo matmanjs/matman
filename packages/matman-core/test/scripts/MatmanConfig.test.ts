@@ -7,6 +7,7 @@ import MatmanConfig from '../../src/MatmanConfig';
 describe('check model/MatmanConfig.js', () => {
   describe('check constructor(rootPath, opts = {})', () => {
     it('if rootPath is undefined return false', () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       expect(() => new MatmanConfig()).to.throw('Unknown rootPath=');
     });
