@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import _ from 'lodash';
 
 import MatmanConfig from '../MatmanConfig';
 import {MATMAN_CONFIG_FILE as configFileName} from '../config';
 import {MatmanConfigOpts} from '../types';
+import {requireSync} from './require-file';
 
 /**
  * 获得绝对路径地址
@@ -59,10 +61,10 @@ export function getConfigFilePath(configPath: string): string {
  * @param {Object} [matmanConfigOpts] 额外传递给 MatmanConfig 的参数，可覆盖 matman.config.js 中配置内容
  * @return {null | MatmanConfig}
  */
-export async function findMatmanConfig(
+export function findMatmanConfig(
   basePath: string,
   matmanConfigOpts?: MatmanConfigOpts,
-): Promise<null | MatmanConfig> {
+): null | MatmanConfig {
   let configData: MatmanConfigOpts;
 
   if (matmanConfigOpts && matmanConfigOpts.rootPath && fs.existsSync(matmanConfigOpts.rootPath)) {
@@ -80,8 +82,8 @@ export async function findMatmanConfig(
     }
 
     // 获取 matman.config.js 中的配置项
-    const res = await import(configFilePath);
-    configData = Object.assign({}, res.default, matmanConfigOpts);
+    const res = requireSync(configFilePath);
+    configData = _.merge({}, res, matmanConfigOpts);
   }
 
   try {

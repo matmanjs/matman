@@ -29,26 +29,26 @@ describe('./util/index.js', () => {
   });
 
   describe('check findMatmanConfig(basePath, matmanConfigOpts)', () => {
-    it('findMatmanConfig(data/fixtures) should return null', async () => {
+    it('findMatmanConfig(data/fixtures) should return null', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures');
-      expect(await findMatmanConfig(targetDir)).to.be.null;
+      expect(findMatmanConfig(targetDir)).to.be.null;
     });
 
-    it('findMatmanConfig(data/fixtures/util) should return null because caseModulesPath not exist', async () => {
+    it('findMatmanConfig(data/fixtures/util) should return null because caseModulesPath not exist', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util');
-      expect(await findMatmanConfig(targetDir)).to.be.null;
+      expect(findMatmanConfig(targetDir)).to.be.null;
     });
 
-    it('findMatmanConfig(data/fixtures/util/dir_exist) should not return null', async () => {
+    it('findMatmanConfig(data/fixtures/util/dir_exist) should not return null', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
 
-      expect(await findMatmanConfig(targetDir)).not.to.be.null;
+      expect(findMatmanConfig(targetDir)).not.to.be.null;
     });
 
-    it('findMatmanConfig(data/fixtures/util/dir_exist,opts) should rewrite ok', async () => {
+    it('findMatmanConfig(data/fixtures/util/dir_exist,opts) should rewrite ok', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
       const newRootPath = path.join(__dirname, '../../data/fixtures/demo2');
-      const matmanConfig = (await findMatmanConfig(targetDir, {
+      const matmanConfig = findMatmanConfig(targetDir, {
         rootPath: newRootPath,
         caseModulesPath: './my_case_modules',
         crawlerBuildPath: path.join(newRootPath, './build/my-crawler-script'),
@@ -57,7 +57,7 @@ describe('./util/index.js', () => {
         screenshotPath: './build/my-screenshot',
         coveragePath: './build/my-coverage_output',
         isDevBuild: true,
-      })) as MatmanConfigOpts;
+      }) as MatmanConfigOpts;
 
       expect(matmanConfig.rootPath).to.equal(newRootPath);
       expect(matmanConfig.caseModulesPath).to.equal(path.join(newRootPath, './my_case_modules'));
