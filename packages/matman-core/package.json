@@ -1,7 +1,7 @@
 {
   "name": "matman-core",
   "version": "5.0.7",
-  "description": "Core for matman",
+  "description": "Core moudles for matman",
   "main": "lib/index.js",
   "scripts": {
     "prepublishOnly": "npm run build",

@@ -14,7 +14,7 @@ import {requireSync} from './require-file';
  * @param {String} [basePath] 根路径，如果目标路径为相对路径，则将用该路径作为其根路径
  * @return {String}
  */
-export function getAbsolutePath(targetPath?: string, basePath?: string): string {
+export function getAbsolutePath(targetPath: string, basePath?: string): string {
   if (!targetPath) {
     return '';
   }
@@ -70,7 +70,7 @@ export function findMatmanConfig(
   if (matmanConfigOpts && matmanConfigOpts.rootPath && fs.existsSync(matmanConfigOpts.rootPath)) {
     // 如果已经传递了 rootPath，且为合法的路径，则直接使用
     // 此时无需去寻找 matman.config.js 文件
-    configData = Object.assign({}, matmanConfigOpts);
+    configData = _.merge({}, matmanConfigOpts);
   } else {
     // 获得 matman.config.js 的文件路径
     const configFilePath = getConfigFilePath(basePath);
