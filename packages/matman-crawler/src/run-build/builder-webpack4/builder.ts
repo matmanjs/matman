@@ -6,7 +6,7 @@ import CleanWebpackPlugin from 'clean-webpack-plugin';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import StringReplaceWebpackPlugin from 'string-replace-webpack-plugin';
-import {MatmanConfig} from 'matman';
+import {MatmanConfig} from 'matman-core';
 
 import CrawlerParser from '../../model/CrawlerParser';
 
