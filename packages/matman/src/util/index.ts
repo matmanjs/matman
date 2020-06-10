@@ -104,10 +104,10 @@ export function getConfigFilePath(configPath: string): string {
  * @param {Object} [matmanConfigOpts] 额外传递给 MatmanConfig 的参数，可覆盖 matman.config.js 中配置内容
  * @return {null | MatmanConfig}
  */
-export async function findMatmanConfig(
+export function findMatmanConfig(
   basePath: string,
   matmanConfigOpts?: MatmanConfigType,
-): Promise<null | MatmanConfig> {
+): null | MatmanConfig {
   let configData: MatmanConfigType;
 
   if (matmanConfigOpts && matmanConfigOpts.rootPath && fs.existsSync(matmanConfigOpts.rootPath)) {
@@ -125,8 +125,9 @@ export async function findMatmanConfig(
     }
 
     // 获取 matman.config.js 中的配置项
-    const res = await import(configFilePath);
-    configData = Object.assign({}, res.default, matmanConfigOpts);
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const res = require(configFilePath);
+    configData = Object.assign({}, res, matmanConfigOpts);
   }
 
   try {

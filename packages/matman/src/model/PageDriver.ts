@@ -361,9 +361,9 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  evaluate(fn: string): Promise<PageDriver>;
-  evaluate(fn: () => any, ...args: any[]): Promise<PageDriver>;
-  async evaluate(fn: string | (() => any), ...args: any[]): Promise<PageDriver> {
+  evaluate(fn: string): PageDriver;
+  evaluate(fn: () => any, ...args: any[]): PageDriver;
+  evaluate(fn: string | (() => any), ...args: any[]): PageDriver {
     if (typeof fn === 'string') {
       // 获取 crawler script 的源文件目录
       // fn 有可能是绝对路径，也可能是相对路径，但都要转为绝对路径
@@ -371,9 +371,9 @@ export default class PageDriver {
       const crawlerScriptSrcPath = path.resolve(path.dirname(this.caseModuleFilePath), fn);
 
       // 调用 crawlerParser 的方法获得该脚本构建之后的路径
-      this.nightmareEvaluateFn = await new CrawlerParser(
-        this.matmanConfig as any,
-      ).getCrawlerScriptPath(crawlerScriptSrcPath);
+      this.nightmareEvaluateFn = new CrawlerParser(this.matmanConfig as any).getCrawlerScriptPath(
+        crawlerScriptSrcPath,
+      );
 
       // 有可能地址不存在脚本构建地址，此时给与提示
       if (!this.nightmareEvaluateFn) {

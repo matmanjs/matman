@@ -26,8 +26,8 @@ export default class Browser {
    * @return {PageDriver}
    * @author helinjiang
    */
-  async newPage(caseModuleFilePath: string, opts: CreatePageDriverOpts): Promise<PageDriver> {
-    return await createPageDriver(
+  newPage(caseModuleFilePath: string, opts: CreatePageDriverOpts): PageDriver {
+    return createPageDriver(
       caseModuleFilePath,
       _.merge({nightmareConfig: this.browserOptions}, opts),
     );
