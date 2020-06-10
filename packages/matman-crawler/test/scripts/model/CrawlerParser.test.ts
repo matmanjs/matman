@@ -3,9 +3,8 @@ import {expect} from 'chai';
 import fse from 'fs-extra';
 
 import CrawlerParser from '../../../src/model/CrawlerParser';
-import build from '../../../src/index';
+import {build} from '../../../src/index';
 import {findMatmanConfig} from 'matman/lib/util';
-import MatmanConfig from 'matman/lib/model/MatmanConfig';
 
 describe('check CrawlerParser', () => {
   describe('check construction', async () => {
@@ -65,7 +64,7 @@ describe('check CrawlerParser', () => {
     before(() => {
       fse.removeSync(tmpCrawlerBuildPath);
 
-      return build.build(crawlerParser.matmanConfig);
+      return build(crawlerParser.matmanConfig);
     });
 
     after(() => {

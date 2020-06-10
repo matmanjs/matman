@@ -4,5 +4,15 @@
     "rootDir": "src",
     "outDir": "./lib"
   },
-  "exclude": ["node_modules", "lib", "es", "dist", "**/__tests__", "**/__test__", "**/demo"]
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "es",
+    "dist",
+    "**/__tests__",
+    "**/__test__",
+    "**/test",
+    "**/demo"
+  ]
 }
