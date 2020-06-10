@@ -3,6 +3,7 @@ import 'mocha';
 import {expect} from 'chai';
 
 import {findMatmanConfig, getAbsolutePath, getConfigFilePath} from '../../../src/util';
+import {MatmanConfigOpts} from '../../../src/types';
 
 describe('./util/index.js', () => {
   describe('check getConfigFilePath(configPath)', () => {
@@ -56,7 +57,7 @@ describe('./util/index.js', () => {
         screenshotPath: './build/my-screenshot',
         coveragePath: './build/my-coverage_output',
         isDevBuild: true,
-      })) as any;
+      })) as MatmanConfigOpts;
 
       expect(matmanConfig.rootPath).to.equal(newRootPath);
       expect(matmanConfig.caseModulesPath).to.equal(path.join(newRootPath, './my_case_modules'));
