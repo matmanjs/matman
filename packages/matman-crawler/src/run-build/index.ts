@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import fse from 'fs-extra';
 import glob from 'glob';
-import MatmanConfig from 'matman/src/model/MatmanConfig';
+import {MatmanConfig} from 'matman';
 
 import {getWebpackConfig, runBuild} from './builder-webpack4';
 
@@ -91,17 +91,13 @@ function getDevPrependCode(crawlerInjectJQuery: boolean) {
   return new Promise((resolve, reject) => {
     const injectFile = crawlerInjectJQuery ? 'dev-prepend-with-jquery.js' : 'dev-prepend.js';
 
-    fs.readFile(
-      path.join(__dirname, `../../asserts/libs/${injectFile}`),
-      'utf8',
-      (err, data) => {
-        if (err) {
-          return reject(err);
-        }
+    fs.readFile(path.join(__dirname, `../../asserts/libs/${injectFile}`), 'utf8', (err, data) => {
+      if (err) {
+        return reject(err);
+      }
 
-        resolve(data);
-      },
-    );
+      resolve(data);
+    });
   });
 }
 
