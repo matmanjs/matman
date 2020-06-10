@@ -1,7 +1,7 @@
 {
-  "name": "matman-crawler",
+  "name": "matman-core",
   "version": "5.0.7",
-  "description": "Easy to write build preload script in nightmare",
+  "description": "Core for matman",
   "main": "lib/index.js",
   "scripts": {
     "prepublishOnly": "npm run build",
