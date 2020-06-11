@@ -44,6 +44,11 @@ export default class MatmanConfig {
     // 测试案例的根目录
     this.caseModulesPath = getAbsolutePath(opts.caseModulesPath || './case_modules', this.rootPath);
 
+    // 如果默认的 caseModulesPath 不存在，则复用 rootPath
+    if (!fs.existsSync(this.caseModulesPath)) {
+      this.caseModulesPath = this.rootPath;
+    }
+
     // crawler script 构建之后的目录
     this.crawlerBuildPath = getAbsolutePath(
       opts.crawlerBuildPath || './build/crawler-script',
@@ -115,13 +120,6 @@ export default class MatmanConfig {
       return {
         result: false,
         msg: 'Unknown rootPath=' + this.rootPath,
-      };
-    }
-
-    if (!fs.existsSync(this.caseModulesPath)) {
-      return {
-        result: false,
-        msg: 'Unknown caseModulesPath=' + this.caseModulesPath,
       };
     }
 
