@@ -1,3 +1,4 @@
+import 'mocha';
 import {expect} from 'chai';
 
 import {MATMAN_CONFIG_FILE} from '../../src/config';

@@ -1,14 +1,15 @@
 {
   "name": "matman",
   "version": "5.0.7",
-  "description": "Easy to write e2e test2",
+  "description": "Easy to write e2e test",
   "main": "lib/index.js",
   "scripts": {
+    "test": "npm run lint && npm run test:unit && npm run test:cover",
     "prepublishOnly": "npm run build",
     "build": "tsc -d",
-    "watch-compile": "npm run build -- --watch",
-    "watch": "npm run watch-compile",
-    "test": "mocha"
+    "test:unit": "mocha 'test/**/*.{ts,tsx}'",
+    "test:cover": "nyc npm run test:unit",
+    "lint": "npx eslint src test --ext .ts"
   },
   "keywords": [
     "matman",
@@ -30,6 +31,7 @@
     "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
     "lodash": "^4.17.15",
+    "matman-core": "^5.0.7",
     "matman-crawler": "^5.0.7",
     "nightmare-handler": "^1.0.10"
   },

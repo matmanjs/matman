@@ -5,14 +5,14 @@ import fse from 'fs-extra';
 import Nightmare from 'nightmare';
 import {CrawlerParser} from 'matman-crawler';
 
+import {MatmanConfig} from 'matman-core';
 import MatmanResult from './MatmanResult';
-import NightmareMaster from './NightmareMaster';
 
+import NightmareMaster from './NightmareMaster';
 import ScreenshotConfig from './ScreenshotConfig';
 import DeviceConfig, {DeviceConfigOpts} from './DeviceConfig';
 import CoverageConfig from './CoverageConfig';
 import MatmanResultConfig from './MatmanResultConfig';
-import MatmanConfig from './MatmanConfig';
 
 import {CoverageOrResultOrScreenOpts} from '../types';
 

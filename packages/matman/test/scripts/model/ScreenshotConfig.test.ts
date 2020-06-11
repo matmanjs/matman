@@ -1,19 +1,20 @@
 import path from 'path';
+import 'mocha';
 import {expect} from 'chai';
 
 import ScreenshotConfig from '../../../src/model/ScreenshotConfig';
-import {findMatmanConfig} from '../../../src/util';
+import {findMatmanConfig, MatmanConfig} from 'matman-core';
 
 describe('check model/ScreenshotConfig.js', () => {
-  describe('check constructor(opts, basePath, tag)', async () => {
+  describe('check constructor(opts, basePath, tag)', () => {
     const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/hi-demo/demo_01');
     const caseModuleFilePath = path.join(
       MATMAN_ROOT_PATH,
       './case_modules/page_baidu_index/basic-check.js',
     );
-    const matmanConfig = (await findMatmanConfig(caseModuleFilePath, {
+    const matmanConfig = findMatmanConfig(caseModuleFilePath, {
       rootPath: MATMAN_ROOT_PATH,
-    })) as any;
+    }) as MatmanConfig;
 
     it('if opts is Boolean and tag is undefined', () => {
       expect(new ScreenshotConfig(matmanConfig, true, caseModuleFilePath)).to.eql({
@@ -230,15 +231,15 @@ describe('check model/ScreenshotConfig.js', () => {
     });
   });
 
-  describe('check getPathWithId(id)', async () => {
+  describe('check getPathWithId(id)', () => {
     const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/hi-demo/demo_01');
     const caseModuleFilePath = path.join(
       MATMAN_ROOT_PATH,
       './case_modules/page_baidu_index/basic-check.js',
     );
-    const matmanConfig = (await findMatmanConfig(caseModuleFilePath, {
+    const matmanConfig = findMatmanConfig(caseModuleFilePath, {
       rootPath: MATMAN_ROOT_PATH,
-    })) as any;
+    }) as MatmanConfig;
 
     it('if opts is Boolean and tag is "mytag"', () => {
       expect(
