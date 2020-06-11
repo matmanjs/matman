@@ -1,7 +1,7 @@
 import fs from 'fs';
+import {MATMAN_CONFIG_FILE, findMatmanConfig} from 'matman-core';
+
 import PageDriver, {PageDriverOpts} from './model/PageDriver';
-import {findMatmanConfig} from './util';
-import {MATMAN_CONFIG_FILE} from './config';
 import {MatmanConfigType} from './types';
 
 export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;
@@ -14,10 +14,10 @@ export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;
  * @return {PageDriver}
  * @author helinjiang
  */
-export async function createPageDriver(
+export function createPageDriver(
   caseModuleFilePath: string,
   opts: CreatePageDriverOpts,
-): Promise<PageDriver> {
+): PageDriver {
   // 自动计算是哪个文件在调用 case 脚本，然后以调用者的文件名来做标记
   // 由于调用者脚本本身已经按目录存储，且同一个目录中不同调用者脚本文件名肯定不一样
   // 这样就能够区分标记了
@@ -38,7 +38,7 @@ export async function createPageDriver(
     opts.tag = '';
   }
 
-  const matmanConfig = await findMatmanConfig(caseModuleFilePath, opts);
+  const matmanConfig = findMatmanConfig(caseModuleFilePath, opts);
 
   if (!matmanConfig) {
     throw new Error(`Could not find ${MATMAN_CONFIG_FILE} or matman config setting!`);

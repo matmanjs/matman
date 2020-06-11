@@ -10,36 +10,7 @@ $ npm install matman --save
 
 ## 2. API
 
-### 2.1 MatmanConfig 类
-
-matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提供。
-
-#### 2.1.1 constructor(rootPath, opts)
-
-- `rootPath`: `String`， 项目的根目录，必填项
-- `opts`: 额外参数，一般情况下是由项目中的 `matman.config.js` 来定义，详见 `MatmanConfig` 类的字段说明
-
-`MatmanConfig` 类的字段如下：
-
-| 字段名 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `rootPath` | `String` | 无 | matman 项目的根目录，一般情况是 `matman.config.js` 的目录 |
-| `caseModulesPath` | `String` | `path.resolve(rootPath, './case_modules')` | 测试案例的根目录 |
-| `crawlerBuildPath` | `String` | `path.resolve(rootPath, './build/crawler-script')` | 前端爬虫脚本构建之后的目录 |
-| `crawlerMatch` | `RegExp` | <code>/[\\/&#124;\\\\]crawlers[\\/&#124;\\\\].*\\.js$/</code> | 用于匹配是否为前端爬虫脚本的正则表达式，默认识别 `crawlers` 文件夹下的js |
-| `crawlerInjectJQuery` | `Boolean` | `true` | 前端爬虫脚本中是否注入jQuery |
-| `screenshotPath` | `String` | `path.resolve(rootPath, './build/screenshot_output')` | 屏幕截图保存的路径 |
-| `coveragePath` | `String` | `path.resolve(rootPath, './build/coverage_output')` | 测试覆盖率文件保存的路径 |
-| `matmanResultPath` | `String` | `path.resolve(rootPath, './build/matman_result_output')` | `MatmanResult` 执行结果数据保存的路径 |
-| `isDevBuild` | `Boolean` | `false` | 是否为开发模式，若值为 `true`，则构建之后的前端爬虫脚本可用于代码调试 |
-
-注意，必须要满足以下条件，否则会直接报错：
-
-- `rootPath` 必须真实存在
-- `caseModulesPath` 必须真实存在
-
-
-### 2.2 createPageDriver(caseModuleFilePath, opts)
+### 2.1 createPageDriver(caseModuleFilePath, opts)
 
 创建 `PageDriver` 对象。
 
@@ -47,11 +18,11 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `opts`: 额外参数，传递给 `MatmanConfig` 和 `PageDriver` 使用
 
 
-### 2.3 PageDriver 类
+### 2.2 PageDriver 类
 
 页面控制器。
 
-#### 2.3.1 constructor(matmanConfig, caseModuleFilePath, opts)
+#### 2.2.1 constructor(matmanConfig, caseModuleFilePath, opts)
 
 - `matmanConfig`: `MatmanConfig`， 必填项
 - `caseModuleFilePath`: `String`， 测试案例文件的绝对路径，必填项
@@ -61,7 +32,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
   - `opts.tag`: `String`， 标记，在某些场景下使用，例如截图保存文件中追加该标记，用于做区分
 
 
-#### 2.3.2 useNightmare(nightmareConfig)
+#### 2.2.2 useNightmare(nightmareConfig)
 
 > 支持链式调用。
 
@@ -69,7 +40,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 
 - `nightmareConfig`: `Object`， 可选项，传递给原生的 [Nightmare constructor](https://www.npmjs.com/package/nightmare#nightmareoptions) 的参数
 
-#### 2.3.3 useProxyServer(proxyServer)
+#### 2.2.3 useProxyServer(proxyServer)
 
 > 支持链式调用。
 
@@ -78,7 +49,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `proxyServer`: `String`， 代理服务器，格式为 `my_proxy_server.example.com:8080`，例如 `127.0.0.1:8899`
 
 
-#### 2.3.4 useMockstar(mockstarQuery)
+#### 2.2.3 useMockstar(mockstarQuery)
 
 > 支持链式调用。
 
@@ -87,7 +58,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `mockstarQuery`: `MockStarQuery`，mockstar 方案中用于指定桩数据的请求对象
 
 
-#### 2.3.5 setCookies(cookies)
+#### 2.2.5 setCookies(cookies)
 
 > 支持链式调用。
 
@@ -98,7 +69,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 当 `cookies` 为 `Object` 时，可以支持多个 cookie 键值对，例如 `{mykey1:'myvalue1', mykey2:'myvalue'}` 。
 
 
-#### 2.3.6 setDeviceConfig(deviceConfig)
+#### 2.2.6 setDeviceConfig(deviceConfig)
 
 > 支持链式调用。
 
@@ -113,7 +84,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `deviceConfig.height`: `Number`， 视窗高度，注意这里不是指页面的高度，页面高度要小于这个值
 
 
-#### 2.3.7 setScreenshotConfig(screenshotConfig)
+#### 2.2.7 setScreenshotConfig(screenshotConfig)
 
 > 支持链式调用。
 
@@ -130,7 +101,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `screenshotConfig.tag`: `String`， 标记，会追加到 `screenshotConfig.path` 中，用作自定义的区分
 
 
-#### 2.3.8 setCoverageConfig(coverageConfig)
+#### 2.2.8 setCoverageConfig(coverageConfig)
 
 > 支持链式调用。
 
@@ -145,7 +116,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `coverageConfig.tag`: `String`， 标记，会追加到 `coverageConfig.path` 中，用作自定义的区分
 
 
-#### 2.3.9 setMatmanResultConfig(matmanResultConfig)
+#### 2.2.9 setMatmanResultConfig(matmanResultConfig)
 
 > 支持链式调用。
 
@@ -159,7 +130,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `matmanResultConfig.path`: `String`，  `MatmanResult` 执行结果文件路径，绝对路径，例如 `/root/xyz.json`，如果不填写，则将根据当前路径自动生成 `MatmanResult` 执行结果
 - `matmanResultConfig.tag`: `String`， 标记，会追加到 `matmanResultConfig.path` 中，用作自定义的区分
 
-#### 2.3.10 goto(pageUrl)
+#### 2.2.10 goto(pageUrl)
 
 > 支持链式调用。
 
@@ -168,7 +139,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `pageUrl`: `String`，页面的 url 地址
 
 
-#### 2.3.11 addAction(actionName, actionCall)
+#### 2.2.11 addAction(actionName, actionCall)
 
 > 支持链式调用。
 
@@ -219,7 +190,7 @@ matman
     .end();
 ```
 
-#### 2.3.12 wait(fn, ...args)
+#### 2.2.12 wait(fn, ...args)
 
 > 支持链式调用。
 
@@ -230,7 +201,7 @@ matman
 - [.wait(fn[, arg1, arg2,...])](https://www.npmjs.com/package/nightmare#waitfn-arg1-arg2) : 使用函数来判断条件 
 
 
-#### 2.3.13 evaluate(fn, ...args)
+#### 2.2.13 evaluate(fn, ...args)
 
 > 支持链式调用。
 
@@ -241,7 +212,7 @@ matman
 当 `fn` 为 `Function` 时，则与 nightmare 的 evaluate 含义和用法一致，详见 [nightmare .evaluate(fn[, arg1, arg2,...])](https://www.npmjs.com/package/nightmare#evaluatefn-arg1-arg2) 。
 
 
-#### 2.3.14 executeCustomFn(customFn)
+#### 2.2.14 executeCustomFn(customFn)
 
 > 支持链式调用。
 
@@ -268,20 +239,20 @@ matman
     // ....
 ```
 
-#### 2.3.15 end()
+#### 2.2.15 end()
 
 启动 PageDriver ，返回一个 `Promise` ，结果值为 `MatmanResult` 对象。
 
 
-### 2.4 MatmanResult 类
+### 2.3 MatmanResult 类
 
-#### 2.4.1 constructor(result)
+#### 2.3.1 constructor(result)
 
 - `data`: `Array | Object`，数据快照，如果使用 `addAction(actionName, actionCall)` 追加的测试动作，则该值为数组，可以通过 `get(actionName)` 获得指定动作的数据
 - `globalInfo`: `Object`，网络请求和浏览器事件等全局信息
 
 
-#### 2.4.2 get(actionName)
+#### 2.3.2 get(actionName)
 
 通过测试动作名字获得数据。
 
@@ -290,12 +261,12 @@ matman
 当 `actionName` 为 `Number` 时，则其相对于数组索引，会从 `matmanResult.data` 这个数组中获取。
 
 
-#### 2.4.3 getQueue(globalInfoRecorderKey = 'recorder')
+#### 2.3.3 getQueue(globalInfoRecorderKey = 'recorder')
 
 获得捕获到的请求队列。返回一个数组，数组元素为网络请求和浏览器事件等信息。
 
 
-#### 2.4.4 getNetwork(resourceType)
+#### 2.3.4 getNetwork(resourceType)
 
 从结果队列中过滤出网络请求。
 
@@ -315,7 +286,7 @@ const RESOURCE_TYPE = {
 };
 ```
 
-#### 2.4.5 isExistInNetwork(partialURL, query = {}, resourceType, status)
+#### 2.3.5 isExistInNetwork(partialURL, query = {}, resourceType, status)
 
 根据条件，从网络请求中匹配指定的请求。
 
@@ -324,14 +295,14 @@ const RESOURCE_TYPE = {
 - `resourceType`: `String`，资源类型
 - `status`: `Number`，http 状态码
 
-#### 2.4.6 isExistPage(partialURL, query = {}, status)
+#### 2.3.6 isExistPage(partialURL, query = {}, status)
 
 根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'mainFrame', status)`。
 
 使用场景：
 - 测试跳转页面的场景，通过它可以判断是否加载了目标的页面
 
-#### 2.4.7 isExistXHR(partialURL, query = {}, status)
+#### 2.3.7 isExistXHR(partialURL, query = {}, status)
 
 根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'xhr', status)`。
 
@@ -340,7 +311,7 @@ const RESOURCE_TYPE = {
 - 利用 `status` 可以验证接口是否可能 `500` 等
 - 有些数据上报也是用 `xhr` 的，可以测试数据上报的字段是否正确
 
-#### 2.4.8 isExistImage(partialURL, query = {}, status)
+#### 2.3.8 isExistImage(partialURL, query = {}, status)
 
 根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'image', status)`。
 
@@ -348,7 +319,7 @@ const RESOURCE_TYPE = {
 - 测试是否加载了某张图片
 - 利用 `status` 可以验证图片请求是否有可能 `404` 等
 
-#### 2.4.9 isExistStylesheet(partialURL, query = {}, status)
+#### 2.3.9 isExistStylesheet(partialURL, query = {}, status)
 
 根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'stylesheet', status)`。
 
@@ -356,7 +327,7 @@ const RESOURCE_TYPE = {
 - 测试是否加载了 `css` 文件
 - 利用 `status` 可以验证 `css` 文件是否有可能 `404` 等
 
-#### 2.4.10 isExistScript(partialURL, query = {}, status)
+#### 2.3.10 isExistScript(partialURL, query = {}, status)
 
 根据条件，从网络请求中匹配指定的请求，等效于 `isExistInNetwork(partialURL, query, 'script', status)`。
 
@@ -364,6 +335,6 @@ const RESOURCE_TYPE = {
 - 测试是否加载了 `js` 文件
 - 利用 `status` 可以验证 `js` 文件是否有可能 `404` 等
 
-#### 2.4.11 isExistJSBridge(partialURL, query = {})
+#### 2.3.11 isExistJSBridge(partialURL, query = {})
 
 是否存在某个 jsbridge 的调用，支持使用 iframe 和 location.href 两种形式，具体可以查看 https://github.com/matmanjs/matman-demo/tree/master/DevOps/matman-app/case_modules/page-hybrid-app。

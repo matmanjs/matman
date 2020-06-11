@@ -1,12 +1,7 @@
 import path from 'path';
-import MatmanConfig from './MatmanConfig';
+import {getAbsolutePath, MatmanConfig} from 'matman-core';
 import {CoverageOrResultOrScreenOpts} from '../types';
-import {
-  getAbsolutePath,
-  getFolderNameFromPath,
-  getNewFilePathWithTag,
-  getSaveDirFromPath,
-} from '../util';
+import {getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath} from '../util';
 
 export default class MatmanResultConfig {
   tag: string | undefined;

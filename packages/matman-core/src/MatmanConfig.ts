@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import {getAbsolutePath} from '../util';
-import {MatmanConfigType} from '../types';
+import {getAbsolutePath} from './util';
+import {MatmanConfigOpts} from './types';
 
 type CheckResult = {result: boolean; msg?: string};
 
@@ -32,7 +32,7 @@ export default class MatmanConfig {
    * @param {Boolean} [opts.isDevBuild] 是否为开发模式
    * @author helinjiang
    */
-  constructor(rootPath: string, opts: MatmanConfigType = {}) {
+  constructor(rootPath: string, opts: MatmanConfigOpts = {}) {
     // 消除警告, 其实会被覆盖
     this.isDevBuild = false;
     // 项目根目录
