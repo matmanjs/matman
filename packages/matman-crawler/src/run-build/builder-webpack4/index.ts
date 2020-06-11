@@ -1,11 +1,6 @@
 import webpack from 'webpack';
-import MatmanConfig from 'matman/src/model/MatmanConfig';
+import {MatmanConfig} from 'matman-core';
 import {createProdConfig} from './builder';
-
-interface RunBuildOpts extends webpack.Configuration {
-  _configParams?: any;
-  _crawlerParser?: any;
-}
 
 /**
  * 获得 webpack 的配置结果
@@ -22,11 +17,7 @@ export function getWebpackConfig(matmanConfig: MatmanConfig): Promise<webpack.Co
  * @param {Object} webpackConfig 传递给 webpack 构建的参数
  * @param {Function} callback 回调
  */
-export function runBuild(webpackConfig: RunBuildOpts, callback: () => void): void {
-  // 这个参数是临时值，传递给 webpack 时移除之
-  delete webpackConfig._configParams;
-  delete webpackConfig._crawlerParser;
-
+export function runBuild(webpackConfig: webpack.Configuration, callback: () => void): void {
   // 执行构建
   webpack(webpackConfig, (err, stats) => {
     if (err) {

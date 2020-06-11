@@ -1,7 +1,8 @@
 import path from 'path';
+import 'mocha';
 import {expect} from 'chai';
 
-import MatmanConfig from '../../../src/model/MatmanConfig';
+import MatmanConfig from '../../src/MatmanConfig';
 
 describe('check model/MatmanConfig.js', () => {
   describe('check constructor(rootPath, opts = {})', () => {
@@ -13,7 +14,7 @@ describe('check model/MatmanConfig.js', () => {
 
     it('if rootPath is not exist return false', () => {
       expect(() => new MatmanConfig('not/exist/rootPath')).to.throw(
-        `Unknown rootPath=${path.join(__dirname, '../../../not/exist/rootPath')}`,
+        `Unknown rootPath=${path.join(__dirname, '../../not/exist/rootPath')}`,
       );
     });
 
@@ -24,7 +25,7 @@ describe('check model/MatmanConfig.js', () => {
     });
 
     it('check demo1: default value', () => {
-      const rootPath = path.join(__dirname, '../../data/fixtures/demo1');
+      const rootPath = path.join(__dirname, '../data/fixtures/demo1');
 
       const matmanConfig = new MatmanConfig(rootPath);
 
@@ -53,7 +54,7 @@ describe('check model/MatmanConfig.js', () => {
     });
 
     it('check demo2: custom value', () => {
-      const rootPath = path.join(__dirname, '../../data/fixtures/demo2');
+      const rootPath = path.join(__dirname, '../data/fixtures/demo2');
 
       const matmanConfig = new MatmanConfig(rootPath, {
         caseModulesPath: './my_case_modules',

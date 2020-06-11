@@ -6,7 +6,7 @@ import CleanWebpackPlugin from 'clean-webpack-plugin';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import StringReplaceWebpackPlugin from 'string-replace-webpack-plugin';
-import MatmanConfig from 'matman/src/model/MatmanConfig';
+import {MatmanConfig} from 'matman-core';
 
 import CrawlerParser from '../../model/CrawlerParser';
 
@@ -83,7 +83,7 @@ export function createProdConfig(matmanConfig: MatmanConfig): webpack.Configurat
 function _getAppendBeforeRule(clientScriptMatch: RegExp) {
   return {
     test: clientScriptMatch,
-    loader: path.join(__dirname, '../../../asserts/webpack/webpack-loader-insert-js'),
+    loader: path.join(__dirname, '../../../assets/webpack/webpack-loader-insert-js'),
   };
 }
 
@@ -91,7 +91,7 @@ function _getAppendBeforeRule(clientScriptMatch: RegExp) {
  * 设置NODE_ENV，否则 线上会报 warning.
  * https://stackoverflow.com/questions/30030031
  */
-function _setDefinePlugin(env: any) {
+function _setDefinePlugin(env: string) {
   return new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify(env),
   });

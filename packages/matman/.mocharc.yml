@@ -1,0 +1,4 @@
+spec: 'test/scripts/**/*.ts'
+require: 'ts-node/register'
+reporter: 'spec'
+recursive: true

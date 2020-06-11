@@ -3,20 +3,18 @@ import path from 'path';
 
 import fse from 'fs-extra';
 import Nightmare from 'nightmare';
-import crawler from 'matman-crawler';
+import {CrawlerParser} from 'matman-crawler';
 
+import {MatmanConfig} from 'matman-core';
 import MatmanResult from './MatmanResult';
-import NightmareMaster from './NightmareMaster';
 
+import NightmareMaster from './NightmareMaster';
 import ScreenshotConfig from './ScreenshotConfig';
 import DeviceConfig, {DeviceConfigOpts} from './DeviceConfig';
 import CoverageConfig from './CoverageConfig';
 import MatmanResultConfig from './MatmanResultConfig';
-import MatmanConfig from './MatmanConfig';
 
 import {CoverageOrResultOrScreenOpts} from '../types';
-
-const {CrawlerParser} = crawler;
 
 interface NightmareOpts extends Nightmare.IConstructorOptions {
   switches?: {
@@ -363,9 +361,9 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  evaluate(fn: string): Promise<PageDriver>;
-  evaluate(fn: () => any, ...args: any[]): Promise<PageDriver>;
-  async evaluate(fn: string | (() => any), ...args: any[]): Promise<PageDriver> {
+  evaluate(fn: string): PageDriver;
+  evaluate(fn: () => any, ...args: any[]): PageDriver;
+  evaluate(fn: string | (() => any), ...args: any[]): PageDriver {
     if (typeof fn === 'string') {
       // 获取 crawler script 的源文件目录
       // fn 有可能是绝对路径，也可能是相对路径，但都要转为绝对路径
@@ -373,9 +371,9 @@ export default class PageDriver {
       const crawlerScriptSrcPath = path.resolve(path.dirname(this.caseModuleFilePath), fn);
 
       // 调用 crawlerParser 的方法获得该脚本构建之后的路径
-      this.nightmareEvaluateFn = await new CrawlerParser(
-        this.matmanConfig as any,
-      ).getCrawlerScriptPath(crawlerScriptSrcPath);
+      this.nightmareEvaluateFn = new CrawlerParser(this.matmanConfig as any).getCrawlerScriptPath(
+        crawlerScriptSrcPath,
+      );
 
       // 有可能地址不存在脚本构建地址，此时给与提示
       if (!this.nightmareEvaluateFn) {

@@ -1,27 +1,28 @@
 import path from 'path';
+import 'mocha';
 import {expect} from 'chai';
 import fse from 'fs-extra';
 import glob from 'glob';
-import {findMatmanConfig} from 'matman/lib/util';
-import MatmanConfig from 'matman/lib/model/MatmanConfig';
+import {findMatmanConfig, MatmanConfig, requireSync} from 'matman-core';
 
-import build from '../../../src';
+import {build} from '../../../src';
 import CrawlerParser from '../../../src/model/CrawlerParser';
+import webpack from 'webpack';
 
-describe('check build()', async () => {
+describe('check build()', () => {
   const rootPath = path.join(__dirname, '../../data/fixtures/demo_for_crawlers');
   const tmpCrawlerBuildPath = path.join(__dirname, '../../data/tmp/demo_for_crawlers_build');
 
   const crawlerParser = new CrawlerParser(
-    (await findMatmanConfig(rootPath, {
+    findMatmanConfig(rootPath, {
       crawlerBuildPath: tmpCrawlerBuildPath,
-    })) as any,
+    }) as MatmanConfig,
   );
 
   before(() => {
     fse.removeSync(tmpCrawlerBuildPath);
 
-    return build.build(crawlerParser.matmanConfig);
+    return build(crawlerParser.matmanConfig);
   });
 
   after(() => {
@@ -40,8 +41,11 @@ describe('check build()', async () => {
     ]);
   });
 
-  it('check webpack-config entry', async () => {
-    const config = (await import(path.join(tmpCrawlerBuildPath, 'webpack-config'))).default;
+  it('check webpack-config entry', () => {
+    const config = requireSync(
+      path.join(tmpCrawlerBuildPath, 'webpack-config'),
+    ) as webpack.Configuration;
+
     const caseModulesPath = path.join(rootPath, './case_modules');
 
     expect(config.entry).to.eql({
@@ -53,10 +57,12 @@ describe('check build()', async () => {
     });
   });
 
-  it('check webpack-config output', async () => {
-    const config = (await import(path.join(tmpCrawlerBuildPath, 'webpack-config'))).default;
+  it('check webpack-config output', () => {
+    const config = requireSync(
+      path.join(tmpCrawlerBuildPath, 'webpack-config'),
+    ) as webpack.Configuration;
 
-    expect(config.output.filename).to.equal('[name].js');
-    expect(config.output.path).to.equal(tmpCrawlerBuildPath);
+    expect(config.output && config.output.filename).to.equal('[name].js');
+    expect(config.output && config.output.path).to.equal(tmpCrawlerBuildPath);
   });
 });
