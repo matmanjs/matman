@@ -7,7 +7,7 @@
     "prepublishOnly": "npm run build",
     "build": "tsc -d",
     "test": "npm run lint && npm run test:unit && npm run test:cover",
-    "test:unit": "mocha 'test/**/*.{ts,tsx}'",
+    "test:unit": "mocha 'test/**/*.test.{ts,tsx}'",
     "test:cover": "nyc npm run test:unit",
     "lint": "npx eslint src test --ext .ts"
   },
