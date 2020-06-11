@@ -136,7 +136,7 @@ function _search(fromCwd: string, fileName: string): string {
     // unix跟目录为/， win32系统根目录为 C:\\格式的
     if (currDir === '/' || /^[a-zA-Z]:\\$/.test(currDir)) {
       isExist = false;
-      // console.log('未找到 ' + configFileName);
+      // console.log('未找到 ' + fileName);
       break;
     }
   }

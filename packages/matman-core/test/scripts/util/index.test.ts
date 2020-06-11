@@ -5,31 +5,32 @@ import {expect} from 'chai';
 import {findMatmanConfig, getAbsolutePath, searchFilePath} from '../../../src/util';
 import {MatmanConfigOpts} from '../../../src/types';
 import {MATMAN_CONFIG_FILE} from '../../../src/config';
+import MatmanConfig from '../../../src/MatmanConfig';
 
 describe('./util/index.js', () => {
-  describe('check getConfigFilePath(configPath)', () => {
-    it('getConfigFilePath(data/fixtures/util) should return current', () => {
+  describe('check searchFilePath(configPath)', () => {
+    it('searchFilePath(data/fixtures/util) should return current', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util');
       expect(searchFilePath(targetDir, MATMAN_CONFIG_FILE)).to.equal(
         path.join(targetDir, 'matman.config.js'),
       );
     });
 
-    it('getConfigFilePath(data/fixtures/util/dir_exist) should return current', () => {
+    it('searchFilePath(data/fixtures/util/dir_exist) should return current', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
       expect(searchFilePath(targetDir, MATMAN_CONFIG_FILE)).to.equal(
         path.join(targetDir, 'matman.config.js'),
       );
     });
 
-    it('getConfigFilePath(data/fixtures/util/dir_lost) should return parent', () => {
+    it('searchFilePath(data/fixtures/util/dir_lost) should return parent', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_lost');
       expect(searchFilePath(targetDir, MATMAN_CONFIG_FILE)).to.equal(
         path.join(targetDir, '../matman.config.js'),
       );
     });
 
-    it('getConfigFilePath(data/fixtures) should return empty', () => {
+    it('searchFilePath(data/fixtures) should return empty', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures');
       expect(searchFilePath(targetDir, MATMAN_CONFIG_FILE)).to.be.empty;
     });
@@ -38,21 +39,32 @@ describe('./util/index.js', () => {
   describe('check findMatmanConfig(basePath, matmanConfigOpts)', () => {
     it('findMatmanConfig(data/fixtures) should return null', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures');
-      expect(findMatmanConfig(targetDir)).to.be.null;
+      const pkgPath = path.join(targetDir, '../../../package.json');
+      const matmanConfig = findMatmanConfig(targetDir) as MatmanConfig;
+
+      expect(matmanConfig.rootPath).to.equal(path.dirname(pkgPath));
+      expect(matmanConfig.caseModulesPath).to.equal(path.dirname(pkgPath));
     });
 
-    it('findMatmanConfig(data/fixtures/util) should return null because caseModulesPath not exist', () => {
+    it('findMatmanConfig(data/fixtures/util) should find matman.config.js', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util');
-      expect(findMatmanConfig(targetDir)).to.be.null;
+      const matmanConfig = findMatmanConfig(targetDir) as MatmanConfig;
+
+      expect(matmanConfig.rootPath).to.equal(targetDir);
+      expect(matmanConfig.caseModulesPath).to.equal(targetDir);
     });
 
-    it('findMatmanConfig(data/fixtures/util/dir_exist) should not return null', () => {
+    it('findMatmanConfig(data/fixtures/util/dir_exist) should find matman.config.js', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
+      const matmanConfig = findMatmanConfig(
+        path.join(targetDir, './case_modules/some-page/crawlers/c1.js'),
+      ) as MatmanConfig;
 
-      expect(findMatmanConfig(targetDir)).not.to.be.null;
+      expect(matmanConfig.rootPath).to.equal(targetDir);
+      expect(matmanConfig.caseModulesPath).to.equal(path.join(targetDir, 'case_modules'));
     });
 
-    it('findMatmanConfig(data/fixtures/util/dir_exist,opts) should rewrite ok', () => {
+    it('findMatmanConfig(data/fixtures/util/dir_exist, opts) should rewrite ok', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
       const newRootPath = path.join(__dirname, '../../data/fixtures/demo2');
       const matmanConfig = findMatmanConfig(targetDir, {
@@ -90,6 +102,44 @@ describe('./util/index.js', () => {
         'screenshotPath',
         'coveragePath',
       );
+    });
+
+    it('findMatmanConfig(data/fixtures/demo-has-config) for matman.config.js', () => {
+      const demoRoot = path.join(__dirname, '../../data/fixtures/demo-has-config');
+      const caseModuleFile = path.join(demoRoot, './c1.js');
+      const matmanConfig = findMatmanConfig(caseModuleFile) as MatmanConfigOpts;
+
+      expect(matmanConfig.rootPath).to.equal(demoRoot);
+      expect(matmanConfig.caseModulesPath).to.equal(demoRoot);
+    });
+
+    it('findMatmanConfig(data/fixtures/demo-has-config) for matman.config.js and rewrite rootPath', () => {
+      const demoRoot = path.join(__dirname, '../../data/fixtures/demo-has-config');
+      const caseModuleFile = path.join(demoRoot, './c1.js');
+      const matmanConfig = findMatmanConfig(caseModuleFile, {
+        rootPath: path.join(demoRoot, '../'),
+      }) as MatmanConfigOpts;
+
+      expect(matmanConfig.rootPath).to.equal(path.join(demoRoot, '../'));
+      expect(matmanConfig.caseModulesPath).to.equal(path.join(demoRoot, '../'));
+    });
+
+    it('findMatmanConfig(data/fixtures/demo-config-no-root-path) for matman.config.js without rootPath', () => {
+      const demoRoot = path.join(__dirname, '../../data/fixtures/demo-config-no-root-path');
+      const caseModuleFile = path.join(demoRoot, './c1.js');
+      const matmanConfig = findMatmanConfig(caseModuleFile) as MatmanConfigOpts;
+
+      expect(matmanConfig.rootPath).to.equal(demoRoot);
+      expect(matmanConfig.caseModulesPath).to.equal(demoRoot);
+    });
+
+    it('findMatmanConfig(data/fixtures/demo-only-package) for package.json', () => {
+      const demoRoot = path.join(__dirname, '../../data/fixtures/demo-only-package');
+      const caseModuleFile = path.join(demoRoot, './c1.js');
+      const matmanConfig = findMatmanConfig(caseModuleFile) as MatmanConfigOpts;
+
+      expect(matmanConfig.rootPath).to.equal(demoRoot);
+      expect(matmanConfig.caseModulesPath).to.equal(demoRoot);
     });
   });
 
