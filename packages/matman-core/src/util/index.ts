@@ -3,7 +3,7 @@ import path from 'path';
 import _ from 'lodash';
 
 import MatmanConfig from '../MatmanConfig';
-import {MATMAN_CONFIG_FILE as configFileName} from '../config';
+import {MATMAN_CONFIG_FILE} from '../config';
 import {MatmanConfigOpts} from '../types';
 import {requireSync} from './require-file';
 
@@ -29,29 +29,30 @@ export function getAbsolutePath(targetPath: string, basePath?: string): string {
 /**
  * 从指定目录开始向上查找 config 配置文件。
  *
- * @param {String} configPath 起始路径，如果非法路径，则默认从当前文件的路径向上查找
+ * @param {String} fromCwd 起始搜索的目录
+ * @param {String} fileName 需要搜索的文件
  * @return {String}
  */
-export function getConfigFilePath(configPath: string): string {
+export function searchFilePath(fromCwd: string, fileName: string): string {
   // 非法的路径时，默认为本文件夹的 dirname
-  if (!configPath || !fs.existsSync(configPath)) {
+  if (!fromCwd || !fs.existsSync(fromCwd)) {
     // console.log('Unknow configPath=' + configPath);
-    configPath = __dirname;
+    fromCwd = __dirname;
   }
 
   // 如果不是 config file，则从当前路径往上找 config file
-  if (configPath.indexOf(configFileName) < 0) {
-    const result = _search(configPath);
+  if (fromCwd.indexOf(fileName) < 0) {
+    const result = _search(fromCwd, fileName);
 
     // 如果没有找到，则直接返回空路径即可
     if (!result) {
       return '';
     }
 
-    configPath = path.resolve(result, configFileName);
+    fromCwd = path.resolve(result, fileName);
   }
 
-  return configPath;
+  return fromCwd;
 }
 
 /**
@@ -65,25 +66,42 @@ export function findMatmanConfig(
   basePath: string,
   matmanConfigOpts?: MatmanConfigOpts,
 ): null | MatmanConfig {
-  let configData: MatmanConfigOpts;
+  let configData: MatmanConfigOpts = {};
 
-  if (matmanConfigOpts && matmanConfigOpts.rootPath && fs.existsSync(matmanConfigOpts.rootPath)) {
-    // 如果已经传递了 rootPath，且为合法的路径，则直接使用
-    // 此时无需去寻找 matman.config.js 文件
-    configData = _.merge({}, matmanConfigOpts);
-  } else {
-    // 获得 matman.config.js 的文件路径
-    const configFilePath = getConfigFilePath(basePath);
+  // matman 所需要的配置数据有两个来源，优先级依次降低
+  // 1. 通过 MatmanConfigOpts 直接传递数据
+  // 2. 使用 matman.config.js 文件，我们自行读取
 
-    // 如果不是 config file，则从当前路径往上找 config file
-    if (!configFilePath) {
-      console.error('Can not find config file from basePath=' + basePath);
-      return null;
-    }
+  // 获取 rootPath，优先级：matmanConfigOpts > matman.config.js 中的定义 > matman.config.js 目录 > package.json 目录
 
-    // 获取 matman.config.js 中的配置项
-    const res = requireSync(configFilePath);
+  // 尝试获得 matman.config.js 文件
+  const matmanConfigFilePath = searchFilePath(basePath, MATMAN_CONFIG_FILE);
+
+  // 如果查到这个配置文件，则使用之
+  if (matmanConfigFilePath) {
+    // 获取 matman.config.js 中的配置内容
+    const res = requireSync(matmanConfigFilePath);
+
+    // matmanConfigOpts 的优先级要高于 matman.config.js 中的配置内容
     configData = _.merge({}, res, matmanConfigOpts);
+  }
+
+  // 获取 rootPath，优先级：matmanConfigOpts > matman.config.js 中的定义 > matman.config.js 目录 > package.json 目录
+  // 如果 rootPath 不存在，则需要自动计算
+  if (!configData.rootPath || !fs.existsSync(configData.rootPath)) {
+    if (matmanConfigFilePath) {
+      // 如果存在 matman.config.js 文件，则取该文件目录
+      configData.rootPath = path.dirname(matmanConfigFilePath);
+    } else {
+      // 否则获取 package.json 目录
+      const packageFilePath = searchFilePath(basePath, 'package.json');
+      if (!packageFilePath) {
+        // 如果连 package.json 都找不到，直接报错吧
+        return null;
+      } else {
+        configData.rootPath = path.dirname(packageFilePath);
+      }
+    }
   }
 
   try {
@@ -104,15 +122,16 @@ export function findMatmanConfig(
  *
  * 寻找的规则：从指定的路径开始，依次往上级目录查找，一直到根目录为止，如果找到，则停止。
  *
- * @param {String} [targetPath] 目标路径
+ * @param {String} fromCwd 起始搜索的目录
+ * @param {String} fileName 需要搜索的文件
  * @return {String}
  */
-function _search(targetPath: string): string {
-  let currDir = targetPath || process.cwd();
+function _search(fromCwd: string, fileName: string): string {
+  let currDir = fromCwd || process.cwd();
   let isExist = true;
 
-  while (!fs.existsSync(path.join(currDir, configFileName))) {
-    currDir = path.join(currDir, '../');
+  while (!fs.existsSync(path.resolve(currDir, fileName))) {
+    currDir = path.resolve(currDir, '../');
 
     // unix跟目录为/， win32系统根目录为 C:\\格式的
     if (currDir === '/' || /^[a-zA-Z]:\\$/.test(currDir)) {
