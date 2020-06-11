@@ -1,7 +1,7 @@
 import fs from 'fs';
+import {MATMAN_CONFIG_FILE, findMatmanConfig} from 'matman-core';
+
 import PageDriver, {PageDriverOpts} from './model/PageDriver';
-import {findMatmanConfig} from './util';
-import {MATMAN_CONFIG_FILE} from './config';
 import {MatmanConfigType} from './types';
 
 export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;
