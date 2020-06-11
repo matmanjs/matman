@@ -4,27 +4,30 @@ import {expect} from 'chai';
 
 import MatmanConfig from '../../src/MatmanConfig';
 
-describe('check model/MatmanConfig.js', () => {
-  describe('check constructor(rootPath, opts = {})', () => {
-    it('if rootPath is undefined return false', () => {
+describe('check model/MatmanConfig.js', function () {
+  describe('check constructor(rootPath, opts = {})', function () {
+    it('if rootPath is undefined return false', function () {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       expect(() => new MatmanConfig()).to.throw('Unknown rootPath=');
     });
 
-    it('if rootPath is not exist return false', () => {
-      expect(() => new MatmanConfig('not/exist/rootPath')).to.throw(
-        `Unknown rootPath=${path.join(__dirname, '../../not/exist/rootPath')}`,
+    it('if rootPath is not exist return false', function () {
+      expect(() => new MatmanConfig('/not/exist/rootPath')).to.throw(
+        `Unknown rootPath=/not/exist/rootPath`,
       );
     });
 
-    it('if params.caseModulesPath is not exist return false', () => {
-      expect(
-        () => new MatmanConfig(__dirname, {caseModulesPath: 'not/exist/caseModulesPath'}),
-      ).to.throw(`Unknown caseModulesPath=${path.join(__dirname, 'not/exist/caseModulesPath')}`);
+    it('if params.caseModulesPath is not exist then set it equal rootPath', function () {
+      const matmanConfig = new MatmanConfig(__dirname, {
+        caseModulesPath: '/not/exist/caseModulesPath',
+      });
+
+      expect(matmanConfig.caseModulesPath).to.eql(__dirname);
+      expect(matmanConfig.caseModulesPath).to.eql(matmanConfig.rootPath);
     });
 
-    it('check demo1: default value', () => {
+    it('check demo1: default value', function () {
       const rootPath = path.join(__dirname, '../data/fixtures/demo1');
 
       const matmanConfig = new MatmanConfig(rootPath);
@@ -53,7 +56,7 @@ describe('check model/MatmanConfig.js', () => {
       );
     });
 
-    it('check demo2: custom value', () => {
+    it('check demo2: custom value', function () {
       const rootPath = path.join(__dirname, '../data/fixtures/demo2');
 
       const matmanConfig = new MatmanConfig(rootPath, {
