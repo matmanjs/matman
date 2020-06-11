@@ -35,7 +35,10 @@ export default class MatmanConfig {
   constructor(rootPath: string, opts: MatmanConfigOpts = {}) {
     // 消除警告, 其实会被覆盖
     this.isDevBuild = false;
+
     // 项目根目录
+    // 根目录是必须的，因为会有一些默认值都是基于这个根目录而言
+    // 获取值的优先级为：参数指定 > matman.config.js 路径 > package.json 路径
     this.rootPath = getAbsolutePath(rootPath);
 
     // 测试案例的根目录

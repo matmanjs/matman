@@ -2,29 +2,36 @@ import path from 'path';
 import 'mocha';
 import {expect} from 'chai';
 
-import {findMatmanConfig, getAbsolutePath, getConfigFilePath} from '../../../src/util';
+import {findMatmanConfig, getAbsolutePath, searchFilePath} from '../../../src/util';
 import {MatmanConfigOpts} from '../../../src/types';
+import {MATMAN_CONFIG_FILE} from '../../../src/config';
 
 describe('./util/index.js', () => {
   describe('check getConfigFilePath(configPath)', () => {
     it('getConfigFilePath(data/fixtures/util) should return current', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util');
-      expect(getConfigFilePath(targetDir)).to.equal(path.join(targetDir, 'matman.config.js'));
+      expect(searchFilePath(targetDir, MATMAN_CONFIG_FILE)).to.equal(
+        path.join(targetDir, 'matman.config.js'),
+      );
     });
 
     it('getConfigFilePath(data/fixtures/util/dir_exist) should return current', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_exist');
-      expect(getConfigFilePath(targetDir)).to.equal(path.join(targetDir, 'matman.config.js'));
+      expect(searchFilePath(targetDir, MATMAN_CONFIG_FILE)).to.equal(
+        path.join(targetDir, 'matman.config.js'),
+      );
     });
 
     it('getConfigFilePath(data/fixtures/util/dir_lost) should return parent', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures/util/dir_lost');
-      expect(getConfigFilePath(targetDir)).to.equal(path.join(targetDir, '../matman.config.js'));
+      expect(searchFilePath(targetDir, MATMAN_CONFIG_FILE)).to.equal(
+        path.join(targetDir, '../matman.config.js'),
+      );
     });
 
     it('getConfigFilePath(data/fixtures) should return empty', () => {
       const targetDir = path.join(__dirname, '../../data/fixtures');
-      expect(getConfigFilePath(targetDir)).to.be.empty;
+      expect(searchFilePath(targetDir, MATMAN_CONFIG_FILE)).to.be.empty;
     });
   });
 
