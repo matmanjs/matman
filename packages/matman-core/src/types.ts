@@ -22,4 +22,5 @@ export interface MatmanConfigOpts {
   coveragePath?: string;
   matmanResultPath?: string;
   isDevBuild?: boolean;
+  setupOptions?: {name: string; cwd?: string; order: string; auto?: boolean}[];
 }

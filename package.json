@@ -5,7 +5,7 @@
     "init": "rm -rf node_modules && npm install && npm run clean && npm run bootstrap",
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean --yes",
-    "build": "lerna run --scope=matman-crawler build && lerna run --scope=matman build",
+    "build": "lerna run --scope=matman-core build && lerna run --scope=matman-crawler build && lerna run --scope=matman build",
     "publish": "git pull && lerna publish --cd-version patch",
     "force-publish": "lerna publish --cd-version patch --force-publish=*",
     "docs:dev": "vuepress dev docs",
