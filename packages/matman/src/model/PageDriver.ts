@@ -16,7 +16,7 @@ import MatmanResultConfig from './MatmanResultConfig';
 
 import {CoverageOrResultOrScreenOpts} from '../types';
 
-interface NightmareOpts extends Nightmare.IConstructorOptions {
+export interface NightmareOpts extends Nightmare.IConstructorOptions {
   switches?: {
     'proxy-server': string;
     // 必须设置一下这个，否则在某些情况下 https 地址无法使用

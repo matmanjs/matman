@@ -1,22 +1,20 @@
 import path from 'path';
+import {EventEmitter} from 'events';
 import fs from 'fs-extra';
 import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
-import PageDriver from './PageDriver';
+import PageDriver, {NightmareOpts} from './PageDriver';
 import {getMainUrl, evaluate} from '../util/masterUtils';
 
-export default class NightmareMaster {
+export default class NightmareMaster extends EventEmitter {
   pageDriver: PageDriver;
   globalInfoRecorderKey: string;
+  nightmareConfig: NightmareOpts;
   nightmare: null | Nightmare;
   nightmareRun: null | Nightmare;
   globalInfo: {[key: string]: any};
-
-  onNightmareCreated: (n: NightmareMaster) => void;
-  onBeforeGotoPage: (n: NightmareMaster) => void;
-  onElectronClose: (n: number) => void;
 
   /**
    * 构造函数
@@ -24,7 +22,11 @@ export default class NightmareMaster {
    * @param {PageDriver} pageDriver
    */
   constructor(pageDriver: PageDriver) {
+    // 基类构造函数
+    super();
     this.pageDriver = pageDriver;
+    // 初始化配置
+    this.nightmareConfig = this.pageDriver.nightmareConfig;
 
     // 是否使用记录器记录整个请求队列
     // 如果为 true，则可以从 this.globalInfo.recorder 中获取，
@@ -48,32 +50,26 @@ export default class NightmareMaster {
 
     // 存储网络请求和浏览器事件等信息
     this.globalInfo = {};
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.onNightmareCreated = self => {};
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.onBeforeGotoPage = self => {};
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.onElectronClose = self => {};
   }
 
-  async getResult() {
-    // Nightmare constructor 的参数
-    const nightmareConfig = this.pageDriver.nightmareConfig;
+  /**
+   * 得到 nightmare 的配置
+   */
+  getNightmareConfig(): void {
+    // 触发开始事件
+    this.emit('beforeGetNightmareConfig');
 
     // 如果设置了 show ，则同步打开开发者工具面板
-    if (nightmareConfig.show) {
+    if (this.nightmareConfig.show) {
       // https://www.npmjs.com/package/nightmare#opendevtools
-      nightmareConfig.openDevTools = {
+      this.nightmareConfig.openDevTools = {
         mode: 'detach',
       };
     }
 
     // 如果传入了代理服务，则设置代理服务器
     if (this.pageDriver.proxyServer) {
-      nightmareConfig.switches = {
+      this.nightmareConfig.switches = {
         'proxy-server': this.pageDriver.proxyServer,
 
         // 必须设置一下这个，否则在某些情况下 https 地址无法使用
@@ -84,21 +80,32 @@ export default class NightmareMaster {
 
     // 如果传递给 evaluate 的是一个本地绝对路径文件，则需要设置 preload
     if (typeof this.pageDriver.nightmareEvaluateFn === 'string') {
-      nightmareConfig.webPreferences = {
+      this.nightmareConfig.webPreferences = {
         // 用例过多且频繁启动测试时可能会存在失败的场景 #154
         partition: 'nopersist',
         preload: this.pageDriver.nightmareEvaluateFn,
       };
     }
 
-    // console.log('===nightmareConfig====', nightmareConfig);
+    // 触发时间 广播配置
+    this.emit('afterGetNightmareConfig', this.nightmareConfig);
+  }
 
+  /**
+   * 得到 nightmare 的一个实例
+   * 并初始化一些行为
+   */
+  getNewNightmare(): void {
+    this.emit('beforeGetNewNightmare');
     // 创建 nightmare 对象，注意使用扩展的 NightmarePlus ，而不是原生的 Nightmare
     const NightmarePlus = getNightmarePlus();
-    this.nightmare = NightmarePlus(nightmareConfig);
+    this.nightmare = NightmarePlus(this.nightmareConfig);
 
     // 钩子事件：创建完成之后，可能会有一些自己的处理
-    this.onNightmareCreated(this);
+    this.emit('afterGetNewNightmare', this);
+
+    // 初始化行为
+    this.emit('beforeInitNightmareRun', this.nightmare);
 
     // 使用记录器，记录网络请求和浏览器事件等
     if (this.globalInfoRecorderKey) {
@@ -142,10 +149,18 @@ export default class NightmareMaster {
       this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
     }
 
-    //  钩子事件：加载页面之前要执行的方法
-    this.onBeforeGotoPage(this);
+    this.emit('afterInitNightmareRun', {
+      nightmare: this.nightmare,
+      nightmareRun: this.nightmareRun,
+    });
+  }
 
-    // 加载页面
+  /**
+   * 打开界面
+   */
+  gotoPage(): void {
+    this.emit('beforeGotoPage', this.pageDriver.pageUrl);
+
     if (!this.nightmareRun) {
       throw new Error('nightmareRun must be defined');
     }
@@ -164,15 +179,35 @@ export default class NightmareMaster {
       );
     }
 
+    this.emit('afterGotoPage', {url: this.pageDriver.pageUrl, nightmareRun: this.nightmareRun});
+  }
+
+  /**
+   * 运行测试 case
+   * @param stop 停止的步骤
+   */
+  async runActions(stop?: number): Promise<any[]> {
     // 循环处理多个 action
-    const result = [];
+    const result: any[] = [];
+    // 触发开始事件
+    this.emit('beforeRunActions', {index: 0, result: result});
 
     for (let i = 0, length = this.pageDriver.actionList.length; i < length; i++) {
+      // 停止在某一步
+      if (stop && i > stop) {
+        break;
+      }
+
+      // 开始执行 action
+      this.emit('beforeRunCase', {index: i, result: result});
+
+      // 执行 action
       if (!this.nightmareRun) {
         throw new Error('nightmareRun must be defined');
       }
       let curRun = this.pageDriver.actionList[i](this.nightmareRun);
 
+      // 保存屏幕截图
       if (this.pageDriver.screenshotConfig) {
         const screenshotFilePath = this.pageDriver.screenshotConfig.getPathWithId(i + 1);
 
@@ -218,14 +253,25 @@ export default class NightmareMaster {
       }
 
       result.push(t);
+
+      // 结束执行 action
+      this.emit('afterRunCase', {index: i, result: result});
     }
 
+    this.emit('afterRunActions', {index: this.pageDriver.actionList.length, result: result});
+
+    return result;
+  }
+
+  /**
+   * 清理副作用
+   */
+  async cleanEffect(): Promise<void> {
     if (!this.nightmareRun) {
       throw new Error('nightmareRun must be defined');
     }
     // 暴露 electron 关闭时间，注意它在 nightmareRun.end() 之后才会触发
     if (
-      typeof this.onElectronClose === 'function' &&
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.nightmareRun.proc &&
@@ -242,7 +288,7 @@ export default class NightmareMaster {
         //     1: 'general error - you may need xvfb',
         //     0: 'success!'
         // }
-        this.onElectronClose(code);
+        this.emit('onElectronClose', code);
       });
     }
 
@@ -252,6 +298,18 @@ export default class NightmareMaster {
     } else {
       await this.nightmareRun.end();
     }
+  }
+
+  async getResult() {
+    this.getNightmareConfig();
+
+    this.getNewNightmare();
+
+    this.gotoPage();
+
+    const result = await this.runActions();
+
+    this.cleanEffect();
 
     return {
       data: result,
