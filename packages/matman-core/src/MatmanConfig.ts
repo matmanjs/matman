@@ -16,6 +16,7 @@ export default class MatmanConfig {
   coveragePath: string;
   matmanResultPath: string;
   isDevBuild: boolean;
+  setupOptions: {name: string; cwd?: string; order: string; auto?: boolean}[];
 
   /**
    * 构造函数
@@ -82,6 +83,9 @@ export default class MatmanConfig {
     // 设置 dev 开发模式
     this.setIsDevBuild(!!opts.isDevBuild);
 
+    // 设置启动脚本
+    this.setupOptions = opts.setupOptions || [];
+
     // 检查参数是否合法
     const checkResult = this.check();
     if (!checkResult.result) {
@@ -121,6 +125,34 @@ export default class MatmanConfig {
         result: false,
         msg: 'Unknown rootPath=' + this.rootPath,
       };
+    }
+
+    // 检查启动脚本
+    for (const item of this.setupOptions) {
+      // 必须有名字
+      if (typeof item.name !== 'string' || item.name === '') {
+        return {
+          result: false,
+          msg: 'Unknown order name=' + item.name,
+        };
+      }
+      if (typeof item.order !== 'string' || item.order === '') {
+        return {
+          result: false,
+          msg: 'Unknown order=' + item.order,
+        };
+      }
+
+      if (!item.cwd) {
+        item.cwd = process.cwd();
+      }
+
+      if (!fs.existsSync(item.cwd)) {
+        return {
+          result: false,
+          msg: 'Unknown option cwd=' + item.cwd,
+        };
+      }
     }
 
     return {
