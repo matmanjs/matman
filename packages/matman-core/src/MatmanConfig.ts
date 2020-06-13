@@ -35,11 +35,19 @@ export default class MatmanConfig {
   constructor(rootPath: string, opts: MatmanConfigOpts = {}) {
     // 消除警告, 其实会被覆盖
     this.isDevBuild = false;
+
     // 项目根目录
+    // 根目录是必须的，因为会有一些默认值都是基于这个根目录而言
+    // 获取值的优先级为：参数指定 > matman.config.js 路径 > package.json 路径
     this.rootPath = getAbsolutePath(rootPath);
 
     // 测试案例的根目录
     this.caseModulesPath = getAbsolutePath(opts.caseModulesPath || './case_modules', this.rootPath);
+
+    // 如果默认的 caseModulesPath 不存在，则复用 rootPath
+    if (!fs.existsSync(this.caseModulesPath)) {
+      this.caseModulesPath = this.rootPath;
+    }
 
     // crawler script 构建之后的目录
     this.crawlerBuildPath = getAbsolutePath(
@@ -112,13 +120,6 @@ export default class MatmanConfig {
       return {
         result: false,
         msg: 'Unknown rootPath=' + this.rootPath,
-      };
-    }
-
-    if (!fs.existsSync(this.caseModulesPath)) {
-      return {
-        result: false,
-        msg: 'Unknown caseModulesPath=' + this.caseModulesPath,
       };
     }
 
