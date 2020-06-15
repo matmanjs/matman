@@ -17,6 +17,7 @@ export default class MatmanConfig {
   matmanResultPath: string;
   isDevBuild: boolean;
   setupOptions: {name: string; cwd?: string; order: string; auto?: boolean}[];
+  master: 'nightmare' | 'puppeteer';
 
   /**
    * 构造函数
@@ -85,6 +86,9 @@ export default class MatmanConfig {
 
     // 设置启动脚本
     this.setupOptions = opts.setupOptions || [];
+
+    // 设置执行器
+    this.master = opts.master || 'nightmare';
 
     // 检查参数是否合法
     const checkResult = this.check();

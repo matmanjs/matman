@@ -23,4 +23,5 @@ export interface MatmanConfigOpts {
   matmanResultPath?: string;
   isDevBuild?: boolean;
   setupOptions?: {name: string; cwd?: string; order: string; auto?: boolean}[];
+  master?: 'nightmare' | 'puppeteer';
 }
