@@ -3,6 +3,7 @@ import path from 'path';
 
 import fse from 'fs-extra';
 import Nightmare from 'nightmare';
+import puppeteer from 'puppeteer';
 import {CrawlerParser} from 'matman-crawler';
 
 import {MatmanConfig} from 'matman-core';
@@ -36,6 +37,7 @@ export interface PageDriverOpts {
   tag?: string;
   delayBeforeRun?: number;
   nightmareConfig?: NightmareOpts;
+  puppeteerConfig?: puppeteer.LaunchOptions;
   isInIDE?: boolean;
 }
 
@@ -52,6 +54,7 @@ export default class PageDriver {
 
   delayBeforeRun: number;
   nightmareConfig: NightmareOpts;
+  puppeteerConfig: puppeteer.LaunchOptions;
   proxyServer: string;
   mockstarQuery: null | {appendToUrl: (s: string) => string};
 
@@ -63,13 +66,13 @@ export default class PageDriver {
 
   pageUrl: string;
 
-  nightmareWaitFn: number | string | (() => number | string);
+  nightmareWaitFn: number | string | ((...args: any[]) => number | string);
   nightmareWaitFnArgs: any[];
 
   nightmareEvaluateFn: null | (() => any) | string;
   nightmareEvaluateFnArgs: any[];
 
-  actionList: ((n: Nightmare) => Nightmare)[];
+  actionList: ((n: Nightmare | puppeteer.Page) => Nightmare)[];
 
   _dataIndexMap: {[key: string]: number};
   _isDefaultScanMode: boolean;
@@ -109,6 +112,7 @@ export default class PageDriver {
     this.delayBeforeRun = typeof opts.delayBeforeRun === 'number' ? opts.delayBeforeRun : 0;
 
     this.nightmareConfig = opts.nightmareConfig || {};
+    this.puppeteerConfig = opts.puppeteerConfig || {};
     this.proxyServer = '';
     this.mockstarQuery = null;
 
@@ -346,8 +350,8 @@ export default class PageDriver {
    * @author helinjiang
    */
   wait(fn: number | string): PageDriver;
-  wait(fn: () => number | string, ...args: any[]): PageDriver;
-  wait(fn: number | string | (() => number | string), ...args: any[]): PageDriver {
+  wait(fn: (...args: any[]) => number | string, ...args: any[]): PageDriver;
+  wait(fn: number | string | ((...args: any[]) => number | string), ...args: any[]): PageDriver {
     this.nightmareWaitFn = fn;
     this.nightmareWaitFnArgs = args;
 
