@@ -192,7 +192,10 @@ export default class NightmareMaster extends EventEmitter {
     // 触发开始事件
     this.emit('beforeRunActions', {index: 0, result: result});
 
-    for (let i = 0, length = this.pageDriver.actionList.length; i < length; i++) {
+    let i = 0;
+    const length = this.pageDriver.actionList.length;
+
+    for (i; i < length; i++) {
       // 停止在某一步
       if (stop && i > stop) {
         break;
@@ -258,7 +261,7 @@ export default class NightmareMaster extends EventEmitter {
       this.emit('afterRunCase', {index: i, result: result});
     }
 
-    this.emit('afterRunActions', {index: this.pageDriver.actionList.length, result: result});
+    this.emit('afterRunActions', {index: i, result: result});
 
     return result;
   }
