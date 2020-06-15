@@ -36,6 +36,7 @@ export interface PageDriverOpts {
   tag?: string;
   delayBeforeRun?: number;
   nightmareConfig?: NightmareOpts;
+  isInIDE?: boolean;
 }
 
 /**
@@ -71,7 +72,8 @@ export default class PageDriver {
   actionList: ((n: Nightmare) => Nightmare)[];
 
   _dataIndexMap: {[key: string]: number};
-  _isDefaultScanMode = false;
+  _isDefaultScanMode: boolean;
+  _isInIDE: boolean;
 
   /**
    * 构造函数
@@ -128,6 +130,7 @@ export default class PageDriver {
 
     this._dataIndexMap = {};
     this._isDefaultScanMode = false;
+    this._isInIDE = !!opts.isInIDE;
   }
 
   /**
@@ -408,9 +411,7 @@ export default class PageDriver {
    * @return {Promise<{}>}
    * @author helinjiang
    */
-  end(): Promise<MatmanResult> {
-    const nightmareMaster = new NightmareMaster(this);
-
+  end(): Promise<MatmanResult | PageDriver> {
     // 默认处理 coverage，根据 window.__coverage__
     if (!this.coverageConfig) {
       this.setCoverageConfig(true);
@@ -428,6 +429,14 @@ export default class PageDriver {
         return nightmareRun.wait(500);
       });
     }
+
+    if (this._isInIDE) {
+      return new Promise(resolve => {
+        resolve(this);
+      });
+    }
+
+    const nightmareMaster = new NightmareMaster(this);
 
     return nightmareMaster
       .getResult()
