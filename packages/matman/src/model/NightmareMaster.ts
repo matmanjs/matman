@@ -27,7 +27,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
     super();
     this.pageDriver = pageDriver;
     // 初始化配置
-    this.nightmareConfig = this.pageDriver.nightmareConfig;
+    this.nightmareConfig = this.pageDriver.nightmareConfig as Nightmare.IConstructorOptions;
 
     // 是否使用记录器记录整个请求队列
     // 如果为 true，则可以从 this.globalInfo.recorder 中获取，

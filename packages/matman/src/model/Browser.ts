@@ -29,7 +29,7 @@ export default class Browser {
   newPage(caseModuleFilePath: string, opts: CreatePageDriverOpts): PageDriver {
     return createPageDriver(
       caseModuleFilePath,
-      _.merge({nightmareConfig: this.browserOptions}, opts),
+      _.merge({browserOptions: this.browserOptions}, opts),
     );
   }
 }

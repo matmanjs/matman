@@ -37,8 +37,7 @@ export interface PageDriverOpts {
   doNotCloseBrowser?: boolean;
   tag?: string;
   delayBeforeRun?: number;
-  nightmareConfig?: NightmareOpts;
-  puppeteerConfig?: puppeteer.LaunchOptions;
+  browserOptions?: NightmareOpts | puppeteer.LaunchOptions;
   isInIDE?: boolean;
 }
 
@@ -54,8 +53,8 @@ export default class PageDriver {
   tag: string | undefined;
 
   delayBeforeRun: number;
-  nightmareConfig: NightmareOpts;
-  puppeteerConfig: puppeteer.LaunchOptions;
+  nightmareConfig: NightmareOpts | undefined;
+  puppeteerConfig: puppeteer.LaunchOptions | undefined;
   proxyServer: string;
   mockstarQuery: null | {appendToUrl: (s: string) => string};
 
@@ -112,8 +111,12 @@ export default class PageDriver {
     // 延时多少ms再启动
     this.delayBeforeRun = typeof opts.delayBeforeRun === 'number' ? opts.delayBeforeRun : 0;
 
-    this.nightmareConfig = opts.nightmareConfig || {};
-    this.puppeteerConfig = opts.puppeteerConfig || {};
+    if (this.matmanConfig.master === 'puppeteer') {
+      this.puppeteerConfig = opts.browserOptions || {};
+    } else {
+      this.nightmareConfig = opts.browserOptions || {};
+    }
+
     this.proxyServer = '';
     this.mockstarQuery = null;
 
