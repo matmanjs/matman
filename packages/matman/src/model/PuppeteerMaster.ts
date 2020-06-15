@@ -17,8 +17,6 @@ class Puppeteer extends EventEmitter implements Master {
   constructor(pageDriver: PageDriver) {
     super();
 
-    // 基类构造函数
-    super();
     this.pageDriver = pageDriver;
 
     // 初始化配置
@@ -155,7 +153,8 @@ class Puppeteer extends EventEmitter implements Master {
     this.emit('beforeRunActions', {index: 0, result: result});
 
     let i = 0;
-    const length = this.pageDriver.actionList.length;
+    const actionList = this.pageDriver.actionList as ((n: puppeteer.Page) => Promise<void>)[];
+    const length = actionList.length;
 
     for (i; i < length; i++) {
       // 停止在某一步
@@ -170,7 +169,7 @@ class Puppeteer extends EventEmitter implements Master {
       if (!this.page) {
         throw new Error('page must be defined');
       }
-      await this.pageDriver.actionList[i](this.page);
+      await actionList[i](this.page);
 
       // 保存屏幕截图
       if (this.pageDriver.screenshotConfig) {
@@ -231,11 +230,11 @@ class Puppeteer extends EventEmitter implements Master {
   }
 
   async getResult() {
-    this.getConfig();
+    await this.getConfig();
 
-    this.getNewInstance();
+    await this.getNewInstance();
 
-    this.gotoPage();
+    await this.gotoPage();
 
     const result = await this.runActions();
 

@@ -194,7 +194,8 @@ export default class NightmareMaster extends EventEmitter implements Master {
     this.emit('beforeRunActions', {index: 0, result: result});
 
     let i = 0;
-    const length = this.pageDriver.actionList.length;
+    const actionList = this.pageDriver.actionList as ((n: Nightmare) => Nightmare)[];
+    const length = actionList.length;
 
     for (i; i < length; i++) {
       // 停止在某一步
@@ -209,7 +210,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
       if (!this.nightmareRun) {
         throw new Error('nightmareRun must be defined');
       }
-      let curRun = this.pageDriver.actionList[i](this.nightmareRun);
+      let curRun = actionList[i](this.nightmareRun);
 
       // 保存屏幕截图
       if (this.pageDriver.screenshotConfig) {

@@ -10,6 +10,7 @@ import {MatmanConfig} from 'matman-core';
 import MatmanResult from './MatmanResult';
 
 import NightmareMaster from './NightmareMaster';
+import PuppeteerMaster from './PuppeteerMaster';
 import ScreenshotConfig from './ScreenshotConfig';
 import DeviceConfig, {DeviceConfigOpts} from './DeviceConfig';
 import CoverageConfig from './CoverageConfig';
@@ -72,7 +73,7 @@ export default class PageDriver {
   nightmareEvaluateFn: null | (() => any) | string;
   nightmareEvaluateFnArgs: any[];
 
-  actionList: ((n: Nightmare | puppeteer.Page) => Nightmare)[];
+  actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
 
   _dataIndexMap: {[key: string]: number};
   _isDefaultScanMode: boolean;
@@ -324,7 +325,10 @@ export default class PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  addAction(actionName: string, actionCall: (n: Nightmare) => Nightmare): PageDriver {
+  addAction(
+    actionName: string,
+    actionCall: ((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>),
+  ): PageDriver {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
       this._dataIndexMap[actionName + ''] = this.actionList.length - 1;
@@ -429,15 +433,46 @@ export default class PageDriver {
     // 兼容没有定义 run 方法的场景
     if (!this.actionList.length) {
       this._isDefaultScanMode = true;
-      this.addAction('_scan_page_', function (nightmareRun) {
-        return nightmareRun.wait(500);
-      });
+      if (this.matmanConfig.master === 'puppeteer') {
+        this.addAction('_scan_page_', async function (n: puppeteer.Page) {
+          await n.waitFor(500);
+        });
+      } else {
+        this.addAction('_scan_page_', function (n: Nightmare) {
+          return n.wait(500);
+        });
+      }
     }
 
     if (this._isInIDE) {
       return new Promise(resolve => {
         resolve(this);
       });
+    }
+
+    if (this.matmanConfig.master === 'puppeteer') {
+      const puppeteerMaster = new PuppeteerMaster(this);
+      return puppeteerMaster
+        .getResult()
+        .then(resultData => {
+          return new MatmanResult(resultData);
+        })
+        .then(matmanResult => {
+          // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回
+          if (this._isDefaultScanMode) {
+            matmanResult.data = matmanResult.get(0) as any;
+          }
+
+          return matmanResult;
+        })
+        .then(matmanResult => {
+          // 保存数据快照
+          if (this.matmanResultConfig) {
+            fse.outputJsonSync(this.matmanResultConfig.path, matmanResult);
+          }
+
+          return matmanResult;
+        });
     }
 
     const nightmareMaster = new NightmareMaster(this);
