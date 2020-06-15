@@ -5,10 +5,11 @@ import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
+import {Master} from './Master';
 import PageDriver, {NightmareOpts} from './PageDriver';
 import {getMainUrl, evaluate} from '../util/masterUtils';
 
-export default class NightmareMaster extends EventEmitter {
+export default class NightmareMaster extends EventEmitter implements Master {
   pageDriver: PageDriver;
   globalInfoRecorderKey: string;
   nightmareConfig: NightmareOpts;
@@ -55,7 +56,7 @@ export default class NightmareMaster extends EventEmitter {
   /**
    * 得到 nightmare 的配置
    */
-  getNightmareConfig(): void {
+  getConfig(): void {
     // 触发开始事件
     this.emit('beforeGetNightmareConfig');
 
@@ -95,7 +96,7 @@ export default class NightmareMaster extends EventEmitter {
    * 得到 nightmare 的一个实例
    * 并初始化一些行为
    */
-  getNewNightmare(): void {
+  getNewInstance(): void {
     this.emit('beforeGetNewNightmare');
     // 创建 nightmare 对象，注意使用扩展的 NightmarePlus ，而不是原生的 Nightmare
     const NightmarePlus = getNightmarePlus();
@@ -304,9 +305,9 @@ export default class NightmareMaster extends EventEmitter {
   }
 
   async getResult() {
-    this.getNightmareConfig();
+    this.getConfig();
 
-    this.getNewNightmare();
+    this.getNewInstance();
 
     this.gotoPage();
 
