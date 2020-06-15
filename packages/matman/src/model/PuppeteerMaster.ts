@@ -20,7 +20,7 @@ class Puppeteer extends EventEmitter implements Master {
     this.pageDriver = pageDriver;
 
     // 初始化配置
-    this.puppeteerConfig = this.pageDriver.puppeteerConfig;
+    this.puppeteerConfig = this.pageDriver.puppeteerConfig as puppeteer.LaunchOptions;
 
     // puppeteer 对象
     this.browser = null;
@@ -33,7 +33,6 @@ class Puppeteer extends EventEmitter implements Master {
 
     // 如果设置了 show ，则同步打开开发者工具面板
     if (this.puppeteerConfig.headless === false) {
-      // https://www.npmjs.com/package/nightmare#opendevtools
       this.puppeteerConfig.devtools = true;
     }
 
