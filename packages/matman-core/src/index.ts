@@ -1,6 +1,8 @@
 import MatmanConfig from './config/MatmanConfig';
 import {MATMAN_CONFIG_FILE} from './config';
 import {Master} from './typings/master';
+import {PageDriver} from './typings/pageDriver';
+import {NightmareOpts} from './types';
 
 import {getAbsolutePath, findMatmanConfig, searchFilePath} from './util';
 import {requireAsync, requireSync} from './util/require-file';
@@ -14,4 +16,6 @@ export {
   requireAsync,
   requireSync,
   Master,
+  PageDriver,
+  NightmareOpts,
 };
