@@ -2,9 +2,20 @@ import fs from 'fs';
 import path from 'path';
 
 import {getAbsolutePath} from './util';
-import {MatmanConfigOpts} from './types';
+import {MatmanConfigOpts, SetupOptions} from './types';
 
-type CheckResult = {result: boolean; msg?: string};
+/**
+ * 定义 check 配置的函数的返回数据
+ *
+ * @member result 检查结果
+ * @member msg 额外的信息
+ *
+ * @author wangjq4214
+ */
+interface CheckResult {
+  result: boolean;
+  msg?: string;
+}
 
 export default class MatmanConfig {
   rootPath: string;
@@ -16,23 +27,12 @@ export default class MatmanConfig {
   coveragePath: string;
   matmanResultPath: string;
   isDevBuild: boolean;
-  setupOptions: {name: string; cwd?: string; order: string; auto?: boolean}[];
-  master: 'nightmare' | 'puppeteer';
+  setupOptions: SetupOptions[];
 
   /**
    * 构造函数
-   *
-   * @param {String} rootPath  matman 项目的根目录
-   * @param {Object} opts 参数
-   * @param {String} [opts.caseModulesPath] 测试案例的根目录
-   * @param {String} [opts.crawlerBuildPath] 前端爬虫脚本构建之后的目录
-   * @param {RegExp} [opts.crawlerMatch] 用于匹配是否为前端爬虫脚本的正则表达式
-   * @param {Boolean} [opts.crawlerInjectJQuery] 前端爬虫脚本中是否注入jQuery
-   * @param {String} [opts.screenshotPath] 屏幕截图保存的路径
-   * @param {String} [opts.coveragePath] 覆盖率文件保存的路径
-   * @param {String} [opts.matmanResultPath] MatmanResult 执行结果数据保存的路径
-   * @param {Boolean} [opts.isDevBuild] 是否为开发模式
-   * @author helinjiang
+   * @param rootPath 项目的根路径
+   * @param opts 传入的配置文件
    */
   constructor(rootPath: string, opts: MatmanConfigOpts = {}) {
     // 消除警告, 其实会被覆盖
@@ -87,9 +87,6 @@ export default class MatmanConfig {
     // 设置启动脚本
     this.setupOptions = opts.setupOptions || [];
 
-    // 设置执行器
-    this.master = opts.master || 'nightmare';
-
     // 检查参数是否合法
     const checkResult = this.check();
     if (!checkResult.result) {
@@ -119,9 +116,9 @@ export default class MatmanConfig {
   /**
    * 校验参数是否合法有效
    *
-   * @return {{result:Boolean, [msg]:String}}
-   * @author helinjiang
    * @private
+   * @author helinjiang
+   * @author wangjq4214
    */
   private check(): CheckResult {
     if (!fs.existsSync(this.rootPath)) {
@@ -140,6 +137,7 @@ export default class MatmanConfig {
           msg: 'Unknown order name=' + item.name,
         };
       }
+      // 必须存在命令
       if (typeof item.order !== 'string' || item.order === '') {
         return {
           result: false,
@@ -147,6 +145,7 @@ export default class MatmanConfig {
         };
       }
 
+      // 指定默认的命令执行路径
       if (!item.cwd) {
         item.cwd = process.cwd();
       }

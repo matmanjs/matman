@@ -1,6 +1,5 @@
 /**
  * matman.config.js 的名字
- *
- * @type {String}
+ * @author wangjq4214
  */
 export const MATMAN_CONFIG_FILE = 'matman.config.js';
