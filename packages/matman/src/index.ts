@@ -1,5 +1,4 @@
 import PageDriver from './model/PageDriver';
-import NightmareMaster from './model/NightmareMaster';
 import MatmanResult from './model/MatmanResult';
 import {isURLMatch} from './util/url';
 
@@ -13,4 +12,4 @@ function launch(browserOptions: any): Browser {
   return new Browser(browserOptions);
 }
 
-export {PageDriver, MatmanResult, isURLMatch, createPageDriver, launch, NightmareMaster};
+export {PageDriver, MatmanResult, isURLMatch, createPageDriver, launch};

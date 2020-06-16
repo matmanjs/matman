@@ -1,4 +1,5 @@
 import {EventEmitter} from 'events';
+import {PageDriver} from './pageDriver';
 
 /**
  * 执行器需要实现的方法
@@ -12,11 +13,16 @@ import {EventEmitter} from 'events';
  * @author wangjq4214
  */
 export interface Master extends EventEmitter {
+  name: string;
+
+  setPage(p: PageDriver): void;
   getResult(): Promise<{
     data: any[];
-    _dataIndexMap: {
-      [key: string]: number;
-    };
+    _dataIndexMap:
+      | {
+          [key: string]: number;
+        }
+      | undefined;
     globalInfo?: {
       [key: string]: any;
     };

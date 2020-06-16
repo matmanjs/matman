@@ -23,39 +23,3 @@ export interface MatmanConfigType {
   matmanResultPath?: string;
   isDevBuild?: boolean;
 }
-
-/**
- * 截图区域的配置信息
- */
-export interface ClipOpts {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-/**
- * 覆盖率、测试结果、屏幕截图配置
- * 可以为 string、boolean 或者为配置对象
- */
-export type CoverageOrResultOrScreenOpts =
-  | string
-  | boolean
-  | {tag?: string; path: string; clip?: ClipOpts};
-
-/**
- * 网络请求队列中的结果
- */
-export interface NetworkType {
-  eventName: string;
-  args: any[];
-}
-
-/**
- * 测试的结果
- */
-export interface MatmanResultType {
-  data?: unknown[];
-  _dataIndexMap?: {[key: string]: number};
-  globalInfo?: {[key: string]: {queue: NetworkType[]}};
-}
