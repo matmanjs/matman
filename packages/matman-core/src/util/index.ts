@@ -10,9 +10,8 @@ import {requireSync} from './require-file';
 /**
  * 获得绝对路径地址
  *
- * @param {String} targetPath 目标路径
- * @param {String} [basePath] 根路径，如果目标路径为相对路径，则将用该路径作为其根路径
- * @return {String}
+ * @param targetPath 目标路径
+ * @param basePath 根路径，如果目标路径为相对路径，则将用该路径作为其根路径
  */
 export function getAbsolutePath(targetPath: string, basePath?: string): string {
   if (!targetPath) {
