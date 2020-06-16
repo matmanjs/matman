@@ -23,3 +23,12 @@ export interface MatmanConfigType {
   matmanResultPath?: string;
   isDevBuild?: boolean;
 }
+
+export interface PageDriverOpts {
+  useRecorder?: boolean;
+  tag?: string;
+  delayBeforeRun?: number;
+  isInIDE?: boolean;
+}
+
+export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;

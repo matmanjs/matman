@@ -18,13 +18,7 @@ import {
 import {CrawlerParser} from 'matman-crawler';
 
 import MatmanResult from './MatmanResult';
-
-export interface PageDriverOpts {
-  useRecorder?: boolean;
-  tag?: string;
-  delayBeforeRun?: number;
-  isInIDE?: boolean;
-}
+import {PageDriverOpts} from '../types';
 
 /**
  * 页面操作类，使用这个类可以实现对浏览器页面的控制

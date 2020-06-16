@@ -1,4 +1,4 @@
-interface NetworkType {
+export interface NetworkType {
   eventName: string;
   args: any[];
 }
