@@ -8,13 +8,14 @@ import MatmanResultConfig, {ResultOpts} from './config/MatmanResultConfig';
 import {MATMAN_CONFIG_FILE} from './config';
 import {Master} from './typings/master';
 import {PageDriver} from './typings/pageDriver';
-import {MatmanResult} from './typings/matmanResult';
-import {NightmareOpts} from './types';
+import {MatmanResult, NetworkType} from './typings/matmanResult';
+import {NightmareOpts, MatmanConfigOpts} from './types';
 
 import {getAbsolutePath, findMatmanConfig, searchFilePath} from './util';
 import {requireAsync, requireSync} from './util/require-file';
 
 export {
+  MatmanConfigOpts,
   Nightmare,
   puppeteer,
   MatmanConfig,
@@ -36,4 +37,5 @@ export {
   MatmanResultConfig,
   ResultOpts,
   MatmanResult,
+  NetworkType,
 };

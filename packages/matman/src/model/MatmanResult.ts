@@ -1,6 +1,5 @@
-import {MatmanResultType, NetworkType} from '../types';
+import {MatmanResult as IMatmanResult, NetworkType} from 'matman-core';
 import {isURLMatch} from '../util/url';
-import {MatmanResult as IMatmanResult} from 'matman-core';
 
 /**
  * 资源类型的枚举
@@ -15,6 +14,12 @@ type ResourceType =
   | 'xhr'
   | 'other'
   | '';
+
+interface MatmanResultType {
+  data?: unknown[];
+  _dataIndexMap?: {[key: string]: number};
+  globalInfo?: {[key: string]: {queue: NetworkType[]}};
+}
 
 export default class MatmanResult implements IMatmanResult {
   data: unknown[];
