@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import {getAbsolutePath} from './util';
-import {MatmanConfigOpts, SetupOptions} from './types';
+import {getAbsolutePath} from '../util';
+import {MatmanConfigOpts, SetupOptions} from '../types';
 
 /**
  * 定义 check 配置的函数的返回数据

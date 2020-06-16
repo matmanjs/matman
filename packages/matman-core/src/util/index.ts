@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 
-import MatmanConfig from '../MatmanConfig';
+import MatmanConfig from '../config/MatmanConfig';
 import {MATMAN_CONFIG_FILE} from '../config';
 import {MatmanConfigOpts} from '../types';
 import {requireSync} from './require-file';
