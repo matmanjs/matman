@@ -5,8 +5,7 @@ import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
-import {Master} from 'matman-core';
-import PageDriver, {NightmareOpts} from './PageDriver';
+import {Master, PageDriver, NightmareOpts} from 'matman-core';
 import {getMainUrl, evaluate} from './utils';
 
 export default class NightmareMaster extends EventEmitter implements Master {
@@ -22,12 +21,12 @@ export default class NightmareMaster extends EventEmitter implements Master {
    *
    * @param {PageDriver} pageDriver
    */
-  constructor(pageDriver: PageDriver) {
+  constructor(pageDriver: PageDriver, opts?: NightmareOpts) {
     // 基类构造函数
     super();
     this.pageDriver = pageDriver;
     // 初始化配置
-    this.nightmareConfig = this.pageDriver.nightmareConfig as Nightmare.IConstructorOptions;
+    this.nightmareConfig = opts || {};
 
     // 是否使用记录器记录整个请求队列
     // 如果为 true，则可以从 this.globalInfo.recorder 中获取，
@@ -56,7 +55,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
   /**
    * 得到 nightmare 的配置
    */
-  getConfig(): void {
+  async getConfig(): Promise<void> {
     // 触发开始事件
     this.emit('beforeGetNightmareConfig');
 
@@ -80,11 +79,11 @@ export default class NightmareMaster extends EventEmitter implements Master {
     }
 
     // 如果传递给 evaluate 的是一个本地绝对路径文件，则需要设置 preload
-    if (typeof this.pageDriver.nightmareEvaluateFn === 'string') {
+    if (typeof this.pageDriver.evaluateFn === 'string') {
       this.nightmareConfig.webPreferences = {
         // 用例过多且频繁启动测试时可能会存在失败的场景 #154
         partition: 'nopersist',
-        preload: this.pageDriver.nightmareEvaluateFn,
+        preload: this.pageDriver.evaluateFn,
       };
     }
 
@@ -96,7 +95,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
    * 得到 nightmare 的一个实例
    * 并初始化一些行为
    */
-  getNewInstance(): void {
+  async getNewInstance(): Promise<void> {
     this.emit('beforeGetNewNightmare');
     // 创建 nightmare 对象，注意使用扩展的 NightmarePlus ，而不是原生的 Nightmare
     const NightmarePlus = getNightmarePlus();
@@ -159,7 +158,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
   /**
    * 打开界面
    */
-  gotoPage(): void {
+  async gotoPage(): Promise<void> {
     this.emit('beforeGotoPage', this.pageDriver.pageUrl);
 
     if (!this.nightmareRun) {
@@ -171,12 +170,12 @@ export default class NightmareMaster extends EventEmitter implements Master {
     // https://github.com/segmentio/nightmare#waitms
     // https://github.com/segmentio/nightmare#waitselector
     // https://github.com/segmentio/nightmare#waitfn-arg1-arg2
-    if (typeof this.pageDriver.nightmareWaitFn !== 'undefined') {
+    if (typeof this.pageDriver.waitFn !== 'undefined') {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.nightmareRun = this.nightmareRun.wait(
-        this.pageDriver.nightmareWaitFn,
-        ...this.pageDriver.nightmareWaitFnArgs,
+        this.pageDriver.waitFn,
+        ...this.pageDriver.waitFnArgs,
       );
     }
 
@@ -229,9 +228,9 @@ export default class NightmareMaster extends EventEmitter implements Master {
       }
 
       let t: any;
-      if (typeof this.pageDriver.nightmareEvaluateFn === 'function') {
+      if (typeof this.pageDriver.evaluateFn === 'function') {
         t = await curRun.evaluate(
-          this.pageDriver.nightmareEvaluateFn,
+          this.pageDriver.evaluateFn,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           ...this.pageDriver.nightmareEvaluateFnArgs,
@@ -298,7 +297,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
     }
 
     // 不关闭界面
-    if (this.pageDriver.doNotCloseBrowser) {
+    if (this.nightmareConfig.doNotCloseBrowser) {
       await this.nightmareRun;
     } else {
       await this.nightmareRun.end();
