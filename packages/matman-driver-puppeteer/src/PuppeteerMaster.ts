@@ -6,17 +6,18 @@ import {Master, PageDriver} from 'matman-core';
 import {evaluate} from './utils/master';
 
 class Puppeteer extends EventEmitter implements Master {
-  pageDriver: PageDriver;
+  name = 'puppeteer';
+  pageDriver: PageDriver | null;
   // globalInfoRecorderKey: string;
   puppeteerConfig: puppeteer.LaunchOptions;
   browser: null | puppeteer.Browser;
   page: null | puppeteer.Page;
   // globalInfo: {[key: string]: any};
 
-  constructor(pageDriver: PageDriver, opts: puppeteer.LaunchOptions = {}) {
+  constructor(opts: puppeteer.LaunchOptions = {}) {
     super();
 
-    this.pageDriver = pageDriver;
+    this.pageDriver = null;
 
     // 初始化配置
     this.puppeteerConfig = opts;
@@ -24,6 +25,10 @@ class Puppeteer extends EventEmitter implements Master {
     // puppeteer 对象
     this.browser = null;
     this.page = null;
+  }
+
+  setPage(n: PageDriver): void {
+    this.pageDriver = n;
   }
 
   getConfig(): void {
@@ -36,7 +41,7 @@ class Puppeteer extends EventEmitter implements Master {
     }
 
     // 如果传入了代理服务，则设置代理服务器
-    if (this.pageDriver.proxyServer) {
+    if (this.pageDriver?.proxyServer) {
       if (this.puppeteerConfig.args) {
         this.puppeteerConfig.args = [
           ...this.puppeteerConfig.args,
@@ -75,7 +80,7 @@ class Puppeteer extends EventEmitter implements Master {
     });
 
     // 设置设备
-    if (this.pageDriver.deviceConfig) {
+    if (this.pageDriver?.deviceConfig) {
       await this.page.setViewport({
         width: this.pageDriver.deviceConfig.width || 1250,
         height: this.pageDriver.deviceConfig.height || 400,
@@ -84,7 +89,7 @@ class Puppeteer extends EventEmitter implements Master {
     }
 
     // 设置 cookie
-    if (this.pageDriver.cookies) {
+    if (this.pageDriver?.cookies) {
       const temp: puppeteer.SetCookie[] = [];
       // 简单处理传入的字符串
       if (typeof this.pageDriver.cookies === 'string') {
@@ -101,7 +106,7 @@ class Puppeteer extends EventEmitter implements Master {
         Object.keys(this.pageDriver.cookies).forEach(item => {
           temp.push({
             name: item,
-            value: (this.pageDriver.cookies as any)[item],
+            value: (this.pageDriver?.cookies as any)[item],
           });
         });
       }
@@ -111,7 +116,7 @@ class Puppeteer extends EventEmitter implements Master {
 
     // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下
     if (
-      this.pageDriver.mockstarQuery &&
+      this.pageDriver?.mockstarQuery &&
       typeof this.pageDriver.mockstarQuery.appendToUrl === 'function'
     ) {
       this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
@@ -123,20 +128,26 @@ class Puppeteer extends EventEmitter implements Master {
   }
 
   async gotoPage(): Promise<void> {
-    this.emit('beforeGotoPage', this.pageDriver.pageUrl);
+    this.emit('beforeGotoPage', this.pageDriver?.pageUrl);
 
-    this.page?.goto(this.pageDriver.pageUrl);
+    if (!this.pageDriver?.pageUrl) {
+      throw new Error('pageUrl must be defined');
+    }
+    this.page?.goto(this.pageDriver?.pageUrl);
 
     // 兼容性处理
-    if (typeof this.pageDriver.waitFn === 'number' || typeof this.pageDriver.waitFn === 'string') {
+    if (
+      typeof this.pageDriver?.waitFn === 'number' ||
+      typeof this.pageDriver?.waitFn === 'string'
+    ) {
       await this.page?.waitFor(this.pageDriver.waitFn as any);
     }
     // 函数执行结果给 waitFor
-    if (typeof this.pageDriver.waitFn === 'function') {
+    if (typeof this.pageDriver?.waitFn === 'function') {
       await this.page?.waitFor(this.pageDriver.waitFn(...this.pageDriver.waitFnArgs) as any);
     }
 
-    this.emit('afterGotoPage', {url: this.pageDriver.pageUrl, page: this.page});
+    this.emit('afterGotoPage', {url: this.pageDriver?.pageUrl, page: this.page});
   }
 
   async runActions(stop?: number): Promise<any[]> {
@@ -146,7 +157,7 @@ class Puppeteer extends EventEmitter implements Master {
     this.emit('beforeRunActions', {index: 0, result: result});
 
     let i = 0;
-    const actionList = this.pageDriver.actionList as ((n: puppeteer.Page) => Promise<void>)[];
+    const actionList = this.pageDriver?.actionList as ((n: puppeteer.Page) => Promise<void>)[];
     const length = actionList.length;
 
     for (i; i < length; i++) {
@@ -165,7 +176,7 @@ class Puppeteer extends EventEmitter implements Master {
       await actionList[i](this.page);
 
       // 保存屏幕截图
-      if (this.pageDriver.screenshotConfig) {
+      if (this.pageDriver?.screenshotConfig) {
         const screenshotFilePath = this.pageDriver.screenshotConfig.getPathWithId(i + 1);
 
         // 要保证这个目录存在，否则保存时会报错
@@ -181,7 +192,7 @@ class Puppeteer extends EventEmitter implements Master {
       // }
 
       let t: any;
-      if (typeof this.pageDriver.evaluateFn === 'function') {
+      if (typeof this.pageDriver?.evaluateFn === 'function') {
         t = await this.page.evaluate(this.pageDriver.evaluateFn, ...this.pageDriver.evaluateFnArgs);
       } else {
         t = await this.page.evaluate(evaluate);
@@ -232,7 +243,7 @@ class Puppeteer extends EventEmitter implements Master {
 
     return {
       data: result,
-      _dataIndexMap: this.pageDriver._dataIndexMap,
+      _dataIndexMap: this.pageDriver?._dataIndexMap,
       // globalInfo: this.globalInfo,
     };
   }

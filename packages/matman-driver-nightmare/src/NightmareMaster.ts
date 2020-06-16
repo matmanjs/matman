@@ -9,7 +9,8 @@ import {Master, PageDriver, NightmareOpts} from 'matman-core';
 import {getMainUrl, evaluate} from './utils';
 
 export default class NightmareMaster extends EventEmitter implements Master {
-  pageDriver: PageDriver;
+  name = 'nightmare';
+  pageDriver: PageDriver | null;
   globalInfoRecorderKey: string;
   nightmareConfig: NightmareOpts;
   nightmare: null | Nightmare;
@@ -21,23 +22,17 @@ export default class NightmareMaster extends EventEmitter implements Master {
    *
    * @param {PageDriver} pageDriver
    */
-  constructor(pageDriver: PageDriver, opts?: NightmareOpts) {
+  constructor(opts?: NightmareOpts) {
     // 基类构造函数
     super();
-    this.pageDriver = pageDriver;
+    this.pageDriver = null;
     // 初始化配置
     this.nightmareConfig = opts || {};
 
     // 是否使用记录器记录整个请求队列
     // 如果为 true，则可以从 this.globalInfo.recorder 中获取，
     // 如果为 字符串，则可以从 this.globalInfo[xxx] 中获取，
-    this.globalInfoRecorderKey = (function (useRecorder) {
-      if (!useRecorder) {
-        return '';
-      }
-
-      return typeof useRecorder === 'boolean' ? 'recorder' : useRecorder + '';
-    })(this.pageDriver.useRecorder);
+    this.globalInfoRecorderKey = '';
 
     // nightmare 对象
     this.nightmare = null;
@@ -50,6 +45,18 @@ export default class NightmareMaster extends EventEmitter implements Master {
 
     // 存储网络请求和浏览器事件等信息
     this.globalInfo = {};
+  }
+
+  setPage(p: PageDriver): void {
+    this.pageDriver = p;
+
+    this.globalInfoRecorderKey = (function (useRecorder) {
+      if (!useRecorder) {
+        return '';
+      }
+
+      return typeof useRecorder === 'boolean' ? 'recorder' : useRecorder + '';
+    })(this.pageDriver.useRecorder);
   }
 
   /**
@@ -68,7 +75,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
     }
 
     // 如果传入了代理服务，则设置代理服务器
-    if (this.pageDriver.proxyServer) {
+    if (this.pageDriver?.proxyServer) {
       this.nightmareConfig.switches = {
         'proxy-server': this.pageDriver.proxyServer,
 
@@ -79,7 +86,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
     }
 
     // 如果传递给 evaluate 的是一个本地绝对路径文件，则需要设置 preload
-    if (typeof this.pageDriver.evaluateFn === 'string') {
+    if (typeof this.pageDriver?.evaluateFn === 'string') {
       this.nightmareConfig.webPreferences = {
         // 用例过多且频繁启动测试时可能会存在失败的场景 #154
         partition: 'nopersist',
@@ -121,7 +128,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
       .header('x-mat-timestamp', Date.now() + '');
 
     // 设置设备
-    if (this.pageDriver.deviceConfig) {
+    if (this.pageDriver?.deviceConfig) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.nightmareRun = this.nightmareRun.exDevice(this.pageDriver.deviceConfig.name, {
@@ -132,7 +139,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
     }
 
     // 设置 cookie
-    if (this.pageDriver.cookies) {
+    if (this.pageDriver?.cookies) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       this.nightmareRun = this.nightmareRun.exCookies(
@@ -143,7 +150,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
 
     // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下
     if (
-      this.pageDriver.mockstarQuery &&
+      this.pageDriver?.mockstarQuery &&
       typeof this.pageDriver.mockstarQuery.appendToUrl === 'function'
     ) {
       this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
@@ -159,12 +166,17 @@ export default class NightmareMaster extends EventEmitter implements Master {
    * 打开界面
    */
   async gotoPage(): Promise<void> {
-    this.emit('beforeGotoPage', this.pageDriver.pageUrl);
+    this.emit('beforeGotoPage', this.pageDriver?.pageUrl);
 
     if (!this.nightmareRun) {
       throw new Error('nightmareRun must be defined');
     }
-    this.nightmareRun = this.nightmareRun.goto(this.pageDriver.pageUrl);
+
+    if (!this.pageDriver?.pageUrl) {
+      throw new Error('pageUrl must be defined');
+    }
+
+    this.nightmareRun = this.nightmareRun.goto(this.pageDriver?.pageUrl);
 
     // 如果指定了 wait，则会传递给 nightmare 处理，具体使用方法可以参考：
     // https://github.com/segmentio/nightmare#waitms
@@ -193,7 +205,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
     this.emit('beforeRunActions', {index: 0, result: result});
 
     let i = 0;
-    const actionList = this.pageDriver.actionList as ((n: Nightmare) => Nightmare)[];
+    const actionList = this.pageDriver?.actionList as ((n: Nightmare) => Nightmare)[];
     const length = actionList.length;
 
     for (i; i < length; i++) {
@@ -212,7 +224,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
       let curRun = actionList[i](this.nightmareRun);
 
       // 保存屏幕截图
-      if (this.pageDriver.screenshotConfig) {
+      if (this.pageDriver?.screenshotConfig) {
         const screenshotFilePath = this.pageDriver.screenshotConfig.getPathWithId(i + 1);
 
         // 要保证这个目录存在，否则保存时会报错
@@ -228,7 +240,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
       }
 
       let t: any;
-      if (typeof this.pageDriver.evaluateFn === 'function') {
+      if (typeof this.pageDriver?.evaluateFn === 'function') {
         t = await curRun.evaluate(
           this.pageDriver.evaluateFn,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -240,7 +252,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
       }
 
       // 覆盖率数据
-      if (t.__coverage__ && this.pageDriver.coverageConfig) {
+      if (t.__coverage__ && this.pageDriver?.coverageConfig) {
         const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
 
         try {
@@ -317,7 +329,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
 
     return {
       data: result,
-      _dataIndexMap: this.pageDriver._dataIndexMap,
+      _dataIndexMap: this.pageDriver?._dataIndexMap,
       globalInfo: this.globalInfo,
     };
   }

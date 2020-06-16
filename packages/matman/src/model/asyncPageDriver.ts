@@ -131,10 +131,10 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  useProxyServer(proxyServer: string): PageDriver {
+  async useProxyServer(proxyServer: string): Promise<void> {
     this.proxyServer = proxyServer;
 
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -146,7 +146,7 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  useWhistle(getRulesCall: () => void, opts = {}): PageDriver {
+  async useWhistle(getRulesCall: () => void, opts = {}): Promise<void> {
     // .useWhistle((data) => {
     //     return {
     //         name: `[auto]matman_demo_03_${data.port}`,
@@ -155,7 +155,7 @@ export default class PageDriver implements IPageDriver {
     //         ]
     //     };
     // }, { autoStartWhistle: true })
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -167,7 +167,7 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  useMockstar(mockstarQuery: {appendToUrl: (s: string) => string}): PageDriver {
+  async useMockstar(mockstarQuery: {appendToUrl: (s: string) => string}): Promise<void> {
     if (!mockstarQuery || typeof mockstarQuery.appendToUrl !== 'function') {
       throw new Error(
         '请传递正确的 MockStarQuery 对象，请参考： https://www.npmjs.com/package/mockstar',
@@ -176,7 +176,7 @@ export default class PageDriver implements IPageDriver {
 
     this.mockstarQuery = mockstarQuery;
 
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -189,9 +189,9 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setCookies(cookies: string | {[key: string]: any}): PageDriver {
+  async setCookies(cookies: string | {[key: string]: any}): Promise<void> {
     this.cookies = cookies;
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -207,9 +207,9 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setDeviceConfig(deviceConfig: DeviceConfigOpts): PageDriver {
+  async setDeviceConfig(deviceConfig: DeviceConfigOpts): Promise<void> {
     this.deviceConfig = new DeviceConfig(deviceConfig || 'mobile');
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -219,7 +219,7 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setScreenshotConfig(screenshotConfig: ScreenOpts): PageDriver {
+  async setScreenshotConfig(screenshotConfig: ScreenOpts): Promise<void> {
     if (screenshotConfig) {
       this.screenshotConfig = new ScreenshotConfig(
         this.matmanConfig,
@@ -228,7 +228,7 @@ export default class PageDriver implements IPageDriver {
         this.tag,
       );
     }
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -238,7 +238,7 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setCoverageConfig(coverageConfig: CoverageOpts): PageDriver {
+  async setCoverageConfig(coverageConfig: CoverageOpts): Promise<void> {
     if (coverageConfig) {
       this.coverageConfig = new CoverageConfig(
         this.matmanConfig,
@@ -248,7 +248,7 @@ export default class PageDriver implements IPageDriver {
       );
     }
 
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -258,7 +258,7 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  setMatmanResultConfig(matmanResultConfig: ResultOpts): PageDriver {
+  async setMatmanResultConfig(matmanResultConfig: ResultOpts): Promise<void> {
     if (matmanResultConfig) {
       this.matmanResultConfig = new MatmanResultConfig(
         this.matmanConfig,
@@ -268,7 +268,7 @@ export default class PageDriver implements IPageDriver {
       );
     }
 
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -278,9 +278,9 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  goto(pageUrl: string): PageDriver {
+  async goto(pageUrl: string): Promise<void> {
     this.pageUrl = pageUrl;
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -291,10 +291,10 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  addAction(
+  async addAction(
     actionName: string,
     actionCall: ((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>),
-  ): PageDriver {
+  ): Promise<void> {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
       this._dataIndexMap[actionName + ''] = this.actionList.length - 1;
@@ -304,7 +304,7 @@ export default class PageDriver implements IPageDriver {
       throw new Error('addAction should assign function!');
     }
 
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -319,13 +319,16 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  wait(fn: number | string): PageDriver;
-  wait(fn: (...args: any[]) => number | string, ...args: any[]): PageDriver;
-  wait(fn: number | string | ((...args: any[]) => number | string), ...args: any[]): PageDriver {
+  async wait(fn: number | string): Promise<void>;
+  async wait(fn: (...args: any[]) => number | string, ...args: any[]): Promise<void>;
+  async wait(
+    fn: number | string | ((...args: any[]) => number | string),
+    ...args: any[]
+  ): Promise<void> {
     this.waitFn = fn;
     this.waitFnArgs = args;
 
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -338,9 +341,9 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  evaluate(fn: string): PageDriver;
-  evaluate(fn: () => any, ...args: any[]): PageDriver;
-  evaluate(fn: string | (() => any), ...args: any[]): PageDriver {
+  async evaluate(fn: string): Promise<void>;
+  async evaluate(fn: () => any, ...args: any[]): Promise<void>;
+  async evaluate(fn: string | (() => any), ...args: any[]): Promise<void> {
     if (typeof fn === 'string') {
       // 获取 crawler script 的源文件目录
       // fn 有可能是绝对路径，也可能是相对路径，但都要转为绝对路径
@@ -363,7 +366,7 @@ export default class PageDriver implements IPageDriver {
       this.evaluateFnArgs = args;
     }
 
-    return this;
+    await Promise.resolve();
   }
 
   /**
@@ -373,11 +376,11 @@ export default class PageDriver implements IPageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  executeCustomFn(customFn: (p: PageDriver) => void): PageDriver {
+  async executeCustomFn(customFn: (p: PageDriver) => void): Promise<void> {
     if (typeof customFn === 'function') {
       customFn(this);
     }
-    return this;
+    await Promise.resolve();
   }
 
   /**
