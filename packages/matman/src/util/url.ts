@@ -20,7 +20,11 @@ export function isURLMatch(URLToCheck: string, partialURL: string, query = {}): 
     return false;
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const URLToCheckParseQueryResult = parseQuery(parseUrl(URLToCheck).search);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const partialURLParseQueryResult = parseQuery(parseUrl(partialURL).search);
 
   // 合并，因为有可能 url 中也携带了 query 参数

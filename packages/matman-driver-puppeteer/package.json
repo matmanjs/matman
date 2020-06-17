@@ -31,6 +31,7 @@
   "dependencies": {
     "fs-extra": "^9.0.1",
     "matman-core": "^5.0.10",
+    "matman-crawler": "^5.0.10",
     "puppeteer": "^3.3.0"
   },
   "devDependencies": {

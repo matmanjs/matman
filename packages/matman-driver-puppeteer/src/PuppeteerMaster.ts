@@ -3,6 +3,7 @@ import {EventEmitter} from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 import {Master, PageDriver} from 'matman-core';
+import {build} from 'matman-crawler';
 import {evaluate} from './utils/master';
 
 class Puppeteer extends EventEmitter implements Master {
@@ -147,6 +148,14 @@ class Puppeteer extends EventEmitter implements Master {
     // 函数执行结果给 waitFor
     if (typeof this.pageDriver?.waitFn === 'function') {
       await this.page?.waitFor(this.pageDriver.waitFn(...this.pageDriver.waitFnArgs) as any);
+    }
+
+    // 注入脚本
+    if (typeof this.pageDriver.evaluateFn === 'string') {
+      const res = await build(this.pageDriver.evaluateFn, {
+        matmanConfig: this.pageDriver.matmanConfig,
+      });
+      this.page?.evaluate(res);
     }
 
     this.emit('afterGotoPage', {url: this.pageDriver?.pageUrl, page: this.page});

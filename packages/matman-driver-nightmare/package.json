@@ -36,6 +36,7 @@
   "dependencies": {
     "fs-extra": "^9.0.1",
     "matman-core": "^5.0.10",
+    "matman-crawler": "^5.0.10",
     "nightmare-handler": "^1.0.10"
   },
   "devDependencies": {
