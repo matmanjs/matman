@@ -1,5 +1,3 @@
-import Nightmare from 'nightmare';
-import puppeteer from 'puppeteer';
 import MatmanConfig from './config/MatmanConfig';
 import DeviceConfig, {DeviceConfigOpts} from './config/DeviceConfig';
 import ScreenshotConfig, {ScreenOpts} from './config/ScreenshotConfig';
@@ -16,8 +14,6 @@ import {requireAsync, requireSync} from './util/require-file';
 
 export {
   MatmanConfigOpts,
-  Nightmare,
-  puppeteer,
   MatmanConfig,
   MATMAN_CONFIG_FILE,
   getAbsolutePath,

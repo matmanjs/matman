@@ -41,7 +41,7 @@ export function isURLMatch(URLToCheck: string, partialURL: string, query = {}): 
   return true;
 }
 
-function parseQuery(url: string | null): queryResult {
+function parseQuery(url: string | undefined): queryResult {
   if (!url) {
     return {};
   }
