@@ -245,7 +245,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
           this.pageDriver.evaluateFn,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          ...this.pageDriver.nightmareEvaluateFnArgs,
+          ...this.pageDriver.evaluateFnArgs,
         );
       } else {
         t = await curRun.evaluate(evaluate);
