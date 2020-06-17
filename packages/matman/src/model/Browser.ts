@@ -100,7 +100,7 @@ export class SyncBrowser extends Browser {
    * @return {PageDriver}
    * @author helinjiang
    */
-  newPage(master: Master, caseModuleFilePath: string, opts: CreatePageDriverOpts): PageDriver {
+  newPage(master: Master, caseModuleFilePath: string, opts: CreatePageDriverOpts = {}): PageDriver {
     // 自动计算是哪个文件在调用 case 脚本，然后以调用者的文件名来做标记
     // 由于调用者脚本本身已经按目录存储，且同一个目录中不同调用者脚本文件名肯定不一样
     // 这样就能够区分标记了
@@ -143,7 +143,7 @@ export class AsyncBrowser extends Browser {
   async newPage(
     master: Master,
     caseModuleFilePath: string,
-    opts: CreatePageDriverOpts,
+    opts: CreatePageDriverOpts = {},
   ): Promise<PageDriver> {
     // 自动计算是哪个文件在调用 case 脚本，然后以调用者的文件名来做标记
     // 由于调用者脚本本身已经按目录存储，且同一个目录中不同调用者脚本文件名肯定不一样

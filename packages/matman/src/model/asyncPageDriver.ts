@@ -1,5 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
+import puppeteer from 'puppeteer';
+import Nightmare from 'nightmare';
 import {
   MatmanConfig,
   PageDriver as IPageDriver,
@@ -7,8 +9,6 @@ import {
   ScreenshotConfig,
   CoverageConfig,
   MatmanResultConfig,
-  Nightmare,
-  puppeteer,
   DeviceConfigOpts,
   ScreenOpts,
   CoverageOpts,
