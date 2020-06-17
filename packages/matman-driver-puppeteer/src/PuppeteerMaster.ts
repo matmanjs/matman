@@ -100,6 +100,7 @@ class Puppeteer extends EventEmitter implements Master {
           temp.push({
             name: res[0],
             value: res[1],
+            domain: this.pageDriver?.pageUrl,
           });
         });
       } else {
@@ -107,6 +108,7 @@ class Puppeteer extends EventEmitter implements Master {
           temp.push({
             name: item,
             value: (this.pageDriver?.cookies as any)[item],
+            domain: this.pageDriver?.pageUrl,
           });
         });
       }
