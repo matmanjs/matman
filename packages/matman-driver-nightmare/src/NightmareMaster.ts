@@ -6,6 +6,7 @@ import Nightmare from 'nightmare';
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
 import {Master, PageDriver, NightmareOpts} from 'matman-core';
+import {build} from 'matman-crawler';
 import {getMainUrl, evaluate} from './utils';
 
 export default class NightmareMaster extends EventEmitter implements Master {
@@ -85,15 +86,6 @@ export default class NightmareMaster extends EventEmitter implements Master {
       };
     }
 
-    // 如果传递给 evaluate 的是一个本地绝对路径文件，则需要设置 preload
-    if (typeof this.pageDriver?.evaluateFn === 'string') {
-      this.nightmareConfig.webPreferences = {
-        // 用例过多且频繁启动测试时可能会存在失败的场景 #154
-        partition: 'nopersist',
-        preload: this.pageDriver.evaluateFn,
-      };
-    }
-
     // 触发时间 广播配置
     this.emit('afterGetNightmareConfig', this.nightmareConfig);
   }
@@ -104,6 +96,7 @@ export default class NightmareMaster extends EventEmitter implements Master {
    */
   async getNewInstance(): Promise<void> {
     this.emit('beforeGetNewNightmare');
+
     // 创建 nightmare 对象，注意使用扩展的 NightmarePlus ，而不是原生的 Nightmare
     const NightmarePlus = getNightmarePlus();
     this.nightmare = NightmarePlus(this.nightmareConfig);
@@ -177,6 +170,21 @@ export default class NightmareMaster extends EventEmitter implements Master {
     }
 
     this.nightmareRun = this.nightmareRun.goto(this.pageDriver?.pageUrl);
+    // 新建启动脚本
+    // 如果传递给 evaluate 的是一个本地绝对路径文件，则需要设置 preload
+    if (typeof this.pageDriver?.evaluateFn === 'string') {
+      let res = await build(this.pageDriver?.evaluateFn, {
+        matmanConfig: this.pageDriver.matmanConfig,
+      });
+
+      res = res.replace(/^var\s/, 'window.');
+
+      fs.ensureDirSync(`${process.env.HOME}/.matman`);
+
+      fs.writeFileSync(`${process.env.HOME}/.matman/temp.js`, res);
+
+      this.nightmareRun.inject('js', `${process.env.HOME}/.matman/temp.js`);
+    }
 
     // 如果指定了 wait，则会传递给 nightmare 处理，具体使用方法可以参考：
     // https://github.com/segmentio/nightmare#waitms
@@ -317,11 +325,11 @@ export default class NightmareMaster extends EventEmitter implements Master {
   }
 
   async getResult() {
-    this.getConfig();
+    await this.getConfig();
 
-    this.getNewInstance();
+    await this.getNewInstance();
 
-    this.gotoPage();
+    await this.gotoPage();
 
     const result = await this.runActions();
 
