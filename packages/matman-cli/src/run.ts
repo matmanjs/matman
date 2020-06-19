@@ -123,7 +123,7 @@ const dealWith: DealWith = {
       const res = await build(files[item], {matmanConfig: matmanConfig});
       fs.outputFileSync(`${matmanConfig.crawlerBuildPath}/${item}.js`, res);
 
-      console.log(chalk.yellow('😘 编译成功', item));
+      console.log(chalk.green('😘 编译成功', item));
     }
   },
 };
