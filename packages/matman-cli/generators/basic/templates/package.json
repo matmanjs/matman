@@ -1,0 +1,22 @@
+{
+  "name": "baidu_02",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "matman build",
+    "build-dev": "matman build --dev",
+    "test": "npm run build && mocha",
+    "test:show": "cross-env SHOW_BROWSER=1 npm run test"
+  },
+  "dependencies": {
+    "matman": "^6.0.0",
+    "matman-crawler": "^6.0.0",
+    "matman-driver-nightmare": "^6.0.0",
+    "matman-driver-puppeteer": "^6.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "cross-env": "^7.0.2",
+    "matman-cli": "^5.0.6",
+    "mocha": "^7.1.2"
+  }
+}
