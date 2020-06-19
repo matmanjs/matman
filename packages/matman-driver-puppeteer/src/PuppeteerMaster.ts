@@ -6,7 +6,7 @@ import {Master, PageDriver} from 'matman-core';
 import {build} from 'matman-crawler';
 import {evaluate} from './utils/master';
 
-class Puppeteer extends EventEmitter implements Master {
+export class PuppeteerMaster extends EventEmitter implements Master {
   name = 'puppeteer';
   pageDriver: PageDriver | null;
   // globalInfoRecorderKey: string;
@@ -259,5 +259,3 @@ class Puppeteer extends EventEmitter implements Master {
     };
   }
 }
-
-export default Puppeteer;

@@ -1,10 +1,29 @@
-import {SyncBrowser, AsyncBrowser} from './model/Browser';
+import Nightmare from 'nightmare';
+import puppeteer from 'puppeteer';
+import {BrowserSync, BrowserAsync} from './model/Browser';
 
 /**
- * 为做兼容，参考 https://github.com/puppeteer/puppeteer/blob/v3.1.0/docs/api.md#puppeteerlaunchoptions
+ * 创建异步 driver
+ * @param master
+ * @param opts
  */
-function launch(): SyncBrowser {
-  return new SyncBrowser();
+function launch(
+  master: any,
+  opts: puppeteer.LaunchOptions | Nightmare.IConstructorOptions = {},
+): BrowserAsync {
+  return new BrowserAsync(new master(opts));
 }
 
-export {AsyncBrowser, launch};
+/**
+ * 创建异步 driver
+ * @param master
+ * @param opts
+ */
+function launchSync(
+  master: any,
+  opts: puppeteer.LaunchOptions | Nightmare.IConstructorOptions = {},
+): BrowserSync {
+  return new BrowserSync(new master(opts));
+}
+
+export {launch, launchSync};
