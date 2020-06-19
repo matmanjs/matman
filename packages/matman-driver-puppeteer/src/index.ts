@@ -1,3 +1,1 @@
-import Puppeteer from './PuppeteerMaster';
-
-export default Puppeteer;
+export * from './PuppeteerMaster';

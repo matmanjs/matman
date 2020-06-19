@@ -1,13 +1,19 @@
 import fs from 'fs-extra';
 import {MATMAN_CONFIG_FILE, findMatmanConfig, Master, PageDriver} from 'matman-core';
-import SyncPageDriver from './PageDriver';
-import AsyncPageDriver from './asyncPageDriver';
+import PageDriverSync from './PageDriverSync';
+import PageDriverAsync from './PageDriver';
 import {CreatePageDriverOpts} from '../types';
 
 /**
  * 浏览器类，使用这个类对浏览器进行设置并创建页面实例
  */
 class Browser {
+  master: Master;
+
+  constructor(master: Master) {
+    this.master = master;
+  }
+
   protected getCaseCallerPath(caseModuleFilePath: string) {
     let err = new Error();
 
@@ -91,7 +97,7 @@ class Browser {
   }
 }
 
-export class SyncBrowser extends Browser {
+export class BrowserSync extends Browser {
   /**
    * 创建 Page 对象
    *
@@ -100,7 +106,7 @@ export class SyncBrowser extends Browser {
    * @return {PageDriver}
    * @author helinjiang
    */
-  newPage(master: Master, caseModuleFilePath: string, opts: CreatePageDriverOpts = {}): PageDriver {
+  newPage(caseModuleFilePath: string, opts: CreatePageDriverOpts = {}): PageDriver {
     // 自动计算是哪个文件在调用 case 脚本，然后以调用者的文件名来做标记
     // 由于调用者脚本本身已经按目录存储，且同一个目录中不同调用者脚本文件名肯定不一样
     // 这样就能够区分标记了
@@ -127,11 +133,11 @@ export class SyncBrowser extends Browser {
       throw new Error(`Could not find ${MATMAN_CONFIG_FILE} or matman config setting!`);
     }
 
-    return new SyncPageDriver(master, matmanConfig, caseModuleFilePath, opts);
+    return new PageDriverSync(this.master, matmanConfig, caseModuleFilePath, opts);
   }
 }
 
-export class AsyncBrowser extends Browser {
+export class BrowserAsync extends Browser {
   /**
    * 创建 Page 对象
    *
@@ -140,11 +146,7 @@ export class AsyncBrowser extends Browser {
    * @return {PageDriver}
    * @author helinjiang
    */
-  async newPage(
-    master: Master,
-    caseModuleFilePath: string,
-    opts: CreatePageDriverOpts = {},
-  ): Promise<PageDriver> {
+  async newPage(caseModuleFilePath: string, opts: CreatePageDriverOpts = {}): Promise<PageDriver> {
     // 自动计算是哪个文件在调用 case 脚本，然后以调用者的文件名来做标记
     // 由于调用者脚本本身已经按目录存储，且同一个目录中不同调用者脚本文件名肯定不一样
     // 这样就能够区分标记了
@@ -171,6 +173,6 @@ export class AsyncBrowser extends Browser {
       throw new Error(`Could not find ${MATMAN_CONFIG_FILE} or matman config setting!`);
     }
 
-    return new AsyncPageDriver(master, matmanConfig, caseModuleFilePath, opts);
+    return new PageDriverAsync(this.master, matmanConfig, caseModuleFilePath, opts);
   }
 }

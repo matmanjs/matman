@@ -9,7 +9,7 @@ import {Master, PageDriver, NightmareOpts} from 'matman-core';
 import {build} from 'matman-crawler';
 import {getMainUrl, evaluate} from './utils';
 
-export default class NightmareMaster extends EventEmitter implements Master {
+export class NightmareMaster extends EventEmitter implements Master {
   name = 'nightmare';
   pageDriver: PageDriver | null;
   globalInfoRecorderKey: string;

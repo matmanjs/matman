@@ -1,3 +1,1 @@
-import NightmareMaster from './NightmareMaster';
-
-export default NightmareMaster;
+export * from './NightmareMaster';
