@@ -3,6 +3,8 @@ import path from 'path';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import yeoman from 'yeoman-environment';
+import {findMatmanConfig, MatmanConfig} from 'matman-core';
+import {CrawlerParser, build} from 'matman-crawler';
 import {DealWith, Argv} from './types';
 
 // 获取所有模板
@@ -111,7 +113,19 @@ const dealWith: DealWith = {
   /**
    * 编译爬虫脚本
    */
-  build: async () => {},
+  build: async () => {
+    const matmanConfig = findMatmanConfig(process.cwd()) as MatmanConfig;
+    const files = new CrawlerParser(matmanConfig).getEntry();
+
+    for (const item of Object.keys(files)) {
+      console.log(chalk.yellow('😏 开始编译', item));
+
+      const res = await build(files[item], {matmanConfig: matmanConfig});
+      fs.outputFileSync(`${matmanConfig.crawlerBuildPath}/${item}.js`, res);
+
+      console.log(chalk.yellow('😘 编译成功', item));
+    }
+  },
 };
 
 /**
