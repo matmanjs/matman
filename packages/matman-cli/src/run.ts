@@ -113,8 +113,11 @@ const dealWith: DealWith = {
   /**
    * 编译爬虫脚本
    */
-  build: async () => {
+  build: async argv => {
     const matmanConfig = findMatmanConfig(process.cwd()) as MatmanConfig;
+    if (argv.dev) {
+      matmanConfig.isDevBuild = argv.dev;
+    }
     const files = new CrawlerParser(matmanConfig).getEntry();
 
     for (const item of Object.keys(files)) {

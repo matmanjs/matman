@@ -18,19 +18,19 @@ export const Main = async (): Promise<void> => {
   // 解析参数
   const argv = yargs
     .command('init', '😋 初始化项目', yargs => {
-      return yargs
-        .option('type', {
-          alias: 't',
-          describe: '生成项目的类型',
-          type: 'string',
-        })
-        .option('dev', {
-          alias: 'd',
-          describe: '是否生成调试版本',
-          type: 'boolean',
-        });
+      return yargs.option('type', {
+        alias: 't',
+        describe: '生成项目的类型',
+        type: 'string',
+      });
     })
-    .command('build', '🤔 编译爬虫脚本')
+    .command('build', '🤔 编译爬虫脚本', yargs => {
+      return yargs.option('dev', {
+        alias: 'd',
+        describe: '是否生成调试版本',
+        type: 'boolean',
+      });
+    })
     .help().argv;
 
   // 执行方法
