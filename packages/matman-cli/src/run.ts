@@ -39,7 +39,7 @@ const runGenerator = async (type: string, {name = '', cwd = process.cwd(), args 
   const generator = new Generator({
     name,
     env,
-    resolved: path.resolve(path.resolve(__dirname, '../generators', type, 'templates')),
+    resolved: path.resolve(__dirname, '../generators', type, 'templates'),
     args,
   });
 
