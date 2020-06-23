@@ -17,6 +17,10 @@ describe('./util/path.ts', function () {
       expect(getNewFilePathWithTag('./a/b/c.min.js', 'iamtag')).to.equal('a/b/c.min_iamtag.js');
     });
 
+    it('../a/b/c.min.js + iamtag -> ../a/b/c.min_iamtag.js', function () {
+      expect(getNewFilePathWithTag('../a/b/c.min.js', 'iamtag')).to.equal('../a/b/c.min_iamtag.js');
+    });
+
     it('/root/a/b/c.min.js + iamtag -> /root/a/b/c.min_iamtag.js', function () {
       expect(getNewFilePathWithTag('/root/a/b/c.min.js', 'iamtag')).to.equal(
         '/root/a/b/c.min_iamtag.js',
@@ -27,6 +31,10 @@ describe('./util/path.ts', function () {
       expect(getNewFilePathWithTag('c.min.js', 'iamtag')).to.equal('c.min_iamtag.js');
     });
 
+    it('iamfile + iamtag -> iamfile_iamtag', function () {
+      expect(getNewFilePathWithTag('iamfile', 'iamtag')).to.equal('iamfile_iamtag');
+    });
+
     it('a\\b\\c.min.js + iamtag -> a\\b\\c.min_iamtag.js', function () {
       expect(getNewFilePathWithTag('a\\b\\c.min.js', 'iamtag')).to.equal('a\\b\\c.min_iamtag.js');
     });
@@ -34,6 +42,12 @@ describe('./util/path.ts', function () {
     it('.\\a\\b\\c.min.js + iamtag -> a\\b\\c.min_iamtag.js', function () {
       expect(getNewFilePathWithTag('.\\a\\b\\c.min.js', 'iamtag')).to.equal(
         'a\\b\\c.min_iamtag.js',
+      );
+    });
+
+    it('..\\a\\b\\c.min.js + iamtag -> ..\\a\\b\\c.min_iamtag.js', function () {
+      expect(getNewFilePathWithTag('..\\a\\b\\c.min.js', 'iamtag')).to.equal(
+        '..\\a\\b\\c.min_iamtag.js',
       );
     });
 
