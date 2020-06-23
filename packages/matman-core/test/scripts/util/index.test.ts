@@ -5,7 +5,7 @@ import {expect} from 'chai';
 import {findMatmanConfig, getAbsolutePath, searchFilePath} from '../../../src/util';
 import {MatmanConfigOpts} from '../../../src/types';
 import {MATMAN_CONFIG_FILE} from '../../../src/config';
-import MatmanConfig from '../../../src/MatmanConfig';
+import MatmanConfig from '../../../src/config/MatmanConfig';
 
 describe('./util/index.js', () => {
   describe('check searchFilePath(configPath)', () => {
@@ -101,6 +101,7 @@ describe('./util/index.js', () => {
         'matmanResultPath',
         'screenshotPath',
         'coveragePath',
+        'setupOptions',
       );
     });
 

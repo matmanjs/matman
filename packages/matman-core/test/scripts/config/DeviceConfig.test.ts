@@ -1,9 +1,9 @@
 import 'mocha';
 import {expect} from 'chai';
 
-import DeviceConfig from '../../../src/model/DeviceConfig';
+import DeviceConfig from '../../../src/config/DeviceConfig';
 
-describe('check model/DeviceConfig.js', () => {
+describe('check config/DeviceConfig.js', () => {
   describe('check constructor(opts)', () => {
     it('if opts is String', () => {
       expect(new DeviceConfig('myname')).to.eql({

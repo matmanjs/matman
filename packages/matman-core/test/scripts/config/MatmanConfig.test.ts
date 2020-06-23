@@ -2,9 +2,9 @@ import path from 'path';
 import 'mocha';
 import {expect} from 'chai';
 
-import MatmanConfig from '../../src/MatmanConfig';
+import MatmanConfig from '../../../src/config/MatmanConfig';
 
-describe('check model/MatmanConfig.js', function () {
+describe('check config/MatmanConfig.js', function () {
   describe('check constructor(rootPath, opts = {})', function () {
     it('if rootPath is undefined return false', function () {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -28,7 +28,7 @@ describe('check model/MatmanConfig.js', function () {
     });
 
     it('check demo1: default value', function () {
-      const rootPath = path.join(__dirname, '../data/fixtures/demo1');
+      const rootPath = path.join(__dirname, '../../data/fixtures/demo1');
 
       const matmanConfig = new MatmanConfig(rootPath);
 
@@ -53,11 +53,12 @@ describe('check model/MatmanConfig.js', function () {
         'matmanResultPath',
         'screenshotPath',
         'coveragePath',
+        'setupOptions',
       );
     });
 
     it('check demo2: custom value', function () {
-      const rootPath = path.join(__dirname, '../data/fixtures/demo2');
+      const rootPath = path.join(__dirname, '../../data/fixtures/demo2');
 
       const matmanConfig = new MatmanConfig(rootPath, {
         caseModulesPath: './my_case_modules',
@@ -90,6 +91,7 @@ describe('check model/MatmanConfig.js', function () {
         'matmanResultPath',
         'screenshotPath',
         'coveragePath',
+        'setupOptions',
       );
     });
   });
