@@ -2,12 +2,13 @@ import path from 'path';
 import 'mocha';
 import {expect} from 'chai';
 
-import ScreenshotConfig from '../../../src/model/ScreenshotConfig';
-import {findMatmanConfig, MatmanConfig} from 'matman-core';
+import ScreenshotConfig from '../../../src/config/ScreenshotConfig';
+import {findMatmanConfig} from '../../../src/util';
+import MatmanConfig from '../../../src/config/MatmanConfig';
 
-describe('check model/ScreenshotConfig.js', () => {
+describe('check config/ScreenshotConfig.js', () => {
   describe('check constructor(opts, basePath, tag)', () => {
-    const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/hi-demo/demo_01');
+    const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/fixtures/demo_sample');
     const caseModuleFilePath = path.join(
       MATMAN_ROOT_PATH,
       './case_modules/page_baidu_index/basic-check.js',
@@ -232,7 +233,7 @@ describe('check model/ScreenshotConfig.js', () => {
   });
 
   describe('check getPathWithId(id)', () => {
-    const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/hi-demo/demo_01');
+    const MATMAN_ROOT_PATH = path.join(__dirname, '../../data/fixtures/demo_sample');
     const caseModuleFilePath = path.join(
       MATMAN_ROOT_PATH,
       './case_modules/page_baidu_index/basic-check.js',
