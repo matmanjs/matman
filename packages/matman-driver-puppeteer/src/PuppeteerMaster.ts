@@ -9,11 +9,11 @@ import {evaluate} from './utils/master';
 export class PuppeteerMaster extends EventEmitter implements Master {
   name = 'puppeteer';
   pageDriver: PageDriver | null;
-  // globalInfoRecorderKey: string;
+  globalInfoRecorderKey: string;
   puppeteerConfig: puppeteer.LaunchOptions;
   browser: null | puppeteer.Browser;
   page: null | puppeteer.Page;
-  // globalInfo: {[key: string]: any};
+  globalInfo: {[key: string]: any};
 
   constructor(opts: puppeteer.LaunchOptions = {}) {
     super();
@@ -23,13 +23,30 @@ export class PuppeteerMaster extends EventEmitter implements Master {
     // 初始化配置
     this.puppeteerConfig = opts;
 
+    // 是否使用记录器记录整个请求队列
+    // 如果为 true，则可以从 this.globalInfo.recorder 中获取，
+    // 如果为 字符串，则可以从 this.globalInfo[xxx] 中获取，
+    this.globalInfoRecorderKey = '';
+
     // puppeteer 对象
     this.browser = null;
     this.page = null;
+
+    this.globalInfo = {};
   }
 
   setPage(n: PageDriver): void {
     this.pageDriver = n;
+
+    this.globalInfoRecorderKey = (function (useRecorder) {
+      if (!useRecorder) {
+        return '';
+      }
+
+      return typeof useRecorder === 'boolean' ? 'recorder' : useRecorder + '';
+    })(this.pageDriver.useRecorder);
+
+    this.globalInfo[this.globalInfoRecorderKey] = [];
   }
 
   getConfig(): void {
@@ -70,9 +87,37 @@ export class PuppeteerMaster extends EventEmitter implements Master {
     this.emit('beforeInitNightmareRun', this.page);
 
     // 使用记录器，记录网络请求和浏览器事件等 暂时不使用
-    // if (this.globalInfoRecorderKey) {
-    //   this.globalInfo[this.globalInfoRecorderKey] = new WebEventRecorder(this.nightmare);
-    // }
+    if (this.globalInfoRecorderKey) {
+      this.page.on('response', async msg => {
+        const request = msg.request();
+
+        this.globalInfo[this.globalInfoRecorderKey].push({
+          url: request.url(),
+          method: request.method(),
+          request: {
+            headers: request.headers(),
+            postData: request.postData(),
+          },
+          response: {
+            ok: msg.ok(),
+            status: msg.status(),
+            statusText: msg.statusText(),
+            headers: msg.headers(),
+            fromCache: msg.fromCache(),
+            body: msg.headers()['content-type'] === 'application/json' ? await msg.json() : null,
+          },
+        });
+      });
+
+      this.page.on('console', log => {
+        this.globalInfo[this.globalInfoRecorderKey].push({
+          type: log.type(),
+          // args: log.args(),
+          location: log.location(),
+          text: log.text(),
+        });
+      });
+    }
 
     // 设置额外请求头
     await this.page.setExtraHTTPHeaders({
@@ -255,7 +300,7 @@ export class PuppeteerMaster extends EventEmitter implements Master {
     return {
       data: result,
       _dataIndexMap: this.pageDriver?._dataIndexMap,
-      // globalInfo: this.globalInfo,
+      globalInfo: this.globalInfo,
     };
   }
 }
