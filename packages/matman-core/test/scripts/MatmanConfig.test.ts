@@ -2,7 +2,7 @@ import path from 'path';
 import 'mocha';
 import {expect} from 'chai';
 
-import MatmanConfig from '../../src/MatmanConfig';
+import MatmanConfig from '../../src/config/MatmanConfig';
 
 describe('check model/MatmanConfig.js', function () {
   describe('check constructor(rootPath, opts = {})', function () {
@@ -53,6 +53,7 @@ describe('check model/MatmanConfig.js', function () {
         'matmanResultPath',
         'screenshotPath',
         'coveragePath',
+        'setupOptions',
       );
     });
 
@@ -90,6 +91,7 @@ describe('check model/MatmanConfig.js', function () {
         'matmanResultPath',
         'screenshotPath',
         'coveragePath',
+        'setupOptions',
       );
     });
   });
