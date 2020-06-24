@@ -2,6 +2,19 @@
   "name": "matman-runner-puppeteer",
   "version": "5.0.10",
   "description": "matman的puppeteer底层驱动",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsc -d",
+    "test": "npm run lint && npm run test:unit && npm run test:cover",
+    "test:unit": "mocha 'test/**/*.test.{ts,tsx}'",
+    "test:cover": "nyc npm run test:unit",
+    "lint": "npx eslint src test --ext .ts"
+  },
+  "keywords": [
+    "matman",
+    "e2e",
+    "test"
+  ],
   "author": "derekjqwang <derekjqwang@tencent.com>",
   "homepage": "https://github.com/matmanjs/matman#readme",
   "license": "MIT",
@@ -16,14 +29,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/matmanjs/matman.git"
-  },
-  "scripts": {
-    "test": "npm run lint && npm run test:unit && npm run test:cover",
-    "prepublishOnly": "npm run build",
-    "build": "tsc -d",
-    "test:unit": "mocha 'test/**/*.test.{ts,tsx}'",
-    "test:cover": "nyc npm run test:unit",
-    "lint": "npx eslint src test --ext .ts"
   },
   "bugs": {
     "url": "https://github.com/matmanjs/matman/issues"

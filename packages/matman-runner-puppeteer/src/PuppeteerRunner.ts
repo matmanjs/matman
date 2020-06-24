@@ -2,11 +2,11 @@ import path from 'path';
 import {EventEmitter} from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import {Master, PageDriver} from 'matman-core';
+import {BrowserRunner, PageDriver} from 'matman-core';
 import {build} from 'matman-crawler';
 import {evaluate} from './utils/master';
 
-export class PuppeteerMaster extends EventEmitter implements Master {
+export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   name = 'puppeteer';
   pageDriver: PageDriver | null;
   globalInfoRecorderKey: string;
