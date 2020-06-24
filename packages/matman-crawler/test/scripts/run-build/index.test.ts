@@ -22,7 +22,21 @@ describe('check run-build/index.ts', () => {
     fse.removeSync(tmpCrawlerBuildPath);
   });
 
-  it('build simple file', () => {
+  it('build simple file when isIPC is true', () => {
+    const entryPath = path.join(
+      __dirname,
+      '../../data/fixtures/demo_for_crawlers/case_modules/crawlers/simple-file.js',
+    );
+    const outputPath = path.join(
+      __dirname,
+      '../../data/expects/demo_for_crawlers/simple-file-isIPC.js.result',
+    );
+    return build(entryPath, {isIPC: true, matmanConfig}).then(result => {
+      expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+    });
+  });
+
+  it('build simple file when isIPC is false', () => {
     const entryPath = path.join(
       __dirname,
       '../../data/fixtures/demo_for_crawlers/case_modules/crawlers/simple-file.js',
@@ -31,7 +45,7 @@ describe('check run-build/index.ts', () => {
       __dirname,
       '../../data/expects/demo_for_crawlers/simple-file.js.result',
     );
-    return build(entryPath, {isIPC: true, matmanConfig}).then(result => {
+    return build(entryPath, {isIPC: false, matmanConfig}).then(result => {
       expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
     });
   });
