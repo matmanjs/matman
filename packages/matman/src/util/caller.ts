@@ -1,6 +1,6 @@
-import fs from 'fs-extra';
+import fse from 'fs-extra';
 
-export function getCallerPath(caseModuleFilePath: string): string {
+export function getCallerPath(referFile?: string): string {
   let err = new Error();
 
   try {
@@ -38,10 +38,15 @@ export function getCallerPath(caseModuleFilePath: string): string {
   let stackFileArr = stackStr.match(/\((.*)\)/gi) || [];
   // console.log(stackFileArr);
 
-  // 过滤掉内部js模块的调用，因为没有意义
+  // 过滤一些不符合要求的模块
   stackFileArr = stackFileArr.filter(item => {
-    return item.indexOf('(internal') !== 0;
+    // 过滤掉内部 js 模块的调用，例如：
+    // (internal/modules/cjs/loader.js:598:3)
+    // 过滤掉 /node_modules/ 模块的调用，例如：
+    // (/Users/helinjiang/gitprojects/matman/packages/matman/node_modules/mocha/lib/runner.js:448:14)
+    return item.indexOf('(internal') !== 0 && item.indexOf('/node_modules/') < 0;
   });
+  // console.log(stackFileArr);
 
   /**
    * 文件调用栈列表
@@ -52,7 +57,7 @@ export function getCallerPath(caseModuleFilePath: string): string {
   const callStackFileArr = [];
   for (let i = 0; i < stackFileArr.length; i++) {
     const item = stackFileArr[i];
-    const matmanResult = item.match(/\((.*\.js):.*\)/);
+    const matmanResult = item.match(/\((.*\.[j|t]s):.*\)/);
 
     // 如果没有匹配结果，则放弃
     if (!matmanResult || !matmanResult[1]) {
@@ -62,7 +67,7 @@ export function getCallerPath(caseModuleFilePath: string): string {
     const filePath = matmanResult[1];
 
     // 如果该文件路径不存在，则放弃
-    if (!fs.existsSync(filePath)) {
+    if (!fse.existsSync(filePath)) {
       continue;
     }
 
@@ -71,13 +76,20 @@ export function getCallerPath(caseModuleFilePath: string): string {
       callStackFileArr.push(filePath);
     }
   }
-  console.log(callStackFileArr);
+  // console.log('caseModuleFilePath', caseModuleFilePath);
+  // console.log('callStackFileArr', callStackFileArr);
 
-  const index = callStackFileArr.indexOf(caseModuleFilePath);
+  if (referFile && fse.existsSync(referFile)) {
+    const index = callStackFileArr.indexOf(referFile);
 
-  if (index < 0 || index >= callStackFileArr.length - 1) {
-    return caseModuleFilePath;
+    if (index < 0 || index >= callStackFileArr.length - 1) {
+      return referFile;
+    } else {
+      return callStackFileArr[index + 1];
+    }
   } else {
-    return callStackFileArr[index + 1];
+    // [0]: 本函数的文件，即__dirname
+    // [1]: 调用本函数的文件，也是我们的目标值
+    return callStackFileArr[1];
   }
 }
