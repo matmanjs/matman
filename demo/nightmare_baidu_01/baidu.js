@@ -21,6 +21,7 @@ module.exports = () => {
         width: 1250,
         height: 400,
       })
+
       // 设置截屏
       .setScreenshotConfig(true)
 
@@ -41,7 +42,6 @@ module.exports = () => {
           searchBtnTxt: document.querySelector('#su').value,
         };
       })
-      .end()
   );
 };
 

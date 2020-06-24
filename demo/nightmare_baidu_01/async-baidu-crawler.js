@@ -42,9 +42,9 @@ module.exports = async () => {
 
   await pageDriver.wait('#su');
 
-  await pageDriver.evaluate(path.resolve(__dirname, './crawlers/get-page-info-for-search.js'));
-
-  return await pageDriver.end();
+  return await pageDriver.evaluate(
+    path.resolve(__dirname, './crawlers/get-page-info-for-search.js'),
+  );
 };
 
 module

@@ -55,17 +55,6 @@ module.exports = opts => {
 
       // 执行爬虫脚本文件或者爬虫脚本函数
       .evaluate(path.resolve(__dirname, './crawlers/get-page-info-for-search.js'))
-
-      // 执行自定义的方法
-      .executeCustomFn(pageDriver => {
-        // 没有其他的意义，只是为了 debug
-        if (opts.show) {
-          console.log(pageDriver);
-        }
-      })
-
-      // 结束，获取结果
-      .end()
   );
 };
 

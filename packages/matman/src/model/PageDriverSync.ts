@@ -303,27 +303,14 @@ export default class PageDriverSync implements PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  evaluate(fn: string): PageDriver;
-  evaluate(fn: () => any, ...args: any[]): PageDriver;
-  evaluate(fn: string | (() => any), ...args: any[]): PageDriver {
+  evaluate(fn: string): Promise<MatmanResult | PageDriver>;
+  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
+  evaluate(fn: string | (() => any), ...args: any[]): Promise<MatmanResult | PageDriver> {
     this.evaluateFn = fn;
     this.evaluateFnArgs = args;
 
-    return this;
-  }
-
-  /**
-   * 执行自定义的方法，适用于 debug 和自定义扩展等场景
-   *
-   * @param {Function} customFn 自定义函数，会传递 PageDriver 给它
-   * @return {PageDriver}
-   * @author helinjiang
-   */
-  executeCustomFn(customFn: (p: PageDriver) => void): PageDriver {
-    if (typeof customFn === 'function') {
-      customFn(this);
-    }
-    return this;
+    // 直接返回结果
+    return this.end();
   }
 
   /**

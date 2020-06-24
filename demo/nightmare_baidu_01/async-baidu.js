@@ -23,7 +23,7 @@ module.exports = async () => {
 
   await pageDriver.wait('#su');
 
-  await pageDriver.evaluate(() => {
+  return await pageDriver.evaluate(() => {
     return {
       title: document.title,
       width: window.innerWidth,
@@ -33,8 +33,6 @@ module.exports = async () => {
       searchBtnTxt: document.querySelector('#su').value,
     };
   });
-
-  return await pageDriver.end();
 };
 
 module

@@ -176,31 +176,15 @@ export interface PageDriver {
   wait(fn: (...args: any[]) => number | string, ...args: any[]): PageDriver | Promise<void>;
 
   /**
-   * 执行爬虫脚本或者方法
+   * 执行爬虫脚本或者方法获得结果
    *
    * https://www.npmjs.com/package/nightmare#evaluatefn-arg1-arg2
    *
    * @param {String | Function} fn
    * @param [args]
-   * @return {PageDriver}
+   * @return {Promise<MatmanResult | PageDriver>}
    * @author helinjiang
    */
-  evaluate(fn: string): PageDriver | Promise<void>;
-  evaluate(fn: () => any, ...args: any[]): PageDriver | Promise<void>;
-
-  /**
-   * 执行自定义的方法，适用于 debug 和自定义扩展等场景
-   *
-   * @param {Function} customFn 自定义函数，会传递 PageDriver 给它
-   * @return {PageDriver}
-   * @author helinjiang
-   */
-  executeCustomFn(customFn: (p: PageDriver) => void): PageDriver | Promise<void>;
-
-  /**
-   * 结束，获取结果
-   * @return {Promise<{}>}
-   * @author helinjiang
-   */
-  end(): Promise<MatmanResult | PageDriver>;
+  evaluate(fn: string): Promise<MatmanResult | PageDriver>;
+  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
 }

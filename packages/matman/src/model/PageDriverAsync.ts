@@ -306,27 +306,13 @@ export default class PageDriverAsync implements PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  async evaluate(fn: string): Promise<void>;
-  async evaluate(fn: () => any, ...args: any[]): Promise<void>;
-  async evaluate(fn: string | (() => any), ...args: any[]): Promise<void> {
+  async evaluate(fn: string): Promise<MatmanResult | PageDriver>;
+  async evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
+  async evaluate(fn: string | (() => any), ...args: any[]): Promise<MatmanResult | PageDriver> {
     this.evaluateFn = fn;
     this.evaluateFnArgs = args;
 
-    await Promise.resolve();
-  }
-
-  /**
-   * 执行自定义的方法，适用于 debug 和自定义扩展等场景
-   *
-   * @param {Function} customFn 自定义函数，会传递 PageDriver 给它
-   * @return {PageDriver}
-   * @author helinjiang
-   */
-  async executeCustomFn(customFn: (p: PageDriver) => void): Promise<void> {
-    if (typeof customFn === 'function') {
-      customFn(this);
-    }
-    await Promise.resolve();
+    return this.end();
   }
 
   /**
