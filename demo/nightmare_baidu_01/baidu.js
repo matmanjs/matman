@@ -1,5 +1,5 @@
 const matman = require('../../packages/matman');
-const {NightmareMaster} = require('../../packages/matman-driver-nightmare');
+const {NightmareMaster} = require('../../packages/matman-runner-nightmare');
 
 module.exports = () => {
   return (

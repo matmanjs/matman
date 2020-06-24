@@ -1,5 +1,5 @@
-const matman = require("matman");
-const { PuppeteerMaster } = require("matman-driver-puppeteer");
+const matman = require('matman');
+const {PuppeteerMaster} = require('matman-runner-puppeteer');
 
 module.exports = async () => {
   const page = await new matman.launch(PuppeteerMaster, {
@@ -10,13 +10,13 @@ module.exports = async () => {
 
   await page.setDeviceConfig({
     UA:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua",
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua',
     width: 1250,
     height: 400,
   });
   await page.setScreenshotConfig(true);
-  await page.goto("https://www.baidu.com");
-  await page.wait("#su");
+  await page.goto('https://www.baidu.com');
+  await page.wait('#su');
   await page.evaluate(() => {
     return {
       title: document.title,
@@ -24,7 +24,7 @@ module.exports = async () => {
       height: window.innerHeight,
       userAgent: navigator.userAgent,
       _version: Date.now(),
-      searchBtnTxt: document.querySelector("#su").value,
+      searchBtnTxt: document.querySelector('#su').value,
     };
   });
   const res = await page.end();
@@ -37,5 +37,5 @@ module
     console.log(JSON.stringify(result));
   })
   .catch(function (error) {
-    console.error("failed:", error);
+    console.error('failed:', error);
   });

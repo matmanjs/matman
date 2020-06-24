@@ -1,5 +1,5 @@
-const matman = require("matman");
-const { NightmareMaster } = require("matman-driver-nightmare");
+const matman = require('matman');
+const {NightmareMaster} = require('matman-runner-nightmare');
 
 module.exports = () => {
   return (
@@ -19,7 +19,7 @@ module.exports = () => {
 
       .setDeviceConfig({
         UA:
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua",
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua',
         width: 1250,
         height: 400,
       })
@@ -27,10 +27,10 @@ module.exports = () => {
       .setScreenshotConfig(true)
 
       // 加载页面地址
-      .goto("https://www.baidu.com")
+      .goto('https://www.baidu.com')
 
       // 需要等待某些条件达成，才开始运行爬虫脚本
-      .wait("#su")
+      .wait('#su')
 
       // 爬虫脚本的函数，用于获取页面中的数据
       .evaluate(() => {
@@ -40,7 +40,7 @@ module.exports = () => {
           height: window.innerHeight,
           userAgent: navigator.userAgent,
           _version: Date.now(),
-          searchBtnTxt: document.querySelector("#su").value,
+          searchBtnTxt: document.querySelector('#su').value,
         };
       })
       .end()
@@ -53,5 +53,5 @@ module
     console.log(JSON.stringify(result));
   })
   .catch(function (error) {
-    console.error("failed:", error);
+    console.error('failed:', error);
   });

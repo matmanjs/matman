@@ -5,7 +5,7 @@ import {CreatePageDriverOpts} from '../types';
 
 import {getCallerPath} from '../util/caller';
 
-interface NewPageParams {
+interface NewPageDriverParams {
   matmanConfig: MatmanConfig;
   newOpts: CreatePageDriverOpts;
 }
@@ -13,7 +13,7 @@ interface NewPageParams {
 /**
  * 浏览器驱动类，使用这个类对浏览器进行设置并创建页面实例
  */
-class Browser {
+class BrowserMaster {
   master: Master;
 
   constructor(master: Master) {
@@ -23,7 +23,7 @@ class Browser {
   protected getNewPageParams(
     caseModuleFilePath: string,
     opts: CreatePageDriverOpts = {},
-  ): NewPageParams {
+  ): NewPageDriverParams {
     // 自动计算是哪个文件在调用 case 脚本，然后以调用者的文件名来做标记
     // 由于调用者脚本本身已经按目录存储，且同一个目录中不同调用者脚本文件名肯定不一样
     // 这样就能够区分标记了
@@ -57,7 +57,10 @@ class Browser {
   }
 }
 
-export class BrowserSync extends Browser {
+/**
+ * 同步版本的 BrowserMaster
+ */
+export class BrowserMasterSync extends BrowserMaster {
   /**
    * 创建 PageDriver 对象
    *
@@ -73,7 +76,10 @@ export class BrowserSync extends Browser {
   }
 }
 
-export class BrowserAsync extends Browser {
+/**
+ * 异步版本的 BrowserMaster
+ */
+export class BrowserMasterAsync extends BrowserMaster {
   /**
    * 创建 PageDriver 对象
    *

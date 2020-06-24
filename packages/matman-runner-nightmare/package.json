@@ -1,5 +1,5 @@
 {
-  "name": "matman-driver-nightmare",
+  "name": "matman-runner-nightmare",
   "version": "5.0.10",
   "description": "matman测试框架nightmare底层驱动",
   "keywords": [

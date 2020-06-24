@@ -1,5 +1,5 @@
 {
-  "name": "matman-driver-puppeteer",
+  "name": "matman-runner-puppeteer",
   "version": "5.0.10",
   "description": "matman的puppeteer底层驱动",
   "author": "derekjqwang <derekjqwang@tencent.com>",

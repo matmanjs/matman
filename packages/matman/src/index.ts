@@ -1,29 +1,21 @@
-import Nightmare from 'nightmare';
-import puppeteer from 'puppeteer';
-import {BrowserSync, BrowserAsync} from './model/Browser';
+import {BrowserMasterSync, BrowserMasterAsync} from './model/BrowserMaster';
 
 /**
- * 创建异步 driver
- * @param master
- * @param opts
+ * 初始化异步的 BrowserMaster 对象
+ *
+ * @param {Object} runner 运行器，目前支持 puppeteer 和 nightmare 两种
  */
-function launch(
-  master: any,
-  opts: puppeteer.LaunchOptions | Nightmare.IConstructorOptions = {},
-): BrowserAsync {
-  return new BrowserAsync(new master(opts));
+function launch(runner: any): BrowserMasterAsync {
+  return new BrowserMasterAsync(runner);
 }
 
 /**
- * 创建异步 driver
- * @param master
- * @param opts
+ * 初始化同步的 BrowserMaster 对象
+ *
+ * @param {Object} runner 运行器，目前支持 puppeteer 和 nightmare 两种
  */
-function launchSync(
-  master: any,
-  opts: puppeteer.LaunchOptions | Nightmare.IConstructorOptions = {},
-): BrowserSync {
-  return new BrowserSync(new master(opts));
+function launchSync(runner: any): BrowserMasterSync {
+  return new BrowserMasterSync(runner);
 }
 
 export {launch, launchSync};
