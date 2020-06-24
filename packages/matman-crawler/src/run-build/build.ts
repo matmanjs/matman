@@ -6,13 +6,13 @@ import commonjs from 'rollup-plugin-commonjs';
  * 改用 rollup 并且打包放在执行时进行
  * 干掉需要手工 build
  *
- * @param matmanConfig
+ * @param {String} entryPath
  * @author wangjq4214
  */
-const build = async (path: string): Promise<string> => {
+const build = async (entryPath: string): Promise<string> => {
   // 打包
   const bundle = await rollup({
-    input: path,
+    input: entryPath,
     plugins: [commonjs()],
   });
 

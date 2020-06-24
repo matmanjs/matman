@@ -24,7 +24,6 @@ export interface SetupOptions {
  * @member rootPath  matman 项目的根目录
  * @member caseModulesPath 测试案例的根目录
  * @member crawlerBuildPath 前端爬虫脚本构建之后的目录
- * @member crawlerMatch 用于匹配是否为前端爬虫脚本的正则表达式
  * @member crawlerInjectJQuery 前端爬虫脚本中是否注入jQuery
  * @member screenshotPath 屏幕截图保存的路径
  * @member coveragePath 覆盖率文件保存的路径
@@ -39,7 +38,6 @@ export interface MatmanConfigOpts {
   rootPath?: string;
   caseModulesPath?: string;
   crawlerBuildPath?: string;
-  crawlerMatch?: RegExp;
   crawlerInjectJQuery?: boolean;
   screenshotPath?: string;
   coveragePath?: string;

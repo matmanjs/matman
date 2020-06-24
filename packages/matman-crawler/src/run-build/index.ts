@@ -3,7 +3,7 @@ import path from 'path';
 import {MatmanConfig} from 'matman-core';
 import rollupBuild from './build';
 
-interface buildOpts {
+interface BuildOpts {
   isIPC?: boolean;
   matmanConfig: MatmanConfig;
 }
@@ -11,12 +11,13 @@ interface buildOpts {
 /**
  * 构建
  *
- * @param {MatmanConfig} matmanConfig
+ * @param {String} entryPath
+ * @param {BuildOpts} opts
  * @return {Promise}
  *
  * @author wangjq4214
  */
-export default function build(path: string, opts: buildOpts): Promise<string> {
+export default function build(entryPath: string, opts: BuildOpts): Promise<string> {
   return new Promise((resolve, reject) => {
     const prependCodePromiseList = [];
     const evalList: string[] = [];
@@ -40,7 +41,7 @@ export default function build(path: string, opts: buildOpts): Promise<string> {
     }
 
     // 放到最后加入
-    prependCodePromiseList.push(rollupBuild(path));
+    prependCodePromiseList.push(rollupBuild(entryPath));
 
     Promise.all(prependCodePromiseList)
       .then(result => {

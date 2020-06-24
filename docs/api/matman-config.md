@@ -10,8 +10,5 @@ sidebarDepth: 0
 | `testerPath` |  `String` | 测试对象的根目录，默认值为 `path.resolve(rootPath, './src/testers')` |
 | `testPath` |  `String` | 即将废弃，含义同 `testerPath` |
 | `crawlerBuildPath` |  `String` | 前端爬虫脚本构建之后的目录，默认值为 `path.resolve(rootPath, './build/logs')`  |
-| `crawlerMatch` |  `RegExp` | 用于匹配是否为前端爬虫脚本的正则表达式 |
 | `screenshotPath` |  `String` | 屏幕截图保存的路径，默认值为 `path.resolve(rootPath, './src/screenshot')` |
 | `isDevBuild` |  `Boolean` | 是否为开发模式，默认值为 `false` |
-
-> 注意， `crawlerMatch` 为 `RegExp` 类型，默认值为 `/[\/|\\]crawlers[\/|\\].*\.js$/`
