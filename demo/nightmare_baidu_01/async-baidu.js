@@ -16,9 +16,13 @@ module.exports = async () => {
     width: 1250,
     height: 400,
   });
+
   await pageDriver.setScreenshotConfig(true);
-  await pageDriver.goto('https://www.baidu.com');
+
+  await pageDriver.setPageUrl('https://www.baidu.com');
+
   await pageDriver.wait('#su');
+
   await pageDriver.evaluate(() => {
     return {
       title: document.title,
@@ -29,6 +33,7 @@ module.exports = async () => {
       searchBtnTxt: document.querySelector('#su').value,
     };
   });
+
   return await pageDriver.end();
 };
 

@@ -145,7 +145,7 @@ export interface PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  goto(pageUrl: string): PageDriver | Promise<void>;
+  setPageUrl(pageUrl: string): PageDriver | Promise<void>;
 
   /**
    * 增加测试动作

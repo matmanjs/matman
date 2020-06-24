@@ -243,7 +243,7 @@ export default class PageDriverSync implements PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  goto(pageUrl: string): PageDriver {
+  setPageUrl(pageUrl: string): PageDriver {
     this.pageUrl = pageUrl;
     return this;
   }

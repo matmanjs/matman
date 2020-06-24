@@ -30,7 +30,7 @@ module.exports = opts => {
       .setScreenshotConfig(true)
 
       // 加载页面地址
-      .goto('https://www.baidu.com')
+      .setPageUrl('https://www.baidu.com')
 
       // 第一步：开始操作之前
       .addAction('init', function (nightmare) {

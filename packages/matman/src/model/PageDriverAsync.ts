@@ -243,7 +243,7 @@ export default class PageDriverAsync implements PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  async goto(pageUrl: string): Promise<void> {
+  async setPageUrl(pageUrl: string): Promise<void> {
     this.pageUrl = pageUrl;
     await Promise.resolve();
   }
