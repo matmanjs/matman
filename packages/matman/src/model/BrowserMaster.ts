@@ -1,4 +1,4 @@
-import {MATMAN_CONFIG_FILE, findMatmanConfig, Master, PageDriver, MatmanConfig} from 'matman-core';
+import {MATMAN_CONFIG_FILE, findMatmanConfig, Runner, PageDriver, MatmanConfig} from 'matman-core';
 import PageDriverSync from './PageDriverSync';
 import PageDriverAsync from './PageDriver';
 import {CreatePageDriverOpts} from '../types';
@@ -14,9 +14,9 @@ interface NewPageDriverParams {
  * 浏览器驱动类，使用这个类对浏览器进行设置并创建页面实例
  */
 class BrowserMaster {
-  master: Master;
+  master: Runner;
 
-  constructor(master: Master) {
+  constructor(master: Runner) {
     this.master = master;
   }
 

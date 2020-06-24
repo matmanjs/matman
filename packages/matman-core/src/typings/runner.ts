@@ -12,7 +12,7 @@ import {PageDriver} from './pageDriver';
  *
  * @author wangjq4214
  */
-export interface Master extends EventEmitter {
+export interface Runner extends EventEmitter {
   name: string;
 
   setPage(p: PageDriver): void;

@@ -13,7 +13,7 @@ import {
   ScreenOpts,
   CoverageOpts,
   ResultOpts,
-  Master,
+  Runner,
 } from 'matman-core';
 
 import MatmanResult from './MatmanResult';
@@ -49,7 +49,7 @@ export default class PageDriver implements IPageDriver {
   _isInIDE: boolean;
 
   // master
-  private master: Master;
+  private master: Runner;
 
   /**
    * 构造函数
@@ -65,7 +65,7 @@ export default class PageDriver implements IPageDriver {
    * @author helinjiang
    */
   constructor(
-    master: Master,
+    master: Runner,
     matmanConfig: MatmanConfig,
     caseModuleFilePath: string,
     opts: PageDriverOpts = {},

@@ -71,7 +71,7 @@ export function getCallerPath(caseModuleFilePath: string): string {
       callStackFileArr.push(filePath);
     }
   }
-  // console.log(callStackFileArr);
+  console.log(callStackFileArr);
 
   const index = callStackFileArr.indexOf(caseModuleFilePath);
 

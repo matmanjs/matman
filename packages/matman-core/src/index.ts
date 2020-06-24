@@ -8,7 +8,7 @@ import {MATMAN_CONFIG_FILE} from './config';
 import {getAbsolutePath, findMatmanConfig, searchFilePath} from './util';
 import {requireAsync, requireSync} from './util/require-file';
 
-import {Master} from './typings/master';
+import {Runner} from './typings/runner';
 import {PageDriver} from './typings/pageDriver';
 import {MatmanResult, NetworkType} from './typings/matmanResult';
 
@@ -30,7 +30,7 @@ export {
   CoverageOpts,
   MatmanResultConfig,
   ResultOpts,
-  Master,
+  Runner,
   PageDriver,
   MatmanResult,
   NetworkType,
