@@ -1,0 +1,12 @@
+var getPageInfo = (function () {
+    'use strict';
+
+    var c1 = () => {
+        return {
+            say: 'hello, c1.js!'
+        };
+    };
+
+    return c1;
+
+}());
