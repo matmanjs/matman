@@ -1,9 +1,11 @@
 var getPageInfo = (function () {
   'use strict';
 
-  var userJs = /*#__PURE__*/Object.freeze({
-    __proto__: null
-  });
+  var userJs = {
+    name: 'matman',
+    description: 'E2E test framework!',
+    fileName: 'user-js.js',
+  };
 
   function getDescription() {
     return 'I am description';
