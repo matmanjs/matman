@@ -54,6 +54,12 @@ export function getCallerPath(referFile?: string): string {
       return false;
     }
 
+    // 是否为 matman 组件内部自己模块间调用
+    const isMatmanSelf = item.indexOf('/matman/src/') > -1 || item.indexOf('/matman/lib/') > -1;
+    if (isMatmanSelf) {
+      return false;
+    }
+
     //是否为 /node_modules/ 模块的调用，例如：
     // (/Users/helinjiang/gitprojects/matman/packages/matman/node_modules/mocha/lib/runner.js:448:14)
     const isNodeModules = item.indexOf('/node_modules/') > -1;
@@ -94,7 +100,7 @@ export function getCallerPath(referFile?: string): string {
       callStackFileArr.push(filePath);
     }
   }
-  // console.log('caseModuleFilePath', caseModuleFilePath);
+  // console.log('referFile', referFile);
   // console.log('callStackFileArr', callStackFileArr);
 
   if (referFile && fse.existsSync(referFile)) {
@@ -106,8 +112,6 @@ export function getCallerPath(referFile?: string): string {
       return callStackFileArr[index + 1];
     }
   } else {
-    // [0]: 本函数的文件，即__dirname
-    // [1]: 调用本函数的文件，也是我们的目标值
-    return callStackFileArr[1];
+    return callStackFileArr[0];
   }
 }
