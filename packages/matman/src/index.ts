@@ -1,19 +1,10 @@
 import fs from 'fs';
 import {BrowserRunner, findMatmanConfig, MATMAN_CONFIG_FILE} from 'matman-core';
 import _ from 'lodash';
-// import {BrowserMasterAsync} from './model/BrowserMaster';
 import PageDriverSync from './model/PageDriverSync';
+import PageDriverAsync from './model/PageDriverAsync';
 import {MatmanConfigOpts, PageDriverOpts} from './types';
 import {getCallerPath} from './util/caller';
-
-// /**
-//  * 初始化异步的 BrowserMaster 对象
-//  *
-//  * @param {Object} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
-//  */
-// function launch(browserRunner: any): BrowserMasterAsync {
-//   return new BrowserMasterAsync(browserRunner);
-// }
 
 /**
  * 获取新的 PageDriverOpts
@@ -53,6 +44,35 @@ function getPageDriverOpts(opts?: PageDriverOpts): PageDriverOpts {
   }
 
   return pageDriverOpts;
+}
+
+/**
+ * 获得同步的 PageDriver
+ *
+ * @param {BrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
+ * @param {PageDriverOpts} pageDriverOpts
+ * @param {MatmanConfigOpts} matmanConfigOpts
+ */
+export function launch(
+  browserRunner: BrowserRunner,
+  pageDriverOpts?: PageDriverOpts,
+  matmanConfigOpts?: MatmanConfigOpts,
+): PageDriverAsync {
+  // 处理下原始传入的 pageDriverOpts，部分设置默认值
+  const newPageDriverOpts = getPageDriverOpts(pageDriverOpts);
+
+  // 查找 matman config
+  const matmanConfig = findMatmanConfig(newPageDriverOpts.caseModuleFilePath, matmanConfigOpts);
+
+  // matman config 必须得存在
+  if (!matmanConfig) {
+    throw new Error(`Could not find ${MATMAN_CONFIG_FILE} or matman config setting!`);
+  }
+
+  // console.log('newPageDriverOpts', newPageDriverOpts);
+  // console.log('matmanConfig', matmanConfig);
+
+  return new PageDriverAsync(browserRunner, matmanConfig, newPageDriverOpts);
 }
 
 /**

@@ -1,0 +1,42 @@
+const matman = require('../../packages/matman');
+const {BrowserRunner} = require('../../packages/matman-runner-nightmare');
+
+module.exports = async () => {
+  const pageDriver = await matman.launch(
+    new BrowserRunner({
+      show: true,
+      doNotCloseBrowser: true,
+      useRecorder: false,
+    }),
+  );
+
+  await pageDriver.setDeviceConfig({
+    UA:
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua',
+    width: 1250,
+    height: 400,
+  });
+  await pageDriver.setScreenshotConfig(true);
+  await pageDriver.goto('https://www.baidu.com');
+  await pageDriver.wait('#su');
+  await pageDriver.evaluate(() => {
+    return {
+      title: document.title,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      userAgent: navigator.userAgent,
+      _version: Date.now(),
+      searchBtnTxt: document.querySelector('#su').value,
+    };
+  });
+  return await pageDriver.end();
+};
+
+module
+  .exports()
+  .then(function (result) {
+    console.log(JSON.stringify(result));
+  })
+  .catch(function (error) {
+    console.error('failed:', error);
+  });
