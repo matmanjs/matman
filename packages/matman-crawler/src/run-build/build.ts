@@ -1,5 +1,6 @@
 import {rollup} from 'rollup';
-import commonjs from 'rollup-plugin-commonjs';
+import pluginCommonjs from '@rollup/plugin-commonjs';
+import pluginJson from '@rollup/plugin-json';
 
 /**
  * 进行爬虫脚本打包
@@ -13,7 +14,7 @@ const build = async (entryPath: string): Promise<string> => {
   // 打包
   const bundle = await rollup({
     input: entryPath,
-    plugins: [commonjs()],
+    plugins: [pluginCommonjs(), pluginJson()],
   });
 
   // 生成

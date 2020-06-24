@@ -33,4 +33,18 @@ describe('check run-build/build.ts', () => {
       expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
     });
   });
+
+  it('build file with require other json modules', () => {
+    const entryPath = path.join(
+      __dirname,
+      '../../data/fixtures/demo_for_crawlers/case_modules/crawlers/file-require-json-module.js',
+    );
+    const outputPath = path.join(
+      __dirname,
+      '../../data/expects/build-result/file-require-json-module.js.result',
+    );
+    return build(entryPath).then(result => {
+      expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+    });
+  });
 });
