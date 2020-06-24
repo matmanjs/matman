@@ -1,3 +1,3 @@
 import {NightmareRunner} from './NightmareRunner';
 
-export const Runner = NightmareRunner;
+export const BrowserRunner = NightmareRunner;

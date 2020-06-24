@@ -74,17 +74,6 @@ export interface PageDriver {
   useProxyServer(proxyServer: string): PageDriver | Promise<void>;
 
   /**
-   * TODO 支持动态设置本次请求动态设置规则，
-   * 这样可以支持自定义的代理mock数据等场景
-   *
-   * @param getRulesCall
-   * @param opts
-   * @return {PageDriver}
-   * @author helinjiang
-   */
-  useWhistle(getRulesCall: () => void, opts?: any): PageDriver | Promise<void>;
-
-  /**
    * 使用 mockstar 工具来做接口 mock 数据
    *
    * https://github.com/mockstarjs/mockstar

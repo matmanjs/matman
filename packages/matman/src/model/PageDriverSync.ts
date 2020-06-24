@@ -69,8 +69,6 @@ export default class PageDriverSync implements PageDriver {
 
     this.matmanConfig = matmanConfig;
 
-    // 测试case文件的路径
-    // TODO 需要确保存在
     this.caseModuleFilePath = opts.caseModuleFilePath;
 
     this.useRecorder = !!opts.useRecorder;
@@ -122,27 +120,6 @@ export default class PageDriverSync implements PageDriver {
   useProxyServer(proxyServer: string): PageDriver {
     this.proxyServer = proxyServer;
 
-    return this;
-  }
-
-  /**
-   * TODO 支持动态设置本次请求动态设置规则，
-   * 这样可以支持自定义的代理mock数据等场景
-   *
-   * @param getRulesCall
-   * @param opts
-   * @return {PageDriver}
-   * @author helinjiang
-   */
-  useWhistle(getRulesCall: () => void, opts = {}): PageDriver {
-    // .useWhistle((data) => {
-    //     return {
-    //         name: `[auto]matman_demo_03_${data.port}`,
-    //         rules: [
-    //             `www.baidu.com ${path.join(__dirname, '../../../local-project')}/baidu.html`
-    //         ]
-    //     };
-    // }, { autoStartWhistle: true })
     return this;
   }
 

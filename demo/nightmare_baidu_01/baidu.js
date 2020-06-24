@@ -1,5 +1,5 @@
 const matman = require('../../packages/matman');
-const {Runner} = require('../../packages/matman-runner-nightmare');
+const {BrowserRunner} = require('../../packages/matman-runner-nightmare');
 
 module.exports = () => {
   return (
@@ -7,7 +7,7 @@ module.exports = () => {
 
       // 创建 Browser 对象，使用它对浏览器进行设置
       .launchSync(
-        new Runner({
+        new BrowserRunner({
           show: true,
           doNotCloseBrowser: true,
           useRecorder: false,

@@ -1,20 +1,19 @@
 const path = require('path');
 const matman = require('../../packages/matman');
-const {NightmareMaster} = require('../../packages/matman-runner-nightmare');
+const {BrowserRunner} = require('../../packages/matman-runner-nightmare');
 
 module.exports = opts => {
   return (
     matman
 
       // 创建 Browser 对象，使用它对浏览器进行设置
-      .launchSync(NightmareMaster, {
-        show: true,
-        doNotCloseBrowser: true,
-        useRecorder: false,
-      })
-
-      // 创建 Page 对象，使用它可以实现对浏览器页面的控制
-      .newPage(__filename)
+      .launchSync(
+        new BrowserRunner({
+          show: true,
+          doNotCloseBrowser: true,
+          useRecorder: false,
+        }),
+      )
 
       // 设置浏览器参数
       .setDeviceConfig({

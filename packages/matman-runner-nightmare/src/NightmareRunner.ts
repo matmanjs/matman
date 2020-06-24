@@ -5,11 +5,11 @@ import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
-import {Runner, PageDriver, NightmareOpts} from 'matman-core';
+import {BrowserRunner, PageDriver, NightmareOpts} from 'matman-core';
 import {build} from 'matman-crawler';
 import {getMainUrl, evaluate} from './utils';
 
-export class NightmareRunner extends EventEmitter implements Runner {
+export class NightmareRunner extends EventEmitter implements BrowserRunner {
   name = 'nightmare';
   pageDriver: PageDriver | null;
   globalInfoRecorderKey: string;
