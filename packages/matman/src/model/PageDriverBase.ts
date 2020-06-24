@@ -1,9 +1,14 @@
+import path from 'path';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 import Nightmare from 'nightmare';
 import {
   MatmanConfig,
   PageDriver,
+  DeviceConfig,
+  ScreenshotConfig,
+  CoverageConfig,
+  MatmanResultConfig,
   DeviceConfigOpts,
   ScreenOpts,
   CoverageOpts,
@@ -13,26 +18,92 @@ import {
 
 import MatmanResult from './MatmanResult';
 import {PageDriverOpts} from '../types';
-import PageDriverBase from './PageDriverBase';
 
 /**
  * 页面操作类，使用这个类可以实现对浏览器页面的控制
  */
-export default class PageDriverSync extends PageDriverBase implements PageDriver {
+export default class PageDriverBase implements PageDriver {
+  // 配置项目
+  matmanConfig: MatmanConfig;
+  caseModuleFilePath: string;
+  useRecorder: boolean;
+  tag: string | undefined;
+  delayBeforeRun: number;
+  proxyServer: string;
+  mockstarQuery: null | {appendToUrl: (s: string) => string};
+  cookies: string | {[key: string]: any};
+  deviceConfig: null | DeviceConfig;
+  screenshotConfig: null | ScreenshotConfig;
+  coverageConfig: null | CoverageConfig;
+  matmanResultConfig: null | MatmanResultConfig;
+
+  // 页面信息
+  pageUrl: string;
+  waitFn: number | string | ((...args: any[]) => number | string);
+  waitFnArgs: any[];
+  evaluateFn: null | (() => any) | string;
+  evaluateFnArgs: any[];
+  actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
+  _dataIndexMap: {[key: string]: number};
+  _isDefaultScanMode: boolean;
+  _isInIDE: boolean;
+
+  browserRunner: BrowserRunner;
+
   /**
    * 构造函数
    *
    * @param {Runner} browserRunner
    * @param {MatmanConfig} matmanConfig
-   * @param {PageDriverOpts} pageDriverOpts
+   * @param {Object} [opts] 参数
+   * @param {Object} [opts.delayBeforeRun] 延时多少ms再启动
+   * @param {String} [opts.tag] 标记，在某些场景下使用，例如截图保存文件中追加该标记，用于做区分
+   * @param {Boolean} [opts.useRecorder] 是否使用记录器
+   * @param {Boolean} [opts.doNotCloseBrowser] 是否在执行完成之后不要关闭浏览器，默认为 false
+   * @param {Boolean} [opts.nightmareConfig] 传递给 nightmare 的配置
    * @author helinjiang
    */
-  constructor(
-    browserRunner: BrowserRunner,
-    matmanConfig: MatmanConfig,
-    pageDriverOpts: PageDriverOpts,
-  ) {
-    super(browserRunner, matmanConfig, pageDriverOpts);
+  constructor(browserRunner: BrowserRunner, matmanConfig: MatmanConfig, opts: PageDriverOpts) {
+    this.browserRunner = browserRunner;
+
+    this.matmanConfig = matmanConfig;
+
+    this.caseModuleFilePath = opts.caseModuleFilePath;
+
+    this.useRecorder = !!opts.useRecorder;
+
+    this.tag = opts.tag;
+
+    // 特殊处理：如果 this.tag 是存在的文件，则获取文件名
+    if (this.tag && fs.existsSync(this.tag)) {
+      this.tag = path.basename(this.tag).replace(/\./gi, '_');
+    }
+
+    // 延时多少ms再启动
+    this.delayBeforeRun = typeof opts.delayBeforeRun === 'number' ? opts.delayBeforeRun : 0;
+
+    this.proxyServer = '';
+    this.mockstarQuery = null;
+
+    this.cookies = '';
+    this.deviceConfig = null;
+    this.screenshotConfig = null;
+    this.coverageConfig = null;
+    this.matmanResultConfig = null;
+
+    this.pageUrl = '';
+
+    this.waitFn = 500;
+    this.waitFnArgs = [];
+
+    this.evaluateFn = null;
+    this.evaluateFnArgs = [];
+
+    this.actionList = [];
+
+    this._dataIndexMap = {};
+    this._isDefaultScanMode = false;
+    this._isInIDE = !!opts.isInIDE;
   }
 
   /**
@@ -46,7 +117,7 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
    * @author helinjiang
    */
   useProxyServer(proxyServer: string): PageDriver {
-    super.useProxyServer(proxyServer);
+    this.proxyServer = proxyServer;
 
     return this;
   }
@@ -61,7 +132,13 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
    * @author helinjiang
    */
   useMockstar(mockstarQuery: {appendToUrl: (s: string) => string}): PageDriver {
-    super.useMockstar(mockstarQuery);
+    if (!mockstarQuery || typeof mockstarQuery.appendToUrl !== 'function') {
+      throw new Error(
+        '请传递正确的 MockStarQuery 对象，请参考： https://www.npmjs.com/package/mockstar',
+      );
+    }
+
+    this.mockstarQuery = mockstarQuery;
 
     return this;
   }
@@ -77,8 +154,7 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
    * @author helinjiang
    */
   setCookies(cookies: string | {[key: string]: any}): PageDriver {
-    super.setCookies(cookies);
-
+    this.cookies = cookies;
     return this;
   }
 
@@ -96,8 +172,7 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
    * @author helinjiang
    */
   setDeviceConfig(deviceConfig: DeviceConfigOpts): PageDriver {
-    super.setDeviceConfig(deviceConfig);
-
+    this.deviceConfig = new DeviceConfig(deviceConfig || 'mobile');
     return this;
   }
 
@@ -109,8 +184,14 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
    * @author helinjiang
    */
   setScreenshotConfig(screenshotConfig: ScreenOpts): PageDriver {
-    super.setScreenshotConfig(screenshotConfig);
-
+    if (screenshotConfig) {
+      this.screenshotConfig = new ScreenshotConfig(
+        this.matmanConfig,
+        screenshotConfig,
+        this.caseModuleFilePath,
+        this.tag,
+      );
+    }
     return this;
   }
 
@@ -122,7 +203,14 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
    * @author helinjiang
    */
   setCoverageConfig(coverageConfig: CoverageOpts): PageDriver {
-    super.setCoverageConfig(coverageConfig);
+    if (coverageConfig) {
+      this.coverageConfig = new CoverageConfig(
+        this.matmanConfig,
+        coverageConfig,
+        this.caseModuleFilePath,
+        this.tag,
+      );
+    }
 
     return this;
   }
@@ -135,7 +223,14 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
    * @author helinjiang
    */
   setMatmanResultConfig(matmanResultConfig: ResultOpts): PageDriver {
-    super.setMatmanResultConfig(matmanResultConfig);
+    if (matmanResultConfig) {
+      this.matmanResultConfig = new MatmanResultConfig(
+        this.matmanConfig,
+        matmanResultConfig,
+        this.caseModuleFilePath,
+        this.tag,
+      );
+    }
 
     return this;
   }
@@ -148,8 +243,7 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
    * @author helinjiang
    */
   goto(pageUrl: string): PageDriver {
-    super.goto(pageUrl);
-
+    this.pageUrl = pageUrl;
     return this;
   }
 
@@ -165,7 +259,14 @@ export default class PageDriverSync extends PageDriverBase implements PageDriver
     actionName: string,
     actionCall: ((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>),
   ): PageDriver {
-    super.addAction(actionName, actionCall);
+    if (typeof actionCall === 'function') {
+      this.actionList.push(actionCall);
+      this._dataIndexMap[actionName + ''] = this.actionList.length - 1;
+    } else if (typeof actionName === 'function') {
+      this.actionList.push(actionName);
+    } else {
+      throw new Error('addAction should assign function!');
+    }
 
     return this;
   }
