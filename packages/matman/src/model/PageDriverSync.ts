@@ -111,7 +111,11 @@ export default class PageDriver implements IPageDriver {
 
     this._dataIndexMap = {};
     this._isDefaultScanMode = false;
-    this._isInIDE = !!opts.isInIDE;
+    this._isInIDE = !!process.env.IS_IN_IDE;
+  }
+
+  getMaster(): Master {
+    return this.master;
   }
 
   /**
@@ -384,13 +388,13 @@ export default class PageDriver implements IPageDriver {
       }
     }
 
+    this.master?.setPage(this);
+
     if (this._isInIDE) {
       return new Promise(resolve => {
         resolve(this);
       });
     }
-
-    this.master?.setPage(this);
 
     return this.master
       ?.getResult()

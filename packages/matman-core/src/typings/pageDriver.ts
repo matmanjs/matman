@@ -1,5 +1,6 @@
 import Nightmare from 'nightmare';
 import puppeteer from 'puppeteer';
+import {Master} from './master';
 import {MatmanResult} from './matmanResult';
 import MatmanConfig from '../config/MatmanConfig';
 import DeviceConfig, {DeviceConfigOpts} from '../config/DeviceConfig';
@@ -60,6 +61,8 @@ export interface PageDriver {
   _dataIndexMap: {[key: string]: number};
   _isDefaultScanMode: boolean;
   _isInIDE: boolean;
+
+  getMaster(): Master;
 
   /**
    * 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的

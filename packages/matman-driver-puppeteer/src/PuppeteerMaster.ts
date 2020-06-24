@@ -76,6 +76,15 @@ export class PuppeteerMaster extends EventEmitter implements Master {
 
   async getNewInstance(): Promise<void> {
     this.emit('beforeGetNewNightmare');
+
+    if (this.pageDriver?._isInIDE) {
+      this.puppeteerConfig = {
+        ...this.puppeteerConfig,
+        headless: false,
+        devtools: true,
+      };
+    }
+
     // 创建 puppeteer 对象, 需要创建到 page
     this.browser = await puppeteer.launch(this.puppeteerConfig);
     this.page = (await this.browser.pages())[0];

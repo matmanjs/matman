@@ -97,6 +97,14 @@ export class NightmareMaster extends EventEmitter implements Master {
   async getNewInstance(): Promise<void> {
     this.emit('beforeGetNewNightmare');
 
+    if (this.pageDriver?._isInIDE) {
+      this.nightmareConfig = {
+        ...this.nightmareConfig,
+        show: true,
+        doNotCloseBrowser: true,
+      };
+    }
+
     // 创建 nightmare 对象，注意使用扩展的 NightmarePlus ，而不是原生的 Nightmare
     const NightmarePlus = getNightmarePlus();
     this.nightmare = NightmarePlus(this.nightmareConfig);
