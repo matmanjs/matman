@@ -3,7 +3,7 @@ import {expect} from 'chai';
 
 import {isURLMatch} from '../../../src/util/url';
 
-describe('./util/url.js', () => {
+describe('./util/url.ts', () => {
   describe('check isURLMatch(URLToCheck, partialURL, query)', () => {
     const URLToCheck = 'http://now.qq.com/maybe/report/pv?report_id=987';
 
