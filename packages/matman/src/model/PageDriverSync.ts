@@ -4,7 +4,7 @@ import puppeteer from 'puppeteer';
 import Nightmare from 'nightmare';
 import {
   MatmanConfig,
-  PageDriver as IPageDriver,
+  PageDriver,
   DeviceConfig,
   ScreenshotConfig,
   CoverageConfig,
@@ -22,7 +22,7 @@ import {PageDriverOpts} from '../types';
 /**
  * 页面操作类，使用这个类可以实现对浏览器页面的控制
  */
-export default class PageDriver implements IPageDriver {
+export default class PageDriverSync implements PageDriver {
   // 配置项目
   matmanConfig: MatmanConfig;
   caseModuleFilePath: string;
@@ -49,13 +49,13 @@ export default class PageDriver implements IPageDriver {
   _isInIDE: boolean;
 
   // master
-  private master: Runner;
+  private browserRunner: Runner;
 
   /**
    * 构造函数
    *
+   * @param {Runner} browserRunner
    * @param {MatmanConfig} matmanConfig
-   * @param {String} caseModuleFilePath  测试case文件的路径
    * @param {Object} [opts] 参数
    * @param {Object} [opts.delayBeforeRun] 延时多少ms再启动
    * @param {String} [opts.tag] 标记，在某些场景下使用，例如截图保存文件中追加该标记，用于做区分
@@ -64,19 +64,14 @@ export default class PageDriver implements IPageDriver {
    * @param {Boolean} [opts.nightmareConfig] 传递给 nightmare 的配置
    * @author helinjiang
    */
-  constructor(
-    master: Runner,
-    matmanConfig: MatmanConfig,
-    caseModuleFilePath: string,
-    opts: PageDriverOpts = {},
-  ) {
-    this.master = master;
+  constructor(browserRunner: Runner, matmanConfig: MatmanConfig, opts: PageDriverOpts) {
+    this.browserRunner = browserRunner;
 
     this.matmanConfig = matmanConfig;
 
     // 测试case文件的路径
     // TODO 需要确保存在
-    this.caseModuleFilePath = caseModuleFilePath;
+    this.caseModuleFilePath = opts.caseModuleFilePath;
 
     this.useRecorder = !!opts.useRecorder;
 
@@ -373,7 +368,7 @@ export default class PageDriver implements IPageDriver {
     // 兼容没有定义 run 方法的场景
     if (!this.actionList.length) {
       this._isDefaultScanMode = true;
-      if (this.master?.name === 'puppeteer') {
+      if (this.browserRunner?.name === 'puppeteer') {
         this.addAction('_scan_page_', async function (n: puppeteer.Page) {
           await n.waitFor(500);
         });
@@ -390,9 +385,9 @@ export default class PageDriver implements IPageDriver {
       });
     }
 
-    this.master?.setPage(this);
+    this.browserRunner?.setPage(this);
 
-    return this.master
+    return this.browserRunner
       ?.getResult()
       .then(resultData => {
         return new MatmanResult(resultData);

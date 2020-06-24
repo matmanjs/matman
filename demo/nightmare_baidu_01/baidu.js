@@ -14,9 +14,6 @@ module.exports = () => {
         }),
       )
 
-      // 创建 Page 对象，使用它可以实现对浏览器页面的控制
-      .newPageDriver(__filename)
-
       // 设置浏览器参数
 
       .setDeviceConfig({

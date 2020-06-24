@@ -1,5 +1,10 @@
 import fse from 'fs-extra';
 
+/**
+ * 获取哪个文件在调用本方法
+ *
+ * @param {String} [referFile] 从调用栈中找到该文件的调用者，而不再是本方法的调用者
+ */
 export function getCallerPath(referFile?: string): string {
   let err = new Error();
 
@@ -38,13 +43,26 @@ export function getCallerPath(referFile?: string): string {
   let stackFileArr = stackStr.match(/\((.*)\)/gi) || [];
   // console.log(stackFileArr);
 
+  let isFoundUserModule = false;
+
   // 过滤一些不符合要求的模块
   stackFileArr = stackFileArr.filter(item => {
-    // 过滤掉内部 js 模块的调用，例如：
+    // 是否为内部 js 模块的调用，例如：
     // (internal/modules/cjs/loader.js:598:3)
-    // 过滤掉 /node_modules/ 模块的调用，例如：
+    const isInternalModules = item.indexOf('(internal') == 0;
+    if (isInternalModules) {
+      return false;
+    }
+
+    //是否为 /node_modules/ 模块的调用，例如：
     // (/Users/helinjiang/gitprojects/matman/packages/matman/node_modules/mocha/lib/runner.js:448:14)
-    return item.indexOf('(internal') !== 0 && item.indexOf('/node_modules/') < 0;
+    const isNodeModules = item.indexOf('/node_modules/') > -1;
+    if (!isNodeModules) {
+      isFoundUserModule = true;
+      return true;
+    } else {
+      return !isFoundUserModule;
+    }
   });
   // console.log(stackFileArr);
 

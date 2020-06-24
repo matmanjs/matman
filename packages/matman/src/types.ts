@@ -11,7 +11,7 @@
  * @param {Boolean} isDevBuild 是否为开发模式
  * @author helinjiang
  */
-export interface MatmanConfigType {
+export interface MatmanConfigOpts {
   rootPath?: string;
   caseModulesPath?: string;
   crawlerBuildPath?: string;
@@ -23,10 +23,11 @@ export interface MatmanConfigType {
 }
 
 export interface PageDriverOpts {
+  caseModuleFilePath: string;
   useRecorder?: boolean;
   tag?: string;
   delayBeforeRun?: number;
   isInIDE?: boolean;
 }
 
-export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;
+// export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;
