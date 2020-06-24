@@ -1,0 +1,22 @@
+var getPageInfo = (function () {
+  'use strict';
+
+  var userJs = /*#__PURE__*/Object.freeze({
+    __proto__: null
+  });
+
+  function getDescription() {
+    return 'I am description';
+  }
+
+  var fileRequireJsModule = () => {
+    return {
+      say: 'hello, file-require-js-module.js!',
+      description: getDescription(),
+      userInfo: userJs,
+    };
+  };
+
+  return fileRequireJsModule;
+
+}());
