@@ -1,5 +1,5 @@
 import fs from 'fs';
-import {findMatmanConfig, MATMAN_CONFIG_FILE} from 'matman-core';
+import {BrowserRunner, findMatmanConfig, MATMAN_CONFIG_FILE} from 'matman-core';
 import _ from 'lodash';
 // import {BrowserMasterAsync} from './model/BrowserMaster';
 import PageDriverSync from './model/PageDriverSync';
@@ -56,14 +56,14 @@ function getPageDriverOpts(opts?: PageDriverOpts): PageDriverOpts {
 }
 
 /**
- * 初始化同步的 BrowserMaster 对象
+ * 获得同步的 PageDriver
  *
- * @param {Object} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
+ * @param {BrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
  * @param {PageDriverOpts} pageDriverOpts
  * @param {MatmanConfigOpts} matmanConfigOpts
  */
 export function launchSync(
-  browserRunner: any,
+  browserRunner: BrowserRunner,
   pageDriverOpts?: PageDriverOpts,
   matmanConfigOpts?: MatmanConfigOpts,
 ): PageDriverSync {
@@ -77,6 +77,9 @@ export function launchSync(
   if (!matmanConfig) {
     throw new Error(`Could not find ${MATMAN_CONFIG_FILE} or matman config setting!`);
   }
+
+  // console.log('newPageDriverOpts', newPageDriverOpts);
+  // console.log('matmanConfig', matmanConfig);
 
   return new PageDriverSync(browserRunner, matmanConfig, newPageDriverOpts);
 }

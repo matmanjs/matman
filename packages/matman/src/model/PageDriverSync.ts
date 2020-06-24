@@ -13,7 +13,7 @@ import {
   ScreenOpts,
   CoverageOpts,
   ResultOpts,
-  Runner,
+  BrowserRunner,
 } from 'matman-core';
 
 import MatmanResult from './MatmanResult';
@@ -49,7 +49,7 @@ export default class PageDriverSync implements PageDriver {
   _isInIDE: boolean;
 
   // master
-  private browserRunner: Runner;
+  private browserRunner: BrowserRunner;
 
   /**
    * 构造函数
@@ -64,7 +64,7 @@ export default class PageDriverSync implements PageDriver {
    * @param {Boolean} [opts.nightmareConfig] 传递给 nightmare 的配置
    * @author helinjiang
    */
-  constructor(browserRunner: Runner, matmanConfig: MatmanConfig, opts: PageDriverOpts) {
+  constructor(browserRunner: BrowserRunner, matmanConfig: MatmanConfig, opts: PageDriverOpts) {
     this.browserRunner = browserRunner;
 
     this.matmanConfig = matmanConfig;
