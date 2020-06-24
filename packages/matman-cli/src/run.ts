@@ -3,8 +3,9 @@ import path from 'path';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 import yeoman from 'yeoman-environment';
+import glob from 'glob';
 import {findMatmanConfig, MatmanConfig} from 'matman-core';
-import {CrawlerParser, build} from 'matman-crawler';
+import {build} from 'matman-crawler';
 import {DealWith, Argv} from './types';
 
 // 获取所有模板
@@ -118,13 +119,17 @@ const dealWith: DealWith = {
     if (argv.dev) {
       matmanConfig.isDevBuild = argv.dev;
     }
-    const files = new CrawlerParser(matmanConfig).getEntry();
+    const files = glob.sync('./**/+(crawlers|crawler)/*.js', {
+      cwd: matmanConfig.caseModulesPath,
+    });
 
-    for (const item of Object.keys(files)) {
+    for (const item of files) {
       console.log(chalk.yellow('😏 开始编译', item));
 
-      const res = await build(files[item], {matmanConfig: matmanConfig});
-      fs.outputFileSync(`${matmanConfig.crawlerBuildPath}/${item}.js`, res);
+      const res = await build(`${matmanConfig.caseModulesPath}/${item}`, {
+        matmanConfig: matmanConfig,
+      });
+      fs.outputFileSync(`${matmanConfig.crawlerBuildPath}/${item}`, res);
 
       console.log(chalk.green('😘 编译成功', item));
     }
