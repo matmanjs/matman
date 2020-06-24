@@ -1,0 +1,24 @@
+var getPageInfo = (function () {
+  'use strict';
+
+  var userJs = {
+    name: 'matman',
+    description: 'E2E test framework!',
+    fileName: 'user-js.js',
+  };
+
+  function getDescription() {
+    return 'I am description';
+  }
+
+  var fileRequireJsModule = () => {
+    return {
+      say: 'hello, file-require-js-module.js!',
+      description: getDescription(),
+      userInfo: userJs,
+    };
+  };
+
+  return fileRequireJsModule;
+
+}());

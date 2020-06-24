@@ -1,0 +1,41 @@
+var getPageInfo = (function () {
+    'use strict';
+
+    var name = "matman";
+    var description = "E2E test framework!";
+    var fileName = "user-json.json";
+    var userJson = {
+    	name: name,
+    	description: description,
+    	fileName: fileName
+    };
+
+    var userJson$1 = /*#__PURE__*/Object.freeze({
+        __proto__: null,
+        name: name,
+        description: description,
+        fileName: fileName,
+        'default': userJson
+    });
+
+    function getCjsExportFromNamespace (n) {
+    	return n && n['default'] || n;
+    }
+
+    var userInfo = getCjsExportFromNamespace(userJson$1);
+
+    function getDescription() {
+      return 'I am description';
+    }
+
+    var fileRequireJsonModule = () => {
+      return {
+        say: 'hello, file-require-json-module.js!',
+        description: getDescription(),
+        userInfo,
+      };
+    };
+
+    return fileRequireJsonModule;
+
+}());

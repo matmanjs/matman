@@ -1,19 +1,20 @@
 import {rollup} from 'rollup';
-import commonjs from 'rollup-plugin-commonjs';
+import pluginCommonjs from '@rollup/plugin-commonjs';
+import pluginJson from '@rollup/plugin-json';
 
 /**
  * 进行爬虫脚本打包
  * 改用 rollup 并且打包放在执行时进行
  * 干掉需要手工 build
  *
- * @param matmanConfig
+ * @param {String} entryPath
  * @author wangjq4214
  */
-const build = async (path: string): Promise<string> => {
+const build = async (entryPath: string): Promise<string> => {
   // 打包
   const bundle = await rollup({
-    input: path,
-    plugins: [commonjs()],
+    input: entryPath,
+    plugins: [pluginCommonjs(), pluginJson()],
   });
 
   // 生成

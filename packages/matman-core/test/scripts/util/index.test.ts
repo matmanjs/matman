@@ -71,7 +71,6 @@ describe('./util/index.js', () => {
         rootPath: newRootPath,
         caseModulesPath: './my_case_modules',
         crawlerBuildPath: path.join(newRootPath, './build/my-crawler-script'),
-        crawlerMatch: /[/|\\]my-crawlers[/|\\].*\.js$/,
         crawlerInjectJQuery: false,
         screenshotPath: './build/my-screenshot',
         coveragePath: './build/my-coverage_output',
@@ -83,7 +82,6 @@ describe('./util/index.js', () => {
       expect(matmanConfig.crawlerBuildPath).to.equal(
         path.join(newRootPath, './build/my-crawler-script_dev'),
       );
-      expect(matmanConfig.crawlerMatch).to.eql(/[/|\\]my-crawlers[/|\\].*\.js$/);
       expect(matmanConfig.crawlerInjectJQuery).to.be.false;
       expect(matmanConfig.isDevBuild).to.be.true;
       expect(matmanConfig.screenshotPath).to.equal(path.join(newRootPath, './build/my-screenshot'));
@@ -95,7 +93,6 @@ describe('./util/index.js', () => {
         'rootPath',
         'caseModulesPath',
         'crawlerBuildPath',
-        'crawlerMatch',
         'crawlerInjectJQuery',
         'isDevBuild',
         'matmanResultPath',

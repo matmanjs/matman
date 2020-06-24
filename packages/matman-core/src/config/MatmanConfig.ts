@@ -21,7 +21,6 @@ export default class MatmanConfig {
   rootPath: string;
   caseModulesPath: string;
   crawlerBuildPath: string;
-  crawlerMatch: RegExp;
   crawlerInjectJQuery: boolean;
   screenshotPath: string;
   coveragePath: string;
@@ -56,9 +55,6 @@ export default class MatmanConfig {
       opts.crawlerBuildPath || './build/crawler-script',
       this.rootPath,
     );
-
-    // 用于匹配是否为 crawler script 的正则
-    this.crawlerMatch = opts.crawlerMatch || /[/|\\]crawlers[/|\\].*\.js$/;
 
     // 前端爬虫脚本中是否注入jQuery，默认值为 true
     this.crawlerInjectJQuery = !!opts.crawlerInjectJQuery;

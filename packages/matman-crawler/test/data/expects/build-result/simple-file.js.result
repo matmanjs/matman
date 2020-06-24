@@ -1,0 +1,17 @@
+var getPageInfo = (function () {
+  'use strict';
+
+  function getDescription() {
+    return 'I am description';
+  }
+
+  var simpleFile = () => {
+    return {
+      say: 'hello, simple-file.js!',
+      description: getDescription(),
+    };
+  };
+
+  return simpleFile;
+
+}());
