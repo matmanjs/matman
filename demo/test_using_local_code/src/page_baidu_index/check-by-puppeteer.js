@@ -3,6 +3,7 @@ const {BrowserRunner} = require('../../../../packages/matman-runner-puppeteer');
 
 module.exports = async pageDriverOpts => {
   const pageDriver = await matman.launch(new BrowserRunner(), pageDriverOpts);
+
   // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
   await pageDriver.useProxyServer(`127.0.0.1:${process.env.PORT || 8899}`);
 
@@ -15,7 +16,7 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setScreenshotConfig(true);
 
-  await pageDriver.setPageUrl('https://www.baidu.com');
+  await pageDriver.setPageUrl('https://www.baidu.com/somepage.html');
 
   await pageDriver.wait('#say-hello');
 
