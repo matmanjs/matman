@@ -289,8 +289,13 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     return result;
   }
 
-  cleanEffect(): void {
-    console.log('empty');
+  async cleanEffect(): Promise<void> {
+    // 如果配置了不关闭界面，且当前是展示浏览器界面的场景，则不再自动关闭浏览器界面，以方便调试
+    if (this.pageDriver?.doNotCloseBrowser && this.puppeteerConfig.headless === false) {
+      console.log('do not close browser');
+    } else {
+      await this.browser?.close();
+    }
   }
 
   async getResult() {
@@ -302,7 +307,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     const result = await this.runActions();
 
-    this.cleanEffect();
+    await this.cleanEffect();
 
     return {
       data: result,
