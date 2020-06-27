@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
 
-const checkPage = require('../../../demo/test_using_local_code/src/page_baidu_index/check-by-puppeteer');
+const checkPage = require('../../../demo/test_using_local_code/src/page_baidu_index/baidu1-by-nightmare');
 
-describe('(check-by-puppeteer)百度首页：使用本地项目测试', function () {
+describe('(baidu1-by-nightmare)百度首页：使用本地项目测试', function () {
   this.timeout(30000);
 
   let resultData;

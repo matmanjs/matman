@@ -1,0 +1,14 @@
+{
+  "name": "mockstar-app",
+  "scripts": {
+    "start": "mockstar start --watch",
+    "dev": "mockstar run --dev --watch",
+    "stop": "mockstar stop"
+  },
+  "dependencies": {
+    "mockstar": "^1.1.4"
+  },
+  "devDependencies": {
+    "mockstar-cli": "^1.1.5"
+  }
+}

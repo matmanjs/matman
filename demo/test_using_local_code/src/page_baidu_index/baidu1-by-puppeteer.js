@@ -16,7 +16,7 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setScreenshotConfig(true);
 
-  await pageDriver.setPageUrl('https://www.baidu.com/somepage.html');
+  await pageDriver.setPageUrl('https://www.baidu.com/baidu1.html');
 
   await pageDriver.wait('#say-hello');
 
