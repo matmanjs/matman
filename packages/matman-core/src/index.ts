@@ -1,4 +1,5 @@
 import MatmanConfig from './config/MatmanConfig';
+import CookieConfig, {CookieConfigOpts} from './config/CookieConfig';
 import DeviceConfig, {DeviceConfigOpts} from './config/DeviceConfig';
 import ScreenshotConfig, {ScreenOpts} from './config/ScreenshotConfig';
 import CoverageConfig, {CoverageOpts} from './config/CoverageConfig';
@@ -22,6 +23,8 @@ export {
   findMatmanConfig,
   requireAsync,
   requireSync,
+  CookieConfig,
+  CookieConfigOpts,
   DeviceConfig,
   DeviceConfigOpts,
   ScreenshotConfig,

@@ -14,6 +14,8 @@ import {
   CoverageOpts,
   ResultOpts,
   BrowserRunner,
+  CookieConfig,
+  CookieConfigOpts,
 } from 'matman-core';
 
 import MatmanResult from './MatmanResult';
@@ -33,7 +35,7 @@ export default class PageDriverSync implements PageDriver {
   delayBeforeRun: number;
   proxyServer: string;
   mockstarQuery: null | {appendToUrl: (s: string) => string};
-  cookies: string | {[key: string]: any};
+  cookieConfig: null | CookieConfig;
   deviceConfig: null | DeviceConfig;
   screenshotConfig: null | ScreenshotConfig;
   coverageConfig: null | CoverageConfig;
@@ -90,7 +92,7 @@ export default class PageDriverSync implements PageDriver {
     this.proxyServer = '';
     this.mockstarQuery = null;
 
-    this.cookies = '';
+    this.cookieConfig = null;
     this.deviceConfig = null;
     this.screenshotConfig = null;
     this.coverageConfig = null;
@@ -154,12 +156,12 @@ export default class PageDriverSync implements PageDriver {
    * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md
    * https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
    *
-   * @param {String | Object } cookies 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
+   * @param {CookieConfigOpts } cookieConfigOpts 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
    * @return {PageDriver}
    * @author helinjiang
    */
-  setCookies(cookies: string | {[key: string]: any}): PageDriver {
-    this.cookies = cookies;
+  setCookieConfig(cookieConfigOpts: CookieConfigOpts): PageDriver {
+    this.cookieConfig = new CookieConfig(cookieConfigOpts);
     return this;
   }
 

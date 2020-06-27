@@ -142,29 +142,13 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     }
 
     // 设置 cookie
-    if (this.pageDriver?.cookies) {
+    if (this.pageDriver?.cookieConfig) {
       const temp: puppeteer.SetCookie[] = [];
-      // 简单处理传入的字符串
-      if (typeof this.pageDriver.cookies === 'string') {
-        this.pageDriver.cookies.split(';').map(item => {
-          item = item.trim();
-          const res = item.split('=');
+      const arr = this.pageDriver.cookieConfig.getCookieObjectArr(this.pageDriver?.pageUrl);
 
-          temp.push({
-            name: res[0],
-            value: res[1],
-            domain: this.pageDriver?.pageUrl,
-          });
-        });
-      } else {
-        Object.keys(this.pageDriver.cookies).forEach(item => {
-          temp.push({
-            name: item,
-            value: (this.pageDriver?.cookies as any)[item],
-            domain: this.pageDriver?.pageUrl,
-          });
-        });
-      }
+      arr.forEach(item => {
+        temp.push(item);
+      });
 
       await this.page.setCookie(...temp);
     }

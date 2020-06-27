@@ -2,6 +2,7 @@ import Nightmare from 'nightmare';
 import puppeteer from 'puppeteer';
 import {MatmanResult} from './matmanResult';
 import MatmanConfig from '../config/MatmanConfig';
+import CookieConfig, {CookieConfigOpts} from '../config/CookieConfig';
 import DeviceConfig, {DeviceConfigOpts} from '../config/DeviceConfig';
 import ScreenshotConfig, {ScreenOpts} from '../config/ScreenshotConfig';
 import CoverageConfig, {CoverageOpts} from '../config/CoverageConfig';
@@ -46,7 +47,7 @@ export interface PageDriver {
   delayBeforeRun: number;
   proxyServer: string;
   mockstarQuery: null | {appendToUrl: (s: string) => string};
-  cookies: string | {[key: string]: any};
+  cookieConfig: null | CookieConfig;
   deviceConfig: null | DeviceConfig;
   screenshotConfig: null | ScreenshotConfig;
   coverageConfig: null | CoverageConfig;
@@ -92,11 +93,11 @@ export interface PageDriver {
    * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md
    * https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
    *
-   * @param {String | Object } cookies 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
+   * @param {String | Object } cookieConfig 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
    * @return {PageDriver}
    * @author helinjiang
    */
-  setCookies(cookies: string | {[key: string]: any}): PageDriver | Promise<void>;
+  setCookieConfig(cookieConfig: CookieConfigOpts): PageDriver | Promise<void>;
 
   /**
    * 设置无头浏览器设备参数
