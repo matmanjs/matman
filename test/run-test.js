@@ -101,25 +101,10 @@ function runUseWhistle(mockstarPort) {
       .then(port => {
         console.log(`whistle 已启动，端口为 ${port}！耗时${Date.now() - t}ms`);
 
-        const whistleOfDemo03 = require('../packages/matman/test/data/hi-demo/demo_03/whistle');
-        const whistleOfDemo04 = require('../packages/matman/test/data/hi-demo/demo_04/whistle');
-        const whistleRulesOfDemo03 = whistleOfDemo03.getDevRules({port});
-        const whistleRulesOfDemo04 = whistleOfDemo04.getDevRules({port, mockstarPort});
-        const whistleRules = {
-          name: `${whistleRulesOfDemo03.name}-${whistleRulesOfDemo04.name}`,
-          rules: [whistleRulesOfDemo03.rules, whistleRulesOfDemo04.rules].join('\n'),
-        };
-
-        const tmpWhistleConfigPath = path.join(__dirname, 'tmp/whistle.dev.js');
-
-        // 文件内容
-        const configFileContent = `module.exports = ${JSON.stringify(whistleRules, null, 2)};`;
-
-        // 保存文件
-        fse.outputFileSync(tmpWhistleConfigPath, configFileContent);
-
         runCmd
-          .runByExec('w2 add tmp/whistle.dev.js --force', {cwd: __dirname})
+          .runByExec('npm run use-whistle', {
+            cwd: path.join(__dirname, '../demo/test_using_local_code'),
+          })
           .then(data => {
             console.log(`whistle 设置完成！耗时${Date.now() - t}ms`);
             resolve(port);
@@ -137,15 +122,12 @@ function runUseWhistle(mockstarPort) {
 }
 
 /**
- * 为 demo04 启动 mockstar
+ * 为 test_using_local_code 启动 mockstar
  *
  * @return {Promise<>}
  */
-function runMockstarForDemo04() {
-  const matmanAppPath = path.join(
-    __dirname,
-    '../packages/matman/test/data/hi-demo/demo_04/mockstar-app',
-  );
+function runMockstarForDemo() {
+  const matmanAppPath = path.join(__dirname, '../demo/test_using_local_code/mockstar-app');
 
   return runCmd
     .runByExec('npm i', {cwd: matmanAppPath})
@@ -200,37 +182,6 @@ function runTestE2EDirect(whistlePort) {
 // 注意，执行 lerna bootstrap 时会执行 npm install 命令（而不是 tnpm install）
 // 因此在公司内网运行时需要配置好 npm 的 registry: npm config set registry http://r.tnpm.oa.com
 // 详见 http://tnpm.oa.com/
-//==================================================================
-// 1. 安装依赖和处理 package 之间的依赖
-// runLernaBootstrap()
-//   .then(() => {
-//     // 2. 为各个 package 执行构建，因为后续测试流程都直接引用的是同源代码构建产物
-//     return runBuildForEachPackage().then(() => {
-//       // 3. 为各个 package 执行单元测试
-//       return runTestForEachPackage().then(() => {
-//         // 4. 构建爬虫脚本，否则执行的时候爬虫脚本若不存在则会报错
-//         // return runBuildForEachDemoProject()
-//         //     .then(() => {
-//         //         // 5. 为 demo04 启动 mockstar
-//         //         return runMockstarForDemo04()
-//         //             .then((mockstarPort) => {
-//         //                 // 6. 启动 whistle
-//         //                 return runUseWhistle(mockstarPort)
-//         //                     .then((whistlePort) => {
-//         //                         // 7. 执行端对端自动化测试
-//         //                         return runTestDirect(whistlePort);
-//         //                     });
-//         //             });
-//         //     });
-//       });
-//     });
-//   })
-//   .then(data => {
-//     console.log(`============执行结束，总耗时${Date.now() - t}ms===========`);
-//   })
-//   .catch(() => {
-//     console.log(`============执行过程遇到异常，总耗时${Date.now() - t}ms===========`);
-//   });
 
 async function startTest() {
   if (process.env.NO_INIT === '1') {
@@ -246,12 +197,15 @@ async function startTest() {
     console.log('不需要进行同源测试！');
     await runTestE2EDirect();
   } else {
+    const mockstarPort = await runMockstarForDemo();
+    const whistlePort = await runUseWhistle(mockstarPort);
+    await runTestE2EDirect(whistlePort);
   }
 }
 
 console.log(`============开始执行===========`);
-
 const t = Date.now();
+
 startTest()
   .then(data => {
     console.log(`============执行结束，总耗时${Date.now() - t}ms===========`);

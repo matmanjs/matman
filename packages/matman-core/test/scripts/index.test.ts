@@ -7,6 +7,7 @@ describe('./index.ts', () => {
   it('export should be correct', () => {
     expect(matmanCore).to.have.all.keys(
       'CoverageConfig',
+      'CookieConfig',
       'DeviceConfig',
       'MATMAN_CONFIG_FILE',
       'MatmanConfig',
