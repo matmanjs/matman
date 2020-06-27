@@ -13,7 +13,7 @@ describe('(baidu1-by-nightmare)百度首页：使用本地项目测试', functio
       return this.skip();
     }
 
-    return checkPage({show: true, doNotCloseBrowser: false, useRecorder: false}).then(function (
+    return checkPage({show: false, doNotCloseBrowser: false, useRecorder: false}).then(function (
       result,
     ) {
       // console.log(JSON.stringify(result));
