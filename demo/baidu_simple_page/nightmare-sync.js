@@ -9,7 +9,7 @@ module.exports = () => {
       .launchSync(
         new BrowserRunner({
           show: true,
-          doNotCloseBrowser: true,
+          doNotCloseBrowser: false,
           useRecorder: false,
         }),
       )

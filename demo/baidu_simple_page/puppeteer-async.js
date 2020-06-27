@@ -4,7 +4,7 @@ const {BrowserRunner} = require('../../packages/matman-runner-puppeteer');
 module.exports = async () => {
   const pageDriver = await matman.launch(new BrowserRunner(), {
     show: true,
-    doNotCloseBrowser: true,
+    doNotCloseBrowser: false,
     useRecorder: false,
   });
 

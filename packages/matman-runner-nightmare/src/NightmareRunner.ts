@@ -48,7 +48,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     this.globalInfo = {};
   }
 
-  setPage(p: PageDriver): void {
+  setPageDriver(p: PageDriver): void {
     this.pageDriver = p;
 
     this.globalInfoRecorderKey = (function (useRecorder) {
