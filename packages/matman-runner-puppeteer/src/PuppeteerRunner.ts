@@ -98,6 +98,16 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       this.page.on('response', async msg => {
         const request = msg.request();
 
+        let responseBody = null;
+        if (msg.headers()['content-type'] === 'application/json') {
+          try {
+            responseBody = await msg.json();
+          } catch (e) {
+            // TODO 部分场景下可能报错，待定位
+            // UnhandledPromiseRejectionWarning: SyntaxError: Unexpected token / in JSON at position 0
+          }
+        }
+
         this.globalInfo[this.globalInfoRecorderKey].push({
           url: request.url(),
           method: request.method(),
@@ -111,7 +121,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
             statusText: msg.statusText(),
             headers: msg.headers(),
             fromCache: msg.fromCache(),
-            body: msg.headers()['content-type'] === 'application/json' ? await msg.json() : null,
+            body: responseBody,
           },
         });
       });
