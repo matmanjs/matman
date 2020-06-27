@@ -2,3 +2,4 @@ node_modules
 asserts
 docs
 packages/matman-cli/generators/**/templates
+demo

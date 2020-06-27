@@ -35,7 +35,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     this.globalInfo = {};
   }
 
-  setPage(n: PageDriver): void {
+  setPageDriver(n: PageDriver): void {
     this.pageDriver = n;
 
     this.globalInfoRecorderKey = (function (useRecorder) {
@@ -51,27 +51,34 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
   getConfig(): void {
     // 触发开始事件
-    this.emit('beforeGetNightmareConfig');
+    this.emit('beforeGetConfig');
 
-    // 如果设置了 show ，则同步打开开发者工具面板
-    if (this.puppeteerConfig.headless === false) {
-      this.puppeteerConfig.devtools = true;
-    }
+    if (this.pageDriver) {
+      if (this.pageDriver.show) {
+        this.puppeteerConfig.headless = false;
+      }
 
-    // 如果传入了代理服务，则设置代理服务器
-    if (this.pageDriver?.proxyServer) {
-      if (this.puppeteerConfig.args) {
-        this.puppeteerConfig.args = [
-          ...this.puppeteerConfig.args,
-          `--proxy-server=${this.pageDriver.proxyServer}`,
-        ];
-      } else {
-        this.puppeteerConfig.args = [`--proxy-server=${this.pageDriver.proxyServer}`];
+      // 如果传入了代理服务，则设置代理服务器
+      if (this.pageDriver.proxyServer) {
+        if (this.puppeteerConfig.args) {
+          this.puppeteerConfig.args = [
+            ...this.puppeteerConfig.args,
+            `--proxy-server=${this.pageDriver.proxyServer}`,
+          ];
+        } else {
+          this.puppeteerConfig.args = [`--proxy-server=${this.pageDriver.proxyServer}`];
+        }
       }
     }
 
-    // 触发时间 广播配置
-    this.emit('afterGetNightmareConfig', this.puppeteerConfig);
+    // 如果设置了 show ，则同步打开开发者工具面板
+    // puppeteer 场景下不需要这么做，可以人工打开，因此不再有必要这么处理了
+    // if (this.puppeteerConfig.headless === false) {
+    //   this.puppeteerConfig.devtools = true;
+    // }
+
+    // 触发广播配置
+    this.emit('afterGetConfig', this.puppeteerConfig);
   }
 
   async getNewInstance(): Promise<void> {

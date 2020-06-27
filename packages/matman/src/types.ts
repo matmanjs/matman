@@ -24,8 +24,10 @@ export interface MatmanConfigOpts {
 
 export interface PageDriverOpts {
   caseModuleFilePath: string;
-  useRecorder?: boolean;
   tag?: string;
+  show?: boolean;
+  doNotCloseBrowser?: boolean;
+  useRecorder?: boolean;
   delayBeforeRun?: number;
   isInIDE?: boolean;
 }

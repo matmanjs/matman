@@ -39,6 +39,8 @@ export interface PageDriver {
   // 配置类
   matmanConfig: MatmanConfig;
   caseModuleFilePath: string;
+  show: boolean;
+  doNotCloseBrowser: boolean;
   useRecorder: boolean;
   tag: string | undefined;
   delayBeforeRun: number;

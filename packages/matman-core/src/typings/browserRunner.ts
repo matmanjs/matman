@@ -15,7 +15,7 @@ import {PageDriver} from './pageDriver';
 export interface BrowserRunner extends EventEmitter {
   name: string;
 
-  setPage(p: PageDriver): void;
+  setPageDriver(p: PageDriver): void;
   getResult(): Promise<{
     data: any[];
     _dataIndexMap:

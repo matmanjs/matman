@@ -26,6 +26,8 @@ export default class PageDriverSync implements PageDriver {
   // 配置项目
   matmanConfig: MatmanConfig;
   caseModuleFilePath: string;
+  show: boolean;
+  doNotCloseBrowser: boolean;
   useRecorder: boolean;
   tag: string | undefined;
   delayBeforeRun: number;
@@ -71,6 +73,8 @@ export default class PageDriverSync implements PageDriver {
 
     this.caseModuleFilePath = opts.caseModuleFilePath;
 
+    this.show = !!opts.show;
+    this.doNotCloseBrowser = !!opts.doNotCloseBrowser;
     this.useRecorder = !!opts.useRecorder;
 
     this.tag = opts.tag;
@@ -349,7 +353,7 @@ export default class PageDriverSync implements PageDriver {
       });
     }
 
-    this.browserRunner?.setPage(this);
+    this.browserRunner?.setPageDriver(this);
 
     return this.browserRunner
       ?.getResult()

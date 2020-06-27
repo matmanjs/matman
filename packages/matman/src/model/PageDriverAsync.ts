@@ -26,6 +26,8 @@ export default class PageDriverAsync implements PageDriver {
   // 配置项目
   matmanConfig: MatmanConfig;
   caseModuleFilePath: string;
+  show: boolean;
+  doNotCloseBrowser: boolean;
   useRecorder: boolean;
   tag: string | undefined;
   delayBeforeRun: number;
@@ -71,6 +73,8 @@ export default class PageDriverAsync implements PageDriver {
 
     this.caseModuleFilePath = opts.caseModuleFilePath;
 
+    this.show = !!opts.show;
+    this.doNotCloseBrowser = !!opts.doNotCloseBrowser;
     this.useRecorder = !!opts.useRecorder;
 
     this.tag = opts.tag;
@@ -320,15 +324,15 @@ export default class PageDriverAsync implements PageDriver {
    * @return {Promise<{}>}
    * @author helinjiang
    */
-  end(): Promise<MatmanResult | PageDriver> {
+  async end(): Promise<MatmanResult | PageDriver> {
     // 默认处理 coverage，根据 window.__coverage__
     if (!this.coverageConfig) {
-      this.setCoverageConfig(true);
+      await this.setCoverageConfig(true);
     }
 
     // 默认处理 matmanResult
     if (!this.matmanResultConfig) {
-      this.setMatmanResultConfig(true);
+      await this.setMatmanResultConfig(true);
     }
 
     // 兼容没有定义 run 方法的场景
@@ -351,7 +355,7 @@ export default class PageDriverAsync implements PageDriver {
       });
     }
 
-    this.browserRunner?.setPage(this);
+    this.browserRunner?.setPageDriver(this);
 
     return this.browserRunner
       ?.getResult()
