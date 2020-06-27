@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
 
-const checkPage = require('../../../demo/baidu_simple_page/puppeteer-async');
+const checkPage = require('../../../demo/baidu_simple_page/nightmare-sync');
 
-describe('(puppeteer-async)百度首页：常规检查', function () {
+describe('(nightmare-sync)百度首页：常规检查', function () {
   this.timeout(30000);
 
   let resultData;

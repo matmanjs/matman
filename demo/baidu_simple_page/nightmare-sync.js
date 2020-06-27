@@ -1,18 +1,12 @@
 const matman = require('../../packages/matman');
 const {BrowserRunner} = require('../../packages/matman-runner-nightmare');
 
-module.exports = () => {
+module.exports = pageDriverOpts => {
   return (
     matman
 
       // 创建 Browser 对象，使用它对浏览器进行设置
-      .launchSync(
-        new BrowserRunner({
-          show: true,
-          doNotCloseBrowser: false,
-          useRecorder: false,
-        }),
-      )
+      .launchSync(new BrowserRunner(), pageDriverOpts)
 
       // 设置浏览器参数
       .setDeviceConfig({
@@ -45,11 +39,15 @@ module.exports = () => {
   );
 };
 
-module
-  .exports()
-  .then(function (result) {
-    console.log(JSON.stringify(result));
-  })
-  .catch(function (error) {
-    console.error('failed:', error);
-  });
+// module
+//   .exports({
+//     show: true,
+//     doNotCloseBrowser: true,
+//     useRecorder: false,
+//   })
+//   .then(function (result) {
+//     console.log(JSON.stringify(result));
+//   })
+//   .catch(function (error) {
+//     console.error('failed:', error);
+//   });
