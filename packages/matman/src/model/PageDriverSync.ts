@@ -2,6 +2,9 @@ import path from 'path';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 import Nightmare from 'nightmare';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {createMockStarQuery} from 'mockstar';
 import {
   MatmanConfig,
   PageDriver,
@@ -134,18 +137,13 @@ export default class PageDriverSync implements PageDriver {
    *
    * https://github.com/mockstarjs/mockstar
    *
-   * @param {MockStarQuery} mockstarQuery 详见 matman 组件的定义
    * @return {PageDriver}
    * @author helinjiang
    */
-  useMockstar(mockstarQuery: {appendToUrl: (s: string) => string}): PageDriver {
-    if (!mockstarQuery || typeof mockstarQuery.appendToUrl !== 'function') {
-      throw new Error(
-        '请传递正确的 MockStarQuery 对象，请参考： https://www.npmjs.com/package/mockstar',
-      );
+  useMockstar(queryMap: {[key: string]: string}): PageDriver {
+    if (queryMap && typeof queryMap === 'object') {
+      this.mockstarQuery = createMockStarQuery(queryMap);
     }
-
-    this.mockstarQuery = mockstarQuery;
 
     return this;
   }

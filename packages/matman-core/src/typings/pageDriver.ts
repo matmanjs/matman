@@ -81,11 +81,10 @@ export interface PageDriver {
    *
    * https://github.com/mockstarjs/mockstar
    *
-   * @param {MockStarQuery} mockstarQuery 详见 matman 组件的定义
    * @return {PageDriver}
    * @author helinjiang
    */
-  useMockstar(mockstarQuery: {appendToUrl: (s: string) => string}): PageDriver | Promise<void>;
+  useMockstar(queryMap: {[key: string]: string}): PageDriver | Promise<void>;
 
   /**
    * 注入 cookie
