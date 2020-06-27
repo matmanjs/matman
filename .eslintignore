@@ -3,3 +3,4 @@ asserts
 docs
 packages/matman-cli/generators/**/templates
 demo
+/test

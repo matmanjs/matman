@@ -12,8 +12,7 @@
     "docs:build": "vuepress build docs",
     "docs:deploy": "npm run docs:build && gh-pages -d docs-dist",
     "test": "cross-env INIT_BEFORE_TEST=1 node ./test/run-test.js",
-    "test:direct": "node ./node_modules/mocha/bin/_mocha",
-    "test:direct:debugnightmare": "cross-env DEBUG=nightmare npm run test:direct"
+    "test:e2e:direct": "mocha"
   },
   "repository": {
     "type": "git",
@@ -43,7 +42,7 @@
     "eslint": "^7.2.0",
     "gh-pages": "^2.2.0",
     "lerna": "^3.20.2",
-    "mocha": "^7.2.0",
+    "mocha": "^8.0.1",
     "prettier": "^2.0.5",
     "typescript": "^3.9.5",
     "vuepress": "^1.3.1"
