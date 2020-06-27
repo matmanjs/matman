@@ -1,5 +1,3 @@
-import Nightmare from 'nightmare';
-
 /**
  * 供 IDE 使用的启动项目的配置
  *
@@ -44,22 +42,4 @@ export interface MatmanConfigOpts {
   matmanResultPath?: string;
   isDevBuild?: boolean;
   setupOptions?: SetupOptions[];
-}
-
-/**
- * 对 nightmare 的接口进行拓展
- */
-export interface NightmareOpts extends Nightmare.IConstructorOptions {
-  doNotCloseBrowser?: boolean;
-  switches?: {
-    'proxy-server': string;
-    // 必须设置一下这个，否则在某些情况下 https 地址无法使用
-    // https://github.com/matmanjs/matman/issues/159
-    'ignore-certificate-errors': boolean;
-  };
-  webPreferences?: {
-    // 用例过多且频繁启动测试时可能会存在失败的场景 #154
-    partition: string;
-    preload: null | (() => any) | string;
-  };
 }

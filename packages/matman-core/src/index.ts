@@ -12,7 +12,7 @@ import {BrowserRunner} from './typings/browserRunner';
 import {PageDriver} from './typings/pageDriver';
 import {MatmanResult, NetworkType} from './typings/matmanResult';
 
-import {NightmareOpts, MatmanConfigOpts} from './types';
+import {MatmanConfigOpts} from './types';
 
 export {
   MatmanConfig,
@@ -34,6 +34,5 @@ export {
   PageDriver,
   MatmanResult,
   NetworkType,
-  NightmareOpts,
   MatmanConfigOpts,
 };

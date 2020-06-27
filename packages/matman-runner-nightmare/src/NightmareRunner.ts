@@ -5,28 +5,45 @@ import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
-import {BrowserRunner, PageDriver, NightmareOpts} from 'matman-core';
+import {BrowserRunner, PageDriver} from 'matman-core';
 import {build} from 'matman-crawler';
 import {getMainUrl, evaluate} from './utils';
+
+/**
+ * 对 nightmare 的接口进行拓展
+ */
+export interface NightmareLaunchOptions extends Nightmare.IConstructorOptions {
+  switches?: {
+    'proxy-server': string;
+    // 必须设置一下这个，否则在某些情况下 https 地址无法使用
+    // https://github.com/matmanjs/matman/issues/159
+    'ignore-certificate-errors': boolean;
+  };
+  webPreferences?: {
+    // 用例过多且频繁启动测试时可能会存在失败的场景 #154
+    partition: string;
+    preload: null | (() => any) | string;
+  };
+}
 
 export class NightmareRunner extends EventEmitter implements BrowserRunner {
   name = 'nightmare';
   pageDriver: PageDriver | null;
   globalInfoRecorderKey: string;
-  nightmareConfig: NightmareOpts;
+  nightmareConfig: NightmareLaunchOptions;
   nightmare: null | Nightmare;
   nightmareRun: null | Nightmare;
   globalInfo: {[key: string]: any};
 
   /**
    * 构造函数
-   *
-   * @param {PageDriver} pageDriver
    */
-  constructor(opts?: NightmareOpts) {
+  constructor(opts: NightmareLaunchOptions = {}) {
     // 基类构造函数
     super();
+
     this.pageDriver = null;
+
     // 初始化配置
     this.nightmareConfig = opts || {};
 
@@ -58,6 +75,8 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
       return typeof useRecorder === 'boolean' ? 'recorder' : useRecorder + '';
     })(this.pageDriver.useRecorder);
+
+    this.globalInfo[this.globalInfoRecorderKey] = [];
   }
 
   /**
@@ -65,7 +84,24 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
    */
   async getConfig(): Promise<void> {
     // 触发开始事件
-    this.emit('beforeGetNightmareConfig');
+    this.emit('beforeGetConfig');
+
+    if (this.pageDriver) {
+      if (this.pageDriver.show) {
+        this.nightmareConfig.show = true;
+      }
+
+      // 如果传入了代理服务，则设置代理服务器
+      if (this.pageDriver.proxyServer) {
+        this.nightmareConfig.switches = {
+          'proxy-server': this.pageDriver.proxyServer,
+
+          // 必须设置一下这个，否则在某些情况下 https 地址无法使用
+          // https://github.com/matmanjs/matman/issues/159
+          'ignore-certificate-errors': true,
+        };
+      }
+    }
 
     // 如果设置了 show ，则同步打开开发者工具面板
     if (this.nightmareConfig.show) {
@@ -75,19 +111,8 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       };
     }
 
-    // 如果传入了代理服务，则设置代理服务器
-    if (this.pageDriver?.proxyServer) {
-      this.nightmareConfig.switches = {
-        'proxy-server': this.pageDriver.proxyServer,
-
-        // 必须设置一下这个，否则在某些情况下 https 地址无法使用
-        // https://github.com/matmanjs/matman/issues/159
-        'ignore-certificate-errors': true,
-      };
-    }
-
     // 触发时间 广播配置
-    this.emit('afterGetNightmareConfig', this.nightmareConfig);
+    this.emit('afterGetConfig', this.nightmareConfig);
   }
 
   /**
@@ -317,7 +342,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     }
 
     // 不关闭界面
-    if (this.nightmareConfig.doNotCloseBrowser) {
+    if (this.pageDriver?.doNotCloseBrowser) {
       await this.nightmareRun;
     } else {
       await this.nightmareRun.end();
@@ -333,7 +358,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
     const result = await this.runActions();
 
-    this.cleanEffect();
+    await this.cleanEffect();
 
     return {
       data: result,

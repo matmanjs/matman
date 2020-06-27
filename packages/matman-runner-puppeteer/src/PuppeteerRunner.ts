@@ -49,7 +49,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     this.globalInfo[this.globalInfoRecorderKey] = [];
   }
 
-  getConfig(): void {
+  async getConfig(): Promise<void> {
     // 触发开始事件
     this.emit('beforeGetConfig');
 
