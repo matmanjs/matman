@@ -157,13 +157,16 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     }
 
     // 设置 cookie
-    if (this.pageDriver?.cookies) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.nightmareRun = this.nightmareRun.exCookies(
-        this.pageDriver.cookies,
-        getMainUrl(this.pageDriver.pageUrl),
-      );
+    if (this.pageDriver?.cookieConfig) {
+      const cookieStr = this.pageDriver.cookieConfig.getCookieStr();
+      if (cookieStr) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        this.nightmareRun = this.nightmareRun.exCookies(
+          cookieStr,
+          getMainUrl(this.pageDriver.pageUrl),
+        );
+      }
     }
 
     // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下

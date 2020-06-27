@@ -34,7 +34,7 @@ export default class CookieConfig {
       Object.keys(cookieConfigOpts).forEach(domainName => {
         this.cookieObjectArr.push({
           name: domainName,
-          value: cookieConfigOpts[domainName] + '',
+          value: encodeURIComponent(cookieConfigOpts[domainName] + ''),
         });
       });
     } else {
@@ -61,6 +61,14 @@ export default class CookieConfig {
 
       return item;
     });
+  }
+
+  getCookieStr() {
+    return this.cookieObjectArr
+      .map(item => {
+        return `${item.name}=${item.value}`;
+      })
+      .join(';');
   }
 }
 

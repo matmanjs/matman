@@ -14,6 +14,9 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setScreenshotConfig(true);
 
+  // 设置 cookie
+  await pageDriver.setCookieConfig('mykey1=myvalue1; mykey2=nightmare_sync');
+
   await pageDriver.setPageUrl('https://www.baidu.com');
 
   // 第一步：开始操作之前

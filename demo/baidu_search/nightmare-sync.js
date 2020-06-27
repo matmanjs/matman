@@ -18,7 +18,7 @@ module.exports = pageDriverOpts => {
       })
 
       // 设置 cookie
-      .setCookies('mykey1=myvalue1; mykey2=myvalue2')
+      .setCookieConfig('mykey1=myvalue1; mykey2=nightmare_async')
 
       // 设置截屏
       .setScreenshotConfig(true)

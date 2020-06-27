@@ -27,8 +27,8 @@ describe('(nightmare-async)百度首页：搜索', function () {
       expect(data.title).to.equal('百度一下，你就知道');
     });
 
-    it('cookie： 应该包含 mykey1=myvalue1; mykey2=myvalue2', function () {
-      expect(data.cookie).to.match(new RegExp('mykey1=myvalue1; mykey2=myvalue2', 'gi'));
+    it('cookie： 应该包含 mykey1=myvalue1; mykey2=nightmare_sync', function () {
+      expect(data.cookie).to.match(new RegExp('mykey1=myvalue1; mykey2=nightmare_sync', 'gi'));
     });
 
     it('searchInputInfo： 搜索框为空', function () {
