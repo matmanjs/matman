@@ -21,28 +21,30 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setPageUrl('https://www.baidu.com/baidu2.html');
 
-  await pageDriver.wait('#say-hello');
+  await pageDriver.wait('#loaded');
 
   return await pageDriver.evaluate(() => {
     return {
       title: document.title,
       sayHello: document.querySelector('#say-hello').innerText,
+      msgText: document.querySelector('#msg').innerText,
+      loadedText: document.querySelector('#loaded').innerText,
     };
   });
 };
 
-module
-  .exports({
-    show: true,
-    doNotCloseBrowser: true,
-    useRecorder: false,
-    queryDataMap: {
-      demo_cgi: 'success_type_2',
-    },
-  })
-  .then(function (result) {
-    console.log(JSON.stringify(result));
-  })
-  .catch(function (error) {
-    console.error('failed:', error);
-  });
+// module
+//   .exports({
+//     show: true,
+//     doNotCloseBrowser: true,
+//     useRecorder: false,
+//     queryDataMap: {
+//       demo_cgi: 'success_type_2',
+//     },
+//   })
+//   .then(function (result) {
+//     console.log(JSON.stringify(result));
+//   })
+//   .catch(function (error) {
+//     console.error('failed:', error);
+//   });

@@ -1,8 +1,0 @@
-{
-    "name": "demo_02",
-    "version": "1.0.0",
-    "scripts": {
-        "build": "node ../../../../../matman-cli/bin/matman build",
-        "build-dev": "node ./../../../..//matman-cli/bin/matman build --dev"
-    }
-}
