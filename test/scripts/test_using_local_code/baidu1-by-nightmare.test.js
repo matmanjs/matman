@@ -8,7 +8,12 @@ describe('(baidu1-by-nightmare)百度首页：使用本地项目测试', functio
   let resultData;
 
   before(function () {
-    return checkPage({show: false, doNotCloseBrowser: false, useRecorder: false}).then(function (
+    // 在某些场景下不再执行该用例，以方便调试
+    if (process.env.NO_TEST_LOCAL === '1') {
+      return this.skip();
+    }
+
+    return checkPage({show: true, doNotCloseBrowser: false, useRecorder: false}).then(function (
       result,
     ) {
       // console.log(JSON.stringify(result));

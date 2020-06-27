@@ -87,45 +87,6 @@ function runTestForEachPackage() {
 }
 
 /**
- * 执行各demo中构建爬虫脚本
- *
- * @return {Promise<>}
- */
-function runBuildForEachDemoProject() {
-  const t = Date.now();
-
-  console.error('开始执行构建爬虫脚本...');
-
-  // 自动获取所有参与测试demo的路径
-  const HI_DEMO_ROOT = path.join(__dirname, '../packages/matman/test/data/hi-demo');
-  const demoArr = fs.readdirSync(HI_DEMO_ROOT);
-  const promiseList = [];
-
-  demoArr.forEach(demoName => {
-    //获取当前文件的绝对路径
-    const fileDir = path.join(HI_DEMO_ROOT, demoName);
-
-    if (!fs.statSync(fileDir).isDirectory()) {
-      return;
-    }
-
-    promiseList.push(runCmd.runByExec('npm run build', {cwd: fileDir}));
-  });
-
-  console.log(`待测试的 demo 总数量为：${promiseList.length} 个！`);
-
-  return Promise.all(promiseList)
-    .then(data => {
-      console.log(`爬虫脚本构建完成，耗时${Date.now() - t}ms`);
-      return data;
-    })
-    .catch(err => {
-      console.error('爬虫脚本构建时失败', err);
-      return Promise.reject(err);
-    });
-}
-
-/**
  * 执行设置 whistle
  *
  * @return {Promise<>}
@@ -212,12 +173,12 @@ function runMockstarForDemo04() {
  *
  * @return {Promise<>}
  */
-function runTestDirect(whistlePort) {
+function runTestE2EDirect(whistlePort) {
   const t = Date.now();
 
   console.error('开始执行端对端测试用例...');
 
-  let cmd = 'npm run test:direct';
+  let cmd = 'npm run test:e2e:direct';
 
   if (whistlePort) {
     cmd = `cross-env PORT=${whistlePort} ${cmd}`;
@@ -234,10 +195,6 @@ function runTestDirect(whistlePort) {
       return Promise.reject(err);
     });
 }
-
-console.log(`============开始执行===========`);
-
-const t = Date.now();
 
 //==================================================================
 // 注意，执行 lerna bootstrap 时会执行 npm install 命令（而不是 tnpm install）
@@ -276,14 +233,25 @@ const t = Date.now();
 //   });
 
 async function startTest() {
-  if (process.env.INIT_BEFORE_TEST === '1') {
+  if (process.env.NO_INIT === '1') {
+    console.log('不需要初始化 init!');
+  } else {
     await runInit();
   }
 
   await runBuildForEachPackage();
   await runTestForEachPackage();
+
+  if (process.env.NO_TEST_LOCAL === '1') {
+    console.log('不需要进行同源测试！');
+    await runTestE2EDirect();
+  } else {
+  }
 }
 
+console.log(`============开始执行===========`);
+
+const t = Date.now();
 startTest()
   .then(data => {
     console.log(`============执行结束，总耗时${Date.now() - t}ms===========`);

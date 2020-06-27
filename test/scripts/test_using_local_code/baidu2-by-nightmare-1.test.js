@@ -8,6 +8,11 @@ describe('(baidu2-by-nightmare)使用本地项目和mockstar: success_type_1', f
   let resultData;
 
   before(function () {
+    // 在某些场景下不再执行该用例，以方便调试
+    if (process.env.NO_TEST_LOCAL === '1') {
+      return this.skip();
+    }
+
     return checkPage({
       show: false,
       doNotCloseBrowser: false,
