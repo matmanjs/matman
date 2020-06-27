@@ -2,12 +2,8 @@ const path = require('path');
 const matman = require('../../packages/matman');
 const {BrowserRunner} = require('../../packages/matman-runner-puppeteer');
 
-module.exports = async () => {
-  const pageDriver = await matman.launch(new BrowserRunner(), {
-    show: true,
-    doNotCloseBrowser: false,
-    useRecorder: false,
-  });
+module.exports = async pageDriverOpts => {
+  const pageDriver = await matman.launch(new BrowserRunner(), pageDriverOpts);
 
   await pageDriver.setDeviceConfig({
     UA:
@@ -45,11 +41,15 @@ module.exports = async () => {
   );
 };
 
-module
-  .exports()
-  .then(function (result) {
-    console.log(JSON.stringify(result));
-  })
-  .catch(function (error) {
-    console.error('failed:', error);
-  });
+// module
+//   .exports({
+//     show: true,
+//     doNotCloseBrowser: true,
+//     useRecorder: false,
+//   })
+//   .then(function (result) {
+//     console.log(JSON.stringify(result));
+//   })
+//   .catch(function (error) {
+//     console.error('failed:', error);
+//   });
