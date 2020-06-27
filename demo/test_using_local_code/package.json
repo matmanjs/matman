@@ -1,0 +1,7 @@
+{
+    "name": "test_using_local_code",
+    "version": "1.0.0",
+    "scripts": {
+        "use-whistle": "w2 add whistle/whistle.dev.js --force"
+    }
+}
