@@ -46,7 +46,9 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       return typeof useRecorder === 'boolean' ? 'recorder' : useRecorder + '';
     })(this.pageDriver.useRecorder);
 
-    this.globalInfo[this.globalInfoRecorderKey] = [];
+    this.globalInfo[this.globalInfoRecorderKey] = {
+      queue: [],
+    };
   }
 
   async getConfig(): Promise<void> {
@@ -108,7 +110,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
           }
         }
 
-        this.globalInfo[this.globalInfoRecorderKey].push({
+        this.addRecordInQueue({
           eventName: 'network',
           url: request.url(),
           method: request.method(),
@@ -130,7 +132,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       });
 
       this.page.on('console', log => {
-        this.globalInfo[this.globalInfoRecorderKey].push({
+        this.addRecordInQueue({
           eventName: 'console',
           type: log.type(),
           // args: log.args(),
@@ -323,5 +325,9 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       _dataIndexMap: this.pageDriver?._dataIndexMap,
       globalInfo: this.globalInfo,
     };
+  }
+
+  addRecordInQueue(queueItem: MatmanResultQueueItem) {
+    this.globalInfo[this.globalInfoRecorderKey]?.queue?.push(queueItem);
   }
 }
