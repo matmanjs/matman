@@ -11,7 +11,7 @@ import {requireAsync, requireSync} from './util/require-file';
 
 import {BrowserRunner} from './typings/browserRunner';
 import {PageDriver} from './typings/pageDriver';
-import {MatmanResult, NetworkType} from './typings/matmanResult';
+import {MatmanResult, MatmanResultQueueItem} from './typings/matmanResult';
 
 import {MatmanConfigOpts} from './types';
 
@@ -36,6 +36,6 @@ export {
   BrowserRunner,
   PageDriver,
   MatmanResult,
-  NetworkType,
+  MatmanResultQueueItem,
   MatmanConfigOpts,
 };

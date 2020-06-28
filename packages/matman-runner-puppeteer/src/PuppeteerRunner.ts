@@ -2,7 +2,7 @@ import path from 'path';
 import {EventEmitter} from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import {BrowserRunner, PageDriver} from 'matman-core';
+import {BrowserRunner, PageDriver, MatmanResultQueueItem} from 'matman-core';
 import {build} from 'matman-crawler';
 import {evaluate} from './utils/master';
 
@@ -109,10 +109,13 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         }
 
         this.globalInfo[this.globalInfoRecorderKey].push({
+          eventName: 'network',
           url: request.url(),
           method: request.method(),
+          // https://github.com/puppeteer/puppeteer/blob/v4.0.0/docs/api.md#httprequestresourcetype
+          resourceType: request.resourceType(),
           request: {
-            headers: request.headers(),
+            headers: request.headers() || {},
             postData: request.postData(),
           },
           response: {
@@ -123,16 +126,17 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
             fromCache: msg.fromCache(),
             body: responseBody,
           },
-        });
+        } as MatmanResultQueueItem);
       });
 
       this.page.on('console', log => {
         this.globalInfo[this.globalInfoRecorderKey].push({
+          eventName: 'console',
           type: log.type(),
           // args: log.args(),
-          location: log.location(),
+          // location: log.location(),
           text: log.text(),
-        });
+        } as MatmanResultQueueItem);
       });
     }
 
