@@ -144,7 +144,6 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     // 设置设备
     if (this.pageDriver?.deviceConfig) {
-      // this.pageDriver?.deviceConfig
       const deviceName = this.pageDriver.deviceConfig.name;
       const deviceeExtend = this.pageDriver.deviceConfig.extend || '';
 

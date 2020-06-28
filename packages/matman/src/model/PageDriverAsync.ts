@@ -168,11 +168,7 @@ export default class PageDriverAsync implements PageDriver {
    *
    * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exDevice.md
    *
-   * @param {String | Object} deviceConfig 设备名或者设备配置，默认值为 mobile
-   * @param {String} [deviceConfig.name] 设备名字
-   * @param {String} [deviceConfig.UA] userAgent
-   * @param {Number} [deviceConfig.width] 视窗宽度
-   * @param {Number} [deviceConfig.height] 视窗高度，注意这里不是指页面的高度，页面高度要小于这个值
+   * {DeviceConfigOpts} deviceConfig 设备名或者设备配置
    * @return {PageDriver}
    * @author helinjiang
    */
@@ -316,7 +312,8 @@ export default class PageDriverAsync implements PageDriver {
     this.evaluateFn = fn;
     this.evaluateFnArgs = args;
 
-    return this.end();
+    // 直接返回结果
+    return this.getResult();
   }
 
   /**
@@ -324,7 +321,7 @@ export default class PageDriverAsync implements PageDriver {
    * @return {Promise<{}>}
    * @author helinjiang
    */
-  async end(): Promise<MatmanResult | PageDriver> {
+  async getResult(): Promise<MatmanResult | PageDriver> {
     // 默认处理 coverage，根据 window.__coverage__
     if (!this.coverageConfig) {
       await this.setCoverageConfig(true);

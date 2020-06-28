@@ -5,7 +5,7 @@ module.exports = async pageDriverOpts => {
   const pageDriver = await matman.launch(new BrowserRunner(), pageDriverOpts);
 
   await pageDriver.setDeviceConfig({
-    name: 'Chrome',
+    name: 'custom',
     userAgent:
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36 matman/custom',
     viewport: {

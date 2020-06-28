@@ -168,16 +168,12 @@ export default class PageDriverSync implements PageDriver {
    *
    * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exDevice.md
    *
-   * @param {String | Object} deviceConfig 设备名或者设备配置，默认值为 mobile
-   * @param {String} [deviceConfig.name] 设备名字
-   * @param {String} [deviceConfig.UA] userAgent
-   * @param {Number} [deviceConfig.width] 视窗宽度
-   * @param {Number} [deviceConfig.height] 视窗高度，注意这里不是指页面的高度，页面高度要小于这个值
+   * @param {DeviceConfigOpts} deviceConfig 设备名或者设备配置
    * @return {PageDriver}
    * @author helinjiang
    */
   setDeviceConfig(deviceConfig: DeviceConfigOpts): PageDriver {
-    this.deviceConfig = new DeviceConfig(deviceConfig || 'mobile');
+    this.deviceConfig = new DeviceConfig(deviceConfig);
     return this;
   }
 
@@ -314,7 +310,7 @@ export default class PageDriverSync implements PageDriver {
     this.evaluateFnArgs = args;
 
     // 直接返回结果
-    return this.end();
+    return this.getResult();
   }
 
   /**
@@ -322,7 +318,7 @@ export default class PageDriverSync implements PageDriver {
    * @return {Promise<{}>}
    * @author helinjiang
    */
-  end(): Promise<MatmanResult | PageDriver> {
+  getResult(): Promise<MatmanResult | PageDriver> {
     // 默认处理 coverage，根据 window.__coverage__
     if (!this.coverageConfig) {
       this.setCoverageConfig(true);
@@ -331,6 +327,11 @@ export default class PageDriverSync implements PageDriver {
     // 默认处理 matmanResult
     if (!this.matmanResultConfig) {
       this.setMatmanResultConfig(true);
+    }
+
+    // 默认处理 deviceConfig
+    if (!this.deviceConfig) {
+      this.setDeviceConfig('mobile');
     }
 
     // 兼容没有定义 run 方法的场景

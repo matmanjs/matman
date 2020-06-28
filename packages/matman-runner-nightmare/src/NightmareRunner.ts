@@ -147,12 +147,32 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
     // 设置设备
     if (this.pageDriver?.deviceConfig) {
+      // 特殊处理，如果 name=mobile，则设置默认值，
+      // 参考 https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts
+      if (this.pageDriver.deviceConfig.extend === 'iPhone 6') {
+        this.pageDriver.deviceConfig.updateExtend({
+          name: 'iPhone 6',
+          userAgent:
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+          viewport: {
+            width: 375,
+            height: 667,
+            deviceScaleFactor: 2,
+            isMobile: true,
+            hasTouch: true,
+            isLandscape: false,
+          },
+        });
+      }
+
+      const deviceConfigResult = this.pageDriver.deviceConfig.getConfig();
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.nightmareRun = this.nightmareRun.exDevice(this.pageDriver.deviceConfig.name, {
-        UA: this.pageDriver.deviceConfig.UA,
-        width: this.pageDriver.deviceConfig.width,
-        height: this.pageDriver.deviceConfig.height,
+      this.nightmareRun = this.nightmareRun.exDevice(deviceConfigResult.name, {
+        UA: deviceConfigResult.userAgent,
+        width: deviceConfigResult.viewport?.width,
+        height: deviceConfigResult.viewport?.height,
       });
     }
 
