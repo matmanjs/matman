@@ -77,7 +77,7 @@ export default class DeviceConfig {
   }
 
   updateExtend(extendDevice: Device) {
-    this.userAgent = this.userAgent || extendDevice.userAgent || DEVICE_CHROME.userAgent;
+    this.userAgent = extendDevice.userAgent || this.userAgent;
     this.viewport = _.merge({}, this.viewport, extendDevice.viewport);
   }
 }
