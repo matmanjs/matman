@@ -14,7 +14,8 @@
     "test": "node ./test/run-test.js",
     "test:noinit": "cross-env NO_INIT=1 npm test",
     "test:noinit:notestlocal": "cross-env NO_INIT=1 NO_TEST_LOCAL=1 npm test",
-    "test:e2e:direct": "mocha"
+    "test:e2e:direct": "mocha",
+    "test:e2e:direct:notestloca": "cross-env NO_TEST_LOCAL=1 npm run test:e2e:direct"
   },
   "repository": {
     "type": "git",

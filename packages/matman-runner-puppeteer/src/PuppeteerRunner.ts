@@ -193,7 +193,8 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     if (!this.pageDriver?.pageUrl) {
       throw new Error('pageUrl must be defined');
     }
-    this.page?.goto(this.pageDriver?.pageUrl);
+
+    await this.page?.goto(this.pageDriver?.pageUrl);
 
     // 兼容性处理
     if (
