@@ -66,8 +66,6 @@ export default class DeviceConfig {
       this.extend = opts.extend;
     } else {
       this.name = opts || 'unknown device';
-      this.userAgent = DEVICE_CHROME.userAgent;
-      this.viewport = DEVICE_CHROME.viewport;
 
       // 特殊处理
       if (this.name === 'mobile') {

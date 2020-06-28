@@ -5,7 +5,7 @@ module.exports = async pageDriverOpts => {
   const pageDriver = await matman.launch(new BrowserRunner(), pageDriverOpts);
 
   // https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts
-  await pageDriver.setDeviceConfig({viewport: {width: 300, height: 600}, extend: 'iPhone XR'});
+  await pageDriver.setDeviceConfig({viewport: {width: 333, height: 666}, extend: 'iPhone XR'});
 
   await pageDriver.setScreenshotConfig(true);
 
