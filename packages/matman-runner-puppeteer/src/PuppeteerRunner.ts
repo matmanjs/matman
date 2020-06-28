@@ -144,11 +144,22 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     // 设置设备
     if (this.pageDriver?.deviceConfig) {
-      await this.page.setViewport({
-        width: this.pageDriver.deviceConfig.width || 1250,
-        height: this.pageDriver.deviceConfig.height || 400,
-      });
-      await this.page.setUserAgent(this.pageDriver.deviceConfig.UA || '');
+      // this.pageDriver?.deviceConfig
+      const deviceName = this.pageDriver.deviceConfig.name;
+      const deviceeExtend = this.pageDriver.deviceConfig.extend || '';
+
+      // https://github.com/puppeteer/puppeteer/blob/v4.0.0/docs/api.md#puppeteerdevices
+      const curDeviceExtend = puppeteer.devices[deviceeExtend];
+      if (curDeviceExtend) {
+        this.pageDriver.deviceConfig.updateExtend(curDeviceExtend);
+      }
+
+      const curDevice = puppeteer.devices[deviceName];
+      if (curDevice) {
+        this.pageDriver.deviceConfig.updateExtend(curDevice);
+      }
+
+      await this.page.emulate(this.pageDriver.deviceConfig);
     }
 
     // 设置 cookie

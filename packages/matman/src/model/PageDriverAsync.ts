@@ -154,7 +154,7 @@ export default class PageDriverAsync implements PageDriver {
    * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md
    * https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
    *
-   * @param {String | Object } cookieConfigOpts 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
+   * @param {CookieConfigOpts } cookieConfigOpts 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
    * @return {PageDriver}
    * @author helinjiang
    */
@@ -177,7 +177,7 @@ export default class PageDriverAsync implements PageDriver {
    * @author helinjiang
    */
   async setDeviceConfig(deviceConfig: DeviceConfigOpts): Promise<void> {
-    this.deviceConfig = new DeviceConfig(deviceConfig || 'mobile');
+    this.deviceConfig = new DeviceConfig(deviceConfig);
     await Promise.resolve();
   }
 
@@ -333,6 +333,11 @@ export default class PageDriverAsync implements PageDriver {
     // 默认处理 matmanResult
     if (!this.matmanResultConfig) {
       await this.setMatmanResultConfig(true);
+    }
+
+    // 默认处理 deviceConfig
+    if (!this.deviceConfig) {
+      await this.setDeviceConfig('Chrome');
     }
 
     // 兼容没有定义 run 方法的场景
