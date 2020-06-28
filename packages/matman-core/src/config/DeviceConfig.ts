@@ -50,8 +50,8 @@ const DEVICE_CHROME = {
 
 export default class DeviceConfig {
   name: string;
-  userAgent: string;
-  viewport: Viewport;
+  userAgent?: string;
+  viewport?: Viewport;
   extend?: string;
 
   /**
@@ -61,8 +61,8 @@ export default class DeviceConfig {
   constructor(opts: DeviceConfigOpts) {
     if (opts && typeof opts === 'object') {
       this.name = opts.name || 'unknown device';
-      this.userAgent = opts.userAgent || DEVICE_CHROME.userAgent;
-      this.viewport = _.merge({}, DEVICE_CHROME.viewport, opts.viewport);
+      this.userAgent = opts.userAgent;
+      this.viewport = opts.viewport;
       this.extend = opts.extend;
     } else {
       this.name = opts || 'unknown device';
@@ -78,6 +78,14 @@ export default class DeviceConfig {
 
   updateExtend(extendDevice: Device) {
     this.userAgent = extendDevice.userAgent || this.userAgent;
-    this.viewport = _.merge({}, this.viewport, extendDevice.viewport);
+    this.viewport = _.merge({}, extendDevice.viewport, this.viewport);
+  }
+
+  getConfig() {
+    return _.merge({}, DEVICE_CHROME, {
+      name: this.name,
+      userAgent: this.userAgent,
+      viewport: this.viewport,
+    });
   }
 }

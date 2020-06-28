@@ -159,7 +159,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         this.pageDriver.deviceConfig.updateExtend(curDevice);
       }
 
-      await this.page.emulate(this.pageDriver.deviceConfig);
+      await this.page.emulate(this.pageDriver.deviceConfig.getConfig());
     }
 
     // 设置 cookie
