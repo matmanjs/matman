@@ -37,7 +37,6 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
   pageDriver: PageDriver | null;
   nightmareConfig: NightmareLaunchOptions;
   nightmare: null | Nightmare;
-  nightmareRun: null | Nightmare;
   globalInfo: {
     recorder?: {
       queue: MatmanResultQueueItem[];
@@ -59,7 +58,6 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
     // nightmare 对象
     this.nightmare = null;
-    this.nightmareRun = null;
 
     // this.mockstarQuery = opts.mockstarQuery || null;
 
@@ -125,7 +123,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     this.emit('afterGetNewNightmare', this);
 
     // 初始化行为
-    this.emit('beforeInitNightmareRun', this.nightmare);
+    this.emit('beforeInitNightmare', this.nightmare);
 
     // 使用记录器，记录网络请求和浏览器事件等
     if (this.pageDriver?.useRecorder) {
@@ -135,10 +133,9 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     if (!this.nightmare) {
       throw new Error('nightmare must be defined');
     }
+
     // 初始化一些行为
-    this.nightmareRun = this.nightmare
-      .header('x-mat-from', 'nightmare')
-      .header('x-mat-timestamp', Date.now() + '');
+    this.nightmare.header('x-mat-from', 'nightmare').header('x-mat-timestamp', Date.now() + '');
 
     // 设置设备
     if (this.pageDriver?.deviceConfig) {
@@ -164,7 +161,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.nightmareRun = this.nightmareRun.exDevice(deviceConfigResult.name, {
+      this.nightmare.exDevice(deviceConfigResult.name, {
         UA: deviceConfigResult.userAgent,
         width: deviceConfigResult.viewport?.width,
         height: deviceConfigResult.viewport?.height,
@@ -177,10 +174,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       if (cookieStr) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        this.nightmareRun = this.nightmareRun.exCookies(
-          cookieStr,
-          getMainUrl(this.pageDriver.pageUrl),
-        );
+        this.nightmare.exCookies(cookieStr, getMainUrl(this.pageDriver.pageUrl));
       }
     }
 
@@ -192,9 +186,8 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
     }
 
-    this.emit('afterInitNightmareRun', {
+    this.emit('afterInitNightmare', {
       nightmare: this.nightmare,
-      nightmareRun: this.nightmareRun,
     });
   }
 
@@ -204,15 +197,16 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
   async gotoPage(): Promise<void> {
     this.emit('beforeGotoPage', this.pageDriver?.pageUrl);
 
-    if (!this.nightmareRun) {
-      throw new Error('nightmareRun must be defined');
+    if (!this.nightmare) {
+      throw new Error('nightmare must be defined');
     }
 
     if (!this.pageDriver?.pageUrl) {
       throw new Error('pageUrl must be defined');
     }
 
-    this.nightmareRun = this.nightmareRun.goto(this.pageDriver?.pageUrl);
+    this.nightmare.goto(this.pageDriver?.pageUrl);
+
     // 新建启动脚本
     // 如果传递给 evaluate 的是一个本地绝对路径文件，则需要设置 preload
     if (typeof this.pageDriver?.evaluateFn === 'string') {
@@ -226,23 +220,10 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
       fs.writeFileSync(`${process.env.HOME}/.matman/temp.js`, res);
 
-      this.nightmareRun.inject('js', `${process.env.HOME}/.matman/temp.js`);
+      this.nightmare.inject('js', `${process.env.HOME}/.matman/temp.js`);
     }
 
-    // 如果指定了 wait，则会传递给 nightmare 处理，具体使用方法可以参考：
-    // https://github.com/segmentio/nightmare#waitms
-    // https://github.com/segmentio/nightmare#waitselector
-    // https://github.com/segmentio/nightmare#waitfn-arg1-arg2
-    if (typeof this.pageDriver.waitFn !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.nightmareRun = this.nightmareRun.wait(
-        this.pageDriver.waitFn,
-        ...this.pageDriver.waitFnArgs,
-      );
-    }
-
-    this.emit('afterGotoPage', {url: this.pageDriver.pageUrl, nightmareRun: this.nightmareRun});
+    this.emit('afterGotoPage', {url: this.pageDriver.pageUrl, nightmare: this.nightmare});
   }
 
   /**
@@ -269,10 +250,10 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       this.emit('beforeRunCase', {index: i, result: result});
 
       // 执行 action
-      if (!this.nightmareRun) {
-        throw new Error('nightmareRun must be defined');
+      if (!this.nightmare) {
+        throw new Error('nightmare must be defined');
       }
-      let curRun = actionList[i](this.nightmareRun);
+      let curRun = actionList[i](this.nightmare);
 
       // 保存屏幕截图
       if (this.pageDriver?.screenshotConfig) {
@@ -334,21 +315,21 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
    * 清理副作用
    */
   async cleanEffect(): Promise<void> {
-    if (!this.nightmareRun) {
-      throw new Error('nightmareRun must be defined');
+    if (!this.nightmare) {
+      throw new Error('nightmare must be defined');
     }
-    // 暴露 electron 关闭时间，注意它在 nightmareRun.end() 之后才会触发
+    // 暴露 electron 关闭时间，注意它在 nightmare.end() 之后才会触发
     if (
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.nightmareRun.proc &&
+      this.nightmare.proc &&
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.nightmareRun.proc.on
+      this.nightmare.proc.on
     ) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.nightmareRun.proc.on('close', (code: number) => {
+      this.nightmare.proc.on('close', (code: number) => {
         // var code = {
         //     127: 'command not found - you may not have electron installed correctly',
         //     126: 'permission problem or command is not an executable - you may not have all the necessary dependencies for electron',
@@ -361,9 +342,9 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
     // 不关闭界面
     if (this.pageDriver?.doNotCloseBrowser) {
-      await this.nightmareRun;
+      await this.nightmare;
     } else {
-      await this.nightmareRun.end();
+      await this.nightmare.end();
     }
   }
 

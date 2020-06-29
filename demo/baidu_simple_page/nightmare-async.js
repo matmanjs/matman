@@ -17,7 +17,9 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setPageUrl('https://www.baidu.com');
 
-  await pageDriver.wait('#su');
+  await pageDriver.addAction('scanPage', nightmare => {
+    return nightmare.wait('#su');
+  });
 
   return await pageDriver.evaluate(() => {
     return {

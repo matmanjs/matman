@@ -194,18 +194,6 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     await this.page?.goto(this.pageDriver?.pageUrl);
 
-    // 兼容性处理
-    if (
-      typeof this.pageDriver?.waitFn === 'number' ||
-      typeof this.pageDriver?.waitFn === 'string'
-    ) {
-      await this.page?.waitFor(this.pageDriver.waitFn as any);
-    }
-    // 函数执行结果给 waitFor
-    if (typeof this.pageDriver?.waitFn === 'function') {
-      await this.page?.waitFor(this.pageDriver.waitFn(...this.pageDriver.waitFnArgs) as any);
-    }
-
     // 注入脚本
     if (typeof this.pageDriver.evaluateFn === 'string') {
       const res = await build(this.pageDriver.evaluateFn, {

@@ -46,8 +46,6 @@ export default class PageDriverAsync implements PageDriver {
 
   // 页面信息
   pageUrl: string;
-  waitFn: number | string | ((...args: any[]) => number | string);
-  waitFnArgs: any[];
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
@@ -101,9 +99,6 @@ export default class PageDriverAsync implements PageDriver {
     this.matmanResultConfig = null;
 
     this.pageUrl = '';
-
-    this.waitFn = 500;
-    this.waitFnArgs = [];
 
     this.evaluateFn = null;
     this.evaluateFnArgs = [];
@@ -271,30 +266,6 @@ export default class PageDriverAsync implements PageDriver {
   }
 
   /**
-   * 需要等待某些条件达成，才开始运行爬虫脚本，与 nightmare 的 wait 含义和用法一致
-   *
-   * https://www.npmjs.com/package/nightmare#waitms
-   * https://www.npmjs.com/package/nightmare#waitselector
-   * https://www.npmjs.com/package/nightmare#waitfn-arg1-arg2
-   *
-   * @param {String | Function} fn
-   * @param [args]
-   * @return {PageDriver}
-   * @author helinjiang
-   */
-  async wait(fn: number | string): Promise<void>;
-  async wait(fn: (...args: any[]) => number | string, ...args: any[]): Promise<void>;
-  async wait(
-    fn: number | string | ((...args: any[]) => number | string),
-    ...args: any[]
-  ): Promise<void> {
-    this.waitFn = fn;
-    this.waitFnArgs = args;
-
-    await Promise.resolve();
-  }
-
-  /**
    * 执行爬虫脚本或者方法
    *
    * https://www.npmjs.com/package/nightmare#evaluatefn-arg1-arg2
@@ -320,6 +291,11 @@ export default class PageDriverAsync implements PageDriver {
    * @author helinjiang
    */
   async getResult(): Promise<MatmanResult | PageDriver> {
+    // 如果没有 actionList 则直接抛出错误
+    if (!this.actionList.length) {
+      throw new Error('No action! Please use addAction(name, callback) to add your actions!');
+    }
+
     // 默认处理 coverage，根据 window.__coverage__
     if (!this.coverageConfig) {
       await this.setCoverageConfig(true);
@@ -333,19 +309,6 @@ export default class PageDriverAsync implements PageDriver {
     // 默认处理 deviceConfig
     if (!this.deviceConfig) {
       await this.setDeviceConfig('Chrome');
-    }
-
-    // 兼容没有定义 run 方法的场景
-    if (!this.actionList.length) {
-      if (this.browserRunner?.name === 'puppeteer') {
-        this.addAction('_scan_page_', async function (n: puppeteer.Page) {
-          await n.waitFor(500);
-        });
-      } else {
-        this.addAction('_scan_page_', function (n: Nightmare) {
-          return n.wait(500);
-        });
-      }
     }
 
     if (this._isInIDE) {

@@ -25,8 +25,6 @@ import MatmanResultConfig, {ResultOpts} from '../config/MatmanResultConfig';
  * @member coverageConfig 覆盖率配置信息
  * @member matmanResultConfig 结果配置信息
  * @member pageUrl 页面 URL
- * @member waitFn 等待元素出现等的函数, 因为加入对 puppeteer 的支持, 所以改名
- * @member waitFnArgs
  * @member evaluateFn 需要执行的爬虫脚本, 可以为函数或者打包好的文件
  * @member evaluateFnArgs
  * @member actionList 存放 action 的数组
@@ -54,8 +52,6 @@ export interface PageDriver {
 
   // page 信息
   pageUrl: string;
-  waitFn: number | string | ((...args: any[]) => number | string);
-  waitFnArgs: any[];
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
@@ -159,21 +155,6 @@ export interface PageDriver {
     actionName: string,
     actionCall: ((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>),
   ): PageDriver | Promise<void>;
-
-  /**
-   * 需要等待某些条件达成，才开始运行爬虫脚本，与 nightmare 的 wait 含义和用法一致
-   *
-   * https://www.npmjs.com/package/nightmare#waitms
-   * https://www.npmjs.com/package/nightmare#waitselector
-   * https://www.npmjs.com/package/nightmare#waitfn-arg1-arg2
-   *
-   * @param {String | Function} fn
-   * @param [args]
-   * @return {PageDriver}
-   * @author helinjiang
-   */
-  wait(fn: number | string): PageDriver | Promise<void>;
-  wait(fn: (...args: any[]) => number | string, ...args: any[]): PageDriver | Promise<void>;
 
   /**
    * 执行爬虫脚本或者方法获得结果
