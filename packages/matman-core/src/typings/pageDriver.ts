@@ -31,7 +31,6 @@ import MatmanResultConfig, {ResultOpts} from '../config/MatmanResultConfig';
  * @member evaluateFnArgs
  * @member actionList 存放 action 的数组
  * @member dataIndexMap 描述与索引的映射, 用户一般不用操作
- * @member _isDefaultScanMode
  * @member _isInIDE 是否在配套的可视化界面中运行
  *
  * @author wangjq4214
@@ -61,7 +60,6 @@ export interface PageDriver {
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
   dataIndexMap: {[key: string]: number};
-  _isDefaultScanMode: boolean;
   _isInIDE: boolean;
 
   /**

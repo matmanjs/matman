@@ -52,7 +52,6 @@ export default class PageDriverSync implements PageDriver {
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
   dataIndexMap: {[key: string]: number};
-  _isDefaultScanMode: boolean;
   _isInIDE: boolean;
 
   // master
@@ -112,7 +111,6 @@ export default class PageDriverSync implements PageDriver {
     this.actionList = [];
 
     this.dataIndexMap = {};
-    this._isDefaultScanMode = false;
     this._isInIDE = !!opts.isInIDE;
   }
 
@@ -336,7 +334,6 @@ export default class PageDriverSync implements PageDriver {
 
     // 兼容没有定义 run 方法的场景
     if (!this.actionList.length) {
-      this._isDefaultScanMode = true;
       if (this.browserRunner?.name === 'puppeteer') {
         this.addAction('_scan_page_', async function (n: puppeteer.Page) {
           await n.waitFor(500);
@@ -356,23 +353,13 @@ export default class PageDriverSync implements PageDriver {
 
     this.browserRunner?.setPageDriver(this);
 
-    return this.browserRunner
-      ?.getResult()
-      .then(matmanResult => {
-        // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回
-        if (this._isDefaultScanMode) {
-          matmanResult.data = matmanResult.get(0) as any;
-        }
+    return this.browserRunner?.getResult().then(matmanResult => {
+      // 保存数据快照
+      if (this.matmanResultConfig) {
+        this.matmanResultConfig.save(matmanResult);
+      }
 
-        return matmanResult;
-      })
-      .then(matmanResult => {
-        // 保存数据快照
-        if (this.matmanResultConfig) {
-          this.matmanResultConfig.save(matmanResult);
-        }
-
-        return matmanResult;
-      });
+      return matmanResult;
+    });
   }
 }

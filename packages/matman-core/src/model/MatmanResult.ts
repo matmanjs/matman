@@ -94,9 +94,9 @@ export default class MatmanResult {
   toString() {
     // 移除 queueHandler ，因为会与 globalInfo 中的数据重复
     return JSON.stringify({
+      runnerName: this.runnerName,
       data: this.data,
       dataIndexMap: this.dataIndexMap,
-      runnerName: this.runnerName,
       globalInfo: this.globalInfo,
     });
   }
