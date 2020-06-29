@@ -15,7 +15,7 @@ module.exports = pageDriverOpts => {
       .setPageUrl('https://www.baidu.com')
 
       // 需要等待某些条件达成，才开始运行爬虫脚本
-      .wait('#su')
+      .wait('#index-bn')
 
       // 爬虫脚本的函数，用于获取页面中的数据
       .evaluate(() => {

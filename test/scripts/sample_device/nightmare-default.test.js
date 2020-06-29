@@ -24,17 +24,17 @@ describe('(nightmare-default)百度首页：常规检查', function () {
     });
 
     it('网站title应该为：百度一下，你就知道', function () {
-      expect(data.title).to.equal('百度一下，你就知道');
+      expect(data.title).to.equal('百度一下');
     });
 
     it('userAgent应该正确', function () {
       expect(data.userAgent).to.equal(
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Electron/2.0.18 Safari/537.36',
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
       );
     });
 
     it('窗体宽度 width=800', function () {
-      expect(data.width).to.equal(800);
+      expect(data.width).to.equal(375);
     });
   });
 });
