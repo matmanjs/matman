@@ -184,9 +184,9 @@ export interface PageDriver {
    *
    * @param {String | Function} fn
    * @param [args]
-   * @return {Promise<MatmanResult>}
+   * @return {Promise<MatmanResult|PageDriver>}
    * @author helinjiang
    */
-  evaluate(fn: string): Promise<MatmanResult>;
-  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult>;
+  evaluate(fn: string): Promise<MatmanResult | PageDriver>;
+  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
 }

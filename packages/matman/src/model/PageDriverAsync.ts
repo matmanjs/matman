@@ -19,9 +19,9 @@ import {
   BrowserRunner,
   CookieConfig,
   CookieConfigOpts,
+  MatmanResult,
 } from 'matman-core';
 
-import MatmanResult from './MatmanResult';
 import {PageDriverOpts} from '../types';
 
 /**
@@ -361,9 +361,6 @@ export default class PageDriverAsync implements PageDriver {
 
     return this.browserRunner
       ?.getResult()
-      .then(resultData => {
-        return new MatmanResult(resultData);
-      })
       .then(matmanResult => {
         // 由于此处返回的是一个元素的数组，不便于后续处理，因此需要转义为对象返回
         if (this._isDefaultScanMode) {
@@ -375,7 +372,7 @@ export default class PageDriverAsync implements PageDriver {
       .then(matmanResult => {
         // 保存数据快照
         if (this.matmanResultConfig) {
-          fs.outputJsonSync(this.matmanResultConfig.path, matmanResult);
+          this.matmanResultConfig.save(matmanResult);
         }
 
         return matmanResult;

@@ -5,7 +5,13 @@ import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
-import {BrowserRunner, PageDriver} from 'matman-core';
+import {
+  BrowserRunner,
+  PageDriver,
+  MatmanResult,
+  MatmanResultQueueItem,
+  RUNNER_NAME,
+} from 'matman-core';
 import {build} from 'matman-crawler';
 import {getMainUrl, evaluate} from './utils';
 
@@ -27,13 +33,17 @@ export interface NightmareLaunchOptions extends Nightmare.IConstructorOptions {
 }
 
 export class NightmareRunner extends EventEmitter implements BrowserRunner {
-  name = 'nightmare';
+  name = RUNNER_NAME.NIGHTMARE;
   pageDriver: PageDriver | null;
-  globalInfoRecorderKey: string;
   nightmareConfig: NightmareLaunchOptions;
   nightmare: null | Nightmare;
   nightmareRun: null | Nightmare;
-  globalInfo: {[key: string]: any};
+  globalInfo: {
+    recorder?: {
+      queue: MatmanResultQueueItem[];
+    };
+    isExistCoverageReport?: boolean;
+  };
 
   /**
    * 构造函数
@@ -46,11 +56,6 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
     // 初始化配置
     this.nightmareConfig = opts || {};
-
-    // 是否使用记录器记录整个请求队列
-    // 如果为 true，则可以从 this.globalInfo.recorder 中获取，
-    // 如果为 字符串，则可以从 this.globalInfo[xxx] 中获取，
-    this.globalInfoRecorderKey = '';
 
     // nightmare 对象
     this.nightmare = null;
@@ -67,16 +72,6 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
   setPageDriver(p: PageDriver): void {
     this.pageDriver = p;
-
-    this.globalInfoRecorderKey = (function (useRecorder) {
-      if (!useRecorder) {
-        return '';
-      }
-
-      return typeof useRecorder === 'boolean' ? 'recorder' : useRecorder + '';
-    })(this.pageDriver.useRecorder);
-
-    this.globalInfo[this.globalInfoRecorderKey] = [];
   }
 
   /**
@@ -133,8 +128,8 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     this.emit('beforeInitNightmareRun', this.nightmare);
 
     // 使用记录器，记录网络请求和浏览器事件等
-    if (this.globalInfoRecorderKey) {
-      this.globalInfo[this.globalInfoRecorderKey] = new WebEventRecorder(this.nightmare);
+    if (this.pageDriver?.useRecorder) {
+      this.globalInfo.recorder = new WebEventRecorder(this.nightmare);
     }
 
     if (!this.nightmare) {
@@ -291,7 +286,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
       // 如果使用了记录器，则每个请求都延迟 50ms，注意是因为 network 是异步的
       // TODO 这里的处理过于粗暴，还可以优化
-      if (this.globalInfoRecorderKey) {
+      if (this.globalInfo.recorder) {
         curRun = curRun.wait(50);
       }
 
@@ -372,7 +367,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     }
   }
 
-  async getResult() {
+  async getResult(): Promise<MatmanResult> {
     await this.getConfig();
 
     await this.getNewInstance();
@@ -383,10 +378,11 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
     await this.cleanEffect();
 
-    return {
+    return new MatmanResult({
+      runnerName: this.name,
       data: result,
-      _dataIndexMap: this.pageDriver?._dataIndexMap,
+      dataIndexMap: this.pageDriver?.dataIndexMap || {},
       globalInfo: this.globalInfo,
-    };
+    });
   }
 }

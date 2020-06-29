@@ -1,5 +1,8 @@
 import path from 'path';
+import fse from 'fs-extra';
+import _ from 'lodash';
 import MatmanConfig from './MatmanConfig';
+import MatmanResult from '../model/MatmanResult';
 import {getAbsolutePath} from '../util/index';
 import {getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath} from '../util/path';
 
@@ -58,6 +61,15 @@ class MatmanResultConfig {
         matmanConfig.matmanResultPath,
       );
     }
+  }
+
+  save(matmanResult: MatmanResult) {
+    const saveData = _.cloneDeep(matmanResult);
+
+    // 移除 queueHandler ，因为会与 globalInfo 中的数据重复
+    delete saveData.queueHandler;
+
+    fse.outputJsonSync(this.path, saveData);
   }
 
   /**
