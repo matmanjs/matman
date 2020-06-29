@@ -8,8 +8,8 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setPageUrl('https://www.baidu.com');
 
-  await pageDriver.addAction('scanPage', async page => {
-    await page.waitFor('#su');
+  await pageDriver.addAction('scanPage', nightmare => {
+    return nightmare.wait('#su');
   });
 
   return await pageDriver.evaluate(() => {
