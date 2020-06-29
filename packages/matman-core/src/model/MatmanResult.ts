@@ -6,8 +6,9 @@ import {
   MatmanResultQueueItemPuppeteerNetwork,
   ResourceType,
   MatmanResultQueueHandler,
-  RUNNER_NAME,
-} from 'matman-core';
+} from '../typings/matmanResult';
+
+import {RUNNER_NAME} from '../config';
 
 import {isURLMatch} from '../util/url';
 

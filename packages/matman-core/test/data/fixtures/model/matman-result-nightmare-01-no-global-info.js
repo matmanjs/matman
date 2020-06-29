@@ -1,4 +1,5 @@
 module.exports = {
+  runnerName: 'nightmare',
   data: [
     {
       searchInputInfo: {keyWorld: '', searchBtnText: '百度一下'},

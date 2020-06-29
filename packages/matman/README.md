@@ -261,7 +261,7 @@ matman
 当 `actionName` 为 `Number` 时，则其相对于数组索引，会从 `matmanResult.data` 这个数组中获取。
 
 
-#### 2.3.3 getQueue(globalInfoRecorderKey = 'recorder')
+#### 2.3.3 getQueue()
 
 获得捕获到的请求队列。返回一个数组，数组元素为网络请求和浏览器事件等信息。
 

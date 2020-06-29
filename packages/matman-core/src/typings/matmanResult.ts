@@ -47,16 +47,17 @@ export type MatmanResultQueueItem =
  * @member globalInfo 请求信息等
  */
 export interface MatmanResult {
+  runnerName: string;
   data: unknown[];
   dataIndexMap: {
     [key: string]: number;
   };
-  runnerName: string;
   globalInfo: {
     recorder?: {
       queue: MatmanResultQueueItem[];
     };
   };
+  isExistCoverageReport?: boolean;
 }
 
 interface QueryOpts {
@@ -74,7 +75,8 @@ type NightmareResourceType =
   | 'image'
   | 'object'
   | 'xhr'
-  | 'other';
+  | 'other'
+  | '';
 
 /**
  * puppeteer 资源类型的枚举
@@ -93,7 +95,8 @@ type PuppeteerResourceType =
   | 'eventsource'
   | 'websocket'
   | 'manifest'
-  | 'other';
+  | 'other'
+  | '';
 
 export type ResourceType = PuppeteerResourceType | NightmareResourceType;
 
