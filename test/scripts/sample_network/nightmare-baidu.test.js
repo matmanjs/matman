@@ -36,5 +36,15 @@ describe('(nightmare-baidu)网络-百度首页：常规检查', function () {
     it('没有请求页面: https://www.qq.com', function () {
       expect(resultData.isExistPage('https://www.qq.com')).to.be.false;
     });
+
+    it('请求了图片: https://www.baidu.com/img/flexible/logo/pc/result.png', function () {
+      expect(resultData.isExistImage('https://www.baidu.com/img/flexible/logo/pc/result.png')).to.be
+        .true;
+    });
+
+    it('请求了js: https://passport.baidu.com/passApi/js/wrapper.js', function () {
+      expect(resultData.isExistScript('https://passport.baidu.com/passApi/js/wrapper.js')).to.be
+        .true;
+    });
   });
 });
