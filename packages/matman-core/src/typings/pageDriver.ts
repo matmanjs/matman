@@ -30,7 +30,7 @@ import MatmanResultConfig, {ResultOpts} from '../config/MatmanResultConfig';
  * @member evaluateFn 需要执行的爬虫脚本, 可以为函数或者打包好的文件
  * @member evaluateFnArgs
  * @member actionList 存放 action 的数组
- * @member _dataIndexMap 描述与索引的映射, 用户一般不用操作
+ * @member dataIndexMap 描述与索引的映射, 用户一般不用操作
  * @member _isDefaultScanMode
  * @member _isInIDE 是否在配套的可视化界面中运行
  *
@@ -60,7 +60,7 @@ export interface PageDriver {
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
-  _dataIndexMap: {[key: string]: number};
+  dataIndexMap: {[key: string]: number};
   _isDefaultScanMode: boolean;
   _isInIDE: boolean;
 

@@ -4,7 +4,7 @@ import DeviceConfig, {DeviceConfigOpts} from './config/DeviceConfig';
 import ScreenshotConfig, {ScreenOpts} from './config/ScreenshotConfig';
 import CoverageConfig, {CoverageOpts} from './config/CoverageConfig';
 import MatmanResultConfig, {ResultOpts} from './config/MatmanResultConfig';
-import {MATMAN_CONFIG_FILE} from './config';
+import {MATMAN_CONFIG_FILE, RUNNER_NAME} from './config';
 
 import {getAbsolutePath, findMatmanConfig, searchFilePath} from './util';
 import {requireAsync, requireSync} from './util/require-file';
@@ -26,6 +26,7 @@ import {MatmanConfigOpts} from './types';
 export {
   MatmanConfig,
   MATMAN_CONFIG_FILE,
+  RUNNER_NAME,
   getAbsolutePath,
   searchFilePath,
   findMatmanConfig,

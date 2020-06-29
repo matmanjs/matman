@@ -1,4 +1,5 @@
 import {EventEmitter} from 'events';
+import {MatmanResult} from './matmanResult';
 import {PageDriver} from './pageDriver';
 
 /**
@@ -16,17 +17,7 @@ export interface BrowserRunner extends EventEmitter {
   name: string;
 
   setPageDriver(p: PageDriver): void;
-  getResult(): Promise<{
-    data: any[];
-    _dataIndexMap:
-      | {
-          [key: string]: number;
-        }
-      | undefined;
-    globalInfo?: {
-      [key: string]: any;
-    };
-  }>;
+  getResult(): Promise<MatmanResult>;
   getConfig(): void;
   getNewInstance(): void;
   gotoPage(): void;
