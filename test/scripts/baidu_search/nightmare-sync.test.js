@@ -5,22 +5,17 @@ const checkPage = require('../../../demo/baidu_search/nightmare-sync');
 describe('(nightmare-sync)百度首页：搜索', function () {
   this.timeout(30000);
 
-  let resultData;
+  let matmanResult;
 
-  before(function () {
-    return checkPage({show: false, doNotCloseBrowser: false, useRecorder: true}).then(function (
-      result,
-    ) {
-      // console.log(JSON.stringify(result));
-      resultData = result;
-    });
+  before(async function () {
+    matmanResult = await checkPage({show: false, doNotCloseBrowser: false, useRecorder: true});
   });
 
   describe('第一步：开始操作之前', function () {
     let data;
 
     before(function () {
-      data = resultData.get('init');
+      data = matmanResult.get('init');
     });
 
     it('title 应该为： 百度一下，你就知道', function () {
@@ -44,7 +39,7 @@ describe('(nightmare-sync)百度首页：搜索', function () {
     let data;
 
     before(function () {
-      data = resultData.get('input_key_word');
+      data = matmanResult.get('input_key_word');
     });
 
     it('title 应该为： 百度一下，你就知道', function () {
@@ -64,7 +59,7 @@ describe('(nightmare-sync)百度首页：搜索', function () {
     let data;
 
     before(function () {
-      data = resultData.get('click_to_search');
+      data = matmanResult.get('click_to_search');
     });
 
     it('title 应该为： matman_百度搜索', function () {

@@ -5,22 +5,17 @@ const checkPage = require('../../../demo/sample_device/puppeteer-custom');
 describe('(puppeteer-custom)百度首页：常规检查', function () {
   this.timeout(30000);
 
-  let resultData;
+  let matmanResult;
 
-  before(function () {
-    return checkPage({show: false, doNotCloseBrowser: false, useRecorder: false}).then(function (
-      result,
-    ) {
-      // console.log(JSON.stringify(result));
-      resultData = result;
-    });
+  before(async function () {
+    matmanResult = await checkPage({show: false, doNotCloseBrowser: false, useRecorder: false});
   });
 
   describe('检查基本信息', function () {
     let data;
 
     before(function () {
-      data = resultData.data;
+      data = matmanResult.get(0);
     });
 
     it('网站title应该为：百度一下，你就知道', function () {

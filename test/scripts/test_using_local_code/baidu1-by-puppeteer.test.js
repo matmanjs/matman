@@ -5,27 +5,22 @@ const checkPage = require('../../../demo/test_using_local_code/case_modules/page
 describe('(baidu1-by-puppeteer)百度首页：使用本地项目测试', function () {
   this.timeout(30000);
 
-  let resultData;
+  let matmanResult;
 
-  before(function () {
+  before(async function () {
     // 在某些场景下不再执行该用例，以方便调试
     if (process.env.NO_TEST_LOCAL === '1') {
       return this.skip();
     }
 
-    return checkPage({show: false, doNotCloseBrowser: false, useRecorder: false}).then(function (
-      result,
-    ) {
-      // console.log(JSON.stringify(result));
-      resultData = result;
-    });
+    matmanResult = await checkPage({show: false, doNotCloseBrowser: false, useRecorder: false});
   });
 
   describe('检查基本信息', function () {
     let data;
 
     before(function () {
-      data = resultData.data;
+      data = matmanResult.get(0);
     });
 
     it('网站title应该为：hi jack', function () {
