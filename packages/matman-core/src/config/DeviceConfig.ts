@@ -58,7 +58,7 @@ export default class DeviceConfig {
    * 构造函数
    * @param opts 设备名或者设备配置对象
    */
-  constructor(opts: DeviceConfigOpts) {
+  constructor(opts?: DeviceConfigOpts) {
     if (opts && typeof opts === 'object') {
       this.name = opts.name || 'unknown device';
       this.userAgent = opts.userAgent;

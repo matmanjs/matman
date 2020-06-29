@@ -1,11 +1,9 @@
 export interface MatmanResultQueueItemNightmare {
-  runnerName: string;
   eventName: string;
   args: any[];
 }
 
 export interface MatmanResultQueueItemPuppeteerNetwork {
-  runnerName: string;
   eventName: string;
   url: string;
   method: string;
@@ -32,7 +30,6 @@ export interface MatmanResultQueueItemPuppeteerNetwork {
 }
 
 export interface MatmanResultQueueItemPuppeteerConsole {
-  runnerName: string;
   eventName: string;
   type: string;
   text: string;
