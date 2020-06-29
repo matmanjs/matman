@@ -10,6 +10,7 @@ describe('./index.ts', () => {
       'CookieConfig',
       'DeviceConfig',
       'MATMAN_CONFIG_FILE',
+      'RUNNER_NAME',
       'MatmanConfig',
       'MatmanResultConfig',
       'ScreenshotConfig',
