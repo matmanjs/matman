@@ -12,7 +12,6 @@ import {requireAsync, requireSync} from './util/require-file';
 import {BrowserRunner} from './typings/browserRunner';
 import {PageDriver} from './typings/pageDriver';
 import {
-  MatmanResult,
   MatmanResultQueueItem,
   MatmanResultQueueItemNightmare,
   MatmanResultQueueItemPuppeteerNetwork,
@@ -20,6 +19,8 @@ import {
   MatmanResultQueueHandler,
   ResourceType,
 } from './typings/matmanResult';
+
+import MatmanResult from './model/MatmanResult';
 
 import {MatmanConfigOpts} from './types';
 

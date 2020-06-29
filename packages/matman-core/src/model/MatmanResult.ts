@@ -1,5 +1,4 @@
 import {
-  MatmanResult as IMatmanResult,
   MatmanResultQueueItem,
   MatmanResultQueueItemNightmare,
   MatmanResultQueueItemPuppeteerConsole,
@@ -25,7 +24,7 @@ interface MatmanResultObj {
   };
 }
 
-export default class MatmanResult implements IMatmanResult {
+export default class MatmanResult {
   runnerName: string;
 
   data: unknown[];
@@ -39,6 +38,8 @@ export default class MatmanResult implements IMatmanResult {
       queue: MatmanResultQueueItem[];
     };
   };
+
+  isExistCoverageReport?: boolean;
 
   queueHandler: null | MatmanResultQueueHandler;
 

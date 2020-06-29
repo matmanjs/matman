@@ -1,5 +1,5 @@
 import {EventEmitter} from 'events';
-import {MatmanResult} from './matmanResult';
+import MatmanResult from '../model/MatmanResult';
 import {PageDriver} from './pageDriver';
 
 /**

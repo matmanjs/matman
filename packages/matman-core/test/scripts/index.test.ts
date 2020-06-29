@@ -11,6 +11,7 @@ describe('./index.ts', () => {
       'DeviceConfig',
       'MATMAN_CONFIG_FILE',
       'RUNNER_NAME',
+      'MatmanResult',
       'MatmanConfig',
       'MatmanResultConfig',
       'ScreenshotConfig',

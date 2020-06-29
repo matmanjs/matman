@@ -40,26 +40,6 @@ export type MatmanResultQueueItem =
   | MatmanResultQueueItemPuppeteerNetwork
   | MatmanResultQueueItemPuppeteerConsole;
 
-/**
- * 数据爬虫执行结果
- * @member data 截获的数据
- * @member dataIndexMap 映射信息
- * @member globalInfo 请求信息等
- */
-export interface MatmanResult {
-  runnerName: string;
-  data: unknown[];
-  dataIndexMap: {
-    [key: string]: number;
-  };
-  globalInfo: {
-    recorder?: {
-      queue: MatmanResultQueueItem[];
-    };
-  };
-  isExistCoverageReport?: boolean;
-}
-
 interface QueryOpts {
   [key: string]: string | number | boolean;
 }

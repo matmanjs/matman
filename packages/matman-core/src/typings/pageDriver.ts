@@ -1,6 +1,6 @@
 import Nightmare from 'nightmare';
 import puppeteer from 'puppeteer';
-import {MatmanResult} from './matmanResult';
+import MatmanResult from '../model/MatmanResult';
 import MatmanConfig from '../config/MatmanConfig';
 import CookieConfig, {CookieConfigOpts} from '../config/CookieConfig';
 import DeviceConfig, {DeviceConfigOpts} from '../config/DeviceConfig';
@@ -184,9 +184,9 @@ export interface PageDriver {
    *
    * @param {String | Function} fn
    * @param [args]
-   * @return {Promise<MatmanResult | PageDriver>}
+   * @return {Promise<MatmanResult>}
    * @author helinjiang
    */
-  evaluate(fn: string): Promise<MatmanResult | PageDriver>;
-  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
+  evaluate(fn: string): Promise<MatmanResult>;
+  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult>;
 }
