@@ -29,19 +29,19 @@ export default class MatmanResult {
 
   data: unknown[];
 
-  dataIndexMap: {
-    [key: string]: number;
-  };
-
   globalInfo: {
     recorder?: {
       queue: MatmanResultQueueItem[];
     };
+
+    isExistCoverageReport?: boolean;
   };
 
-  isExistCoverageReport?: boolean;
+  private readonly dataIndexMap: {
+    [key: string]: number;
+  };
 
-  queueHandler: null | MatmanResultQueueHandler;
+  private readonly queueHandler: null | MatmanResultQueueHandler;
 
   /**
    * matman 框架执行的结果
@@ -50,6 +50,8 @@ export default class MatmanResult {
    * @author helinjiang
    */
   constructor(result: MatmanResultObj) {
+    this.runnerName = result.runnerName || 'unknown';
+
     /**
      * 从页面获得的数据
      * @type {Array}
@@ -57,18 +59,16 @@ export default class MatmanResult {
     this.data = result.data || [];
 
     /**
-     * actionName 和数据映射表
-     * @type {Object}
-     */
-    this.dataIndexMap = result.dataIndexMap || {};
-
-    this.runnerName = result.runnerName || 'unknown';
-
-    /**
      * 网络请求和浏览器事件等信息
      * @type {Object}
      */
     this.globalInfo = result.globalInfo || {};
+
+    /**
+     * actionName 和数据映射表
+     * @type {Object}
+     */
+    this.dataIndexMap = result.dataIndexMap || {};
 
     /**
      * 处理队列中的数据
@@ -89,6 +89,16 @@ export default class MatmanResult {
     } else {
       return null;
     }
+  }
+
+  toString() {
+    // 移除 queueHandler ，因为会与 globalInfo 中的数据重复
+    return JSON.stringify({
+      data: this.data,
+      dataIndexMap: this.dataIndexMap,
+      runnerName: this.runnerName,
+      globalInfo: this.globalInfo,
+    });
   }
 
   /**

@@ -64,12 +64,7 @@ class MatmanResultConfig {
   }
 
   save(matmanResult: MatmanResult) {
-    const saveData = _.cloneDeep(matmanResult);
-
-    // 移除 queueHandler ，因为会与 globalInfo 中的数据重复
-    delete saveData.queueHandler;
-
-    fse.outputJsonSync(this.path, saveData);
+    fse.outputJsonSync(this.path, JSON.parse(matmanResult.toString()));
   }
 
   /**
