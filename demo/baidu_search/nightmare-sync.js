@@ -31,7 +31,7 @@ module.exports = pageDriverOpts => {
       // 第一步：开始操作之前
       .addAction('init', function (nightmare) {
         // nightmare 支持所有的原始 nightmare 语法和对其定制的扩展功能
-        return nightmare.wait(500);
+        return nightmare.wait('#su');
       })
 
       // 第二步：搜索输入框输入: matman
@@ -45,9 +45,6 @@ module.exports = pageDriverOpts => {
         // nightmare 支持所有的原始 nightmare 语法和对其定制的扩展功能
         return nightmare.click('#su').wait('#content_left');
       })
-
-      // 需要等待某些条件达成，才开始运行爬虫脚本
-      .wait('#su')
 
       // 执行爬虫脚本文件或者爬虫脚本函数
       .evaluate(path.resolve(__dirname, './crawlers/get-page-info-for-search.js'))

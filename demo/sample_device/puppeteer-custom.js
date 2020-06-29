@@ -22,7 +22,9 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setPageUrl('https://www.baidu.com');
 
-  await pageDriver.wait('#su');
+  await pageDriver.addAction('scanPage', async page => {
+    await page.waitFor('#su');
+  });
 
   return await pageDriver.evaluate(() => {
     return {

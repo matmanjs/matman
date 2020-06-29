@@ -30,8 +30,9 @@ module.exports = pageDriverOpts => {
       // 加载页面地址
       .setPageUrl('https://www.baidu.com/baidu2.html')
 
-      // 需要等待某些条件达成，才开始运行爬虫脚本
-      .wait('#loaded')
+      .addAction('scanPage', nightmare => {
+        return nightmare.wait('#loaded');
+      })
 
       // 爬虫脚本的函数，用于获取页面中的数据
       .evaluate(() => {

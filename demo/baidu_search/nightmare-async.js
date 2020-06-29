@@ -24,7 +24,7 @@ module.exports = async pageDriverOpts => {
   // 第一步：开始操作之前
   await pageDriver.addAction('init', function (nightmare) {
     // nightmare 支持所有的原始 nightmare 语法和对其定制的扩展功能
-    return nightmare.wait(500);
+    return nightmare.wait('#su');
   });
 
   // 第二步：搜索输入框输入: matman
@@ -38,8 +38,6 @@ module.exports = async pageDriverOpts => {
     // nightmare 支持所有的原始 nightmare 语法和对其定制的扩展功能
     return nightmare.click('#su').wait('#content_left');
   });
-
-  await pageDriver.wait('#su');
 
   return await pageDriver.evaluate(
     path.resolve(__dirname, './crawlers/get-page-info-for-search.js'),

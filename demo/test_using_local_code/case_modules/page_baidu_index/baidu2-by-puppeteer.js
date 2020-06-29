@@ -23,7 +23,9 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setPageUrl('https://www.baidu.com/baidu2.html');
 
-  await pageDriver.wait('#loaded');
+  await pageDriver.addAction('scanPage', async page => {
+    await page.waitFor('#loaded');
+  });
 
   return await pageDriver.evaluate(() => {
     return {

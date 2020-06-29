@@ -10,7 +10,9 @@ module.exports = async pageDriverOpts => {
 
   await pageDriver.setPageUrl('https://www.baidu.com');
 
-  await pageDriver.wait('#index-bn');
+  await pageDriver.addAction('scanPage', async page => {
+    await page.waitFor('#index-bn');
+  });
 
   return await pageDriver.evaluate(() => {
     return {

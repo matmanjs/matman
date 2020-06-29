@@ -27,8 +27,9 @@ module.exports = pageDriverOpts => {
       // 加载页面地址
       .setPageUrl('https://www.baidu.com/baidu1.html')
 
-      // 需要等待某些条件达成，才开始运行爬虫脚本
-      .wait('#say-hello')
+      .addAction('scanPage', nightmare => {
+        return nightmare.wait('#say-hello');
+      })
 
       // 爬虫脚本的函数，用于获取页面中的数据
       .evaluate(() => {
