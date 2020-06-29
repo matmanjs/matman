@@ -11,7 +11,15 @@ import {requireAsync, requireSync} from './util/require-file';
 
 import {BrowserRunner} from './typings/browserRunner';
 import {PageDriver} from './typings/pageDriver';
-import {MatmanResult, MatmanResultQueueItem} from './typings/matmanResult';
+import {
+  MatmanResult,
+  MatmanResultQueueItem,
+  MatmanResultQueueItemNightmare,
+  MatmanResultQueueItemPuppeteerNetwork,
+  MatmanResultQueueItemPuppeteerConsole,
+  MatmanResultQueueHandler,
+  ResourceType,
+} from './typings/matmanResult';
 
 import {MatmanConfigOpts} from './types';
 
@@ -37,5 +45,10 @@ export {
   PageDriver,
   MatmanResult,
   MatmanResultQueueItem,
+  MatmanResultQueueItemNightmare,
+  MatmanResultQueueItemPuppeteerNetwork,
+  MatmanResultQueueItemPuppeteerConsole,
+  MatmanResultQueueHandler,
+  ResourceType,
   MatmanConfigOpts,
 };

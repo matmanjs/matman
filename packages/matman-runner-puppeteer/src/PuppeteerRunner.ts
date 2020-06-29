@@ -47,6 +47,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     })(this.pageDriver.useRecorder);
 
     this.globalInfo[this.globalInfoRecorderKey] = {
+      runnerName: 'puppeteer',
       queue: [],
     };
   }
