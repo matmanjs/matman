@@ -1,0 +1,6 @@
+node_modules/
+demo/
+test/
+coverage
+*.map
+*.log

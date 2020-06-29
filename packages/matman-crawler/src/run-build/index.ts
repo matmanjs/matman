@@ -1,73 +1,54 @@
 import fs from 'fs';
 import path from 'path';
-import fse from 'fs-extra';
-import glob from 'glob';
 import {MatmanConfig} from 'matman-core';
+import rollupBuild from './build';
 
-import {getWebpackConfig, runBuild} from './builder-webpack4';
+interface BuildOpts {
+  isIPC?: boolean;
+  matmanConfig: MatmanConfig;
+}
 
 /**
  * 构建
  *
- * @param {MatmanConfig} matmanConfig
+ * @param {String} entryPath
+ * @param {BuildOpts} opts
  * @return {Promise}
+ *
+ * @author wangjq4214
  */
-export default function build(matmanConfig: MatmanConfig): Promise<never> {
+export default function build(entryPath: string, opts: BuildOpts): Promise<string> {
   return new Promise((resolve, reject) => {
-    // 获得 webpack 构建选项
-    getWebpackConfig(matmanConfig)
-      .then(webpackConfig => {
-        if (matmanConfig.isDevBuild) {
-          // 获取到 webpack 配置项结果
-          console.log('webpackConfig: \n', webpackConfig);
-        }
+    const prependCodePromiseList = [];
+    const evalList: string[] = [];
 
-        // 执行构建
-        runBuild(webpackConfig, () => {
-          // 构建完成之后保存一份配置到构建目录中
-          saveWebpackConfig(matmanConfig.crawlerBuildPath, webpackConfig);
+    if (opts.matmanConfig.isDevBuild || false) {
+      // 如果是开发模式下
+      // 追加开发模式下需要的代码，例如 jQuery
+      prependCodePromiseList.push(getDevPrependCode(opts.matmanConfig.crawlerInjectJQuery));
+    } else {
+      // 如果是非开发模式下
+      // 为打包之后的文件手动增加 nightmare client script，以便能与 nightmare 通信
+      if (opts.isIPC) {
+        prependCodePromiseList.push(getNightmareClientCode());
+      }
 
-          const prependCodePromiseList = [];
-          const evalList: string[] = [];
+      // 插入 jQuery
+      if (opts.matmanConfig.crawlerInjectJQuery) {
+        prependCodePromiseList.push(getJqueryCode('jQueryCode'));
+        evalList.push('jQueryCode');
+      }
+    }
 
-          if (!matmanConfig.isDevBuild) {
-            // 如果是非开发模式下
-            // 为打包之后的文件手动增加 nightmare client script，以便能与 nightmare 通信
-            prependCodePromiseList.push(getNightmareClientCode());
+    // 放到最后加入
+    prependCodePromiseList.push(rollupBuild(entryPath));
 
-            // 插入 jQuery
-            if (matmanConfig.crawlerInjectJQuery) {
-              prependCodePromiseList.push(getJqueryCode('jQueryCode'));
-              evalList.push('jQueryCode');
-            }
-          } else {
-            // 如果是开发模式下
-            // 追加开发模式下需要的代码，例如 jQuery
-            prependCodePromiseList.push(getDevPrependCode(matmanConfig.crawlerInjectJQuery));
-          }
-
-          // 获得所有的代码之后，追加在头部
-          if (prependCodePromiseList.length) {
-            Promise.all(prependCodePromiseList)
-              .then(result => {
-                result.push(`window.evalList=[${evalList.map(item => `"${item}"`).join(',')}]`);
-
-                // 每段插入的代码之后，注意要加一个换行符号，否则在支持 source map 之后，可能会被其"注释"掉
-                prependCodeToDistFile(matmanConfig.crawlerBuildPath, result.join(';\n'))
-                  .then(() => {
-                    resolve();
-                  })
-                  .catch(err => {
-                    reject(err);
-                  });
-              })
-              .catch(err => {
-                reject(err);
-              });
-          } else {
-            resolve();
-          }
-        });
+    Promise.all(prependCodePromiseList)
+      .then(result => {
+        const temp = evalList.map(item => `"${item}"`).join(',');
+        result.push(`window.evalList=[${temp}]`);
+        // 每段插入的代码之后，注意要加一个换行符号，否则在支持 source map 之后，可能会被其"注释"掉
+        resolve(result.join(';\n'));
       })
       .catch(err => {
         reject(err);
@@ -75,7 +56,7 @@ export default function build(matmanConfig: MatmanConfig): Promise<never> {
   });
 }
 
-function getNightmareClientCode() {
+function getNightmareClientCode(): Promise<string> {
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(__dirname, '../../assets/nightmare-preload.js'), 'utf8', (err, data) => {
       if (err) {
@@ -87,7 +68,7 @@ function getNightmareClientCode() {
   });
 }
 
-function getDevPrependCode(crawlerInjectJQuery: boolean) {
+function getDevPrependCode(crawlerInjectJQuery: boolean): Promise<string> {
   return new Promise((resolve, reject) => {
     const injectFile = crawlerInjectJQuery ? 'dev-prepend-with-jquery.js' : 'dev-prepend.js';
 
@@ -101,7 +82,7 @@ function getDevPrependCode(crawlerInjectJQuery: boolean) {
   });
 }
 
-function getJqueryCode(key: string) {
+function getJqueryCode(key: string): Promise<string> {
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(__dirname, '../../assets/jquery.slim.min.js'), 'utf8', (err, data) => {
       if (err) {
@@ -114,50 +95,10 @@ function getJqueryCode(key: string) {
   });
 }
 
-function prependCodeToDistFile(crawlerScriptBuildPath: string, code: string | number) {
-  const globResult = glob.sync(path.resolve(crawlerScriptBuildPath, './**/**.js'));
-
-  const promiseList: Promise<unknown>[] = [];
-
-  globResult.forEach(item => {
-    // console.log(item);
-    promiseList.push(_prependCodeToOneFile(item, code));
-  });
-
-  return Promise.all(promiseList);
-}
-
 function getRawCodeToPrepend(key: string, source: string) {
   const rawCode = JSON.stringify(source)
     .replace(/\u2028/g, '\\u2028')
     .replace(/\u2029/g, '\\u2029');
 
   return `window.${key}=${rawCode};`;
-}
-
-function saveWebpackConfig(basePath: string, data: unknown) {
-  // 必须要保证这个目录存在，否则构建时可能报错
-  fse.ensureDirSync(basePath);
-
-  fse.writeJsonSync(path.join(basePath, './webpack-config.json'), data);
-}
-
-function _prependCodeToOneFile(filePath: string, code: string | number) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filePath, 'utf8', (err, fileContent) => {
-      if (err) {
-        console.error('read file err!', filePath, err);
-        return reject('read file err! filePath=' + filePath);
-      }
-
-      fse.outputFile(filePath, code + '\n;' + fileContent, err => {
-        if (err) {
-          console.error('prepend fail!', filePath, err);
-          reject('prepend err! filePath=' + filePath);
-        } else {
-          resolve();
-        }
-      });
-    });
-  });
 }

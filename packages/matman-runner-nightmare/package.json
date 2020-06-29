@@ -1,0 +1,46 @@
+{
+  "name": "matman-runner-nightmare",
+  "version": "6.0.0",
+  "description": "matman测试框架nightmare底层驱动",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsc -d",
+    "test": "echo \"no test\"",
+    "lint": "npx eslint src test --ext .ts"
+  },
+  "keywords": [
+    "matman",
+    "e2e",
+    "test"
+  ],
+  "author": "derekjqwang <derekjqwang@tencent.com>",
+  "homepage": "https://github.com/matmanjs/matman#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matmanjs/matman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matmanjs/matman/issues"
+  },
+  "dependencies": {
+    "fs-extra": "^9.0.1",
+    "matman-core": "^6.0.0",
+    "matman-crawler": "^6.0.0",
+    "nightmare-handler": "^1.0.10"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.1",
+    "@types/nightmare": "^2.10.4",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  }
+}

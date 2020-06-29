@@ -1,8 +1,0 @@
-{
-    "name": "demo_01",
-    "version": "1.0.0",
-    "scripts": {
-        "build": "echo \"No need to build\"",
-        "build-dev": "echo \"No need to build\""
-    }
-}

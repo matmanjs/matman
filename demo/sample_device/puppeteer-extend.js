@@ -1,0 +1,39 @@
+const matman = require('../../packages/matman');
+const {BrowserRunner} = require('../../packages/matman-runner-puppeteer');
+
+module.exports = async pageDriverOpts => {
+  const pageDriver = await matman.launch(new BrowserRunner(), pageDriverOpts);
+
+  // https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts
+  await pageDriver.setDeviceConfig({viewport: {width: 333, height: 666}, extend: 'iPhone XR'});
+
+  await pageDriver.setScreenshotConfig(true);
+
+  await pageDriver.setPageUrl('https://www.baidu.com');
+
+  await pageDriver.addAction('scanPage', async page => {
+    await page.waitFor('#index-bn');
+  });
+
+  return await pageDriver.evaluate(() => {
+    return {
+      title: document.title,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      userAgent: navigator.userAgent,
+    };
+  });
+};
+
+// module
+//   .exports({
+//     show: true,
+//     doNotCloseBrowser: true,
+//     useRecorder: false,
+//   })
+//   .then(function (result) {
+//     console.log(JSON.stringify(result));
+//   })
+//   .catch(function (error) {
+//     console.error('failed:', error);
+//   });

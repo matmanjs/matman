@@ -6,8 +6,15 @@ import * as matmanCore from '../../src/index';
 describe('./index.ts', () => {
   it('export should be correct', () => {
     expect(matmanCore).to.have.all.keys(
+      'CoverageConfig',
+      'CookieConfig',
+      'DeviceConfig',
       'MATMAN_CONFIG_FILE',
+      'RUNNER_NAME',
+      'MatmanResult',
       'MatmanConfig',
+      'MatmanResultConfig',
+      'ScreenshotConfig',
       'findMatmanConfig',
       'getAbsolutePath',
       'requireAsync',
