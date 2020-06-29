@@ -15,6 +15,7 @@ module.exports = async pageDriverOpts => {
       title: document.title,
       width: window.innerWidth,
       height: window.innerHeight,
+      searchBtnTxt: document.querySelector('#su').value,
     };
   });
 };

@@ -15,7 +15,6 @@ module.exports = async pageDriverOpts => {
       title: document.title,
       width: window.innerWidth,
       height: window.innerHeight,
-      userAgent: navigator.userAgent,
     };
   });
 };
