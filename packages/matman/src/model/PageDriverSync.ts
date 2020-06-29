@@ -51,7 +51,7 @@ export default class PageDriverSync implements PageDriver {
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
-  _dataIndexMap: {[key: string]: number};
+  dataIndexMap: {[key: string]: number};
   _isDefaultScanMode: boolean;
   _isInIDE: boolean;
 
@@ -111,7 +111,7 @@ export default class PageDriverSync implements PageDriver {
 
     this.actionList = [];
 
-    this._dataIndexMap = {};
+    this.dataIndexMap = {};
     this._isDefaultScanMode = false;
     this._isInIDE = !!opts.isInIDE;
   }
@@ -262,7 +262,7 @@ export default class PageDriverSync implements PageDriver {
   ): PageDriver {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
-      this._dataIndexMap[actionName + ''] = this.actionList.length - 1;
+      this.dataIndexMap[actionName + ''] = this.actionList.length - 1;
     } else if (typeof actionName === 'function') {
       this.actionList.push(actionName);
     } else {

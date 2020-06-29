@@ -5,26 +5,20 @@ import MatmanResult from '../../../src/model/MatmanResult';
 
 describe('check model/MatmanResult.js', () => {
   describe('check constructor(result)', () => {
-    it('if result is undefined', () => {
-      expect(new MatmanResult()).to.eql({
-        data: [],
-        _dataIndexMap: {},
-        globalInfo: {},
-      });
-    });
-
     it('if result has data', () => {
       expect(new MatmanResult({data: [{a: 1, b: '2'}]})).to.eql({
         data: [{a: 1, b: '2'}],
-        _dataIndexMap: {},
+        dataIndexMap: {},
         globalInfo: {},
+        queueHandler: null,
+        runnerName: 'unknown',
       });
     });
   });
 
   describe('check get(key)', () => {
     const matmanResult = new MatmanResult(
-      require('../../data/fixtures/model/matman-result-01-no-global-info'),
+      require('../../data/fixtures/model/matman-result-nightmare-01-no-global-info.js'),
     );
 
     it('get(1) should ok', () => {
@@ -52,90 +46,90 @@ describe('check model/MatmanResult.js', () => {
     });
   });
 
-  describe('check getQueue(globalInfoRecorderKey)', () => {
-    it('matman-result-01-no-global-info getQueue() should return empty', () => {
+  describe('check getQueue()', () => {
+    it('matman-result-nightmare-01-no-global-info.js getQueue() should return empty', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-no-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-no-global-info.js'),
       );
       expect(matmanResult.getQueue()).to.be.empty;
     });
 
-    it('matman-result-01-with-global-info getQueue() should return 78', () => {
+    it('matman-result-nightmare-01-with-global-info.js getQueue() should return 78', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getQueue()).to.have.lengthOf(78);
     });
   });
 
   describe('check getNetwork(resourceType)', () => {
-    it('matman-result-01-no-global-info getNetwork() should return 0', () => {
+    it('matman-result-nightmare-01-no-global-info.js getNetwork() should return 0', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-no-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-no-global-info.js'),
       );
 
       expect(matmanResult.getNetwork()).to.have.lengthOf(0);
     });
 
-    it('matman-result-01-with-global-info getNetwork() should return 67', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork() should return 67', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork()).to.have.lengthOf(67);
     });
 
-    it('matman-result-01-with-global-info getNetwork(mainFrame) should return 1', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork(mainFrame) should return 1', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork('mainFrame')).to.have.lengthOf(1);
     });
 
-    it('matman-result-01-with-global-info getNetwork(subFrame) should return 0', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork(subFrame) should return 0', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork('subFrame')).to.have.lengthOf(0);
     });
 
-    it('matman-result-01-with-global-info getNetwork(stylesheet) should return 4', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork(stylesheet) should return 4', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork('stylesheet')).to.have.lengthOf(4);
     });
 
-    it('matman-result-01-with-global-info getNetwork(script) should return 14', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork(script) should return 14', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork('script')).to.have.lengthOf(14);
     });
 
-    it('matman-result-01-with-global-info getNetwork(image) should return 33', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork(image) should return 33', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork('image')).to.have.lengthOf(33);
     });
 
-    it('matman-result-01-with-global-info getNetwork(object) should return 0', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork(object) should return 0', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork('object')).to.have.lengthOf(0);
     });
 
-    it('matman-result-01-with-global-info getNetwork(xhr) should return 14', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork(xhr) should return 14', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork('xhr')).to.have.lengthOf(14);
     });
 
-    it('matman-result-01-with-global-info getNetwork(other) should return 1', () => {
+    it('matman-result-nightmare-01-with-global-info.js getNetwork(other) should return 1', () => {
       const matmanResult = new MatmanResult(
-        require('../../data/fixtures/model/matman-result-01-with-global-info'),
+        require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
       );
       expect(matmanResult.getNetwork('other')).to.have.lengthOf(1);
     });
@@ -143,7 +137,7 @@ describe('check model/MatmanResult.js', () => {
 
   describe('check isExistInNetwork(partialURL, query = {}, resourceType)', () => {
     const matmanResult = new MatmanResult(
-      require('../../data/fixtures/model/matman-result-01-with-global-info'),
+      require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
     );
 
     it('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif should return true', () => {
@@ -174,7 +168,7 @@ describe('check model/MatmanResult.js', () => {
 
   describe('check isExistPage(partialURL, query = {})', () => {
     const matmanResult = new MatmanResult(
-      require('../../data/fixtures/model/matman-result-01-with-global-info'),
+      require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
     );
 
     it('https://www.baidu.com should return true', () => {
@@ -196,7 +190,7 @@ describe('check model/MatmanResult.js', () => {
 
   describe('check isExistXHR(partialURL, query = {})', () => {
     const matmanResult = new MatmanResult(
-      require('../../data/fixtures/model/matman-result-01-with-global-info'),
+      require('../../data/fixtures/model/matman-result-nightmare-01-with-global-info.js'),
     );
 
     it('img/dong_f6764cd1911fae7d460b25e31c7e342c.gif should return false', () => {
