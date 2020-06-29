@@ -15,19 +15,20 @@ module.exports = async pageDriverOpts => {
       title: document.title,
       width: window.innerWidth,
       height: window.innerHeight,
+      searchBtnTxt: document.querySelector('#su').value,
     };
   });
 };
 
-module
-  .exports({
-    show: true,
-    doNotCloseBrowser: true,
-    useRecorder: true,
-  })
-  .then(function (result) {
-    console.log(JSON.stringify(result));
-  })
-  .catch(function (error) {
-    console.error('failed:', error);
-  });
+// module
+//   .exports({
+//     show: true,
+//     doNotCloseBrowser: true,
+//     useRecorder: true,
+//   })
+//   .then(function (result) {
+//     console.log(JSON.stringify(result));
+//   })
+//   .catch(function (error) {
+//     console.error('failed:', error);
+//   });

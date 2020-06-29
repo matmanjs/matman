@@ -2,18 +2,22 @@ import path from 'path';
 import {EventEmitter} from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import {BrowserRunner, PageDriver, MatmanResultQueueItem} from 'matman-core';
+import {BrowserRunner, PageDriver, MatmanResult, MatmanResultQueueItem} from 'matman-core';
 import {build} from 'matman-crawler';
 import {evaluate} from './utils/master';
 
 export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   name = 'puppeteer';
   pageDriver: PageDriver | null;
-  globalInfoRecorderKey: string;
   puppeteerConfig: puppeteer.LaunchOptions;
   browser: null | puppeteer.Browser;
   page: null | puppeteer.Page;
-  globalInfo: {[key: string]: any};
+  globalInfo: {
+    recorder?: {
+      queue: MatmanResultQueueItem[];
+    };
+    isExistCoverageReport?: boolean;
+  };
 
   constructor(opts: puppeteer.LaunchOptions = {}) {
     super();
@@ -22,11 +26,6 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     // 初始化配置
     this.puppeteerConfig = opts;
-
-    // 是否使用记录器记录整个请求队列
-    // 如果为 true，则可以从 this.globalInfo.recorder 中获取，
-    // 如果为 字符串，则可以从 this.globalInfo[xxx] 中获取，
-    this.globalInfoRecorderKey = '';
 
     // puppeteer 对象
     this.browser = null;
@@ -38,18 +37,11 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   setPageDriver(n: PageDriver): void {
     this.pageDriver = n;
 
-    this.globalInfoRecorderKey = (function (useRecorder) {
-      if (!useRecorder) {
-        return '';
-      }
-
-      return typeof useRecorder === 'boolean' ? 'recorder' : useRecorder + '';
-    })(this.pageDriver.useRecorder);
-
-    this.globalInfo[this.globalInfoRecorderKey] = {
-      runnerName: 'puppeteer',
-      queue: [],
-    };
+    if (this.pageDriver.useRecorder) {
+      this.globalInfo.recorder = {
+        queue: [],
+      };
+    }
   }
 
   async getConfig(): Promise<void> {
@@ -97,7 +89,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     this.emit('beforeInitNightmareRun', this.page);
 
     // 使用记录器，记录网络请求和浏览器事件等 暂时不使用
-    if (this.globalInfoRecorderKey) {
+    if (this.globalInfo.recorder) {
       this.page.on('response', async msg => {
         const request = msg.request();
 
@@ -274,21 +266,21 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       }
 
       // 覆盖率数据
-      // if (t.__coverage__ && this.pageDriver.coverageConfig) {
-      //   const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
+      if (t.__coverage__ && this.pageDriver?.coverageConfig) {
+        const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
 
-      //   try {
-      //     await fs.outputJson(coverageFilePath, t.__coverage__);
+        try {
+          await fs.outputJson(coverageFilePath, t.__coverage__);
 
-      //     // 设置存在的标志
-      //     this.globalInfo.isExistCoverageReport = true;
+          // 设置存在的标志
+          this.globalInfo.isExistCoverageReport = true;
 
-      //     // 记录之后就删除之，否则返回的数据太大了
-      //     delete t.__coverage__;
-      //   } catch (e) {
-      //     console.log('save coverage file fail', coverageFilePath, e);
-      //   }
-      // }
+          // 记录之后就删除之，否则返回的数据太大了
+          delete t.__coverage__;
+        } catch (e) {
+          console.log('save coverage file fail', coverageFilePath, e);
+        }
+      }
 
       result.push(t);
 
@@ -310,7 +302,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     }
   }
 
-  async getResult() {
+  async getResult(): Promise<MatmanResult> {
     await this.getConfig();
 
     await this.getNewInstance();
@@ -321,14 +313,15 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     await this.cleanEffect();
 
-    return {
+    return new MatmanResult({
+      runnerName: this.name,
       data: result,
-      _dataIndexMap: this.pageDriver?._dataIndexMap,
+      dataIndexMap: this.pageDriver?.dataIndexMap || {},
       globalInfo: this.globalInfo,
-    };
+    });
   }
 
   addRecordInQueue(queueItem: MatmanResultQueueItem) {
-    this.globalInfo[this.globalInfoRecorderKey]?.queue?.push(queueItem);
+    this.globalInfo.recorder?.queue?.push(queueItem);
   }
 }
