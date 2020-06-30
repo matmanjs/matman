@@ -56,7 +56,6 @@ export interface PageDriver {
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
   dataIndexMap: {[key: string]: number};
-  _isInIDE: boolean;
 
   /**
    * 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的

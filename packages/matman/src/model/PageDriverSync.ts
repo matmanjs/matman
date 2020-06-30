@@ -50,7 +50,6 @@ export default class PageDriverSync implements PageDriver {
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
   dataIndexMap: {[key: string]: number};
-  _isInIDE: boolean;
 
   // master
   private browserRunner: BrowserRunner;
@@ -106,7 +105,6 @@ export default class PageDriverSync implements PageDriver {
     this.actionList = [];
 
     this.dataIndexMap = {};
-    this._isInIDE = !!opts.isInIDE;
   }
 
   /**
@@ -311,7 +309,7 @@ export default class PageDriverSync implements PageDriver {
       this.setDeviceConfig('mobile');
     }
 
-    if (this._isInIDE) {
+    if (process.env.IS_IN_IDE) {
       return new Promise(resolve => {
         resolve(this);
       });
