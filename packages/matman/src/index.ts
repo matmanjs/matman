@@ -5,6 +5,7 @@ import PageDriverSync from './model/PageDriverSync';
 import PageDriverAsync from './model/PageDriverAsync';
 import {MatmanConfigOpts, PageDriverOpts} from './types';
 import {getCallerPath} from './util/caller';
+import {checkIfWhistleStarted} from './util/whistle';
 
 /**
  * 获取新的 PageDriverOpts
@@ -104,4 +105,37 @@ export function launchSync(
   return new PageDriverSync(browserRunner, matmanConfig, newPageDriverOpts);
 }
 
-// export {launchSync};
+/**
+ * 获得本地 whistle 地址
+ *
+ * @param {Number} port 指定端口
+ * @param {Boolean} doNotAutoCheckStartedPort 不需要自动获得已经启动的端口
+ */
+export async function getLocalWhistleServer(
+  port: number,
+  doNotAutoCheckStartedPort?: boolean,
+): Promise<string> {
+  // process.env.WHISTLE_PORT 该值拥有最高优先级，主要用于自动化测试场景
+  if (process.env.WHISTLE_PORT) {
+    return `127.0.0.1:${process.env.WHISTLE_PORT}`;
+  }
+
+  let whisltePort;
+
+  if (!doNotAutoCheckStartedPort) {
+    try {
+      whisltePort = await checkIfWhistleStarted();
+    } catch (e) {
+      if (process.env.IS_DEV === '1') {
+        console.log('checkIfWhistleStarted() catch', e);
+      }
+    }
+  }
+
+  if (!whisltePort) {
+    // whistle 默认的端口号为 8899
+    whisltePort = port || 8899;
+  }
+
+  return `127.0.0.1:${whisltePort}`;
+}
