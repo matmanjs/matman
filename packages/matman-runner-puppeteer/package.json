@@ -1,6 +1,6 @@
 {
   "name": "matman-runner-puppeteer",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "matman的puppeteer底层驱动",
   "scripts": {
     "prepublishOnly": "npm run build",
@@ -34,7 +34,7 @@
   "dependencies": {
     "fs-extra": "^9.0.1",
     "matman-core": "^6.0.1",
-    "matman-crawler": "^6.0.2",
+    "matman-crawler": "^6.0.3",
     "puppeteer": "^4.0.1"
   },
   "devDependencies": {
