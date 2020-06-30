@@ -48,6 +48,8 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     // 触发开始事件
     this.emit('beforeGetConfig');
 
+    this.puppeteerConfig.args = this.puppeteerConfig.args || [];
+
     if (this.pageDriver) {
       if (this.pageDriver.show) {
         this.puppeteerConfig.headless = false;
@@ -55,20 +57,27 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
       // 如果传入了代理服务，则设置代理服务器
       if (this.pageDriver.proxyServer) {
-        if (this.puppeteerConfig.args) {
-          this.puppeteerConfig.args = [
-            ...this.puppeteerConfig.args,
-            `--proxy-server=${this.pageDriver.proxyServer}`,
-          ];
-        } else {
-          this.puppeteerConfig.args = [`--proxy-server=${this.pageDriver.proxyServer}`];
-        }
+        this.puppeteerConfig.args.push(`--proxy-server=${this.pageDriver.proxyServer}`);
       }
     }
 
     if (process.env.IS_IN_IDE) {
       this.puppeteerConfig.headless = false;
     }
+
+    // 取消安全限制
+    // Don't enforce the same-origin policy. (Used by people testing their sites.)
+    // https://stackoverflow.com/questions/52129649/puppeteer-cors-mistake/52131823
+    // https://peter.sh/experiments/chromium-command-line-switches/#disable-web-security
+    this.puppeteerConfig.args.push('--disable-web-security');
+
+    // Disables the sandbox for all process types that are normally sandboxed.
+    // https://peter.sh/experiments/chromium-command-line-switches/#no-sandbox
+    this.puppeteerConfig.args.push('--no-sandbox');
+
+    // Disable the setuid sandbox (Linux only).
+    // https://peter.sh/experiments/chromium-command-line-switches/#disable-setuid-sandbox
+    this.puppeteerConfig.args.push('--disable-setuid-sandbox');
 
     // 如果设置了 show ，则同步打开开发者工具面板
     // puppeteer 场景下不需要这么做，可以人工打开，因此不再有必要这么处理了
