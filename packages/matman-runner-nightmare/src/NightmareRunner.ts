@@ -221,6 +221,21 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       fs.writeFileSync(`${process.env.HOME}/.matman/temp.js`, res);
 
       this.nightmare.inject('js', `${process.env.HOME}/.matman/temp.js`);
+    } else {
+      fs.ensureDirSync(`${process.env.HOME}/.matman`);
+
+      fs.writeFileSync(
+        `${process.env.HOME}/.matman/temp.js`,
+        `module.exports=${this.pageDriver.evaluateFn?.toString()}`,
+      );
+      let res = await build(`${process.env.HOME}/.matman/temp.js`, {
+        matmanConfig: this.pageDriver.matmanConfig,
+      });
+      res = res.replace(/var\sgetPageInfo/, 'window.getPageInfo');
+
+      fs.writeFileSync(`${process.env.HOME}/.matman/temp.js`, res);
+
+      this.nightmare.inject('js', `${process.env.HOME}/.matman/temp.js`);
     }
 
     this.emit('afterGotoPage', {url: this.pageDriver.pageUrl, nightmare: this.nightmare});
@@ -271,17 +286,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
         curRun = curRun.wait(50);
       }
 
-      let t: any;
-      if (typeof this.pageDriver?.evaluateFn === 'function') {
-        t = await curRun.evaluate(
-          this.pageDriver.evaluateFn,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          ...this.pageDriver.evaluateFnArgs,
-        );
-      } else {
-        t = await curRun.evaluate(evaluate);
-      }
+      const t: any = await curRun.evaluate(evaluate);
 
       // 覆盖率数据
       if (t.__coverage__ && this.pageDriver?.coverageConfig) {

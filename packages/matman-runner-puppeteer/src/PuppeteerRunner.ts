@@ -195,8 +195,20 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     await this.page?.goto(this.pageDriver?.pageUrl);
 
     // 注入脚本
+    // 因为有时需要注入脚本 所以必须进行文件的保存与注入
     if (typeof this.pageDriver.evaluateFn === 'string') {
       const res = await build(this.pageDriver.evaluateFn, {
+        matmanConfig: this.pageDriver.matmanConfig,
+      });
+      this.page?.evaluate(res);
+    } else {
+      fs.ensureDirSync(`${process.env.HOME}/.matman`);
+
+      fs.writeFileSync(
+        `${process.env.HOME}/.matman/temp.js`,
+        `module.exports=${this.pageDriver.evaluateFn?.toString()}`,
+      );
+      const res = await build(`${process.env.HOME}/.matman/temp.js`, {
         matmanConfig: this.pageDriver.matmanConfig,
       });
       this.page?.evaluate(res);
@@ -246,12 +258,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       //   curRun = curRun.wait(50);
       // }
 
-      let t: any;
-      if (typeof this.pageDriver?.evaluateFn === 'function') {
-        t = await this.page.evaluate(this.pageDriver.evaluateFn, ...this.pageDriver.evaluateFnArgs);
-      } else {
-        t = await this.page.evaluate(evaluate);
-      }
+      const t = await this.page.evaluate(evaluate);
 
       // 覆盖率数据
       if (t.__coverage__ && this.pageDriver?.coverageConfig) {
@@ -309,7 +316,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     });
   }
 
-  addRecordInQueue(queueItem: MatmanResultQueueItem) {
+  addRecordInQueue(queueItem: MatmanResultQueueItem): void {
     this.globalInfo.recorder?.queue?.push(queueItem);
   }
 }
