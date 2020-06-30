@@ -4,6 +4,7 @@ import DeviceConfig, {DeviceConfigOpts} from './config/DeviceConfig';
 import ScreenshotConfig, {ScreenOpts} from './config/ScreenshotConfig';
 import CoverageConfig, {CoverageOpts} from './config/CoverageConfig';
 import MatmanResultConfig, {ResultOpts} from './config/MatmanResultConfig';
+import MockstarConfig, {MockstarConfigOpts, MockstarQueryDataMap} from './config/MockstarConfig';
 import {MATMAN_CONFIG_FILE, RUNNER_NAME} from './config';
 
 import {getAbsolutePath, findMatmanConfig, searchFilePath} from './util';
@@ -41,6 +42,9 @@ export {
   ScreenOpts,
   CoverageConfig,
   CoverageOpts,
+  MockstarConfig,
+  MockstarConfigOpts,
+  MockstarQueryDataMap,
   MatmanResultConfig,
   ResultOpts,
   BrowserRunner,

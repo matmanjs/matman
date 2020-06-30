@@ -4,6 +4,9 @@ import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 import {BrowserRunner, PageDriver, MatmanResult, MatmanResultQueueItem} from 'matman-core';
 import {build} from 'matman-crawler';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {createMockStarQuery} from 'mockstar';
 import {evaluate} from './utils/master';
 
 export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
@@ -37,7 +40,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   setPageDriver(n: PageDriver): void {
     this.pageDriver = n;
 
-    if (this.pageDriver.useRecorder) {
+    if (this.pageDriver?.useRecorder) {
       this.globalInfo.recorder = {
         queue: [],
       };
@@ -101,6 +104,29 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     // 初始化行为
     this.emit('beforeInitNewInstance', this.page);
 
+    // 使用 mockstar 作为 mock server
+    if (this.pageDriver?.mockstarConfig) {
+      this.page.on('request', request => {
+        if (request.resourceType() === 'xhr') {
+          // console.log('追加参数', this.pageDriver?.mockstarQuery);
+          // console.log('pageUrl', this.pageDriver?.pageUrl);
+
+          // 必须放在这里，每次都实时获取，后续在更换 mockstar 桩数据时才会生效
+          const mockstarQuery = createMockStarQuery(this.pageDriver?.mockstarConfig?.queryDataMap);
+          const mockstarQueryString = mockstarQuery.getString();
+
+          // Override headers
+          const headers = Object.assign({}, request.headers(), {
+            'x-mockstar-query': encodeURIComponent(mockstarQueryString),
+          });
+
+          request.continue({headers});
+        } else {
+          request.continue();
+        }
+      });
+    }
+
     // 使用记录器，记录网络请求和浏览器事件等 暂时不使用
     if (this.globalInfo.recorder) {
       this.page.on('response', async msg => {
@@ -148,6 +174,11 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       });
     }
 
+    // 使用 mockstar 作为 mock server
+    if (this.pageDriver?.mockstarConfig) {
+      await this.page.setRequestInterception(true);
+    }
+
     // 设置额外请求头
     await this.page.setExtraHTTPHeaders({
       'x-mat-from': 'puppeteer',
@@ -183,14 +214,6 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       });
 
       await this.page.setCookie(...temp);
-    }
-
-    // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下
-    if (
-      this.pageDriver?.mockstarQuery &&
-      typeof this.pageDriver.mockstarQuery.appendToUrl === 'function'
-    ) {
-      this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
     }
 
     this.emit('afterInitNewInstance', {
