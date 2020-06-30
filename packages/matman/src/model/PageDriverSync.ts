@@ -107,6 +107,10 @@ export default class PageDriverSync implements PageDriver {
     this.dataIndexMap = {};
   }
 
+  getRunner(): BrowserRunner {
+    return this.browserRunner;
+  }
+
   /**
    * 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
    * 若不配置，则之前请求现网，亦可直接测试现网的服务
@@ -309,13 +313,13 @@ export default class PageDriverSync implements PageDriver {
       this.setDeviceConfig('mobile');
     }
 
+    this.browserRunner?.setPageDriver(this);
+
     if (process.env.IS_IN_IDE) {
       return new Promise(resolve => {
         resolve(this);
       });
     }
-
-    this.browserRunner?.setPageDriver(this);
 
     return this.browserRunner?.getResult().then(matmanResult => {
       // 保存数据快照

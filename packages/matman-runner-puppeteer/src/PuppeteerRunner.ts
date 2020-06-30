@@ -66,6 +66,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       }
     }
 
+    if (process.env.IS_IN_IDE) {
+      this.puppeteerConfig.headless = false;
+    }
+
     // 如果设置了 show ，则同步打开开发者工具面板
     // puppeteer 场景下不需要这么做，可以人工打开，因此不再有必要这么处理了
     // if (this.puppeteerConfig.headless === false) {
@@ -290,7 +294,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
   async cleanEffect(): Promise<void> {
     // 如果配置了不关闭界面，且当前是展示浏览器界面的场景，则不再自动关闭浏览器界面，以方便调试
-    if (this.pageDriver?.doNotCloseBrowser && this.puppeteerConfig.headless === false) {
+    if (
+      (process.env.IS_IN_IDE || this.pageDriver?.doNotCloseBrowser) &&
+      this.puppeteerConfig.headless === false
+    ) {
       console.log('do not close browser');
     } else {
       await this.browser?.close();

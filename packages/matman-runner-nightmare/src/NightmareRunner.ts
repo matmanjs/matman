@@ -96,6 +96,10 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       }
     }
 
+    if (process.env.IS_IN_IDE) {
+      this.nightmareConfig.show = true;
+    }
+
     // 如果设置了 show ，则同步打开开发者工具面板
     if (this.nightmareConfig.show) {
       // https://www.npmjs.com/package/nightmare#opendevtools
@@ -346,7 +350,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     }
 
     // 不关闭界面
-    if (this.pageDriver?.doNotCloseBrowser) {
+    if (this.pageDriver?.doNotCloseBrowser || process.env.IS_IN_IDE) {
       await this.nightmare;
     } else {
       await this.nightmare.end();
