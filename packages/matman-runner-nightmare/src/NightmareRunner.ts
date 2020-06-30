@@ -113,17 +113,17 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
    * 并初始化一些行为
    */
   async getNewInstance(): Promise<void> {
-    this.emit('beforeGetNewNightmare');
+    this.emit('beforeGetNewInstance');
 
     // 创建 nightmare 对象，注意使用扩展的 NightmarePlus ，而不是原生的 Nightmare
     const NightmarePlus = getNightmarePlus();
     this.nightmare = NightmarePlus(this.nightmareConfig);
 
     // 钩子事件：创建完成之后，可能会有一些自己的处理
-    this.emit('afterGetNewNightmare', this);
+    this.emit('afterGetNewInstance', this);
 
     // 初始化行为
-    this.emit('beforeInitNightmare', this.nightmare);
+    this.emit('beforeInitNewInstance', this.nightmare);
 
     // 使用记录器，记录网络请求和浏览器事件等
     if (this.pageDriver?.useRecorder) {
@@ -186,7 +186,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
     }
 
-    this.emit('afterInitNightmare', {
+    this.emit('afterInitNewInstance', {
       nightmare: this.nightmare,
     });
   }

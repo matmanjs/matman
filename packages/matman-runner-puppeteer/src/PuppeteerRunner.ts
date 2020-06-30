@@ -77,16 +77,16 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   }
 
   async getNewInstance(): Promise<void> {
-    this.emit('beforeGetNewNightmare');
+    this.emit('beforeGetNewInstance');
     // 创建 puppeteer 对象, 需要创建到 page
     this.browser = await puppeteer.launch(this.puppeteerConfig);
     this.page = (await this.browser.pages())[0];
 
     // 钩子事件：创建完成之后，可能会有一些自己的处理
-    this.emit('afterGetNewNightmare', this);
+    this.emit('afterGetNewInstance', this);
 
     // 初始化行为
-    this.emit('beforeInitNightmareRun', this.page);
+    this.emit('beforeInitNewInstance', this.page);
 
     // 使用记录器，记录网络请求和浏览器事件等 暂时不使用
     if (this.globalInfo.recorder) {
@@ -180,7 +180,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
     }
 
-    this.emit('afterInitNightmareRun', {
+    this.emit('afterInitNewInstance', {
       nightmare: this.page,
     });
   }
