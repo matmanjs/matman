@@ -1,10 +1,10 @@
 import {
+  MatmanResultQueueHandler,
   MatmanResultQueueItem,
   MatmanResultQueueItemNightmare,
   MatmanResultQueueItemPuppeteerConsole,
   MatmanResultQueueItemPuppeteerNetwork,
   ResourceType,
-  MatmanResultQueueHandler,
 } from '../typings/matmanResult';
 
 import {RUNNER_NAME} from '../config';
@@ -20,6 +20,7 @@ interface MatmanResultObj {
   globalInfo?: {
     recorder?: {
       queue: MatmanResultQueueItem[];
+      allRequestUrl: string[];
     };
   };
 }
@@ -32,6 +33,7 @@ export default class MatmanResult {
   globalInfo: {
     recorder?: {
       queue: MatmanResultQueueItem[];
+      allRequestUrl: string[];
     };
 
     isExistCoverageReport?: boolean;
@@ -85,7 +87,7 @@ export default class MatmanResult {
     if (this.runnerName === RUNNER_NAME.NIGHTMARE) {
       return new NightmareQueueHandler(this.getQueue());
     } else if (this.runnerName === RUNNER_NAME.PUPPETEER) {
-      return new PuppeteerQueueHandler(this.getQueue());
+      return new PuppeteerQueueHandler(this.getQueue(), this.globalInfo.recorder.allRequestUrl);
     } else {
       return null;
     }
@@ -241,8 +243,9 @@ export default class MatmanResult {
 
 class PuppeteerQueueHandler implements MatmanResultQueueHandler {
   queue: MatmanResultQueueItemPuppeteerNetwork[] | MatmanResultQueueItemPuppeteerConsole[];
+  allRequestUrl: string[];
 
-  constructor(queue: MatmanResultQueueItem[]) {
+  constructor(queue: MatmanResultQueueItem[], allRequestUrl?: string[]) {
     /**
      * 从页面获得的数据
      * @type {Array}
@@ -250,6 +253,8 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
     this.queue = queue as
       | MatmanResultQueueItemPuppeteerNetwork[]
       | MatmanResultQueueItemPuppeteerConsole[];
+
+    this.allRequestUrl = allRequestUrl || [];
   }
 
   /**
@@ -385,7 +390,24 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @author helinjiang
    */
   isExistJSBridge(partialURL: string, query = {}): boolean {
-    return false;
+    const queue = this.allRequestUrl || [];
+
+    let result = false;
+
+    // 只要找到其中一个匹配即可返回
+    for (let i = 0; i < queue.length; i++) {
+      const queueItem = queue[i];
+
+      // 如果没有匹配到链接则执行下一个
+      if (!isURLMatch(queueItem, partialURL, query)) {
+        continue;
+      }
+
+      result = true;
+      break;
+    }
+
+    return result;
   }
 }
 
