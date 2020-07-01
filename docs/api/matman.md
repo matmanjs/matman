@@ -1,3 +1,7 @@
+---
+sidebarDepth: 2
+---
+
 # matman 包 API
 
 ## 1. launch

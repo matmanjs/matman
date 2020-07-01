@@ -73,7 +73,7 @@ module.exports = {
               path: '/api/matman',
             },
             {
-              title: 'pageDriver 对象',
+              title: 'PageDriver 对象',
               path: '/api/pageDriver',
             },
             {
