@@ -48,7 +48,7 @@ export default class PageDriverAsync implements PageDriver {
   pageUrl: string;
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
-  actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
+  actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
   dataIndexMap: {[key: string]: number};
 
   // master
@@ -253,7 +253,7 @@ export default class PageDriverAsync implements PageDriver {
    */
   async addAction(
     actionName: string,
-    actionCall: ((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>),
+    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
   ): Promise<void> {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
