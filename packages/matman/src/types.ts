@@ -29,7 +29,6 @@ export interface PageDriverOpts {
   doNotCloseBrowser?: boolean;
   useRecorder?: boolean;
   delayBeforeRun?: number;
-  isInIDE?: boolean;
 }
 
 // export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;

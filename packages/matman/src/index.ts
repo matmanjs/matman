@@ -48,7 +48,7 @@ function getPageDriverOpts(opts?: PageDriverOpts): PageDriverOpts {
 }
 
 /**
- * 获得同步的 PageDriver
+ * 获得异步的 PageDriver
  *
  * @param {BrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
  * @param {PageDriverOpts} pageDriverOpts
