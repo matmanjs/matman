@@ -2,9 +2,6 @@ import path from 'path';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 import Nightmare from 'nightmare';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import {createMockStarQuery} from 'mockstar';
 import {
   MatmanConfig,
   PageDriver,
@@ -20,6 +17,8 @@ import {
   CookieConfig,
   CookieConfigOpts,
   MatmanResult,
+  MockstarConfig,
+  MockstarQueryDataMap,
 } from 'matman-core';
 
 import {PageDriverOpts} from '../types';
@@ -37,7 +36,7 @@ export default class PageDriverAsync implements PageDriver {
   tag: string | undefined;
   delayBeforeRun: number;
   proxyServer: string;
-  mockstarQuery: null | {appendToUrl: (s: string) => string};
+  mockstarConfig: null | MockstarConfig;
   cookieConfig: null | CookieConfig;
   deviceConfig: null | DeviceConfig;
   screenshotConfig: null | ScreenshotConfig;
@@ -89,8 +88,8 @@ export default class PageDriverAsync implements PageDriver {
     this.delayBeforeRun = typeof opts.delayBeforeRun === 'number' ? opts.delayBeforeRun : 0;
 
     this.proxyServer = '';
-    this.mockstarQuery = null;
 
+    this.mockstarConfig = null;
     this.cookieConfig = null;
     this.deviceConfig = null;
     this.screenshotConfig = null;
@@ -135,10 +134,8 @@ export default class PageDriverAsync implements PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  async useMockstar(queryMap: {[key: string]: string}): Promise<void> {
-    if (queryMap && typeof queryMap === 'object') {
-      this.mockstarQuery = createMockStarQuery(queryMap);
-    }
+  async useMockstar(queryDataMap: MockstarQueryDataMap): Promise<void> {
+    this.mockstarConfig = new MockstarConfig({queryDataMap});
 
     await Promise.resolve();
   }
