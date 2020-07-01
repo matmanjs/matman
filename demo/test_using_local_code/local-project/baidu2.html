@@ -9,6 +9,7 @@
 <p id="msg">我是原始信息</p>
 
 <script>
+    // TODO 应该要设计一个跨域的cgi，且有点击行为
     fetch('https://www.baidu.com/cgi-bin/a/b/demo_cgi')
         .then((result) => {
             return result.json();

@@ -5,6 +5,9 @@ import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {createMockStarQuery} from 'mockstar';
 import {
   BrowserRunner,
   PageDriver,
@@ -59,11 +62,6 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     // nightmare 对象
     this.nightmare = null;
 
-    // this.mockstarQuery = opts.mockstarQuery || null;
-
-    // 测试覆盖率
-    // this.coverageConfig = opts.coverageConfig;
-
     // 存储网络请求和浏览器事件等信息
     this.globalInfo = {};
   }
@@ -96,6 +94,10 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       }
     }
 
+    if (process.env.IS_IN_IDE) {
+      this.nightmareConfig.show = true;
+    }
+
     // 如果设置了 show ，则同步打开开发者工具面板
     if (this.nightmareConfig.show) {
       // https://www.npmjs.com/package/nightmare#opendevtools
@@ -113,17 +115,17 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
    * 并初始化一些行为
    */
   async getNewInstance(): Promise<void> {
-    this.emit('beforeGetNewNightmare');
+    this.emit('beforeGetNewInstance');
 
     // 创建 nightmare 对象，注意使用扩展的 NightmarePlus ，而不是原生的 Nightmare
     const NightmarePlus = getNightmarePlus();
     this.nightmare = NightmarePlus(this.nightmareConfig);
 
     // 钩子事件：创建完成之后，可能会有一些自己的处理
-    this.emit('afterGetNewNightmare', this);
+    this.emit('afterGetNewInstance', this);
 
     // 初始化行为
-    this.emit('beforeInitNightmare', this.nightmare);
+    this.emit('beforeInitNewInstance', this.nightmare);
 
     // 使用记录器，记录网络请求和浏览器事件等
     if (this.pageDriver?.useRecorder) {
@@ -179,14 +181,14 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     }
 
     // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下
-    if (
-      this.pageDriver?.mockstarQuery &&
-      typeof this.pageDriver.mockstarQuery.appendToUrl === 'function'
-    ) {
-      this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
+    if (this.pageDriver?.mockstarConfig?.queryDataMap) {
+      // 必须放在这里，每次都实时获取，后续在更换 mockstar 桩数据时才会生效
+      const mockstarQuery = createMockStarQuery(this.pageDriver?.mockstarConfig?.queryDataMap);
+
+      this.pageDriver.pageUrl = mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
     }
 
-    this.emit('afterInitNightmare', {
+    this.emit('afterInitNewInstance', {
       nightmare: this.nightmare,
     });
   }
@@ -217,6 +219,21 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       res = res.replace(/^var\s/, 'window.');
 
       fs.ensureDirSync(`${process.env.HOME}/.matman`);
+
+      fs.writeFileSync(`${process.env.HOME}/.matman/temp.js`, res);
+
+      this.nightmare.inject('js', `${process.env.HOME}/.matman/temp.js`);
+    } else {
+      fs.ensureDirSync(`${process.env.HOME}/.matman`);
+
+      fs.writeFileSync(
+        `${process.env.HOME}/.matman/temp.js`,
+        `module.exports=${this.pageDriver.evaluateFn?.toString()}`,
+      );
+      let res = await build(`${process.env.HOME}/.matman/temp.js`, {
+        matmanConfig: this.pageDriver.matmanConfig,
+      });
+      res = res.replace(/var\sgetPageInfo/, 'window.getPageInfo');
 
       fs.writeFileSync(`${process.env.HOME}/.matman/temp.js`, res);
 
@@ -271,17 +288,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
         curRun = curRun.wait(50);
       }
 
-      let t: any;
-      if (typeof this.pageDriver?.evaluateFn === 'function') {
-        t = await curRun.evaluate(
-          this.pageDriver.evaluateFn,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          ...this.pageDriver.evaluateFnArgs,
-        );
-      } else {
-        t = await curRun.evaluate(evaluate);
-      }
+      const t: any = await curRun.evaluate(evaluate);
 
       // 覆盖率数据
       if (t.__coverage__ && this.pageDriver?.coverageConfig) {
@@ -341,7 +348,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     }
 
     // 不关闭界面
-    if (this.pageDriver?.doNotCloseBrowser) {
+    if (this.pageDriver?.doNotCloseBrowser || process.env.IS_IN_IDE) {
       await this.nightmare;
     } else {
       await this.nightmare.end();

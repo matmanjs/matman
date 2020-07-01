@@ -3,8 +3,8 @@
  */
 function getSearchInputInfo() {
   return {
-    keyWorld: jQuery("#kw").val(),
-    searchBtnText: jQuery("#su").val(),
+    keyWorld: jQuery('#kw').val(),
+    searchBtnText: jQuery('#su').val(),
   };
 }
 
@@ -12,7 +12,7 @@ function getSearchInputInfo() {
  * 获取搜索结果相关的信息
  */
 function getSearchResultInfo() {
-  const jqContainer = jQuery("#content_left");
+  const jqContainer = jQuery('#content_left');
   const result = {
     isExist: !!jqContainer.length,
     list: [],
@@ -20,13 +20,13 @@ function getSearchResultInfo() {
 
   function getItemData(jqItem) {
     return {
-      title: jQuery(".t", jqItem).text().trim(),
-      describe: jQuery(".c-abstract", jqItem).text().trim(),
-      tpl: jqItem.attr("tpl"),
+      title: jQuery('.t', jqItem).text().trim(),
+      describe: jQuery('.c-abstract', jqItem).text().trim(),
+      tpl: jqItem.attr('tpl'),
     };
   }
 
-  jQuery(".c-container", jqContainer).each(function () {
+  jQuery('.c-container', jqContainer).each(function () {
     result.list.push(getItemData(jQuery(this)));
   });
 

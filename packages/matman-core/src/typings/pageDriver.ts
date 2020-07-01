@@ -1,5 +1,6 @@
 import Nightmare from 'nightmare';
 import puppeteer from 'puppeteer';
+import {BrowserRunner} from './browserRunner';
 import MatmanResult from '../model/MatmanResult';
 import MatmanConfig from '../config/MatmanConfig';
 import CookieConfig, {CookieConfigOpts} from '../config/CookieConfig';
@@ -7,6 +8,7 @@ import DeviceConfig, {DeviceConfigOpts} from '../config/DeviceConfig';
 import ScreenshotConfig, {ScreenOpts} from '../config/ScreenshotConfig';
 import CoverageConfig, {CoverageOpts} from '../config/CoverageConfig';
 import MatmanResultConfig, {ResultOpts} from '../config/MatmanResultConfig';
+import MockstarConfig, {MockstarQueryDataMap} from '../config/MockstarConfig';
 
 /**
  * PageDriver 需要实现的接口
@@ -29,7 +31,6 @@ import MatmanResultConfig, {ResultOpts} from '../config/MatmanResultConfig';
  * @member evaluateFnArgs
  * @member actionList 存放 action 的数组
  * @member dataIndexMap 描述与索引的映射, 用户一般不用操作
- * @member _isInIDE 是否在配套的可视化界面中运行
  *
  * @author wangjq4214
  */
@@ -43,7 +44,8 @@ export interface PageDriver {
   tag: string | undefined;
   delayBeforeRun: number;
   proxyServer: string;
-  mockstarQuery: null | {appendToUrl: (s: string) => string};
+
+  mockstarConfig: null | MockstarConfig;
   cookieConfig: null | CookieConfig;
   deviceConfig: null | DeviceConfig;
   screenshotConfig: null | ScreenshotConfig;
@@ -56,7 +58,8 @@ export interface PageDriver {
   evaluateFnArgs: any[];
   actionList: (((n: Nightmare) => Nightmare) | ((p: puppeteer.Page) => Promise<void>))[];
   dataIndexMap: {[key: string]: number};
-  _isInIDE: boolean;
+
+  getRunner(): BrowserRunner;
 
   /**
    * 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
@@ -78,7 +81,7 @@ export interface PageDriver {
    * @return {PageDriver}
    * @author helinjiang
    */
-  useMockstar(queryMap: {[key: string]: string}): PageDriver | Promise<void>;
+  useMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
 
   /**
    * 注入 cookie

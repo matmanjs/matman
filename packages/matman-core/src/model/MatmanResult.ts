@@ -331,7 +331,10 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @author helinjiang
    */
   isExistXHR(partialURL: string, query = {}, status?: number): boolean {
-    return this.isExistInNetwork(partialURL, query, 'xhr', status);
+    return (
+      this.isExistInNetwork(partialURL, query, 'xhr', status) ||
+      this.isExistInNetwork(partialURL, query, 'fetch', status)
+    );
   }
 
   /**

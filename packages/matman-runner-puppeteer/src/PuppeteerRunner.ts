@@ -4,6 +4,9 @@ import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 import {BrowserRunner, PageDriver, MatmanResult, MatmanResultQueueItem} from 'matman-core';
 import {build} from 'matman-crawler';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {createMockStarQuery} from 'mockstar';
 import {evaluate} from './utils/master';
 
 export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
@@ -37,7 +40,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   setPageDriver(n: PageDriver): void {
     this.pageDriver = n;
 
-    if (this.pageDriver.useRecorder) {
+    if (this.pageDriver?.useRecorder) {
       this.globalInfo.recorder = {
         queue: [],
       };
@@ -48,6 +51,8 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     // 触发开始事件
     this.emit('beforeGetConfig');
 
+    this.puppeteerConfig.args = this.puppeteerConfig.args || [];
+
     if (this.pageDriver) {
       if (this.pageDriver.show) {
         this.puppeteerConfig.headless = false;
@@ -55,16 +60,27 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
       // 如果传入了代理服务，则设置代理服务器
       if (this.pageDriver.proxyServer) {
-        if (this.puppeteerConfig.args) {
-          this.puppeteerConfig.args = [
-            ...this.puppeteerConfig.args,
-            `--proxy-server=${this.pageDriver.proxyServer}`,
-          ];
-        } else {
-          this.puppeteerConfig.args = [`--proxy-server=${this.pageDriver.proxyServer}`];
-        }
+        this.puppeteerConfig.args.push(`--proxy-server=${this.pageDriver.proxyServer}`);
       }
     }
+
+    if (process.env.IS_IN_IDE) {
+      this.puppeteerConfig.headless = false;
+    }
+
+    // 取消安全限制
+    // Don't enforce the same-origin policy. (Used by people testing their sites.)
+    // https://stackoverflow.com/questions/52129649/puppeteer-cors-mistake/52131823
+    // https://peter.sh/experiments/chromium-command-line-switches/#disable-web-security
+    this.puppeteerConfig.args.push('--disable-web-security');
+
+    // Disables the sandbox for all process types that are normally sandboxed.
+    // https://peter.sh/experiments/chromium-command-line-switches/#no-sandbox
+    this.puppeteerConfig.args.push('--no-sandbox');
+
+    // Disable the setuid sandbox (Linux only).
+    // https://peter.sh/experiments/chromium-command-line-switches/#disable-setuid-sandbox
+    this.puppeteerConfig.args.push('--disable-setuid-sandbox');
 
     // 如果设置了 show ，则同步打开开发者工具面板
     // puppeteer 场景下不需要这么做，可以人工打开，因此不再有必要这么处理了
@@ -77,16 +93,40 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   }
 
   async getNewInstance(): Promise<void> {
-    this.emit('beforeGetNewNightmare');
+    this.emit('beforeGetNewInstance');
     // 创建 puppeteer 对象, 需要创建到 page
     this.browser = await puppeteer.launch(this.puppeteerConfig);
     this.page = (await this.browser.pages())[0];
 
     // 钩子事件：创建完成之后，可能会有一些自己的处理
-    this.emit('afterGetNewNightmare', this);
+    this.emit('afterGetNewInstance', this);
 
     // 初始化行为
-    this.emit('beforeInitNightmareRun', this.page);
+    this.emit('beforeInitNewInstance', this.page);
+
+    // 使用 mockstar 作为 mock server
+    if (this.pageDriver?.mockstarConfig) {
+      this.page.on('request', request => {
+        // console.log('\npageUrl', this.pageDriver?.pageUrl);
+        // console.log('request.resourceType()', request.resourceType());
+        // console.log('request.url()', request.url());
+
+        if (request.resourceType() === 'xhr' || request.resourceType() === 'fetch') {
+          // 必须放在这里，每次都实时获取，后续在更换 mockstar 桩数据时才会生效
+          const mockstarQuery = createMockStarQuery(this.pageDriver?.mockstarConfig?.queryDataMap);
+          const mockstarQueryString = mockstarQuery.getString();
+
+          // Override headers
+          const headers = Object.assign({}, request.headers(), {
+            'x-mockstar-query': encodeURIComponent(mockstarQueryString),
+          });
+
+          request.continue({headers});
+        } else {
+          request.continue();
+        }
+      });
+    }
 
     // 使用记录器，记录网络请求和浏览器事件等 暂时不使用
     if (this.globalInfo.recorder) {
@@ -135,6 +175,11 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       });
     }
 
+    // 使用 mockstar 作为 mock server
+    if (this.pageDriver?.mockstarConfig) {
+      await this.page.setRequestInterception(true);
+    }
+
     // 设置额外请求头
     await this.page.setExtraHTTPHeaders({
       'x-mat-from': 'puppeteer',
@@ -172,15 +217,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       await this.page.setCookie(...temp);
     }
 
-    // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下
-    if (
-      this.pageDriver?.mockstarQuery &&
-      typeof this.pageDriver.mockstarQuery.appendToUrl === 'function'
-    ) {
-      this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
-    }
-
-    this.emit('afterInitNightmareRun', {
+    this.emit('afterInitNewInstance', {
       nightmare: this.page,
     });
   }
@@ -195,8 +232,20 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     await this.page?.goto(this.pageDriver?.pageUrl);
 
     // 注入脚本
+    // 因为有时需要注入脚本 所以必须进行文件的保存与注入
     if (typeof this.pageDriver.evaluateFn === 'string') {
       const res = await build(this.pageDriver.evaluateFn, {
+        matmanConfig: this.pageDriver.matmanConfig,
+      });
+      this.page?.evaluate(res);
+    } else {
+      fs.ensureDirSync(`${process.env.HOME}/.matman`);
+
+      fs.writeFileSync(
+        `${process.env.HOME}/.matman/temp.js`,
+        `module.exports=${this.pageDriver.evaluateFn?.toString()}`,
+      );
+      const res = await build(`${process.env.HOME}/.matman/temp.js`, {
         matmanConfig: this.pageDriver.matmanConfig,
       });
       this.page?.evaluate(res);
@@ -246,12 +295,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       //   curRun = curRun.wait(50);
       // }
 
-      let t: any;
-      if (typeof this.pageDriver?.evaluateFn === 'function') {
-        t = await this.page.evaluate(this.pageDriver.evaluateFn, ...this.pageDriver.evaluateFnArgs);
-      } else {
-        t = await this.page.evaluate(evaluate);
-      }
+      const t = await this.page.evaluate(evaluate);
 
       // 覆盖率数据
       if (t.__coverage__ && this.pageDriver?.coverageConfig) {
@@ -283,7 +327,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
   async cleanEffect(): Promise<void> {
     // 如果配置了不关闭界面，且当前是展示浏览器界面的场景，则不再自动关闭浏览器界面，以方便调试
-    if (this.pageDriver?.doNotCloseBrowser && this.puppeteerConfig.headless === false) {
+    if (
+      (process.env.IS_IN_IDE || this.pageDriver?.doNotCloseBrowser) &&
+      this.puppeteerConfig.headless === false
+    ) {
       console.log('do not close browser');
     } else {
       await this.browser?.close();
@@ -309,7 +356,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     });
   }
 
-  addRecordInQueue(queueItem: MatmanResultQueueItem) {
+  addRecordInQueue(queueItem: MatmanResultQueueItem): void {
     this.globalInfo.recorder?.queue?.push(queueItem);
   }
 }

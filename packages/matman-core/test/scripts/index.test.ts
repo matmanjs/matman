@@ -13,6 +13,7 @@ describe('./index.ts', () => {
       'RUNNER_NAME',
       'MatmanResult',
       'MatmanConfig',
+      'MockstarConfig',
       'MatmanResultConfig',
       'ScreenshotConfig',
       'findMatmanConfig',
