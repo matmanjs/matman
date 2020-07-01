@@ -2,14 +2,16 @@ const path = require('path');
 const matman = require('matman');
 const {BrowserRunner} = require('matman-runner-puppeteer');
 
-module.exports = async () => {
-  const page = matman.launch(new BrowserRunner());
+module.exports = async opts => {
+  const page = matman.launch(new BrowserRunner(), opts);
   // 设置浏览器参数
   await page.setDeviceConfig({
-    UA:
+    userAgent:
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.75 Safari/537.36 mycustomua',
-    width: 1250,
-    height: 400,
+    viewport: {
+      width: 1250,
+      height: 400,
+    },
   });
 
   // 设置 cookie
@@ -49,11 +51,11 @@ module.exports = async () => {
   return res;
 };
 
-module
-  .exports()
-  .then(function (result) {
-    console.log(JSON.stringify(result));
-  })
-  .catch(function (error) {
-    console.error('failed:', error);
-  });
+// module
+//   .exports()
+//   .then(function (result) {
+//     console.log(JSON.stringify(result));
+//   })
+//   .catch(function (error) {
+//     console.error('failed:', error);
+//   });

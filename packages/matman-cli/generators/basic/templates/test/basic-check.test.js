@@ -22,7 +22,7 @@ describe('百度首页：常规检查', function () {
     let data;
 
     before(function () {
-      data = resultData.data.get('init');
+      data = resultData.get('init');
     });
 
     it('网站title应该为：百度一下，你就知道', function () {
