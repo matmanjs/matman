@@ -18,6 +18,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   globalInfo: {
     recorder?: {
       queue: MatmanResultQueueItem[];
+      allRequestUrl: string[];
     };
     isExistCoverageReport?: boolean;
   };
@@ -43,6 +44,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     if (this.pageDriver?.useRecorder) {
       this.globalInfo.recorder = {
         queue: [],
+        allRequestUrl: [],
       };
     }
   }
@@ -172,6 +174,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
           // location: log.location(),
           text: log.text(),
         } as MatmanResultQueueItem);
+      });
+
+      this.page.on('request', request => {
+        this.globalInfo.recorder?.allRequestUrl?.push(request.url());
       });
     }
 

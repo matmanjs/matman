@@ -43,6 +43,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
   globalInfo: {
     recorder?: {
       queue: MatmanResultQueueItem[];
+      allRequestUrl: string[];
     };
     isExistCoverageReport?: boolean;
   };
@@ -130,6 +131,11 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     // 使用记录器，记录网络请求和浏览器事件等
     if (this.pageDriver?.useRecorder) {
       this.globalInfo.recorder = new WebEventRecorder(this.nightmare);
+
+      // TODO nightmare 中 allRequestUrl 暂未实现
+      if (this.globalInfo.recorder) {
+        this.globalInfo.recorder.allRequestUrl = [];
+      }
     }
 
     if (!this.nightmare) {
