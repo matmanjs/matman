@@ -10,7 +10,11 @@ sidebarDepth: 0
 
 在开始之前，请再次确认下环境是否准备好：
 
-```sh
+```bash
+# node 版本需 >= 10.18.1
 $ node -v
-$ matman -v
+
+# 使用脚手架初始化项目
+$ npx matman-cli init
 ```
+
