@@ -5,6 +5,9 @@ import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import {createMockStarQuery} from 'mockstar';
 import {
   BrowserRunner,
   PageDriver,
@@ -58,11 +61,6 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
 
     // nightmare 对象
     this.nightmare = null;
-
-    // this.mockstarQuery = opts.mockstarQuery || null;
-
-    // 测试覆盖率
-    // this.coverageConfig = opts.coverageConfig;
 
     // 存储网络请求和浏览器事件等信息
     this.globalInfo = {};
@@ -183,11 +181,11 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     }
 
     // 如果有设置符合要求的 matman 服务设置，则还需要额外处理一下
-    if (
-      this.pageDriver?.mockstarQuery &&
-      typeof this.pageDriver.mockstarQuery.appendToUrl === 'function'
-    ) {
-      this.pageDriver.pageUrl = this.pageDriver.mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
+    if (this.pageDriver?.mockstarConfig?.queryDataMap) {
+      // 必须放在这里，每次都实时获取，后续在更换 mockstar 桩数据时才会生效
+      const mockstarQuery = createMockStarQuery(this.pageDriver?.mockstarConfig?.queryDataMap);
+
+      this.pageDriver.pageUrl = mockstarQuery.appendToUrl(this.pageDriver.pageUrl);
     }
 
     this.emit('afterInitNewInstance', {
