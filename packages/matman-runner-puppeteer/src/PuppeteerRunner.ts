@@ -107,10 +107,11 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     // 使用 mockstar 作为 mock server
     if (this.pageDriver?.mockstarConfig) {
       this.page.on('request', request => {
-        if (request.resourceType() === 'xhr') {
-          // console.log('追加参数', this.pageDriver?.mockstarQuery);
-          // console.log('pageUrl', this.pageDriver?.pageUrl);
+        // console.log('\npageUrl', this.pageDriver?.pageUrl);
+        // console.log('request.resourceType()', request.resourceType());
+        // console.log('request.url()', request.url());
 
+        if (request.resourceType() === 'xhr' || request.resourceType() === 'fetch') {
           // 必须放在这里，每次都实时获取，后续在更换 mockstar 桩数据时才会生效
           const mockstarQuery = createMockStarQuery(this.pageDriver?.mockstarConfig?.queryDataMap);
           const mockstarQueryString = mockstarQuery.getString();

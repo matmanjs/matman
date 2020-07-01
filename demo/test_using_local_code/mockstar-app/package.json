@@ -6,9 +6,9 @@
     "stop": "mockstar stop"
   },
   "dependencies": {
-    "mockstar": "^1.1.4"
+    "mockstar": "^1.1.6"
   },
   "devDependencies": {
-    "mockstar-cli": "^1.1.5"
+    "mockstar-cli": "^1.1.6"
   }
 }
