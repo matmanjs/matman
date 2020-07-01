@@ -2,19 +2,25 @@
 
 在使用 matman 来构建项目之前，需要先安装 Node 和 [matman-cli](https://www.npmjs.com/package/matman-cli) 。
 
-## 1. 安装 Node 
+## 1. 安装 Node.js 并验证版本
 
-matman 是基于 Node 来实现的，因此需要在本机安装 [Node](https://nodejs.org/) 。
+### 1.1 Node.js 安装
 
-> 为了获得更好的性能，推荐安装最新版本的 Node，进入 [https://nodejs.org/](https://nodejs.org/) 官网，选择 LTS 版本的 Node 安装即可。
+matman 是基于 Node.js 来实现的，因此需要在本机安装 [Node.js](https://nodejs.org/)，可以选择：
 
-安装完 Node 后，执行下面命令，查看当前 Node 版本，如果能正常输出 Node 的版本号，表示 Node 已安装成功( Windows 系统可能需要重新打开 cmd )。
+- 进入 [https://nodejs.org/](https://nodejs.org/) 官网，选择 LTS 版本的 Node 安装
+- 采用 [NVM](https://github.com/nvm-sh/nvm) 进行多版本管理
+
+### 1.2 版本验证
+
+完成安装后，执行下面命令，查看当前 Node 版本：
 
 ```
 $ node -v
 ```
 
-
+- 如果能正常输出 Node 的版本号，表示 Node 已安装成功（ Windows 系统可能需要重新打开 cmd）
+- 值得注意的是，一定要确保 Node.js 版本在 `10.18.1` 及以上，否则将无法运行
 
 ## 2. 安装 matman-cli
 

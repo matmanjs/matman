@@ -10,7 +10,6 @@
   "dependencies": {
     "matman": "^6.0.2",
     "matman-crawler": "^6.0.2",
-    "matman-runner-nightmare": "^6.0.2",
     "matman-runner-puppeteer": "^6.0.2"
   },
   "devDependencies": {
