@@ -15,7 +15,7 @@ matman 是基于 Node.js 来实现的，因此需要在本机安装 [Node.js](ht
 
 完成安装后，执行下面命令，查看当前 Node 版本：
 
-```
+```bash
 $ node -v
 ```
 
@@ -24,57 +24,37 @@ $ node -v
 
 ## 2. 安装 matman-cli
 
+### 2.1 初始化项目
+
 [matman-cli](https://www.npmjs.com/package/matman-cli) 提供了一些命令行，用于初始化项目和构建等。
 
-Node 安装成功后，执行如下 npm 命令安装 matman-cli （Mac 或 Linux 的非 `root` 用户需要在命令行前面加 `sudo`，如：`sudo npm install -g matman-cli`）。
+> 需要注意的是 matman 虽然提供了 Nightmare 与 puppeteer 两种能力、写法也支持链式调用与异步操作，但是推荐使用 puppeteer + 异步操作，所以 cli 工具只会为你生成 puppeteer + 异步的版本。
 
-```
-$ npm install -g matman-cli
-```
+执行下面的命令初始化你的 matman 项目：
 
-npm 默认镜像是在国外，有时候安装速度很慢或者出现安装不了的情况，如果无法安装或者安装很慢，可以使用淘宝的镜像安装：
+```bash
+# 如果安装缓慢请大家配置镜像
+$ npm config set registry https://registry.npm.taobao.org
 
-```
-$ npm install -g cnpm --registry=https://registry.npm.taobao.org
-$ cnpm install -g matman-cli
-```
-
-或者直接指定镜像安装：
-
-```
-$ npm install -g matman-cli --registry=https://registry.npm.taobao.org
+# 推荐大家使用 npx 进行初始化，保证运行 cli 的最新版本
+$ npx matman-cli init
 ```
 
-全局安装 matman-cli 时，如果遇到 electron 安装权限问题，则需要增加一些额外参数来安装，原因可以查看 [#30](https://github.com/matmanjs/matman-cli/issues/30)：
+### 2.2 命令参考
 
-```
-$ npm install matman-cli -g --unsafe-perm=true --allow-root
-```
+| 命令  |       选项        |                     说明                     |
+| :---: | :---------------: | :------------------------------------------: |
+|   /   | --version、--help |          `查看版本`、`显示帮助信息`          |
+| build |   -d 或者 --dev   |   `编译爬虫脚本`，-d 与 --dev 生成调试版本   |
+| init  |  -t 或者 --type   | `初始化项目`，-t 与--type 指定生成所用的模板 |
 
-matman-cli 安装完成后，执行命令 `matman --help`，查看帮助信息:
+## 3. puppeteer 安装问题
 
-```
-$ matman --help
+### 需求场景
 
-  Usage: matman [options] [command]
+由于种种原因，安装 puppeteer 可能会非常的慢。在没有梯子的情况下采用淘宝镜像安装是最快的方式。
 
+### 解决方法
 
-  Commands:
-      build                                    Build the code.
-
-
-  Options:
-      --version, -[v]           Print version and exit successfully.
-      --help, -[h]              Print this help and exit successfully.
-
-
-  Report bugs to https://github.com/matmanjs/matman/issues.
-```
-
-如果能正常输出 matman 的帮助信息，表示已安装成功。
-
-## 3. 升级 matman-cli
-
-> 为了能使用 matman 的所有功能，请记得将其升级到最新版本。
-
-升级命令与安装命令类似，请参考上一节内容。
+1. 在用户目录下新建 `.npmrc`
+2. 在其中设置 `PUPPETEER_DOWNLOAD_HOST=https://npm.taobao.org/mirrors`
