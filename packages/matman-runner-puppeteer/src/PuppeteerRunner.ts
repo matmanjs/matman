@@ -90,6 +90,15 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     //   this.puppeteerConfig.devtools = true;
     // }
 
+    // 如果传入了浏览器则使用
+    this.puppeteerConfig.executablePath = this.pageDriver?.executablePath;
+    if (
+      this.puppeteerConfig.executablePath &&
+      /firefox/gi.test(this.puppeteerConfig.executablePath)
+    ) {
+      this.puppeteerConfig.product = 'firefox';
+    }
+
     // 触发广播配置
     this.emit('afterGetConfig', this.puppeteerConfig);
   }
@@ -115,7 +124,9 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
         if (request.resourceType() === 'xhr' || request.resourceType() === 'fetch') {
           // 必须放在这里，每次都实时获取，后续在更换 mockstar 桩数据时才会生效
-          const mockstarQuery = createMockStarQuery(this.pageDriver?.mockstarConfig?.queryDataMap);
+          const mockstarQuery = createMockStarQuery(
+            this.pageDriver?.mockstarConfig?.queryDataMap as any,
+          );
           const mockstarQueryString = mockstarQuery.getString();
 
           // Override headers

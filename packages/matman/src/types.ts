@@ -29,6 +29,8 @@ export interface PageDriverOpts {
   doNotCloseBrowser?: boolean;
   useRecorder?: boolean;
   delayBeforeRun?: number;
+  // 其他浏览器启动
+  executablePath?: string;
 }
 
 // export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;

@@ -35,6 +35,7 @@ export default class PageDriverAsync implements PageDriver {
   useRecorder: boolean;
   tag: string | undefined;
   delayBeforeRun: number;
+  executablePath: string | undefined;
   proxyServer: string;
   mockstarConfig: null | MockstarConfig;
   cookieConfig: null | CookieConfig;
@@ -86,6 +87,9 @@ export default class PageDriverAsync implements PageDriver {
 
     // 延时多少ms再启动
     this.delayBeforeRun = typeof opts.delayBeforeRun === 'number' ? opts.delayBeforeRun : 0;
+
+    // 设置浏览器
+    this.executablePath = opts.executablePath;
 
     this.proxyServer = '';
 
