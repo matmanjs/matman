@@ -43,6 +43,7 @@ export interface PageDriver {
   useRecorder: boolean;
   tag: string | undefined;
   delayBeforeRun: number;
+  executablePath: string | undefined;
   proxyServer: string;
 
   mockstarConfig: null | MockstarConfig;

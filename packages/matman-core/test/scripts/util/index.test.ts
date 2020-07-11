@@ -138,6 +138,19 @@ describe('./util/index.js', () => {
 
       expect(matmanConfig.rootPath).to.equal(demoRoot);
       expect(matmanConfig.caseModulesPath).to.equal(demoRoot);
+      expect(matmanConfig.crawlerInjectJQuery).to.be.false;
+    });
+
+    it('findMatmanConfig(data/fixtures/demo-only-package) for package.json with crawlerInjectJQuery=true', () => {
+      const demoRoot = path.join(__dirname, '../../data/fixtures/demo-only-package');
+      const caseModuleFile = path.join(demoRoot, './c1.js');
+      const matmanConfig = findMatmanConfig(caseModuleFile, {
+        crawlerInjectJQuery: true,
+      }) as MatmanConfigOpts;
+
+      expect(matmanConfig.rootPath).to.equal(demoRoot);
+      expect(matmanConfig.caseModulesPath).to.equal(demoRoot);
+      expect(matmanConfig.crawlerInjectJQuery).to.be.true;
     });
   });
 
