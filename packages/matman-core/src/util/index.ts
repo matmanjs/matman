@@ -83,6 +83,8 @@ export function findMatmanConfig(
 
     // matmanConfigOpts 的优先级要高于 matman.config.js 中的配置内容
     configData = _.merge({}, res, matmanConfigOpts);
+  } else {
+    configData = _.merge({}, matmanConfigOpts);
   }
 
   // 获取 rootPath，优先级：matmanConfigOpts > matman.config.js 中的定义 > matman.config.js 目录 > package.json 目录
