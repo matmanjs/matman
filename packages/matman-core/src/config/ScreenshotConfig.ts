@@ -16,12 +16,16 @@ interface ClipOpts {
 /**
  * 是否启用截图, 或者截图保存的文件名路径(如果想对路径, 则相对于basePath 而言), 或者截图配置
  */
-export type ScreenOpts = string | boolean | {tag?: string; path: string; clip?: ClipOpts};
+export type ScreenOpts =
+  | string
+  | boolean
+  | {tag?: string; path: string; fullPage: boolean; clip?: ClipOpts};
 
 export default class ScreenshotConfig {
   tag: string | undefined;
   path: string;
   clip: ClipOpts | undefined;
+  fullPage = false;
 
   /**
    * 构造函数
@@ -56,6 +60,7 @@ export default class ScreenshotConfig {
       // 截图的区域，例如 { x: 0, y: 0, width: 0, height: 0 }
       // https://github.com/electron/electron/blob/master/docs/api/browser-window.md#winsetthumbnailclipregion-windows
       this.clip = opts.clip;
+      this.fullPage = opts.fullPage;
     } else if (typeof opts === 'string') {
       // 如果 opts 为字符串，则代表设置的是截图保存路径
       this.path = this.getScreenshotFullPath(opts, matmanConfig.screenshotPath);

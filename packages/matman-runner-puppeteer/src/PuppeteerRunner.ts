@@ -300,10 +300,16 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       if (this.pageDriver?.screenshotConfig) {
         const screenshotFilePath = this.pageDriver.screenshotConfig.getPathWithId(i + 1);
 
+        const opts: puppeteer.BinaryScreenShotOptions = {
+          path: screenshotFilePath,
+          clip: this.pageDriver.screenshotConfig.clip,
+          fullPage: this.pageDriver.screenshotConfig.fullPage,
+        };
+
         // 要保证这个目录存在，否则保存时会报错
         fs.ensureDirSync(path.dirname(screenshotFilePath));
 
-        await this.page.screenshot({path: screenshotFilePath});
+        await this.page.screenshot(opts);
       }
 
       // 如果使用了记录器，则每个请求都延迟 50ms，注意是因为 network 是异步的
