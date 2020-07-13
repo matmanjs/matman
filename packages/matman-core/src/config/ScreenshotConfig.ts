@@ -25,7 +25,7 @@ export default class ScreenshotConfig {
   tag: string | undefined;
   path: string;
   clip: ClipOpts | undefined;
-  fullPage = false;
+  fullPage = true;
 
   /**
    * 构造函数
