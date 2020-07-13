@@ -55,7 +55,21 @@ export default class ScreenshotConfig {
       }
 
       // 如果传递了对象
-      this.path = this.getScreenshotFullPath(opts.path, matmanConfig.screenshotPath);
+      if (opts.path) {
+        this.path = this.getScreenshotFullPath(opts.path, matmanConfig.screenshotPath);
+      } else {
+        // 其他情况自动生成截图保存路径
+        const relativeSavePath = getSaveDirFromPath(
+          path.relative(matmanConfig.caseModulesPath, caseModuleFilePath),
+        );
+
+        const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.png';
+
+        this.path = this.getScreenshotFullPath(
+          path.join(relativeSavePath, saveFileName),
+          matmanConfig.screenshotPath,
+        );
+      }
 
       // 截图的区域，例如 { x: 0, y: 0, width: 0, height: 0 }
       // https://github.com/electron/electron/blob/master/docs/api/browser-window.md#winsetthumbnailclipregion-windows
