@@ -57,14 +57,32 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `basePath`: `String`， 从该路径开始查找
 - `matmanConfigOpts`: `Object`， 额外的参数，将与找到的 `matman.config.js` 内容进行合并
 
-### 2.5 requireSync(filePath: string)
+### 2.5 requireSync(filePath:)
 
 以同步的方式 require 文件。
 
 - `filePath`: `String`， 模块文件的绝对路径
 
-### 2.6 requireAsync(filePath: string)
+### 2.6 requireAsync(filePath)
 
 以异步的方式 require 文件，返回的是 `Promise`。
 
 - `filePath`: `String`， 模块文件的绝对路径
+
+### 2.7 isURLMatch(URLToCheck, partialURL, query)
+ 
+判断指定的 url 是否被部分匹配到
+
+- `URLToCheck`: `String`，待匹配的地址
+- `partialURL`: `String`，部分地址
+- `query`: `Object`，url 中携带的查询参数
+
+```js
+// true
+isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv');
+isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv',{report_id: 987});
+
+// false
+isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv2');
+isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv',{report_id: 123});
+```
