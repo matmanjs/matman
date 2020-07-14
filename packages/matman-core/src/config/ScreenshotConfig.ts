@@ -16,12 +16,16 @@ interface ClipOpts {
 /**
  * 是否启用截图, 或者截图保存的文件名路径(如果想对路径, 则相对于basePath 而言), 或者截图配置
  */
-export type ScreenOpts = string | boolean | {tag?: string; path: string; clip?: ClipOpts};
+export type ScreenOpts =
+  | string
+  | boolean
+  | {tag?: string; path: string; fullPage?: boolean; clip?: ClipOpts};
 
 export default class ScreenshotConfig {
   tag: string | undefined;
   path: string;
   clip: ClipOpts | undefined;
+  fullPage = true;
 
   /**
    * 构造函数
@@ -51,11 +55,26 @@ export default class ScreenshotConfig {
       }
 
       // 如果传递了对象
-      this.path = this.getScreenshotFullPath(opts.path, matmanConfig.screenshotPath);
+      if (opts.path) {
+        this.path = this.getScreenshotFullPath(opts.path, matmanConfig.screenshotPath);
+      } else {
+        // 其他情况自动生成截图保存路径
+        const relativeSavePath = getSaveDirFromPath(
+          path.relative(matmanConfig.caseModulesPath, caseModuleFilePath),
+        );
+
+        const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.png';
+
+        this.path = this.getScreenshotFullPath(
+          path.join(relativeSavePath, saveFileName),
+          matmanConfig.screenshotPath,
+        );
+      }
 
       // 截图的区域，例如 { x: 0, y: 0, width: 0, height: 0 }
       // https://github.com/electron/electron/blob/master/docs/api/browser-window.md#winsetthumbnailclipregion-windows
       this.clip = opts.clip;
+      this.fullPage = opts.fullPage === false ? false : true;
     } else if (typeof opts === 'string') {
       // 如果 opts 为字符串，则代表设置的是截图保存路径
       this.path = this.getScreenshotFullPath(opts, matmanConfig.screenshotPath);

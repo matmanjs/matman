@@ -9,6 +9,7 @@ import {MATMAN_CONFIG_FILE, RUNNER_NAME} from './config';
 
 import {getAbsolutePath, findMatmanConfig, searchFilePath} from './util';
 import {requireAsync, requireSync} from './util/require-file';
+import {isURLMatch} from './util/url';
 
 import {BrowserRunner} from './typings/browserRunner';
 import {PageDriver} from './typings/pageDriver';
@@ -34,6 +35,7 @@ export {
   findMatmanConfig,
   requireAsync,
   requireSync,
+  isURLMatch,
   CookieConfig,
   CookieConfigOpts,
   DeviceConfig,

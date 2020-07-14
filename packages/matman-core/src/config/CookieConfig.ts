@@ -39,11 +39,13 @@ export default class CookieConfig {
       });
     } else {
       cookieConfigOpts.split(';').map(item => {
-        const res = item.trim().split('=');
-        this.cookieObjectArr.push({
-          name: res[0],
-          value: res[1],
-        });
+        if (item.indexOf('=') !== -1) {
+          const res = item.trim().split('=');
+          this.cookieObjectArr.push({
+            name: res[0],
+            value: res[1],
+          });
+        }
       });
     }
   }
