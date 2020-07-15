@@ -148,7 +148,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         const request = msg.request();
 
         let responseBody = null;
-        if (msg.headers()['content-type'].indexOf('application/json') !== -1) {
+        if (
+          msg.headers()['content-type'] &&
+          msg.headers()['content-type'].indexOf('application/json') !== -1
+        ) {
           try {
             responseBody = await msg.json();
           } catch (e) {
