@@ -343,6 +343,11 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       this.emit('afterRunCase', {index: i, result: result});
     }
 
+    // 因为要等待请求完成, 所以强制停 500ms
+    if (this.globalInfo.recorder) {
+      await this.page?.waitFor(500);
+    }
+
     this.emit('afterRunActions', {index: i, result: result});
 
     return result;
