@@ -22,6 +22,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     };
     isExistCoverageReport?: boolean;
   };
+  script = '';
 
   constructor(opts: puppeteer.LaunchOptions = {}) {
     super();
@@ -251,10 +252,9 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     // 注入脚本
     // 因为有时需要注入脚本 所以必须进行文件的保存与注入
     if (typeof this.pageDriver.evaluateFn === 'string') {
-      const res = await build(this.pageDriver.evaluateFn, {
+      this.script = await build(this.pageDriver.evaluateFn, {
         matmanConfig: this.pageDriver.matmanConfig,
       });
-      this.page?.evaluate(res);
     } else {
       fs.ensureDirSync(`${process.env.HOME}/.matman`);
 
@@ -262,11 +262,12 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         `${process.env.HOME}/.matman/temp.js`,
         `module.exports=${this.pageDriver.evaluateFn?.toString()}`,
       );
-      const res = await build(`${process.env.HOME}/.matman/temp.js`, {
+      this.script = await build(`${process.env.HOME}/.matman/temp.js`, {
         matmanConfig: this.pageDriver.matmanConfig,
       });
-      this.page?.evaluate(res);
     }
+
+    await this.page?.evaluate(this.script);
 
     this.emit('afterGotoPage', {url: this.pageDriver?.pageUrl, page: this.page});
   }
@@ -318,6 +319,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       //   curRun = curRun.wait(50);
       // }
 
+      await this.page.evaluate(this.script);
       const t = await this.page.evaluate(evaluate);
 
       // 覆盖率数据
