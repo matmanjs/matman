@@ -1,6 +1,6 @@
 {
   "name": "matman-core",
-  "version": "6.0.8",
+  "version": "6.0.9",
   "description": "Core moudles for matman",
   "main": "lib/index.js",
   "scripts": {
