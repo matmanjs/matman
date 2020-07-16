@@ -1,6 +1,6 @@
 {
   "name": "matman-runner-nightmare",
-  "version": "6.0.9",
+  "version": "6.0.10",
   "description": "matman测试框架nightmare底层驱动",
   "scripts": {
     "prepublishOnly": "npm run build",

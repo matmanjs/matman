@@ -1,6 +1,6 @@
 {
   "name": "matman-runner-puppeteer",
-  "version": "6.0.9",
+  "version": "6.0.10",
   "description": "matman的puppeteer底层驱动",
   "scripts": {
     "prepublishOnly": "npm run build",
