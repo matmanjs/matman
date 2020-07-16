@@ -10,6 +10,7 @@ import {createMockStarQuery} from 'mockstar';
 import {evaluate} from './utils/master';
 
 export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
+  private url = '';
   name = 'puppeteer';
   pageDriver: PageDriver | null;
   puppeteerConfig: puppeteer.LaunchOptions;
@@ -41,6 +42,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
   setPageDriver(n: PageDriver): void {
     this.pageDriver = n;
+    this.url = n.pageUrl;
 
     if (this.pageDriver?.useRecorder) {
       this.globalInfo.recorder = {
@@ -322,7 +324,11 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       //   curRun = curRun.wait(50);
       // }
 
-      await this.page.evaluate(this.script);
+      if (this.page.url() !== this.url) {
+        this.url = this.page.url();
+        await this.page.evaluate(this.script);
+      }
+
       const t = await this.page.evaluate(evaluate);
 
       // 覆盖率数据

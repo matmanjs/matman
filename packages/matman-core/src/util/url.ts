@@ -70,5 +70,5 @@ function parseQuery(url: string | undefined): queryResult {
 }
 
 function isEqualOfLoose(a: any, b: any) {
-  return a == encodeURI(b);
+  return a == encodeURIComponent(b);
 }
