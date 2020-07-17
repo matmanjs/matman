@@ -255,7 +255,11 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       throw new Error('pageUrl must be defined');
     }
 
-    await this.page?.goto(this.pageDriver?.pageUrl);
+    // https://github.com/puppeteer/puppeteer/blob/v5.1.0/docs/api.md#pagegotourl-options
+    await this.page?.goto(this.pageDriver?.pageUrl, {
+      // timeout: 0,
+      waitUntil: 'networkidle2',
+    });
 
     // 注入脚本
     // 因为有时需要注入脚本 所以必须进行文件的保存与注入
