@@ -87,6 +87,9 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     // https://peter.sh/experiments/chromium-command-line-switches/#disable-setuid-sandbox
     this.puppeteerConfig.args.push('--disable-setuid-sandbox');
 
+    // 为了解决 HTTPS 证书报错
+    this.puppeteerConfig.ignoreHTTPSErrors = true;
+
     // 如果设置了 show ，则同步打开开发者工具面板
     // puppeteer 场景下不需要这么做，可以人工打开，因此不再有必要这么处理了
     // if (this.puppeteerConfig.headless === false) {
