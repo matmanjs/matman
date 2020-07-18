@@ -156,7 +156,7 @@ export default class MatmanResult {
    */
   isExistInNetwork(
     partialURL: string,
-    query: { [key: string]: number },
+    query?: { [key: string]: any },
     resourceType?: ResourceType,
     status?: number,
   ): boolean {
@@ -172,7 +172,7 @@ export default class MatmanResult {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistPage(partialURL: string, query: { [key: string]: number }, status?: number): boolean {
+  isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.queueHandler?.isExistPage(partialURL, query, status) || false;
   }
 
@@ -185,7 +185,7 @@ export default class MatmanResult {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistXHR(partialURL: string, query: { [key: string]: number }, status?: number): boolean {
+  isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.queueHandler?.isExistXHR(partialURL, query, status) || false;
   }
 
@@ -198,7 +198,7 @@ export default class MatmanResult {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistImage(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistImage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.queueHandler?.isExistImage(partialURL, query, status) || false;
   }
 
@@ -211,7 +211,7 @@ export default class MatmanResult {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistStylesheet(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistStylesheet(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.queueHandler?.isExistStylesheet(partialURL, query, status) || false;
   }
 
@@ -224,7 +224,7 @@ export default class MatmanResult {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistScript(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistScript(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.queueHandler?.isExistScript(partialURL, query, status) || false;
   }
 
@@ -236,7 +236,7 @@ export default class MatmanResult {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistJSBridge(partialURL: string, query: { [key: string]: number }): boolean {
+  isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
     return this.queueHandler?.isExistJSBridge(partialURL, query) || false;
   }
 }
@@ -284,7 +284,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    */
   isExistInNetwork(
     partialURL: string,
-    query: { [key: string]: number },
+    query?: { [key: string]: any },
     resourceType?: ResourceType,
     status?: number,
   ): boolean {
@@ -350,7 +350,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistPage(partialURL: string, query: { [key: string]: number }, status?: number): boolean {
+  isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'document', status);
   }
 
@@ -363,7 +363,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistXHR(partialURL: string, query: { [key: string]: number }, status?: number): boolean {
+  isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return (
       this.isExistInNetwork(partialURL, query, 'xhr', status) ||
       this.isExistInNetwork(partialURL, query, 'fetch', status)
@@ -379,7 +379,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistImage(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistImage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'image', status);
   }
 
@@ -392,7 +392,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistStylesheet(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistStylesheet(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'stylesheet', status);
   }
 
@@ -405,7 +405,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistScript(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistScript(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'script', status);
   }
 
@@ -417,7 +417,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistJSBridge(partialURL: string, query: { [key: string]: number }): boolean {
+  isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
     const queue = this.allRequestUrl || [];
 
     let result = false;
@@ -491,7 +491,7 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    */
   isExistInNetwork(
     partialURL: string,
-    query: { [key: string]: number },
+    query?: { [key: string]: any },
     resourceType?: ResourceType,
     status?: number,
   ): boolean {
@@ -529,7 +529,7 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistPage(partialURL: string, query: { [key: string]: number }, status?: number): boolean {
+  isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'mainFrame', status);
   }
 
@@ -542,7 +542,7 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistXHR(partialURL: string, query: { [key: string]: number }, status?: number): boolean {
+  isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'xhr', status);
   }
 
@@ -555,7 +555,7 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistImage(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistImage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'image', status);
   }
 
@@ -568,7 +568,7 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistStylesheet(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistStylesheet(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'stylesheet', status);
   }
 
@@ -581,7 +581,7 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistScript(partialURL: string, query: { [key: string]: number }, status: number): boolean {
+  isExistScript(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'script', status);
   }
 
@@ -593,7 +593,7 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @return {Boolean}
    * @author helinjiang
    */
-  isExistJSBridge(partialURL: string, query: { [key: string]: number }): boolean {
+  isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
     const queue = this.queue;
 
     let result = false;
