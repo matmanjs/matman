@@ -1,6 +1,6 @@
 {
   "name": "matman-cli",
-  "version": "6.0.12",
+  "version": "6.0.13",
   "description": "CLI for matman projects",
   "bin": {
     "matman": "./bin/matman.js"
@@ -38,8 +38,8 @@
     "figlet": "^1.2.0",
     "fs-extra": "^7.0.1",
     "inquirer": "^7.2.0",
-    "matman-core": "^6.0.12",
-    "matman-crawler": "^6.0.12",
+    "matman-core": "^6.0.13",
+    "matman-crawler": "^6.0.13",
     "semver": "^5.4.1",
     "yargs": "^15.3.1",
     "yeoman-environment": "^2.3.4",
