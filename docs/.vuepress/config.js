@@ -10,16 +10,16 @@ module.exports = {
 
   title: 'matman.js',
   description: 'web 端对端测试解决方案',
-  head: [['link', {rel: 'icon', href: `/logo.png`}]],
+  head: [['link', { rel: 'icon', href: `/logo.png` }]],
   themeConfig: {
     locales: {
       '/': {
         navs: [
-          {text: 'web端对端测试方案', link: '/wiki/'},
-          {text: 'API手册', link: '/api/'},
-          {text: '工具', link: '/tool/'},
-          {text: '发布日志', link: '/release/'},
-          {text: 'Issues', link: 'https://github.com/matmanjs/matman/issues'},
+          { text: 'web端对端测试方案', link: '/wiki/' },
+          { text: 'API手册', link: '/api/' },
+          { text: '工具', link: '/tool/' },
+          { text: '发布日志', link: '/release/' },
+          { text: 'Issues', link: 'https://github.com/matmanjs/matman/issues' },
         ],
         sidebar: {
           '/wiki/': [
@@ -37,7 +37,11 @@ module.exports = {
               title: '快速入门',
               path: '/wiki/getting-started/',
               collapsable: false,
-              children: ['getting-started/baidu_01', 'getting-started/baidu_02'],
+              children: [
+                'getting-started/baidu_01',
+                'getting-started/baidu_02',
+                'getting-started/baidu_03',
+              ],
             },
             {
               title: '深入',
