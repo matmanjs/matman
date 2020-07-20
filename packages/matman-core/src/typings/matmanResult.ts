@@ -178,8 +178,9 @@ export interface MatmanResultQueueHandler {
    * 是否存在某一条 console 记录
    *
    * @param {String | RegExp} partialText 待匹配的文本
-   * @param {String} type console 的类型
+   * @param {String} [type] 类型，例如 console.log，则 type=log
+   * @param {Boolean} [isFullMatch] 是否将 partialText 作为全匹配
    * @returns {Boolean}
    */
-  isExistConsole(partialText: string | RegExp, type?: string): boolean;
+  isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean;
 }

@@ -244,10 +244,12 @@ export default class MatmanResult {
    * 是否存在某一条 console 记录
    *
    * @param {String} partialText 待匹配的文本
+   * @param {String} [type] 类型，例如 console.log，则 type=log
+   * @param {Boolean} [isFullMatch] 是否将 partialText 作为全匹配
    * @returns {Boolean}
    */
-  isExistConsole(partialText: string | RegExp, type?: string): boolean {
-    return this.queueHandler?.isExistConsole(partialText, type) || false;
+  isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean {
+    return this.queueHandler?.isExistConsole(partialText, type, isFullMatch) || false;
   }
 }
 
@@ -465,10 +467,11 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * 是否存在某一条 console 记录
    *
    * @param {String} partialText 待匹配的文本
-   * @param type
+   * @param {String} [type] 类型，例如 console.log，则 type=log
+   * @param {Boolean} [isFullMatch] 是否将 partialText 作为全匹配
    * @returns {Boolean}
    */
-  isExistConsole(partialText: string | RegExp, type?: string): boolean {
+  isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean {
     let queue = this.getConsole();
     // 是否过滤 console 的类型
     if (type) {
@@ -489,6 +492,19 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
     if (partialText instanceof RegExp) {
       for (let i = 0; i < queue.length; ++i) {
         if (partialText.test(queue[i].text)) {
+          return true;
+        }
+      }
+    } else {
+      // partialText 有可能为 number 等，因此要转义
+      const checkText = partialText + '';
+
+      for (let i = 0; i < queue.length; ++i) {
+        const consoleText = queue[i].text + '';
+        if (
+          (isFullMatch && consoleText === checkText) ||
+          (!isFullMatch && consoleText.indexOf(checkText) > -1)
+        ) {
           return true;
         }
       }
@@ -687,9 +703,11 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * 是否存在某一条 console 记录
    *
    * @param {String} partialText 待匹配的文本
+   * @param {String} [type] 类型，例如 console.log，则 type=log
+   * @param {Boolean} [isFullMatch] 是否将 partialText 作为全匹配
    * @returns {Boolean}
    */
-  isExistConsole(partialText: string | RegExp): boolean {
+  isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean {
     return false;
   }
 }

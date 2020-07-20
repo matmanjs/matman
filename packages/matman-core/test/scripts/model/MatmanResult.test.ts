@@ -215,15 +215,31 @@ describe('check model/MatmanResult.js', () => {
       require('../../data/fixtures/model/matman-result-puppeteer.js'),
     );
 
-    it('visibility-state shoule return false', () => {
-      expect(matmanResult.isExistConsole('visibility-state')).to.be.false;
+    it('only partial text should return true', () => {
+      expect(matmanResult.isExistConsole('visibility-state')).to.be.true;
     });
 
-    it('visibility-state regex shoule return true', () => {
+    it('partial text with correct type should return true', () => {
+      expect(matmanResult.isExistConsole('visibility-state', 'warning')).to.be.true;
+    });
+
+    it('partial text with incorrect type should return false', () => {
+      expect(matmanResult.isExistConsole('visibility-state', 'log')).to.be.false;
+    });
+
+    it('partial text with correct type but isFullMatch should return false', () => {
+      expect(matmanResult.isExistConsole('visibility-state', 'warning', true)).to.be.false;
+    });
+
+    it('only regex should return true', () => {
       expect(matmanResult.isExistConsole(/\.*visibility-state\.*/)).to.be.true;
     });
 
-    it('visibility-state with type to log shoule return false', () => {
+    it('regex with correct type should return true', () => {
+      expect(matmanResult.isExistConsole(/\.*visibility-state\.*/, 'warning')).to.be.true;
+    });
+
+    it('regex with incorrect type should return false', () => {
       expect(matmanResult.isExistConsole(/\.*visibility-state\.*/, 'log')).to.be.false;
     });
   });
