@@ -224,7 +224,7 @@ describe('check model/MatmanResult.js', () => {
     });
 
     it('visibility-state with type to log shoule return false', () => {
-      expect(matmanResult.isExistConsole(/\.*visibility-state\.*/, 'log')).to.be.true;
+      expect(matmanResult.isExistConsole(/\.*visibility-state\.*/, 'log')).to.be.false;
     });
   });
 });

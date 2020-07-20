@@ -465,12 +465,13 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * 是否存在某一条 console 记录
    *
    * @param {String} partialText 待匹配的文本
+   * @param type
    * @returns {Boolean}
    */
   isExistConsole(partialText: string | RegExp, type?: string): boolean {
     let queue = this.getConsole();
     // 是否过滤 console 的类型
-    if (type && typeof partialText === 'string') {
+    if (type) {
       queue = queue.filter(item => {
         return item.type === type;
       });
