@@ -198,14 +198,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         // 将符合输出格式的 console 加入到请求队列
         const text = log.text();
         if (/^\[e2e\]\s\.*/.test(text)) {
-          let url = text.split(' ')[1];
+          const url = text.split(' ')[1];
           // 这里因为之后的 URLMatch 函数中比较时会进行编码, 所以此时将 uri 编码统一格式
           // 需要注意的是不能使用 encodeURIComponent 因为其会将特殊字符也编码导致匹配失败
-          if (url.indexOf('?') !== -1) {
-            const temp = url.split('?');
-            url = `${temp[0]}?${encodeURI(temp[1])}`;
-          }
-          this.globalInfo.recorder?.allRequestUrl?.push(url);
+          this.globalInfo.recorder?.allRequestUrl?.push(encodeURI(url));
         }
       });
 
