@@ -1,13 +1,13 @@
 import path from 'path';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import {BrowserRunner, PageDriver, MatmanResult, MatmanResultQueueItem} from 'matman-core';
-import {build} from 'matman-crawler';
+import { BrowserRunner, PageDriver, MatmanResult, MatmanResultQueueItem } from 'matman-core';
+import { build } from 'matman-crawler';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import {createMockStarQuery} from 'mockstar';
-import {evaluate} from './utils/master';
+import { createMockStarQuery } from 'mockstar';
+import { evaluate } from './utils/master';
 
 export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
   private url = '';
@@ -140,7 +140,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
             'x-mockstar-query': encodeURIComponent(mockstarQueryString),
           });
 
-          request.continue({headers});
+          request.continue({ headers });
         } else {
           request.continue();
         }
@@ -194,6 +194,13 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
           // location: log.location(),
           text: log.text(),
         } as MatmanResultQueueItem);
+
+        // 将符合输出格式的 console 加入到请求队列
+        const text = log.text();
+        if (/^\[e2e\]\s\.*/.test(text)) {
+          const url = text.split(' ')[1];
+          this.globalInfo.recorder?.allRequestUrl?.push(url);
+        }
       });
 
       this.page.on('request', request => {
@@ -281,14 +288,14 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     await this.page?.evaluate(this.script);
 
-    this.emit('afterGotoPage', {url: this.pageDriver?.pageUrl, page: this.page});
+    this.emit('afterGotoPage', { url: this.pageDriver?.pageUrl, page: this.page });
   }
 
   async runActions(stop?: number): Promise<any[]> {
     // 循环处理多个 action
     const result: any[] = [];
     // 触发开始事件
-    this.emit('beforeRunActions', {index: 0, result: result});
+    this.emit('beforeRunActions', { index: 0, result: result });
 
     let i = 0;
     const actionList = this.pageDriver?.actionList as ((n: puppeteer.Page) => Promise<void>)[];
@@ -301,7 +308,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       }
 
       // 开始执行 action
-      this.emit('beforeRunCase', {index: i, result: result});
+      this.emit('beforeRunCase', { index: i, result: result });
 
       // 执行 action
       if (!this.page) {
@@ -358,7 +365,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       result.push(t);
 
       // 结束执行 action
-      this.emit('afterRunCase', {index: i, result: result});
+      this.emit('afterRunCase', { index: i, result: result });
     }
 
     // 因为要等待请求完成, 所以强制停 500ms
@@ -366,7 +373,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       await this.page?.waitFor(500);
     }
 
-    this.emit('afterRunActions', {index: i, result: result});
+    this.emit('afterRunActions', { index: i, result: result });
 
     return result;
   }
