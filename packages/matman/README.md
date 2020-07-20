@@ -338,3 +338,12 @@ const RESOURCE_TYPE = {
 #### 2.3.11 isExistJSBridge(partialURL, query = {})
 
 是否存在某个 jsbridge 的调用，支持使用 iframe 和 location.href 两种形式，具体可以查看 https://github.com/matmanjs/matman-demo/tree/master/DevOps/matman-app/case_modules/page-hybrid-app。
+
+
+#### 2.3.12 isExistConsole(partialURL, type, isFullMatch)
+
+是否存在某一条 console 记录
+
+- `partialText`: `String`，待匹配的字符串
+- `type`: `String`，类型，例如 `console.log`，则 `type=log`
+- `isFullMatch`: `Boolean`，是否将 `partialText` 作为全匹配，默认值为 `false`
