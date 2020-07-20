@@ -1,13 +1,13 @@
 import 'mocha';
-import {expect} from 'chai';
+import { expect } from 'chai';
 
 import MatmanResult from '../../../src/model/MatmanResult';
 
 describe('check model/MatmanResult.js', () => {
   describe('check constructor(result)', () => {
     it('if result has data', () => {
-      expect(new MatmanResult({data: [{a: 1, b: '2'}]})).to.eql({
-        data: [{a: 1, b: '2'}],
+      expect(new MatmanResult({ data: [{ a: 1, b: '2' }] })).to.eql({
+        data: [{ a: 1, b: '2' }],
         dataIndexMap: {},
         globalInfo: {},
         queueHandler: null,
@@ -23,16 +23,16 @@ describe('check model/MatmanResult.js', () => {
 
     it('get(1) should ok', () => {
       expect(matmanResult.get(1)).to.eql({
-        searchInputInfo: {keyWorld: 'matman', searchBtnText: '百度一下'},
-        searchResultInfo: {isExist: false, list: []},
+        searchInputInfo: { keyWorld: 'matman', searchBtnText: '百度一下' },
+        searchResultInfo: { isExist: false, list: [] },
         title: '百度一下，你就知道',
       });
     });
 
     it('get("input_key_word") should ok', () => {
       expect(matmanResult.get('input_key_word')).to.eql({
-        searchInputInfo: {keyWorld: 'matman', searchBtnText: '百度一下'},
-        searchResultInfo: {isExist: false, list: []},
+        searchInputInfo: { keyWorld: 'matman', searchBtnText: '百度一下' },
+        searchResultInfo: { isExist: false, list: [] },
         title: '百度一下，你就知道',
       });
     });
@@ -162,7 +162,7 @@ describe('check model/MatmanResult.js', () => {
     });
 
     it('https://www.baidu.com/sugrec should return true', () => {
-      expect(matmanResult.isExistInNetwork('www.baidu.com/sugrec', {prod: 'pc_his'})).to.be.true;
+      expect(matmanResult.isExistInNetwork('www.baidu.com/sugrec', { prod: 'pc_his' })).to.be.true;
     });
   });
 
@@ -184,7 +184,7 @@ describe('check model/MatmanResult.js', () => {
     });
 
     it('https://www.baidu.com/sugrec should return false', () => {
-      expect(matmanResult.isExistPage('www.baidu.com/sugrec', {prod: 'pc_his'})).to.be.false;
+      expect(matmanResult.isExistPage('www.baidu.com/sugrec', { prod: 'pc_his' })).to.be.false;
     });
   });
 
@@ -198,15 +198,33 @@ describe('check model/MatmanResult.js', () => {
     });
 
     it('https://www.baidu.com/sugrec should return true', () => {
-      expect(matmanResult.isExistXHR('www.baidu.com/sugrec', {prod: 'pc_his'})).to.be.true;
+      expect(matmanResult.isExistXHR('www.baidu.com/sugrec', { prod: 'pc_his' })).to.be.true;
     });
 
     it('https://www.baidu.com/sugrec and status=200 should return true', () => {
-      expect(matmanResult.isExistXHR('www.baidu.com/sugrec', {prod: 'pc_his'}, 200)).to.be.true;
+      expect(matmanResult.isExistXHR('www.baidu.com/sugrec', { prod: 'pc_his' }, 200)).to.be.true;
     });
 
     it('https://www.baidu.com/sugrec and status=500 should return true', () => {
-      expect(matmanResult.isExistXHR('www.baidu.com/sugrec', {prod: 'pc_his'}, 500)).to.be.false;
+      expect(matmanResult.isExistXHR('www.baidu.com/sugrec', { prod: 'pc_his' }, 500)).to.be.false;
+    });
+  });
+
+  describe('check isExistConsole(partialText, type)', () => {
+    const matmanResult = new MatmanResult(
+      require('../../data/fixtures/model/matman-result-puppeteer.js'),
+    );
+
+    it('visibility-state shoule return false', () => {
+      expect(matmanResult.isExistConsole('visibility-state')).to.be.false;
+    });
+
+    it('visibility-state regex shoule return true', () => {
+      expect(matmanResult.isExistConsole(/\.*visibility-state\.*/)).to.be.true;
+    });
+
+    it('visibility-state with type to log shoule return false', () => {
+      expect(matmanResult.isExistConsole(/\.*visibility-state\.*/, 'log')).to.be.true;
     });
   });
 });

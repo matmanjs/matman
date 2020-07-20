@@ -93,7 +93,7 @@ export default class MatmanResult {
     }
   }
 
-  toString() {
+  toString(): string {
     // 移除 queueHandler ，因为会与 globalInfo 中的数据重复
     return JSON.stringify({
       runnerName: this.runnerName,
@@ -239,6 +239,16 @@ export default class MatmanResult {
   isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
     return this.queueHandler?.isExistJSBridge(partialURL, query) || false;
   }
+
+  /**
+   * 是否存在某一条 console 记录
+   *
+   * @param {String} partialText 待匹配的文本
+   * @returns {Boolean}
+   */
+  isExistConsole(partialText: string | RegExp, type?: string): boolean {
+    return this.queueHandler?.isExistConsole(partialText, type) || false;
+  }
 }
 
 class PuppeteerQueueHandler implements MatmanResultQueueHandler {
@@ -264,11 +274,24 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @return {Array}
    * @author helinjiang
    */
-  getNetwork(resourceType?: ResourceType): MatmanResultQueueItemPuppeteerNetwork[] {
+  getNetwork(): MatmanResultQueueItemPuppeteerNetwork[] {
     const queue = this.queue as MatmanResultQueueItemPuppeteerNetwork[];
 
     return queue.filter(item => {
       return item.eventName === 'network';
+    });
+  }
+
+  /**
+   * 从结果队列中过滤出 console log
+   *
+   * @returns {Array}
+   */
+  getConsole(): MatmanResultQueueItemPuppeteerConsole[] {
+    const queue = this.queue as MatmanResultQueueItemPuppeteerConsole[];
+
+    return queue.filter(item => {
+      return item.eventName === 'console';
     });
   }
 
@@ -288,7 +311,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
     resourceType?: ResourceType,
     status?: number,
   ): boolean {
-    const queue = this.getNetwork(resourceType);
+    const queue = this.getNetwork();
 
     let result = false;
 
@@ -436,6 +459,41 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
     }
 
     return result;
+  }
+
+  /**
+   * 是否存在某一条 console 记录
+   *
+   * @param {String} partialText 待匹配的文本
+   * @returns {Boolean}
+   */
+  isExistConsole(partialText: string | RegExp, type?: string): boolean {
+    let queue = this.getConsole();
+    // 是否过滤 console 的类型
+    if (type && typeof partialText === 'string') {
+      queue = queue.filter(item => {
+        return item.type === type;
+      });
+    }
+
+    // string 类型时完全匹配
+    if (typeof partialText === 'string') {
+      for (let i = 0; i < queue.length; ++i) {
+        if (queue[i].text === partialText) {
+          return true;
+        }
+      }
+    }
+
+    if (partialText instanceof RegExp) {
+      for (let i = 0; i < queue.length; ++i) {
+        if (partialText.test(queue[i].text)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }
 
@@ -622,5 +680,15 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
     }
 
     return result;
+  }
+
+  /**
+   * 是否存在某一条 console 记录
+   *
+   * @param {String} partialText 待匹配的文本
+   * @returns {Boolean}
+   */
+  isExistConsole(partialText: string | RegExp): boolean {
+    return false;
   }
 }

@@ -173,4 +173,13 @@ export interface MatmanResultQueueHandler {
    * @author helinjiang
    */
   isExistJSBridge(partialURL: string, query?: QueryOpts): boolean;
+
+  /**
+   * 是否存在某一条 console 记录
+   *
+   * @param {String | RegExp} partialText 待匹配的文本
+   * @param {String} type console 的类型
+   * @returns {Boolean}
+   */
+  isExistConsole(partialText: string | RegExp, type?: string): boolean;
 }
