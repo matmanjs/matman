@@ -12,7 +12,11 @@ sidebarDepth: 2
 
 ### 1.1 useProxyServer
 
-> 设置代理服务
+> 设置代理服务，[参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/10.mockstar-and-proxy)
+
+```typescript
+useProxyServer(proxyServer: string): PageDriver | Promise<void>
+```
 
 #### 1.1.1 参数
 
@@ -24,7 +28,11 @@ sidebarDepth: 2
 
 ### 1.2 useMockstar
 
-> 设置 mock 服务
+> 设置 mock 服务中各个接口的返回值（必须与 mockstar 搭配使用），[参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/10.mockstar-and-proxy)
+
+```typescript
+useMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
+```
 
 #### 1.2.1 参数
 
@@ -36,17 +44,29 @@ export interface MockstarQueryDataMap {
 }
 ```
 
+- 即接受一个对象，`key` 为 Mocker 名称，`value` 为 Mocker 中具体返回结果名称
+
 #### 1.2.2 返回值
 
 - `void`
 
 ### 1.3 setCookieConfig
 
-> 设置 cookie
+> 设置 cookie，具体的使用方法可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/06.set-cookie)
+
+```typescript
+setCookieConfig(cookieConfig: CookieConfigOpts): PageDriver | Promise<void>;
+```
 
 #### 1.3.1 参数
 
-- cookieConfig：需要注入的 cookie（CookieConfigOpts，可以传入 `符合格式的 cookie 字符串、键值映射、对象数组`），类型定义如下：
+cookieConfig：需要注入的 cookie
+
+- 可以传入 `符合格式的 cookie 字符串`（以分号分割，等号连接的字符串）
+- 可以传入 `键值映射`
+- 可以传入 `对象数组`（具体的定义可以 [参考](https://github.com/puppeteer/puppeteer/blob/v4.0.0/docs/api.md#pagesetcookiecookies)）
+
+类型定义如下：
 
 ```typescript
 export interface CookieMap {
@@ -77,11 +97,20 @@ export type CookieConfigOpts = cookieStr | CookieMap | CookieObject[];
 
 ### 1.4 setDeviceConfig
 
-> 设置设备参数
+> 设置设备参数，比如可以进行 移动端调试，具体的使用方法可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/04.device-emulation)
+
+```typescript
+setDeviceConfig(deviceConfig: DeviceConfigOpts): PageDriver | Promise<void>;
+```
 
 #### 1.4.1 参数
 
-- deviceConfig：设备参数设置（DeviceConfigOpts，当传入 `string` 时，应为你需要指定的设备，否则传入`object`），类型定义如下：
+deviceConfig：设备参数设置
+
+- 当传入 `string` 时，应为你需要指定的设备
+- 否则传入`object`
+
+类型定义如下：
 
 ```typescript
 interface Viewport {
@@ -119,11 +148,21 @@ export type DeviceConfigOpts = string | Device;
 
 ### 1.5 setScreenshotConfig
 
-> 设置截屏配置
+> 设置截屏配置，具体的使用方法可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/07.set-screen-shot)
+
+```typescript
+setScreenshotConfig(screenshotConfig: ScreenOpts): PageDriver | Promise<void>;
+```
 
 #### 1.5.1 参数
 
-- screenshotConfig：截屏配置（ScreenOpts，传入 `string` 时为文件保存路径，`boolean` 时为是否启动截屏，`object` 时为截屏区域设置等），类型定义如下：
+screenshotConfig：截屏配置
+
+- 传入 `string` 时为文件保存路径（必须带 `PNG` 后缀）
+- `boolean` 时为是否启动截屏
+- `object` 时为截屏区域设置等
+
+类型定义如下：
 
 ```typescript
 /**
@@ -141,7 +180,12 @@ interface ClipOpts {
 /**
  * 是否启用截图, 或者截图保存的文件名路径(如果想对路径, 则相对于basePath 而言), 或者截图配置
  */
-export type ScreenOpts = string | boolean | {tag?: string; path: string; clip?: ClipOpts};
+export type ScreenOpts = string | boolean | {
+  tag?: string;
+  path: string;
+  clip?: ClipOpts;
+  fullPage?: boolean
+};
 ```
 
 #### 1.5.2 返回值
@@ -150,11 +194,20 @@ export type ScreenOpts = string | boolean | {tag?: string; path: string; clip?: 
 
 ### 1.6 setCoverageConfig
 
-> 设置覆盖率配置
+> 设置覆盖率配置，具体使用可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/08.result-coverage)
+
+```typescript
+setCoverageConfig(coverageConfig: CoverageOpts): PageDriver | Promise<void>;
+```
 
 #### 1.6.1 参数
 
-- coverageConfig：覆盖率配置参数（CoverageOpts），类型定义如下：
+coverageConfig：覆盖率配置参数（CoverageOpts）
+
+- path：保存覆盖率文件的路径, 如果没有填写就自动生成
+- tag：标记，用于保存多个版本的结果
+
+类型定义如下：
 
 ```typescript
 /**
@@ -173,11 +226,20 @@ export type CoverageOpts = string | boolean | {tag?: string; path: string};
 
 ### 1.7 setMatmanResultConfig
 
-> 设置运行结果保存配置
+> 设置运行结果保存配置，具体使用可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/08.result-coverage)
+
+```typescript
+setMatmanResultConfig(matmanResultConfig: ResultOpts): PageDriver | Promise<void>;
+```
 
 #### 1.7.1 参数
 
-- matmanResultConfig：执行结果保存配置（ResultOpts），类型定义如下：
+matmanResultConfig：执行结果保存配置（ResultOpts）
+
+- path：保存覆盖率文件的路径, 如果没有填写就自动生成
+- tag：标记，用于保存多个版本的结果
+
+类型定义如下：
 
 ```typescript
 /**
@@ -198,6 +260,10 @@ export type ResultOpts = string | boolean | {tag?: string; path: string};
 
 > 设置页面 URL
 
+```typescript
+setPageUrl(pageUrl: string): PageDriver | Promise<void>;
+```
+
 #### 1.8.1 参数
 
 - pageUrl：待测试页面的 URL（string）
@@ -209,6 +275,13 @@ export type ResultOpts = string | boolean | {tag?: string; path: string};
 ### 1.9 addAction
 
 > 设置页面操作步骤
+
+```typescript
+addAction(
+  actionName: string,
+  actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+): PageDriver | Promise<void>;
+```
 
 #### 1.9.1 参数
 
@@ -225,6 +298,11 @@ export type ResultOpts = string | boolean | {tag?: string; path: string};
 ### 1.10 evaluate
 
 > 设置爬虫、得到结果
+
+```typescript
+evaluate(fn: string): Promise<MatmanResult | PageDriver>;
+evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
+```
 
 #### 1.10.1 参数
 
