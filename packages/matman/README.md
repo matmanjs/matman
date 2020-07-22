@@ -58,6 +58,15 @@ $ npm install matman --save
 - `mockstarQuery`: `MockStarQuery`，mockstar 方案中用于指定桩数据的请求对象
 
 
+#### 2.2.4 changeMockstar(mockstarQuery)
+
+> 支持链式调用。
+
+切换 [mockstar](https://github.com/mockstarjs/mockstar) 的桩数据(假数据，mock 数据)。
+
+- `mockstarQuery`: `MockStarQuery`，mockstar 方案中用于指定桩数据的请求对象
+
+
 #### 2.2.5 setCookies(cookies)
 
 > 支持链式调用。

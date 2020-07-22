@@ -21,7 +21,7 @@ import {
   MockstarQueryDataMap,
 } from 'matman-core';
 
-import {PageDriverOpts} from '../types';
+import { PageDriverOpts } from '../types';
 
 /**
  * 页面操作类，使用这个类可以实现对浏览器页面的控制
@@ -49,7 +49,7 @@ export default class PageDriverAsync implements PageDriver {
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
-  dataIndexMap: {[key: string]: number};
+  dataIndexMap: { [key: string]: number };
 
   // master
   private browserRunner: BrowserRunner;
@@ -139,7 +139,23 @@ export default class PageDriverAsync implements PageDriver {
    * @author helinjiang
    */
   async useMockstar(queryDataMap: MockstarQueryDataMap): Promise<void> {
-    this.mockstarConfig = new MockstarConfig({queryDataMap});
+    this.mockstarConfig = new MockstarConfig({ queryDataMap });
+
+    await Promise.resolve();
+  }
+
+  /**
+   * 更新 mockstar 中的请求
+   *
+   * https://github.com/mockstarjs/mockstar
+   *
+   * @return {PageDriver}
+   * @author helinjiang
+   */
+  async changeMockstar(queryDataMap: MockstarQueryDataMap): Promise<void> {
+    if (this.mockstarConfig) {
+      this.mockstarConfig.update(queryDataMap);
+    }
 
     await Promise.resolve();
   }
