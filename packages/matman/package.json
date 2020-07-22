@@ -1,6 +1,6 @@
 {
   "name": "matman",
-  "version": "6.0.14",
+  "version": "6.0.15",
   "description": "Easy to write e2e test",
   "main": "lib/index.js",
   "scripts": {
@@ -40,7 +40,7 @@
     "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
     "lodash": "^4.17.15",
-    "matman-core": "^6.0.14"
+    "matman-core": "^6.0.15"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
