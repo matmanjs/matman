@@ -2,7 +2,7 @@ import path from 'path';
 import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import { BrowserRunner, PageDriver, MatmanResult, MatmanResultQueueItem } from 'matman-core';
+import { BrowserRunner, MatmanResult, MatmanResultQueueItem, PageDriver } from 'matman-core';
 import { build } from 'matman-crawler';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -187,21 +187,22 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       });
 
       this.page.on('console', log => {
+        const logText = log.text();
+
         this.addRecordInQueue({
           eventName: 'console',
           type: log.type(),
           // args: log.args(),
           // location: log.location(),
-          text: log.text(),
+          text: logText,
         } as MatmanResultQueueItem);
 
         // 将符合输出格式的 console 加入到请求队列
-        const text = log.text();
-        if (/^\[e2e\]\s\.*/.test(text)) {
-          const url = text.split(' ')[1];
+        const matchResult = logText.match(/^\[e2e\](.*)/);
+        if (matchResult && matchResult.length > 1) {
           // 这里因为之后的 URLMatch 函数中比较时会进行编码, 所以此时将 uri 编码统一格式
           // 需要注意的是不能使用 encodeURIComponent 因为其会将特殊字符也编码导致匹配失败
-          this.globalInfo.recorder?.allRequestUrl?.push(encodeURI(url));
+          this.globalInfo.recorder?.allRequestUrl?.push(encodeURI(matchResult[1].trim()));
         }
       });
 
