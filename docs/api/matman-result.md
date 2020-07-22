@@ -240,6 +240,18 @@ isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean;
 
 `Boolean`
 
+#### 2.11.3 使用注意
+
+因为一些实现的问题，在使用中这个 API 可能会对用户代码有一定的侵入性。
+
+如果在使用中发现此 API 的调用结果与实现不符，那么请检查结果文件。如果在 URL 列表中没有捕捉到指定的调用，我们需要大家在代码中添加如下语句：
+
+```js
+console.log(`[e2e] ${url}`)
+```
+
+这样输出在控制台的这条 URL 将被认为是 JSBridge 调用。
+
 ### 2.12 isExistJSConsole
 
 > 是否存在某个 console 输出
@@ -248,12 +260,12 @@ isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean;
 isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean;
 ```
 
-#### 2.11.1 参数
+#### 2.12.1 参数
 
 - partialText：需要匹配的 `string` 或者 `正则表达式`
 - type：console 的类型，如：`log`、`error` 等
 - isFullMatch：是否采用完全匹配模式
 
-#### 2.11.2 返回值
+#### 2.12.2 返回值
 
 `Boolean`
