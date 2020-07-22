@@ -1,14 +1,14 @@
 import Nightmare from 'nightmare';
 import puppeteer from 'puppeteer';
-import {BrowserRunner} from './browserRunner';
+import { BrowserRunner } from './browserRunner';
 import MatmanResult from '../model/MatmanResult';
 import MatmanConfig from '../config/MatmanConfig';
-import CookieConfig, {CookieConfigOpts} from '../config/CookieConfig';
-import DeviceConfig, {DeviceConfigOpts} from '../config/DeviceConfig';
-import ScreenshotConfig, {ScreenOpts} from '../config/ScreenshotConfig';
-import CoverageConfig, {CoverageOpts} from '../config/CoverageConfig';
-import MatmanResultConfig, {ResultOpts} from '../config/MatmanResultConfig';
-import MockstarConfig, {MockstarQueryDataMap} from '../config/MockstarConfig';
+import CookieConfig, { CookieConfigOpts } from '../config/CookieConfig';
+import DeviceConfig, { DeviceConfigOpts } from '../config/DeviceConfig';
+import ScreenshotConfig, { ScreenOpts } from '../config/ScreenshotConfig';
+import CoverageConfig, { CoverageOpts } from '../config/CoverageConfig';
+import MatmanResultConfig, { ResultOpts } from '../config/MatmanResultConfig';
+import MockstarConfig, { MockstarQueryDataMap } from '../config/MockstarConfig';
 
 /**
  * PageDriver 需要实现的接口
@@ -58,7 +58,7 @@ export interface PageDriver {
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
-  dataIndexMap: {[key: string]: number};
+  dataIndexMap: { [key: string]: number };
 
   getRunner(): BrowserRunner;
 
@@ -83,6 +83,16 @@ export interface PageDriver {
    * @author helinjiang
    */
   useMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
+
+  /**
+   * 更新 mockstar 中的请求
+   *
+   * https://github.com/mockstarjs/mockstar
+   *
+   * @return {PageDriver}
+   * @author helinjiang
+   */
+  changeMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
 
   /**
    * 注入 cookie
