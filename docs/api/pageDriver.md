@@ -50,7 +50,31 @@ export interface MockstarQueryDataMap {
 
 - `void`
 
-### 1.3 setCookieConfig
+### 1.3 changeMockstar
+
+> 根据需要改变 mock 服务中各个接口的返回值（必须与 mockstar 搭配使用），[参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/10.mockstar-and-proxy)
+
+```typescript
+async changeMockstar(queryDataMap: MockstarQueryDataMap): Promise<void>;
+```
+
+#### 1.3.1 参数
+
+- queryMap：mockstar 数据映射（MockstarQueryDataMap），类型定义如下：
+
+```typescript
+export interface MockstarQueryDataMap {
+  [key: string]: string;
+}
+```
+
+- 即接受一个对象，`key` 为 Mocker 名称，`value` 为 Mocker 中具体返回结果名称
+
+#### 1.3.2 返回值
+
+- `void`
+
+### 1.4 setCookieConfig
 
 > 设置 cookie，具体的使用方法可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/06.set-cookie)
 
@@ -58,7 +82,7 @@ export interface MockstarQueryDataMap {
 setCookieConfig(cookieConfig: CookieConfigOpts): PageDriver | Promise<void>;
 ```
 
-#### 1.3.1 参数
+#### 1.4.1 参数
 
 cookieConfig：需要注入的 cookie
 
@@ -91,11 +115,11 @@ type cookieStr = string;
 export type CookieConfigOpts = cookieStr | CookieMap | CookieObject[];
 ```
 
-#### 1.3.2 返回值
+#### 1.4.2 返回值
 
 - `void`
 
-### 1.4 setDeviceConfig
+### 1.5 setDeviceConfig
 
 > 设置设备参数，比如可以进行 移动端调试，具体的使用方法可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/04.device-emulation)
 
@@ -103,7 +127,7 @@ export type CookieConfigOpts = cookieStr | CookieMap | CookieObject[];
 setDeviceConfig(deviceConfig: DeviceConfigOpts): PageDriver | Promise<void>;
 ```
 
-#### 1.4.1 参数
+#### 1.5.1 参数
 
 deviceConfig：设备参数设置
 
@@ -142,11 +166,11 @@ interface Device {
 export type DeviceConfigOpts = string | Device;
 ```
 
-#### 1.4.2 返回值
+#### 1.5.2 返回值
 
 - `void`
 
-### 1.5 setScreenshotConfig
+### 1.6 setScreenshotConfig
 
 > 设置截屏配置，具体的使用方法可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/07.set-screen-shot)
 
@@ -154,7 +178,7 @@ export type DeviceConfigOpts = string | Device;
 setScreenshotConfig(screenshotConfig: ScreenOpts): PageDriver | Promise<void>;
 ```
 
-#### 1.5.1 参数
+#### 1.6.1 参数
 
 screenshotConfig：截屏配置
 
@@ -188,11 +212,11 @@ export type ScreenOpts = string | boolean | {
 };
 ```
 
-#### 1.5.2 返回值
+#### 1.6.2 返回值
 
 - `void`
 
-### 1.6 setCoverageConfig
+### 1.7 setCoverageConfig
 
 > 设置覆盖率配置，具体使用可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/08.result-coverage)
 
@@ -200,7 +224,7 @@ export type ScreenOpts = string | boolean | {
 setCoverageConfig(coverageConfig: CoverageOpts): PageDriver | Promise<void>;
 ```
 
-#### 1.6.1 参数
+#### 1.7.1 参数
 
 coverageConfig：覆盖率配置参数（CoverageOpts）
 
@@ -220,11 +244,11 @@ coverageConfig：覆盖率配置参数（CoverageOpts）
 export type CoverageOpts = string | boolean | {tag?: string; path: string};
 ```
 
-#### 1.6.2 返回值
+#### 1.7.2 返回值
 
 - `void`
 
-### 1.7 setMatmanResultConfig
+### 1.8 setMatmanResultConfig
 
 > 设置运行结果保存配置，具体使用可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/08.result-coverage)
 
@@ -232,7 +256,7 @@ export type CoverageOpts = string | boolean | {tag?: string; path: string};
 setMatmanResultConfig(matmanResultConfig: ResultOpts): PageDriver | Promise<void>;
 ```
 
-#### 1.7.1 参数
+#### 1.8.1 参数
 
 matmanResultConfig：执行结果保存配置（ResultOpts）
 
@@ -252,11 +276,11 @@ matmanResultConfig：执行结果保存配置（ResultOpts）
 export type ResultOpts = string | boolean | {tag?: string; path: string};
 ```
 
-#### 1.7.2 返回值
+#### 1.8.2 返回值
 
 - `void`
 
-### 1.8 setPageUrl
+### 1.9 setPageUrl
 
 > 设置页面 URL
 
@@ -264,15 +288,15 @@ export type ResultOpts = string | boolean | {tag?: string; path: string};
 setPageUrl(pageUrl: string): PageDriver | Promise<void>;
 ```
 
-#### 1.8.1 参数
+#### 1.9.1 参数
 
 - pageUrl：待测试页面的 URL（string）
 
-#### 1.8.2 返回值
+#### 1.9.2 返回值
 
 - `void`
 
-### 1.9 addAction
+### 1.10 addAction
 
 > 设置页面操作步骤
 
@@ -283,7 +307,7 @@ addAction(
 ): PageDriver | Promise<void>;
 ```
 
-#### 1.9.1 参数
+#### 1.10.1 参数
 
 - actionName：action 的名称（string）
 - actionCall：需要执行的方法（`(n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>`）
@@ -291,11 +315,11 @@ addAction(
   - 当 runner 选择 puppeteer 时，需要传入的函数为异步函数
   - 当 runner 选择 Nightmare 时，需要将 Nightmare 实例返回
 
-#### 1.9.2 返回值
+#### 1.10.2 返回值
 
 - `void`
 
-### 1.10 evaluate
+### 1.11 evaluate
 
 > 设置爬虫、得到结果
 
@@ -304,11 +328,11 @@ evaluate(fn: string): Promise<MatmanResult | PageDriver>;
 evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
 ```
 
-#### 1.10.1 参数
+#### 1.11.1 参数
 
 - evaluate：需要执行的爬虫脚本的路径或者函数（string 或者 Function）
 
-#### 1.10.2 返回值
+#### 1.11.2 返回值
 
 - `Promise<MatmanResult | PageDriver>`
 
@@ -344,6 +368,16 @@ export interface PageDriver {
    * @return {PageDriver}
    */
   useMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
+  
+  /**
+   * 更新 mockstar 中的请求
+   *
+   * https://github.com/mockstarjs/mockstar
+   *
+   * @return {PageDriver}
+   * @author helinjiang
+   */
+  async changeMockstar(queryDataMap: MockstarQueryDataMap): Promise<void>;
 
   /**
    * 注入 cookie

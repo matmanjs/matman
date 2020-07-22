@@ -83,7 +83,12 @@ function getTransactionListInfo() {
 
 ### 2.2 启动脚本
 
-在 `DevOps/matman-app/case_modules/page-transaction/crawlers/get-page-info.js` 文件中，我们利用matman 编写端到端测试的逻辑，内容如下（需要注意的是我们一定需要一个 action 这样才可以捕捉页面的快照）：
+在 `DevOps/matman-app/case_modules/page-transaction/basic-check.js` 文件中，我们利用matman 编写端到端测试的逻辑，内容如下（需要注意的是我们一定需要一个 action 这样才可以捕捉页面的快照）：
+
+1. 启动浏览器
+2. 设置页面的 URL
+3. 添加一个 INIT 动作，捕捉页面快照
+4. 执行爬虫脚本获取结果
 
 ```js
 const path = require('path');
@@ -103,7 +108,7 @@ module.exports = async pageDriverOpts => {
   });
 
   // 获取结果
-  return await pageDriver.evaluate(path.resolve(__dirname, './crawlers/get-page-info.js'));
+  return pageDriver.evaluate(path.resolve(__dirname, './crawlers/get-page-info.js'));
 };
 ```
 
