@@ -1,3 +1,4 @@
+import _ from 'lodash';
 export interface MockstarQueryDataMap {
   [key: string]: string;
 }
@@ -11,5 +12,9 @@ export default class MockstarConfig {
 
   constructor(mockstarConfigOpts: MockstarConfigOpts) {
     this.queryDataMap = mockstarConfigOpts.queryDataMap;
+  }
+
+  update(queryDataMap: MockstarQueryDataMap): void {
+    this.queryDataMap = _.merge({}, this.queryDataMap, queryDataMap);
   }
 }
