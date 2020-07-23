@@ -51,6 +51,7 @@ module.exports = {
                 'improve/simple',
                 'improve/transaction',
                 'improve/withdraw',
+                'improve/jsBridge',
               ],
             },
             {
