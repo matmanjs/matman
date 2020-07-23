@@ -346,7 +346,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         await this.page.evaluate(this.script);
       }
 
-      if (!this.pageDriver?.isRunList) {
+      if (!this.pageDriver?.isRunList[i]) {
         const t = await this.page.evaluate(evaluate);
 
         // 覆盖率数据

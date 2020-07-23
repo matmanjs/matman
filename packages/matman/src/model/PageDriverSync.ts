@@ -300,7 +300,7 @@ export default class PageDriverSync implements PageDriver {
     actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
   ): PageDriver {
     if (typeof actionCall !== 'function') {
-      throw new Error('addAction should assign function!');
+      throw new Error('addRunAction should assign function!');
     }
     this.actionList.push(actionCall);
     this.isRunList.push(1);

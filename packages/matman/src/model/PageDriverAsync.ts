@@ -301,7 +301,7 @@ export default class PageDriverAsync implements PageDriver {
     actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
   ): Promise<void> {
     if (typeof actionCall !== 'function') {
-      throw new Error('addAction should assign function!');
+      throw new Error('addRunAction should assign function!');
     }
     this.actionList.push(actionCall);
     this.isRunList.push(1);

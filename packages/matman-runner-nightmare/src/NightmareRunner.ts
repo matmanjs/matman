@@ -294,7 +294,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
         curRun = curRun.wait(50);
       }
 
-      if (!this.pageDriver?.isRunList) {
+      if (!this.pageDriver?.isRunList[i]) {
         const t: any = await curRun.evaluate(evaluate);
 
         // 覆盖率数据
