@@ -8,22 +8,9 @@ sidebarDepth: 2
 
 > 获得异步的 PageDriver
 
-### 1.1 原型定义
+### 1.1 入参类型
 
-```typescript
-/**
- * 获得异步的 PageDriver
- *
- * @param {BrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
- * @param {PageDriverOpts} pageDriverOpts
- * @param {MatmanConfigOpts} matmanConfigOpts
- */
-export declare function launch(browserRunner: BrowserRunner, pageDriverOpts?: PageDriverOpts, matmanConfigOpts?: MatmanConfigOpts): PageDriverAsync;
-```
-
-### 1.2 入参类型
-
-#### 1.2.1 BrowserRunner
+#### 1.1.1 BrowserRunner
 
 浏览器运行器，目前支持 `puppeteer` 和 `nightmare` 两种。
 
@@ -43,9 +30,9 @@ const {BrowserRunner} = require('matman-runner-nightmare');
 const page = matman.launch(new BrowserRunner(), opts);
 ```
 
-#### 1.2.2 PageDriverOpts
+#### 1.1.2 PageDriverOpts
 
-传递给运行器的启动参数，他的类型定义如下：
+传递给运行器的启动参数，他的类型定义如下（具体的例子可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/05.launch-options)）：
 
 ```typescript
 export interface PageDriverOpts {
@@ -65,35 +52,35 @@ export interface PageDriverOpts {
 - `useRecorder`：是否启用全局的记录器，用于监听网络请求、console 等
 - `delayBeforeRun`：延迟执行
 
-#### 1.2.3 MatmanConfigOpts
+#### 1.1.3 MatmanConfigOpts
 
 - matman 全局配置，不推荐使用
 - 推荐在根目录下定义 `matman.config.js` 进行使用，请[参考](./matman-config)
 
-### 1.3 返回结果
+### 1.2 返回结果
 
 返回 `PageDriverAsync`，请[参考](./pageDriver#_2-pagedriverasync)
 
-## 2. launchSync
-
-> 获得同步的 PageDriver
-
-### 2.1 原型定义
+### 1.3 原型定义
 
 ```typescript
 /**
- * 获得同步的 PageDriver
+ * 获得异步的 PageDriver
  *
  * @param {BrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
  * @param {PageDriverOpts} pageDriverOpts
  * @param {MatmanConfigOpts} matmanConfigOpts
  */
-export declare function launchSync(browserRunner: BrowserRunner, pageDriverOpts?: PageDriverOpts, matmanConfigOpts?: MatmanConfigOpts): PageDriverSync;
+export declare function launch(browserRunner: BrowserRunner, pageDriverOpts?: PageDriverOpts, matmanConfigOpts?: MatmanConfigOpts): PageDriverAsync;
 ```
 
-### 2.2 入参类型
+## 2. launchSync
 
-#### 2.2.1 BrowserRunner
+> 获得同步的 PageDriver，同步的 PageDriver 支持链式调用
+
+### 2.1 入参类型
+
+#### 2.1.1 BrowserRunner
 
 浏览器运行器，目前支持 `puppeteer` 和 `nightmare` 两种。
 
@@ -113,24 +100,52 @@ const {BrowserRunner} = require('matman-runner-nightmare');
 const page = matman.launchSync(new BrowserRunner(), opts);
 ```
 
-#### 2.2.2 PageDriverOpts
+#### 2.1.2 PageDriverOpts
 
-与 `lunch` 中的定义相同，请参考上述文档。
+与 `lunch` 中的定义相同，请参考上述文档（具体的例子可以 [参考](https://github.com/matmanjs/test-automation-training/tree/master/matman/05.launch-options)）。
 
-#### 2.2.3 MatmanConfigOpts
+#### 2.1.3 MatmanConfigOpts
 
 - matman 全局配置，不推荐使用
 - 推荐在根目录下定义 `matman.config.js` 进行使用，请[参考](./matman-config)
 
-### 2.3 返回结果
+### 2.2 返回结果
 
 返回 `PageDriverSync`，请[参考](./pageDriver#_2-pagedriversync)
 
+### 2.3 原型定义
+
+```typescript
+/**
+ * 获得同步的 PageDriver
+ *
+ * @param {BrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
+ * @param {PageDriverOpts} pageDriverOpts
+ * @param {MatmanConfigOpts} matmanConfigOpts
+ */
+export declare function launchSync(browserRunner: BrowserRunner, pageDriverOpts?: PageDriverOpts, matmanConfigOpts?: MatmanConfigOpts): PageDriverSync;
+```
+
 ## 3. getLocalWhistleServer
 
-> 获得本地 whistle 地址
+> 获得本地 whistle 地址，一般不需要使用我们将为你自动执行
 
-### 3.1 原型定义
+### 3.1 入参类型
+
+#### 3.1.1 port
+
+指定 Whistle 端口
+
+#### 3.1.2 doNotAutoCheckStartedPort
+
+是否自动嗅探，正在运行的 whistle 服务
+
+### 3.2 返回结果
+
+- 返回结果为：`Promise<string>`
+- 例如：`127.0.0.1:8899`
+
+### 3.3 原型定义
 
 ```typescript
 /**
@@ -141,19 +156,3 @@ const page = matman.launchSync(new BrowserRunner(), opts);
  */
 export declare function getLocalWhistleServer(port: number, doNotAutoCheckStartedPort?: boolean): Promise<string>;
 ```
-
-### 3.2 入参类型
-
-#### 3.2.1 port
-
-指定 Whistle 端口
-
-#### 3.2.2 doNotAutoCheckStartedPort
-
-是否自动嗅探，正在运行的 whistle 服务
-
-### 3.3 返回结果
-
-- 返回结果为：`Promise<string>`
-- 例如：`127.0.0.1:8899`
-

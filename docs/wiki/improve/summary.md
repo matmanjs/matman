@@ -33,29 +33,20 @@
 ```text
 .
 ├── DevOps
-│   ├── devops-app
-│   ├── matman-app
-│   ├── mockstar-app
-│   └── whistle
+│   ├── devops-app
+│   ├── matman-app
+│   ├── mockstar-app
+│   └── whistle
 ├── LICENSE
+├── README.md
 ├── config-overrides.js
+├── package-lock.json
 ├── package.json
 ├── public
 ├── src
 └── test
-    ├── bootstrap.sh
-    ├── clean.sh
     ├── e2e
-    │   ├── page-debug
-    │   ├── page-simple
-    │   ├── page-transaction
-    │   └── page-withdraw
-    ├── mocha.opts
     └── unit
-        ├── middlewares
-        ├── pages
-        ├── some.test.js
-        └── subdir
 ```
 
 ### 2.1 DevOps
@@ -71,10 +62,8 @@
 
 本文件夹中我们编写测试用例：
 
-- mocha.opts：mocha 的配置文件
 - e2e：端到端测试的测试用例文件
 - unit：单元测试用例文件
-- *.sh：相关的启动脚本、清理脚本
 
 ## 3. 运行
 
@@ -91,17 +80,15 @@
 
 ### 3.2 启动命令
 
-在本项目中，我们在 `/test` 目录下提供了执行完整流程的测试脚本——[bootstrap.sh](https://github.com/matmanjs/matman-demo/blob/master/test/bootstrap.sh)与清理端口的测试脚本 [clean.sh](https://github.com/matmanjs/matman-demo/blob/master/test/clean.sh)
-
 在终端中执行下面的命令即可查看效果：
 
 ```bash
-$ sh ./test/bootstrap.sh
+$ npm test
 ```
 
 ## 4. 运行结果
 
-执行 `sh ./test/bootstrap.sh` 命令，我们可以在 `/DevOps/devops-app/output` 文件夹中查看所有的输出文件，一般情况下用浏览器打开 **index.html** 即可
+执行 `npm test` 命令，我们可以在 `/DevOps/devops-app/output` 文件夹中查看所有的输出文件，一般情况下用浏览器打开 **index.html** 即可
 
 ### 4.1 综合入口
 
