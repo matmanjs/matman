@@ -319,7 +319,28 @@ addAction(
 
 - `void`
 
-### 1.11 evaluate
+### 1.11 addRunAction
+
+> 设置页面操作步骤，但是不产生页面快照
+
+```typescript
+addRunAction(
+  actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+): PageDriver | Promise<void>;
+```
+
+#### 1.11.1 参数
+
+- actionCall：需要执行的方法（`(n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>`）
+- 需要注意的是
+  - 当 runner 选择 puppeteer 时，需要传入的函数为异步函数
+  - 当 runner 选择 Nightmare 时，需要将 Nightmare 实例返回
+
+#### 1.11.2 返回值
+
+- `void`
+
+### 1.12 evaluate
 
 > 设置爬虫、得到结果
 
@@ -328,11 +349,11 @@ evaluate(fn: string): Promise<MatmanResult | PageDriver>;
 evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
 ```
 
-#### 1.11.1 参数
+#### 1.12.1 参数
 
 - evaluate：需要执行的爬虫脚本的路径或者函数（string 或者 Function）
 
-#### 1.11.2 返回值
+#### 1.12.2 返回值
 
 - `Promise<MatmanResult | PageDriver>`
 
@@ -445,6 +466,16 @@ export interface PageDriver {
    */
   addAction(
     actionName: string,
+    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+  ): PageDriver | Promise<void>;
+  
+  /**
+   * 增加执行动作
+   *
+   * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
+   * @return {PageDriver | Promise<void>}
+   */
+  addRunAction(
     actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
   ): PageDriver | Promise<void>;
 
