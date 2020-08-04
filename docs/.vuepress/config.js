@@ -101,6 +101,10 @@ module.exports = {
               path: '/tool/',
             },
             {
+              title: 'Devtool',
+              path: '/tool/devtools',
+            },
+            {
               title: 'Proxy SwitchyOmega',
               path: '/tool/proxy-switchyomega',
             },
