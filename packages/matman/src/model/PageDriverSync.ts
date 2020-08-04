@@ -49,6 +49,7 @@ export default class PageDriverSync implements PageDriver {
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
+  isRunList: number[] = [];
   dataIndexMap: { [key: string]: number };
 
   // master
@@ -273,12 +274,36 @@ export default class PageDriverSync implements PageDriver {
   ): PageDriverSync {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
-      this.dataIndexMap[actionName + ''] = this.actionList.length - 1;
+      // 注意 run 引入后需要统计的是前面有多少个非 run action
+      this.dataIndexMap[actionName + ''] = this.isRunList.reduce(
+        (count, value) => (value === 0 ? count + 1 : count),
+        0,
+      );
     } else if (typeof actionName === 'function') {
       this.actionList.push(actionName);
     } else {
       throw new Error('addAction should assign function!');
     }
+
+    this.isRunList.push(0);
+
+    return this;
+  }
+
+  /**
+   * 增加执行动作
+   *
+   * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
+   * @return {Promise<void>}
+   */
+  addRunAction(
+    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+  ): PageDriver {
+    if (typeof actionCall !== 'function') {
+      throw new Error('addRunAction should assign function!');
+    }
+    this.actionList.push(actionCall);
+    this.isRunList.push(1);
 
     return this;
   }

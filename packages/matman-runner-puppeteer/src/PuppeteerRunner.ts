@@ -346,26 +346,28 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         await this.page.evaluate(this.script);
       }
 
-      const t = await this.page.evaluate(evaluate);
+      if (!this.pageDriver?.isRunList[i]) {
+        const t = await this.page.evaluate(evaluate);
 
-      // 覆盖率数据
-      if (t.__coverage__ && this.pageDriver?.coverageConfig) {
-        const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
+        // 覆盖率数据
+        if (t.__coverage__ && this.pageDriver?.coverageConfig) {
+          const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
 
-        try {
-          await fs.outputJson(coverageFilePath, t.__coverage__);
+          try {
+            await fs.outputJson(coverageFilePath, t.__coverage__);
 
-          // 设置存在的标志
-          this.globalInfo.isExistCoverageReport = true;
+            // 设置存在的标志
+            this.globalInfo.isExistCoverageReport = true;
 
-          // 记录之后就删除之，否则返回的数据太大了
-          delete t.__coverage__;
-        } catch (e) {
-          console.log('save coverage file fail', coverageFilePath, e);
+            // 记录之后就删除之，否则返回的数据太大了
+            delete t.__coverage__;
+          } catch (e) {
+            console.log('save coverage file fail', coverageFilePath, e);
+          }
         }
-      }
 
-      result.push(t);
+        result.push(t);
+      }
 
       // 结束执行 action
       this.emit('afterRunCase', { index: i, result: result });

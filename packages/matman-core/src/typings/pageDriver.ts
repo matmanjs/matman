@@ -58,6 +58,8 @@ export interface PageDriver {
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
+  // 提供给 Run 方法做标记, 不产生快照
+  isRunList: number[];
   dataIndexMap: { [key: string]: number };
 
   getRunner(): BrowserRunner;
@@ -167,6 +169,16 @@ export interface PageDriver {
    */
   addAction(
     actionName: string,
+    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+  ): PageDriver | Promise<void>;
+
+  /**
+   * 增加执行动作
+   *
+   * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
+   * @return {PageDriver | Promise<void>}
+   */
+  addRunAction(
     actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
   ): PageDriver | Promise<void>;
 

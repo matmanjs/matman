@@ -1,13 +1,13 @@
 import path from 'path';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import Nightmare from 'nightmare';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import {getNightmarePlus, WebEventRecorder} from 'nightmare-handler';
+import { getNightmarePlus, WebEventRecorder } from 'nightmare-handler';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import {createMockStarQuery} from 'mockstar';
+import { createMockStarQuery } from 'mockstar';
 import {
   BrowserRunner,
   PageDriver,
@@ -15,8 +15,8 @@ import {
   MatmanResultQueueItem,
   RUNNER_NAME,
 } from 'matman-core';
-import {build} from 'matman-crawler';
-import {getMainUrl, evaluate} from './utils';
+import { build } from 'matman-crawler';
+import { getMainUrl, evaluate } from './utils';
 
 /**
  * 对 nightmare 的接口进行拓展
@@ -246,7 +246,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       this.nightmare.inject('js', `${process.env.HOME}/.matman/temp.js`);
     }
 
-    this.emit('afterGotoPage', {url: this.pageDriver.pageUrl, nightmare: this.nightmare});
+    this.emit('afterGotoPage', { url: this.pageDriver.pageUrl, nightmare: this.nightmare });
   }
 
   /**
@@ -257,7 +257,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
     // 循环处理多个 action
     const result: any[] = [];
     // 触发开始事件
-    this.emit('beforeRunActions', {index: 0, result: result});
+    this.emit('beforeRunActions', { index: 0, result: result });
 
     let i = 0;
     const actionList = this.pageDriver?.actionList as ((n: Nightmare) => Nightmare)[];
@@ -270,7 +270,7 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
       }
 
       // 开始执行 action
-      this.emit('beforeRunCase', {index: i, result: result});
+      this.emit('beforeRunCase', { index: i, result: result });
 
       // 执行 action
       if (!this.nightmare) {
@@ -294,32 +294,34 @@ export class NightmareRunner extends EventEmitter implements BrowserRunner {
         curRun = curRun.wait(50);
       }
 
-      const t: any = await curRun.evaluate(evaluate);
+      if (!this.pageDriver?.isRunList[i]) {
+        const t: any = await curRun.evaluate(evaluate);
 
-      // 覆盖率数据
-      if (t.__coverage__ && this.pageDriver?.coverageConfig) {
-        const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
+        // 覆盖率数据
+        if (t.__coverage__ && this.pageDriver?.coverageConfig) {
+          const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
 
-        try {
-          await fs.outputJson(coverageFilePath, t.__coverage__);
+          try {
+            await fs.outputJson(coverageFilePath, t.__coverage__);
 
-          // 设置存在的标志
-          this.globalInfo.isExistCoverageReport = true;
+            // 设置存在的标志
+            this.globalInfo.isExistCoverageReport = true;
 
-          // 记录之后就删除之，否则返回的数据太大了
-          delete t.__coverage__;
-        } catch (e) {
-          console.log('save coverage file fail', coverageFilePath, e);
+            // 记录之后就删除之，否则返回的数据太大了
+            delete t.__coverage__;
+          } catch (e) {
+            console.log('save coverage file fail', coverageFilePath, e);
+          }
         }
+
+        result.push(t);
       }
 
-      result.push(t);
-
       // 结束执行 action
-      this.emit('afterRunCase', {index: i, result: result});
+      this.emit('afterRunCase', { index: i, result: result });
     }
 
-    this.emit('afterRunActions', {index: i, result: result});
+    this.emit('afterRunActions', { index: i, result: result });
 
     return result;
   }
