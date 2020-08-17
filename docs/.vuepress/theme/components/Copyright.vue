@@ -97,7 +97,6 @@
                     transform: translate(-50%, -100%);
                     width: 200px;
                     height: 342px;
-                    background-image: url(../images/wechat-qrcode.jpg);
                     background-size: 100%;
                 }
             }

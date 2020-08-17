@@ -63,7 +63,7 @@
                     langClass: 'nav__link',
                     logo,
                     logoStyle: {
-                        width: '220px',
+                        // width: '220px',
                         height: '50px'
                     }
                 };
