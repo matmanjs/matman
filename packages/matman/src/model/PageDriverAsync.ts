@@ -21,7 +21,7 @@ import {
   MockstarQueryDataMap,
 } from 'matman-core';
 
-import {PageDriverOpts} from '../types';
+import { PageDriverOpts } from '../types';
 
 /**
  * 页面操作类，使用这个类可以实现对浏览器页面的控制
@@ -49,7 +49,8 @@ export default class PageDriverAsync implements PageDriver {
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
-  dataIndexMap: {[key: string]: number};
+  isRunList: number[] = [];
+  dataIndexMap: { [key: string]: number };
 
   // master
   private browserRunner: BrowserRunner;
@@ -139,7 +140,23 @@ export default class PageDriverAsync implements PageDriver {
    * @author helinjiang
    */
   async useMockstar(queryDataMap: MockstarQueryDataMap): Promise<void> {
-    this.mockstarConfig = new MockstarConfig({queryDataMap});
+    this.mockstarConfig = new MockstarConfig({ queryDataMap });
+
+    await Promise.resolve();
+  }
+
+  /**
+   * 更新 mockstar 中的请求
+   *
+   * https://github.com/mockstarjs/mockstar
+   *
+   * @return {PageDriver}
+   * @author helinjiang
+   */
+  async changeMockstar(queryDataMap: MockstarQueryDataMap): Promise<void> {
+    if (this.mockstarConfig) {
+      this.mockstarConfig.update(queryDataMap);
+    }
 
     await Promise.resolve();
   }
@@ -258,12 +275,36 @@ export default class PageDriverAsync implements PageDriver {
   ): Promise<void> {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
-      this.dataIndexMap[actionName + ''] = this.actionList.length - 1;
+      // 注意 run 引入后需要统计的是前面有多少个非 run action
+      this.dataIndexMap[actionName + ''] = this.isRunList.reduce(
+        (count, value) => (value === 0 ? count + 1 : count),
+        0,
+      );
     } else if (typeof actionName === 'function') {
       this.actionList.push(actionName);
     } else {
       throw new Error('addAction should assign function!');
     }
+
+    this.isRunList.push(0);
+
+    await Promise.resolve();
+  }
+
+  /**
+   * 增加执行动作
+   *
+   * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
+   * @return {Promise<void>}
+   */
+  async addRunAction(
+    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+  ): Promise<void> {
+    if (typeof actionCall !== 'function') {
+      throw new Error('addRunAction should assign function!');
+    }
+    this.actionList.push(actionCall);
+    this.isRunList.push(1);
 
     await Promise.resolve();
   }

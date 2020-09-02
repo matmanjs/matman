@@ -24,6 +24,7 @@ describe('check config/ScreenshotConfig.js', () => {
           './page_baidu_index/basic-check_js/basic-check_js.png',
         ),
         tag: undefined,
+        fullPage: true,
       });
     });
 
@@ -34,6 +35,7 @@ describe('check config/ScreenshotConfig.js', () => {
           './page_baidu_index/basic-check_js/basic-check_js_mytag.png',
         ),
         tag: 'mytag',
+        fullPage: true,
       });
     });
 
@@ -43,6 +45,7 @@ describe('check config/ScreenshotConfig.js', () => {
       ).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file.png'),
         tag: undefined,
+        fullPage: true,
       });
     });
 
@@ -52,6 +55,7 @@ describe('check config/ScreenshotConfig.js', () => {
       ).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file_mytag.png'),
         tag: 'mytag',
+        fullPage: true,
       });
     });
 
@@ -61,6 +65,7 @@ describe('check config/ScreenshotConfig.js', () => {
       ).to.eql({
         path: '/is/absolute/file.png',
         tag: undefined,
+        fullPage: true,
       });
     });
 
@@ -70,6 +75,7 @@ describe('check config/ScreenshotConfig.js', () => {
       ).to.eql({
         path: '/is/absolute/file_mytag.png',
         tag: 'mytag',
+        fullPage: true,
       });
     });
 
@@ -80,6 +86,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: path.join(matmanConfig.screenshotPath, './is/relative/file.png'),
         clip: undefined,
         tag: undefined,
+        fullPage: true,
       });
     });
 
@@ -95,6 +102,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: path.join(matmanConfig.screenshotPath, './is/relative/file_mytag.png'),
         clip: undefined,
         tag: 'mytag',
+        fullPage: true,
       });
     });
 
@@ -112,6 +120,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: path.join(matmanConfig.screenshotPath, './is/relative/file.png'),
         clip: {x: 1, y: 2, width: 3, height: 4},
         tag: undefined,
+        fullPage: true,
       });
     });
 
@@ -130,6 +139,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: path.join(matmanConfig.screenshotPath, './is/relative/file_customtag.png'),
         clip: {x: 1, y: 2, width: 3, height: 4},
         tag: 'customtag',
+        fullPage: true,
       });
     });
 
@@ -149,6 +159,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: path.join(matmanConfig.screenshotPath, './is/relative/file_customtag.png'),
         clip: {x: 1, y: 2, width: 3, height: 4},
         tag: 'customtag',
+        fullPage: true,
       });
     });
 
@@ -159,6 +170,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: '/is/absolute/file.png',
         clip: undefined,
         tag: undefined,
+        fullPage: true,
       });
     });
 
@@ -174,6 +186,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: '/is/absolute/file_mytag.png',
         clip: undefined,
         tag: 'mytag',
+        fullPage: true,
       });
     });
 
@@ -191,6 +204,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: '/is/absolute/file.png',
         clip: {x: 1, y: 2, width: 3, height: 4},
         tag: undefined,
+        fullPage: true,
       });
     });
 
@@ -209,6 +223,7 @@ describe('check config/ScreenshotConfig.js', () => {
         path: '/is/absolute/file_customtag.png',
         clip: {x: 1, y: 2, width: 3, height: 4},
         tag: 'customtag',
+        fullPage: true,
       });
     });
 
@@ -228,6 +243,28 @@ describe('check config/ScreenshotConfig.js', () => {
         path: '/is/absolute/file_customtag.png',
         clip: {x: 1, y: 2, width: 3, height: 4},
         tag: 'customtag',
+        fullPage: true,
+      });
+    });
+
+    it('if opts is Object() and fullPage is false', () => {
+      expect(
+        new ScreenshotConfig(
+          matmanConfig,
+          {
+            path: '/is/absolute/file.png',
+            clip: {x: 1, y: 2, width: 3, height: 4},
+            tag: 'customtag',
+            fullPage: false,
+          },
+          caseModuleFilePath,
+          'mytag',
+        ),
+      ).to.eql({
+        path: '/is/absolute/file_customtag.png',
+        clip: {x: 1, y: 2, width: 3, height: 4},
+        tag: 'customtag',
+        fullPage: false,
       });
     });
   });

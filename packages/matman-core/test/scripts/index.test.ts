@@ -9,6 +9,7 @@ describe('./index.ts', () => {
       'CoverageConfig',
       'CookieConfig',
       'DeviceConfig',
+      'isURLMatch',
       'MATMAN_CONFIG_FILE',
       'RUNNER_NAME',
       'MatmanResult',

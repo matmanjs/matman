@@ -1,15 +1,16 @@
 import path from 'path';
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import {BrowserRunner, PageDriver, MatmanResult, MatmanResultQueueItem} from 'matman-core';
-import {build} from 'matman-crawler';
+import { BrowserRunner, MatmanResult, MatmanResultQueueItem, PageDriver } from 'matman-core';
+import { build } from 'matman-crawler';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import {createMockStarQuery} from 'mockstar';
-import {evaluate} from './utils/master';
+import { createMockStarQuery } from 'mockstar';
+import { evaluate } from './utils/master';
 
 export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
+  private url = '';
   name = 'puppeteer';
   pageDriver: PageDriver | null;
   puppeteerConfig: puppeteer.LaunchOptions;
@@ -22,6 +23,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     };
     isExistCoverageReport?: boolean;
   };
+  script = '';
 
   constructor(opts: puppeteer.LaunchOptions = {}) {
     super();
@@ -40,6 +42,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
   setPageDriver(n: PageDriver): void {
     this.pageDriver = n;
+    this.url = n.pageUrl;
 
     if (this.pageDriver?.useRecorder) {
       this.globalInfo.recorder = {
@@ -83,6 +86,9 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     // Disable the setuid sandbox (Linux only).
     // https://peter.sh/experiments/chromium-command-line-switches/#disable-setuid-sandbox
     this.puppeteerConfig.args.push('--disable-setuid-sandbox');
+
+    // 为了解决 HTTPS 证书报错
+    this.puppeteerConfig.ignoreHTTPSErrors = true;
 
     // 如果设置了 show ，则同步打开开发者工具面板
     // puppeteer 场景下不需要这么做，可以人工打开，因此不再有必要这么处理了
@@ -134,7 +140,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
             'x-mockstar-query': encodeURIComponent(mockstarQueryString),
           });
 
-          request.continue({headers});
+          request.continue({ headers });
         } else {
           request.continue();
         }
@@ -147,7 +153,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         const request = msg.request();
 
         let responseBody = null;
-        if (msg.headers()['content-type'] === 'application/json') {
+        if (
+          msg.headers()['content-type'] &&
+          msg.headers()['content-type'].indexOf('application/json') !== -1
+        ) {
           try {
             responseBody = await msg.json();
           } catch (e) {
@@ -178,13 +187,23 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       });
 
       this.page.on('console', log => {
+        const logText = log.text();
+
         this.addRecordInQueue({
           eventName: 'console',
           type: log.type(),
           // args: log.args(),
           // location: log.location(),
-          text: log.text(),
+          text: logText,
         } as MatmanResultQueueItem);
+
+        // 将符合输出格式的 console 加入到请求队列
+        const matchResult = logText.match(/^\[e2e\](.*)/);
+        if (matchResult && matchResult.length > 1) {
+          // 这里因为之后的 URLMatch 函数中比较时会进行编码, 所以此时将 uri 编码统一格式
+          // 需要注意的是不能使用 encodeURIComponent 因为其会将特殊字符也编码导致匹配失败
+          this.globalInfo.recorder?.allRequestUrl?.push(encodeURI(matchResult[1].trim()));
+        }
       });
 
       this.page.on('request', request => {
@@ -246,15 +265,18 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       throw new Error('pageUrl must be defined');
     }
 
-    await this.page?.goto(this.pageDriver?.pageUrl);
+    // https://github.com/puppeteer/puppeteer/blob/v5.1.0/docs/api.md#pagegotourl-options
+    await this.page?.goto(this.pageDriver?.pageUrl, {
+      // timeout: 0,
+      waitUntil: 'networkidle2',
+    });
 
     // 注入脚本
     // 因为有时需要注入脚本 所以必须进行文件的保存与注入
     if (typeof this.pageDriver.evaluateFn === 'string') {
-      const res = await build(this.pageDriver.evaluateFn, {
+      this.script = await build(this.pageDriver.evaluateFn, {
         matmanConfig: this.pageDriver.matmanConfig,
       });
-      this.page?.evaluate(res);
     } else {
       fs.ensureDirSync(`${process.env.HOME}/.matman`);
 
@@ -262,20 +284,21 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         `${process.env.HOME}/.matman/temp.js`,
         `module.exports=${this.pageDriver.evaluateFn?.toString()}`,
       );
-      const res = await build(`${process.env.HOME}/.matman/temp.js`, {
+      this.script = await build(`${process.env.HOME}/.matman/temp.js`, {
         matmanConfig: this.pageDriver.matmanConfig,
       });
-      this.page?.evaluate(res);
     }
 
-    this.emit('afterGotoPage', {url: this.pageDriver?.pageUrl, page: this.page});
+    await this.page?.evaluate(this.script);
+
+    this.emit('afterGotoPage', { url: this.pageDriver?.pageUrl, page: this.page });
   }
 
   async runActions(stop?: number): Promise<any[]> {
     // 循环处理多个 action
     const result: any[] = [];
     // 触发开始事件
-    this.emit('beforeRunActions', {index: 0, result: result});
+    this.emit('beforeRunActions', { index: 0, result: result });
 
     let i = 0;
     const actionList = this.pageDriver?.actionList as ((n: puppeteer.Page) => Promise<void>)[];
@@ -288,7 +311,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       }
 
       // 开始执行 action
-      this.emit('beforeRunCase', {index: i, result: result});
+      this.emit('beforeRunCase', { index: i, result: result });
 
       // 执行 action
       if (!this.page) {
@@ -300,10 +323,16 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       if (this.pageDriver?.screenshotConfig) {
         const screenshotFilePath = this.pageDriver.screenshotConfig.getPathWithId(i + 1);
 
+        const opts: puppeteer.BinaryScreenShotOptions = {
+          path: screenshotFilePath,
+          clip: this.pageDriver.screenshotConfig.clip,
+          fullPage: this.pageDriver.screenshotConfig.fullPage,
+        };
+
         // 要保证这个目录存在，否则保存时会报错
         fs.ensureDirSync(path.dirname(screenshotFilePath));
 
-        await this.page.screenshot({path: screenshotFilePath});
+        await this.page.screenshot(opts);
       }
 
       // 如果使用了记录器，则每个请求都延迟 50ms，注意是因为 network 是异步的
@@ -312,32 +341,44 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       //   curRun = curRun.wait(50);
       // }
 
-      const t = await this.page.evaluate(evaluate);
-
-      // 覆盖率数据
-      if (t.__coverage__ && this.pageDriver?.coverageConfig) {
-        const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
-
-        try {
-          await fs.outputJson(coverageFilePath, t.__coverage__);
-
-          // 设置存在的标志
-          this.globalInfo.isExistCoverageReport = true;
-
-          // 记录之后就删除之，否则返回的数据太大了
-          delete t.__coverage__;
-        } catch (e) {
-          console.log('save coverage file fail', coverageFilePath, e);
-        }
+      if (this.page.url() !== this.url) {
+        this.url = this.page.url();
+        await this.page.evaluate(this.script);
       }
 
-      result.push(t);
+      if (!this.pageDriver?.isRunList[i]) {
+        const t = await this.page.evaluate(evaluate);
+
+        // 覆盖率数据
+        if (t.__coverage__ && this.pageDriver?.coverageConfig) {
+          const coverageFilePath = this.pageDriver.coverageConfig.getPathWithId(i + 1);
+
+          try {
+            await fs.outputJson(coverageFilePath, t.__coverage__);
+
+            // 设置存在的标志
+            this.globalInfo.isExistCoverageReport = true;
+
+            // 记录之后就删除之，否则返回的数据太大了
+            delete t.__coverage__;
+          } catch (e) {
+            console.log('save coverage file fail', coverageFilePath, e);
+          }
+        }
+
+        result.push(t);
+      }
 
       // 结束执行 action
-      this.emit('afterRunCase', {index: i, result: result});
+      this.emit('afterRunCase', { index: i, result: result });
     }
 
-    this.emit('afterRunActions', {index: i, result: result});
+    // 因为要等待请求完成, 所以强制停 500ms
+    if (this.globalInfo.recorder) {
+      await this.page?.waitFor(500);
+    }
+
+    this.emit('afterRunActions', { index: i, result: result });
 
     return result;
   }

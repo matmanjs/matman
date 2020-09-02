@@ -58,6 +58,15 @@ $ npm install matman --save
 - `mockstarQuery`: `MockStarQuery`，mockstar 方案中用于指定桩数据的请求对象
 
 
+#### 2.2.4 changeMockstar(mockstarQuery)
+
+> 支持链式调用。
+
+切换 [mockstar](https://github.com/mockstarjs/mockstar) 的桩数据(假数据，mock 数据)。
+
+- `mockstarQuery`: `MockStarQuery`，mockstar 方案中用于指定桩数据的请求对象
+
+
 #### 2.2.5 setCookies(cookies)
 
 > 支持链式调用。
@@ -338,3 +347,12 @@ const RESOURCE_TYPE = {
 #### 2.3.11 isExistJSBridge(partialURL, query = {})
 
 是否存在某个 jsbridge 的调用，支持使用 iframe 和 location.href 两种形式，具体可以查看 https://github.com/matmanjs/matman-demo/tree/master/DevOps/matman-app/case_modules/page-hybrid-app。
+
+
+#### 2.3.12 isExistConsole(partialURL, type, isFullMatch)
+
+是否存在某一条 console 记录
+
+- `partialText`: `String`，待匹配的字符串
+- `type`: `String`，类型，例如 `console.log`，则 `type=log`
+- `isFullMatch`: `Boolean`，是否将 `partialText` 作为全匹配，默认值为 `false`

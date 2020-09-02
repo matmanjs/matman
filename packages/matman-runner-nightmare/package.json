@@ -1,6 +1,6 @@
 {
   "name": "matman-runner-nightmare",
-  "version": "6.0.6",
+  "version": "6.0.17",
   "description": "matman测试框架nightmare底层驱动",
   "scripts": {
     "prepublishOnly": "npm run build",
@@ -33,8 +33,8 @@
   },
   "dependencies": {
     "fs-extra": "^9.0.1",
-    "matman-core": "^6.0.6",
-    "matman-crawler": "^6.0.6",
+    "matman-core": "^6.0.17",
+    "matman-crawler": "^6.0.17",
     "mockstar": "^1.1.6",
     "nightmare-handler": "^1.0.10"
   },

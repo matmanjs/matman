@@ -1,11 +1,11 @@
 import fs from 'fs';
-import {BrowserRunner, findMatmanConfig, MATMAN_CONFIG_FILE} from 'matman-core';
+import { BrowserRunner, findMatmanConfig, MATMAN_CONFIG_FILE } from 'matman-core';
 import _ from 'lodash';
 import PageDriverSync from './model/PageDriverSync';
 import PageDriverAsync from './model/PageDriverAsync';
-import {MatmanConfigOpts, PageDriverOpts} from './types';
-import {getCallerPath} from './util/caller';
-import {checkIfWhistleStarted} from './util/whistle';
+import { MatmanConfigOpts, PageDriverOpts } from './types';
+import { getCallerPath } from './util/caller';
+import { checkIfWhistleStarted } from './util/whistle';
 
 /**
  * 获取新的 PageDriverOpts
@@ -15,7 +15,7 @@ import {checkIfWhistleStarted} from './util/whistle';
 function getPageDriverOpts(opts?: PageDriverOpts): PageDriverOpts {
   const pageDriverOpts = _.merge({}, opts);
 
-  let {caseModuleFilePath} = pageDriverOpts;
+  let { caseModuleFilePath } = pageDriverOpts;
 
   // 特殊处理 caseModuleFilePath，如果没有，则自动获取
   if (!caseModuleFilePath || !fs.existsSync(caseModuleFilePath)) {
@@ -61,6 +61,12 @@ export function launch(
 ): PageDriverAsync {
   // 处理下原始传入的 pageDriverOpts，部分设置默认值
   const newPageDriverOpts = getPageDriverOpts(pageDriverOpts);
+
+  // 特殊处理，如果传入了 process.env.SHOW_BROWSER === 1，则强制修改 newPageDriverOpts.show 为 true
+  // 该场景主要用于调试之用
+  if (process.env.SHOW_BROWSER && process.env.SHOW_BROWSER === '1') {
+    newPageDriverOpts.show = true;
+  }
 
   // 查找 matman config
   const matmanConfig = findMatmanConfig(newPageDriverOpts.caseModuleFilePath, matmanConfigOpts);

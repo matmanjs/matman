@@ -1,14 +1,14 @@
 import Nightmare from 'nightmare';
 import puppeteer from 'puppeteer';
-import {BrowserRunner} from './browserRunner';
+import { BrowserRunner } from './browserRunner';
 import MatmanResult from '../model/MatmanResult';
 import MatmanConfig from '../config/MatmanConfig';
-import CookieConfig, {CookieConfigOpts} from '../config/CookieConfig';
-import DeviceConfig, {DeviceConfigOpts} from '../config/DeviceConfig';
-import ScreenshotConfig, {ScreenOpts} from '../config/ScreenshotConfig';
-import CoverageConfig, {CoverageOpts} from '../config/CoverageConfig';
-import MatmanResultConfig, {ResultOpts} from '../config/MatmanResultConfig';
-import MockstarConfig, {MockstarQueryDataMap} from '../config/MockstarConfig';
+import CookieConfig, { CookieConfigOpts } from '../config/CookieConfig';
+import DeviceConfig, { DeviceConfigOpts } from '../config/DeviceConfig';
+import ScreenshotConfig, { ScreenOpts } from '../config/ScreenshotConfig';
+import CoverageConfig, { CoverageOpts } from '../config/CoverageConfig';
+import MatmanResultConfig, { ResultOpts } from '../config/MatmanResultConfig';
+import MockstarConfig, { MockstarQueryDataMap } from '../config/MockstarConfig';
 
 /**
  * PageDriver 需要实现的接口
@@ -58,7 +58,9 @@ export interface PageDriver {
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
   actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
-  dataIndexMap: {[key: string]: number};
+  // 提供给 Run 方法做标记, 不产生快照
+  isRunList: number[];
+  dataIndexMap: { [key: string]: number };
 
   getRunner(): BrowserRunner;
 
@@ -83,6 +85,16 @@ export interface PageDriver {
    * @author helinjiang
    */
   useMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
+
+  /**
+   * 更新 mockstar 中的请求
+   *
+   * https://github.com/mockstarjs/mockstar
+   *
+   * @return {PageDriver}
+   * @author helinjiang
+   */
+  changeMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
 
   /**
    * 注入 cookie
@@ -157,6 +169,16 @@ export interface PageDriver {
    */
   addAction(
     actionName: string,
+    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+  ): PageDriver | Promise<void>;
+
+  /**
+   * 增加执行动作
+   *
+   * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
+   * @return {PageDriver | Promise<void>}
+   */
+  addRunAction(
     actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
   ): PageDriver | Promise<void>;
 
