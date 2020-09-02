@@ -101,10 +101,6 @@ module.exports = {
           ],
           '/tool/': [
             {
-              title: '说明',
-              path: '/tool/',
-            },
-            {
               title: 'Devtool',
               path: '/tool/devtools',
             },
