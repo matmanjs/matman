@@ -94,10 +94,6 @@ module.exports = {
               title: '爬虫工具：web-crawl-util',
               path: '/api/web-crawl-util',
             },
-            {
-              title: '脚手架：create-matman-app',
-              path: '/api/create-matman-app',
-            },
           ],
           '/tool/': [
             {
@@ -111,6 +107,10 @@ module.exports = {
             {
               title: 'Whistle',
               path: '/tool/whistle',
+            },
+            {
+              title: '脚手架：create-matman-app',
+              path: '/tool/create-matman-app',
             },
           ],
           '/release/': true,
