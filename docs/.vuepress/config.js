@@ -94,6 +94,10 @@ module.exports = {
               title: '爬虫工具：web-crawl-util',
               path: '/api/web-crawl-util',
             },
+            {
+              title: '脚手架：create-matman-app',
+              path: '/api/create-matman-app',
+            },
           ],
           '/tool/': [
             {
