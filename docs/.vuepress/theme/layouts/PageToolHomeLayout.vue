@@ -9,15 +9,8 @@
     <Navbar />
 
     <div class="main-content">
-      <h1>需要改造为九宫格</h1>
-      <p>可参考 https://www.bootcss.com/</p>
-      <ul>
-        <li><a href="./devtools.html">Devtool</a></li>
-        <li><a href="./proxy-switchyomega.html">Proxy SwitchyOmega</a></li>
-        <li><a href="./whistle.html">Whistle</a></li>
-      </ul>
+      <Tools />
     </div>
-
   </div>
 </template>
 
@@ -26,6 +19,7 @@ import Home from '@theme/components/Home.vue';
 import Navbar from '@theme/components/Navbar.vue';
 import Page from '@theme/components/Page.vue';
 import Sidebar from '@theme/components/Sidebar.vue';
+import Tools from '@theme/components/Tools.vue';
 import Footer from '../components/Footer';
 import { resolveSidebarItems } from '../util/util';
 
@@ -36,6 +30,7 @@ export default {
     Sidebar,
     Navbar,
     Footer,
+    Tools,
   },
 
   data() {
@@ -131,6 +126,7 @@ export default {
 
 .main-content {
   margin-top: 110px;
+  background-color: #fefefe;
 }
 
 .particles {
