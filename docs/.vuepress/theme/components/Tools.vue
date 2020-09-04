@@ -42,9 +42,18 @@
                     </div>
                 </a>
             </li>
+            <div>{{$page.frontmatter.tools}}</div>
         </ul>
     </div>
 </template>
+
+<script>
+    export default {
+        mounted() {
+            console.log(this.$page)
+        }
+    }
+</script>
 
 <style lang="less" scoped> 
 
