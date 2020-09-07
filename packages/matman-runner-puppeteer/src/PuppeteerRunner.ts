@@ -209,6 +209,17 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       this.page.on('request', request => {
         this.globalInfo.recorder?.allRequestUrl?.push(request.url());
       });
+
+      // 使用 CDPSession 连接 Chrome Devtools 获取底层信息
+      const client = await this.page.target().createCDPSession();
+      await client.send('Network.enable');
+      client.on('Network.requestWillBeSent', (e: any) => {
+        const url = e.request.url;
+        // 删选 jsbridge 同类的相关协议
+        if (url === e.documentURL && !url.match(/^http/)) {
+          this.globalInfo.recorder?.allRequestUrl?.push(url);
+        }
+      })
     }
 
     // 使用 mockstar 作为 mock server
