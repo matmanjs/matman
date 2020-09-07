@@ -4,9 +4,20 @@
 
 > 首先需要大家自行安装 [Node.js](http://nodejs.cn/) 环境
 
-### clone & build
+*git仓库： https://github.com/matmanjs/matman-devtools-extensions*
 
-1. 进入 [matman-devtools](https://github.com/matmanjs/matman-devtools)，复制链接、克隆项目：
+### 压缩包安装(推荐)
+
+- 进入: [matman-devtools](https://github.com/matmanjs/matman-devtools)
+- 下载 `release/` 目录下的zip包至本地
+- 解压zip包，加载解压后的插件
+- 操作过程如下所示
+
+<img src="./devtools.assets/20200903_插件安装.gif" alt="20200903_插件安装" style="zoom:50%;" />
+
+### 源码安装
+
+1. 进入 [matman-devtools](https://github.com/matmanjs/matman-devtools)，克隆项目
 
 ```bash
 $ git clone https://github.com/matmanjs/matman-devtools.git
@@ -21,46 +32,36 @@ $ npm install
 3. 执行编译打包
 
 ```bash
-$ npm run build:install
+$ npm run build:chrome
 ```
 
-### 在浏览器中安装
+<img src="./devtools.assets/20200903_clone&build.gif" alt="20200903_clone&build" style="zoom:50%;" />
 
-> 因审查原因暂时还未上架拓展商店
+4. 浏览器加载构建出来的插件chrome-extensions
 
-1. 打开 chrome 浏览器（文档中使用的是 `edge` 浏览器），访问 `chrome://extensions/`：
+<img src="./devtools.assets/20200903_setup.gif" alt="20200903_setup" style="zoom:50%;" />
 
-<img src="./devtools.assets/image-20200804103232591.png" alt="image-20200804103232591" style="zoom:25%;" />
-
-2.  打开插件的“开发者模式”：
-
-<img src="./devtools.assets/image-20200804103410308.png" alt="image-20200804103410308" style="zoom:50%;" />
-
-3. 点击 "加载已解压的扩展程序"，然后选择到本项目的 `build` 目录即可
-
-<img src="./devtools.assets/image-20200804103514012.png" alt="image-20200804103514012" style="zoom:33%;" />
 
 ## 使用
 
-> 在安装之后将会在控制台生成两个面板，分别为：
->
-> - 负责代码片段生成与页面元素选择的 `Matman` 面板（在 Element 面板中，与 Styles 面板平级）
-> - 负责在浏览器上下文中进行执行的 `MatmanExec` 面板（与 Element 面板平级）
->
-> 同时我们将在浏览器的上下文中注入 3 个库供大家使用：`JQuery`、`web-crawler-utils`、`lodash`
+在安装之后将会在控制台生成两个面板，分别为：
+
+> - 负责代码片段生成与页面元素选择的 `Matman` 面板（Helper面板）
+> - 负责在浏览器上下文中进行执行的 `Matman` 面板（执行面板）
 
 选择需要审查的页面，打开开发者工具可以查看到：
 
-<img src="./devtools.assets/image-20200804105015385.png" alt="image-20200804105015385" style="zoom:25%;" />
+<img src="./devtools.assets/安装成功.png" alt="安装成功.png" style="zoom:75%;" />
 
-### 元素审查 & 代码生成
 
-只需要正常的选择元素，在旁边的面板中即可生产对应的代码片段
+### Matman helper
 
-<img src="./devtools.assets/Kapture 2020-08-04 at 11.05.32.gif" alt="Kapture 2020-08-04 at 11.05.32" style="zoom:33%;" />
+当选择元素时，面板中可生成对应代码片段。可以通过拷贝生成代码至项目中，节省开发时间。
 
-### 自动执行
+<img src="./devtools.assets/20200904_helper.gif" alt="20200904_helper" style="zoom:75%;" />
 
-我们可以将代码复制，或者直接在 MatmanExec 中进行代码编辑，进行爬虫脚本代码的测试工作
+### 执行面板
 
-<img src="./devtools.assets/Kapture 2020-08-04 at 11.16.45.gif" alt="Kapture 2020-08-04 at 11.16.45" style="zoom:33%;" />
+我们可以将代码复制，或者直接在 Matman 中进行代码编辑，进行爬虫脚本代码的测试工作。
+
+<img src="./devtools.assets/20200904_matman执行.gif" alt="20200904_matman执行" style="zoom:75%;" />
