@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>03. 单一接口展示型页面 | matman.js</title>
+    <meta name="generator" content="VuePress 1.5.2">
+    <link rel="icon" href="/matman/logo.png">
+    <meta name="description" content="web 端对端测试解决方案">
+    <link rel="preload" href="/matman/assets/css/0.styles.734c5509.css" as="style"><link rel="preload" href="/matman/assets/js/app.b3f8f6ce.js" as="script"><link rel="preload" href="/matman/assets/js/3.401d6b26.js" as="script"><link rel="preload" href="/matman/assets/js/2.d54e6689.js" as="script"><link rel="preload" href="/matman/assets/js/10.07c8118b.js" as="script"><link rel="prefetch" href="/matman/assets/js/11.9019913b.js"><link rel="prefetch" href="/matman/assets/js/12.12850e42.js"><link rel="prefetch" href="/matman/assets/js/13.4e9dd721.js"><link rel="prefetch" href="/matman/assets/js/14.c6344b78.js"><link rel="prefetch" href="/matman/assets/js/15.b891806f.js"><link rel="prefetch" href="/matman/assets/js/16.57d092a6.js"><link rel="prefetch" href="/matman/assets/js/17.697ce94f.js"><link rel="prefetch" href="/matman/assets/js/18.39e9facc.js"><link rel="prefetch" href="/matman/assets/js/19.b99ac8cd.js"><link rel="prefetch" href="/matman/assets/js/20.ef0eb1f8.js"><link rel="prefetch" href="/matman/assets/js/21.4e253c96.js"><link rel="prefetch" href="/matman/assets/js/22.244306ca.js"><link rel="prefetch" href="/matman/assets/js/23.19c16e70.js"><link rel="prefetch" href="/matman/assets/js/24.a5112f0a.js"><link rel="prefetch" href="/matman/assets/js/25.04f70ab5.js"><link rel="prefetch" href="/matman/assets/js/26.85b84988.js"><link rel="prefetch" href="/matman/assets/js/27.233fe0f8.js"><link rel="prefetch" href="/matman/assets/js/28.44525bbf.js"><link rel="prefetch" href="/matman/assets/js/29.aec3bd90.js"><link rel="prefetch" href="/matman/assets/js/30.077508ea.js"><link rel="prefetch" href="/matman/assets/js/31.65ba1d41.js"><link rel="prefetch" href="/matman/assets/js/32.01ab2572.js"><link rel="prefetch" href="/matman/assets/js/33.32be7a84.js"><link rel="prefetch" href="/matman/assets/js/34.1fd6a0ea.js"><link rel="prefetch" href="/matman/assets/js/35.7ad8f4c5.js"><link rel="prefetch" href="/matman/assets/js/36.9f049634.js"><link rel="prefetch" href="/matman/assets/js/37.9dbcf3f8.js"><link rel="prefetch" href="/matman/assets/js/38.9e91c8c7.js"><link rel="prefetch" href="/matman/assets/js/39.46a25416.js"><link rel="prefetch" href="/matman/assets/js/4.fd4364ff.js"><link rel="prefetch" href="/matman/assets/js/5.65686d23.js"><link rel="prefetch" href="/matman/assets/js/6.fd2c0ce0.js"><link rel="prefetch" href="/matman/assets/js/7.c4973086.js"><link rel="prefetch" href="/matman/assets/js/8.558ec8a3.js"><link rel="prefetch" href="/matman/assets/js/9.a087590a.js">
+    <link rel="stylesheet" href="/matman/assets/css/0.styles.734c5509.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container fastest-docs-container"><!----> <header style="background-color:rgba(255, 255, 255, 1);box-shadow:0px 2px 30px 0px rgba(0, 0, 0, 0.1);" data-v-e3902e94><nav data-v-e3902e94><a href="/matman/" class="router-link-active" data-v-e3902e94><img src="/matman/assets/img/logo_100.285fceb1.png" alt="logo" style="height:50px;" data-v-e3902e94></a> <ul class="navs" data-v-e3902e94><li class="nav" data-v-e3902e94><a href="/matman/docs/" class="router-link-active nav__link--white" style="color:rgba(102, 102, 102, 1);" data-v-e3902e94>web端对端测试方案
+                </a> <!----></li><li class="nav" data-v-e3902e94><a href="/matman/api/" class="nav__link--white" style="color:rgba(102, 102, 102, 1);" data-v-e3902e94>API手册
+                </a> <!----></li><li class="nav" data-v-e3902e94><a href="/matman/tool/" class="nav__link--white" style="color:rgba(102, 102, 102, 1);" data-v-e3902e94>工具
+                </a> <!----></li><li class="nav" data-v-e3902e94><a href="/matman/release/" class="nav__link--white" style="color:rgba(102, 102, 102, 1);" data-v-e3902e94>发布日志
+                </a> <!----></li><li class="nav" data-v-e3902e94><a href="https://github.com/matmanjs/matman/issues" target="_blank" rel="noopener noreferrer" class="nav__link--white" style="color:rgba(102, 102, 102, 1);" data-v-e3902e94>Issues</a> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound" data-v-e3902e94 data-v-e3902e94><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></li></ul></nav></header> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/matman/docs/" aria-current="page" class="sidebar-link">关于 matman</a></li><li><a href="/matman/docs/install.html" class="sidebar-link">安装和升级</a></li><li><section class="sidebar-group depth-0"><a href="/matman/docs/getting-started/" class="sidebar-heading clickable"><span>快速入门</span> <!----></a> <ul class="sidebar-links sidebar-group-items"><li><a href="/matman/docs/getting-started/baidu_01.html" class="sidebar-link">01. 第一个端对端测试</a></li><li><a href="/matman/docs/getting-started/baidu_02.html" class="sidebar-link">02. 测试用户交互</a></li><li><a href="/matman/docs/getting-started/baidu_03.html" class="sidebar-link">03. 更多例子</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>深入</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/matman/docs/improve/summary.html" class="sidebar-link">01. 综述</a></li><li><a href="/matman/docs/improve/simple.html" class="sidebar-link">02. 简单静态页面</a></li><li><a href="/matman/docs/improve/transaction.html" aria-current="page" class="active sidebar-link">03. 单一接口展示型页面</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/matman/docs/improve/transaction.html#_1-测试概述" class="sidebar-link">1. 测试概述</a></li><li class="sidebar-sub-header"><a href="/matman/docs/improve/transaction.html#_2-获取页面数据快照" class="sidebar-link">2. 获取页面数据快照</a></li><li class="sidebar-sub-header"><a href="/matman/docs/improve/transaction.html#_3-测试样例文件" class="sidebar-link">3. 测试样例文件</a></li><li class="sidebar-sub-header"><a href="/matman/docs/improve/transaction.html#_4-测试结果" class="sidebar-link">4. 测试结果</a></li></ul></li><li><a href="/matman/docs/improve/withdraw.html" class="sidebar-link">04. 重交互界面</a></li><li><a href="/matman/docs/improve/jsBridge.html" class="sidebar-link">05. JSBridge</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>基本理论</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/matman/docs/basic-concepts/page-snapshot.html" class="sidebar-link">页面快照</a></li><li><a href="/matman/docs/basic-concepts/data-snapshot.html" class="sidebar-link">数据快照</a></li><li><a href="/matman/docs/basic-concepts/test-by-mock.html" class="sidebar-link">基于白盒数据测试数据快照</a></li></ul></section></li><li><section class="sidebar-group depth-0"><p class="sidebar-heading"><span>FAQ</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/matman/docs/faq/common.html" class="sidebar-link">常见问题</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="_03-单一接口展示型页面"><a href="#_03-单一接口展示型页面" class="header-anchor">#</a> 03. 单一接口展示型页面</h1> <p>本节我们将会通过一个单一接口的展示型页面，为大家展示如何检测接口的不同返回结果在页面上的表现。</p> <h2 id="_1-测试概述"><a href="#_1-测试概述" class="header-anchor">#</a> 1. 测试概述</h2> <p><img src="/matman/assets/img/image-20200721164411164.e54cd2ff.png" alt="image-20200721164411164" style="zoom:33%;"><img src="/matman/assets/img/image-20200721165553953.347d341c.png" alt="image-20200721165553953" style="zoom:33%;"></p> <p>单一接口展示型页面的两种情况如上。</p> <p>我们需要验证的情况有下面两种：</p> <ul><li>返回数据时正确显示列表</li> <li>当列表为空时，显示正确的 empty 状态</li></ul> <p>我们的测试思路很简单，分别获取不同的 DOM 信息进行判断即可</p> <h2 id="_2-获取页面数据快照"><a href="#_2-获取页面数据快照" class="header-anchor">#</a> 2. 获取页面数据快照</h2> <h3 id="_2-1-爬虫脚本"><a href="#_2-1-爬虫脚本" class="header-anchor">#</a> 2.1 爬虫脚本</h3> <p>在 <code>DevOps/matman-app/case_modules/page-transaction/crawlers/get-page-info.js</code> 文件中，有我们获取页面信息内容的脚本</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> <span class="token punctuation">{</span> useJquery <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'web-crawl-util'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    transactionListInfo<span class="token operator">:</span> <span class="token function">getTransactionListInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * 列表项信息
+ */</span>
+<span class="token keyword">function</span> <span class="token function">getListTransactionItemInfo</span><span class="token punctuation">(</span><span class="token parameter">parentSelector</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">{</span>
+    isExist<span class="token operator">:</span> useJquery<span class="token punctuation">.</span><span class="token function">isExist</span><span class="token punctuation">(</span>parentSelector<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span>isExist<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    result<span class="token punctuation">.</span>name <span class="token operator">=</span> useJquery<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token string">'.info .flow-info'</span><span class="token punctuation">,</span> parentSelector<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span>time <span class="token operator">=</span> useJquery<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token string">'.info .flow-time'</span><span class="token punctuation">,</span> parentSelector<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span>money <span class="token operator">=</span> useJquery<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token string">'.money'</span><span class="token punctuation">,</span> parentSelector<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span>isExpire <span class="token operator">=</span> useJquery<span class="token punctuation">.</span><span class="token function">isExist</span><span class="token punctuation">(</span><span class="token string">'.dated-icon'</span><span class="token punctuation">,</span> parentSelector<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">.</span>id <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span>parentSelector<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">attr</span><span class="token punctuation">(</span><span class="token string">'data-id'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">/**
+ * 列表信息
+ */</span>
+<span class="token keyword">function</span> <span class="token function">getTransactionListInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> parentSelector <span class="token operator">=</span> <span class="token string">'#root .display-transaction'</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">{</span>
+    isExist<span class="token operator">:</span> useJquery<span class="token punctuation">.</span><span class="token function">isExist</span><span class="token punctuation">(</span>parentSelector<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span>isExist<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 总数</span>
+    result<span class="token punctuation">.</span>total <span class="token operator">=</span> useJquery<span class="token punctuation">.</span><span class="token function">getTotal</span><span class="token punctuation">(</span><span class="token string">'.display-transaction-list .list-item'</span><span class="token punctuation">,</span> parentSelector<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> list <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'.display-transaction-list .list-item'</span><span class="token punctuation">,</span> parentSelector<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">each</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      list<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token function">getListTransactionItemInfo</span><span class="token punctuation">(</span><span class="token function">$</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 列表内容</span>
+    result<span class="token punctuation">.</span>list <span class="token operator">=</span> list<span class="token punctuation">;</span>
+
+    <span class="token comment">// 列表为空时的文字</span>
+    result<span class="token punctuation">.</span>emptyWording <span class="token operator">=</span> useJquery<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token string">'.display-transaction-empty p'</span><span class="token punctuation">,</span> parentSelector<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><h3 id="_2-2-启动脚本"><a href="#_2-2-启动脚本" class="header-anchor">#</a> 2.2 启动脚本</h3> <p>在 <code>DevOps/matman-app/case_modules/page-transaction/basic-check.js</code> 文件中，我们利用matman 编写端到端测试的逻辑，内容如下（需要注意的是我们一定需要一个 action 这样才可以捕捉页面的快照）：</p> <ol><li>启动浏览器</li> <li>设置页面的 URL</li> <li>添加一个 INIT 动作，捕捉页面快照</li> <li>执行爬虫脚本获取结果</li></ol> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> createPageDriver <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'../../helpers'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token punctuation">{</span> <span class="token constant">BASIC_QUERY_DATA_MAP</span><span class="token punctuation">,</span> <span class="token constant">WAIT</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./env'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span><span class="token function-variable function">exports</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token parameter">pageDriverOpts</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token comment">// 创建 PageDriver</span>
+  <span class="token keyword">const</span> pageDriver <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">createPageDriver</span><span class="token punctuation">(</span>__filename<span class="token punctuation">,</span> pageDriverOpts<span class="token punctuation">,</span> <span class="token constant">BASIC_QUERY_DATA_MAP</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 设置页面地址</span>
+  <span class="token keyword">await</span> pageDriver<span class="token punctuation">.</span><span class="token function">setPageUrl</span><span class="token punctuation">(</span><span class="token string">'http://now.qq.com/transaction'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 增加自定义动作</span>
+  <span class="token keyword">await</span> pageDriver<span class="token punctuation">.</span><span class="token function">addAction</span><span class="token punctuation">(</span><span class="token string">'init'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token parameter">page</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">await</span> page<span class="token punctuation">.</span><span class="token function">waitFor</span><span class="token punctuation">(</span><span class="token constant">WAIT</span><span class="token punctuation">.</span><span class="token constant">READY</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 获取结果</span>
+  <span class="token keyword">return</span> pageDriver<span class="token punctuation">.</span><span class="token function">evaluate</span><span class="token punctuation">(</span>path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">'./crawlers/get-page-info.js'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>使用 matman 执行无头浏览器模拟浏览，调用爬虫脚本得到数据快照。</p> <h2 id="_3-测试样例文件"><a href="#_3-测试样例文件" class="header-anchor">#</a> 3. 测试样例文件</h2> <p>在 <code>test/e2e/page-transaction/basic-check.test.js</code> 文件中，我们可以对捕捉到的页面快照进行校验，确认页面状态（这里我们进行确认的是 <code>成功</code> 获取到页面列表的情况）：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> <span class="token punctuation">{</span>expect<span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'chai'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> checkPage <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'../../../DevOps/matman-app/case_modules/page-transaction/basic-check'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'transaction 页面：常规基础信息检查'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">timeout</span><span class="token punctuation">(</span><span class="token number">30000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">let</span> matmanResult<span class="token punctuation">;</span>
+
+  <span class="token function">before</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    matmanResult <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">checkPage</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      show<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      doNotCloseBrowser<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      useRecorder<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      queryDataMap<span class="token operator">:</span> <span class="token punctuation">{</span>
+        get_flow<span class="token operator">:</span> <span class="token string">'success_basic'</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'检查基本信息'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> data<span class="token punctuation">;</span>
+
+    <span class="token function">before</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      data <span class="token operator">=</span> matmanResult<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'init'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">'数据快照校验通过'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">expect</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">.</span><span class="token function">eql</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        transactionListInfo<span class="token operator">:</span> <span class="token punctuation">{</span>
+          emptyWording<span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+          isExist<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+          list<span class="token operator">:</span> <span class="token punctuation">[</span>
+            <span class="token punctuation">{</span>
+              id<span class="token operator">:</span> <span class="token string">'id_1_1539224581000_6'</span><span class="token punctuation">,</span>
+              isExist<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+              isExpire<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+              money<span class="token operator">:</span> <span class="token string">'+0.09'</span><span class="token punctuation">,</span>
+              name<span class="token operator">:</span> <span class="token string">'摇一摇新手红包'</span><span class="token punctuation">,</span>
+              time<span class="token operator">:</span> <span class="token string">'2018.10.11'</span><span class="token punctuation">,</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token operator">...</span>
+          <span class="token punctuation">]</span><span class="token punctuation">,</span>
+          total<span class="token operator">:</span> <span class="token number">28</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>在 <code>test/e2e/page-transaction/empty-check.test.js</code> 文件中，我们可以对捕捉到的页面快照进行校验，确认页面状态（这里我们进行确认的是 <code>页面列表为空</code> 的情况）：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'transaction 页面：无流水信息检查'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">timeout</span><span class="token punctuation">(</span><span class="token number">30000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">let</span> matmanResult<span class="token punctuation">;</span>
+
+  <span class="token function">before</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    matmanResult <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">checkPage</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      show<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      doNotCloseBrowser<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      useRecorder<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      queryDataMap<span class="token operator">:</span> <span class="token punctuation">{</span>
+        get_flow<span class="token operator">:</span> <span class="token string">'success_empty'</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">'检查基本信息'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> data<span class="token punctuation">;</span>
+
+    <span class="token function">before</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      data <span class="token operator">=</span> matmanResult<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'init'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">'数据快照校验通过'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">expect</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span>to<span class="token punctuation">.</span><span class="token function">eql</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        transactionListInfo<span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token comment">// 'emptyPic': 'http://now.qq.com/img/nopkdata@2x_c3c9fbba.png',</span>
+          emptyWording<span class="token operator">:</span> <span class="token string">'暂无流水记录'</span><span class="token punctuation">,</span>
+          isExist<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+          list<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+          total<span class="token operator">:</span> <span class="token number">0</span><span class="token punctuation">,</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><h2 id="_4-测试结果"><a href="#_4-测试结果" class="header-anchor">#</a> 4. 测试结果</h2> <img src="/matman/assets/img/image-20200721170602180.df1faea4.png" alt="image-20200721170602180" style="zoom:30%;"></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/matman/docs/improve/simple.html" class="prev">
+        02. 简单静态页面
+      </a></span> <span class="next"><a href="/matman/docs/improve/withdraw.html">
+        04. 重交互界面
+      </a>
+      →
+    </span></p></div> </main> <!----> <!----></div><div class="global-ui"></div></div>
+    <script src="/matman/assets/js/app.b3f8f6ce.js" defer></script><script src="/matman/assets/js/3.401d6b26.js" defer></script><script src="/matman/assets/js/2.d54e6689.js" defer></script><script src="/matman/assets/js/10.07c8118b.js" defer></script>
+  </body>
+</html>
