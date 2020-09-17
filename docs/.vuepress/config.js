@@ -15,27 +15,27 @@ module.exports = {
     locales: {
       '/': {
         navs: [
-          { text: 'web端对端测试方案', link: '/wiki/' },
+          { text: 'web端对端测试方案', link: '/docs/' },
           { text: 'API手册', link: '/api/' },
           { text: '工具', link: '/tool/' },
           { text: '发布日志', link: '/release/' },
           { text: 'Issues', link: 'https://github.com/matmanjs/matman/issues' },
         ],
         sidebar: {
-          '/wiki/': [
+          '/docs/': [
             {
               title: '关于 matman',
-              path: '/wiki/',
+              path: '/docs/',
               collapsable: false,
             },
             {
               title: '安装和升级',
-              path: '/wiki/install',
+              path: '/docs/install',
               collapsable: false,
             },
             {
               title: '快速入门',
-              path: '/wiki/getting-started/',
+              path: '/docs/getting-started/',
               collapsable: false,
               children: [
                 'getting-started/baidu_01',

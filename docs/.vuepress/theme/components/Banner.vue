@@ -58,7 +58,7 @@
                 return 'web 端对端测试解决方案';
             },
             introductionLink() {
-                return '/wiki';
+                return '/docs';
             },
             introduction() {
                 return '快速开始 →';
