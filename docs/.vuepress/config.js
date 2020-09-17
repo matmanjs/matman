@@ -97,20 +97,54 @@ module.exports = {
           ],
           '/tool/': [
             {
-              title: 'Devtool',
-              path: '/tool/devtools',
+              title: '工具首页',
+              path: '/tool/',
             },
             {
-              title: 'Proxy SwitchyOmega',
-              path: '/tool/proxy-switchyomega',
+              title: '开发者工具',
+              collapsable: false,
+              children: [
+                {
+                  title: '脚手架：create-matman-app',
+                  path: '/tool/create-matman-app',
+                },
+                {
+                  title: 'Chrome 插件：Matman',
+                  path: 'matman-chrome-devtools-extensions',
+                },
+                {
+                  title: 'VSCode 插件：Matman',
+                  path: 'matman-vscode-plugin',
+                },
+              ],
             },
             {
-              title: 'Whistle',
-              path: '/tool/whistle',
+              title: 'Mock Server',
+              collapsable: false,
+              children: [
+                {
+                  title: 'MockStar',
+                  path: '/tool/mockstar',
+                },
+                {
+                  title: 'Chrome 插件：MockStar',
+                  path: 'mockstar-chrome-devtools-extensions',
+                },
+              ],
             },
             {
-              title: '脚手架：create-matman-app',
-              path: '/tool/create-matman-app',
+              title: '代理',
+              collapsable: false,
+              children: [
+                {
+                  title: 'Whistle',
+                  path: '/tool/whistle',
+                },
+                {
+                  title: 'Chrome 插件：Proxy SwitchyOmega',
+                  path: 'proxy-switchyomega',
+                },
+              ],
             },
           ],
           '/release/': true,

@@ -20,13 +20,13 @@ export default {
   data() {
     return {
       toolList: [{
-        href: './devtools.html',
+        href: './matman-chrome-devtools-extensions.html',
         img: require('../../images/tools-logo/matman-devtools-extensions.png'),
         name: 'Matman Chrome Devtools',
         desc: 'Chrome 扩展，Matman 辅助工具',
         moreDesc: 'matman-devtools是一款自动化测试辅助工具。您可以使用该工具来帮助你生成部分自动化测试代码，以减少您的工作量！',
       }, {
-        href: './mockstar.html',
+        href: './mockstar-chrome-devtools-extensions.html',
         img: require('../../images/tools-logo/mockstar-devtools-extensions.png'),
         name: 'MockStar Chrome Devtools',
         desc: 'Chrome 扩展，MockStar 辅助工具',
