@@ -35,29 +35,29 @@ export default {
           list: [{
             href: './matman-chrome-devtools-extensions.html',
             img: require('../../images/tools-logo/matman-devtools-extensions.png'),
-            name: 'Matman Chrome Devtools',
-            desc: 'Chrome 扩展，Matman 辅助工具',
-            moreDesc: 'matman-devtools是一款自动化测试辅助工具。您可以使用该工具来帮助你生成部分自动化测试代码，以减少您的工作量！',
+            name: 'Matman Developer Tools',
+            desc: 'Chrome Devtools extension，Matman 辅助工具',
+            moreDesc: '一款辅助使用 Matman 做 web UI自动化测试（端对端测试） Chrome 浏览器插件。您可以使用该工具来帮助你生成部分自动化测试代码，以减少您的工作量',
           }],
         },
         {
           title: 'Mock Server',
           list: [{
             href: './mockstar.html',
-            img: require('../../images/tools-logo/matman-devtools-extensions.png'),
+            img: require('../../images/tools-logo/mockstar.png'),
             name: 'MockStar',
             desc: '轻量级前端Mock工具',
             moreDesc: '不只是提供快速搭建本地 Mock Server 的能力，更是 Mock 数据管理专家，纯 JavaScript，轻松掌握无门槛',
           }, {
             href: './mockstar-chrome-devtools-extensions.html',
-            img: require('../../images/tools-logo/mockstar-devtools-extensions.png'),
-            name: 'MockStar Chrome Devtools',
-            desc: 'Chrome 扩展，MockStar 辅助工具',
-            moreDesc: 'mockstar-devtools是一款辅助使用mockstar做mock服务的浏览器插件，通过减少开发过程中的页面切换，提升开发效率。',
+            img: require('../../images/tools-logo/mockstar-chrome-devtools-extensions.jpg'),
+            name: 'MockStar Developer Tools',
+            desc: 'Chrome Devtools extension，MockStar 辅助工具',
+            moreDesc: '一款辅助使用 MockStar 做 Mock Server 的 Chrome 浏览器插件，通过减少开发过程中的页面切换，提升开发效率',
           }],
         },
         {
-          title: '代理',
+          title: '代理工具',
           list: [{
             href: './whistle.html',
             img: require('../../images/tools-logo/whistle.png'),
