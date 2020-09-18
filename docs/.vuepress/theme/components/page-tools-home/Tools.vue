@@ -33,8 +33,14 @@ export default {
         {
           title: '开发者工具',
           list: [{
+            href: './create-matman-app.html',
+            img: require('../../images/tools-logo/create-matman-app.jpg'),
+            name: 'create-matman-app',
+            desc: 'Matman 脚手架工具',
+            moreDesc: '脚手架工具，快速生成 Matman 项目',
+          }, {
             href: './matman-chrome-devtools-extensions.html',
-            img: require('../../images/tools-logo/matman-devtools-extensions.png'),
+            img: require('../../images/tools-logo/matman-chrome-devtools-extensions.jpg'),
             name: 'Matman Developer Tools',
             desc: 'Chrome Devtools extension，Matman 辅助工具',
             moreDesc: '一款辅助使用 Matman 做 web UI自动化测试（端对端测试） Chrome 浏览器插件。您可以使用该工具来帮助你生成部分自动化测试代码，以减少您的工作量',
