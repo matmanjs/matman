@@ -44,6 +44,12 @@ export default {
             name: 'Matman Developer Tools',
             desc: 'Chrome Devtools extension，Matman 辅助工具',
             moreDesc: '一款辅助使用 Matman 做 web UI自动化测试（端对端测试） Chrome 浏览器插件。您可以使用该工具来帮助你生成部分自动化测试代码，以减少您的工作量',
+          }, {
+            href: './matman-vscode-plugin.html',
+            img: require('../../images/tools-logo/matman-vscode-plugin.jpg'),
+            name: 'matman For Web UI/E2E Testing',
+            desc: 'VSCode 插件，Matman 辅助工具',
+            moreDesc: '一款辅助使用 Matman 做 web UI自动化测试（端对端测试） VSCode 插件。您可以使用该工具来帮助你生成部分自动化测试代码，以减少您的工作量',
           }],
         },
         {
