@@ -1,13 +1,51 @@
 <template>
   <div class="advantage-two">
     <div class="container">
+      <h2>Jest 还是 Mocha ？TypeScript ？请随意</h2>
+
       <div class="row">
-        <div class="col">
-          <h2>不只是 Mock Server，更是 Mock 数据管理专家</h2>
-          <p>提供配套的 UI 后台，可视化管理你的所有 Mock 数据，并可任意指定返回所需要的 Mock 数据上。</p>
+        <div class="col col--4">
+          <p>使用 matman.js 做 web 端对端测试时，并不限制你使用 <code>Jest</code> 还是 <code>Mocha</code>，它提供了一整套方案帮助你获得数据，然后交给你用最熟悉的测试框架。</p>
+          <p>项目中要用 <code>TypeScript</code>？没问题！使用 <a href="./tool/create-matman-app.html" target="_blank">create-matman-app</a> 快速创建你所需要的模板项目。</p>
+
+          <div class="codeBlockWrapper_2QGZ">
+            <pre class="prism-code language-sh codeBlock_19pQ" style="color:#bfc7d5;background-color:#292d3e"><div
+                class="token-line" style="color:#bfc7d5"><span
+                class="token plain"># 使用 Mocha</span></div><div
+                class="token-line" style="color:#bfc7d5"><span
+                class="token plain">$ npx create-matman-app [project_name]</span></div><div
+                class="token-line" style="color:#bfc7d5"><span
+                class="token plain"><br># 或者</span></div><div
+                class="token-line" style="color:#bfc7d5"><span
+                class="token plain">$ npx create-matman-app [project_name] --template=mocha</span></div></pre>
+          </div>
+
+          <div class="codeBlockWrapper_2QGZ">
+            <pre class="prism-code language-sh codeBlock_19pQ" style="color:#bfc7d5;background-color:#292d3e"><div
+                  class="token-line" style="color:#bfc7d5"><span
+                  class="token plain"># 使用 Mocha + TS</span></div><div
+                  class="token-line" style="color:#bfc7d5"><span
+                  class="token plain">$ npx create-matman-app [project_name] --template=mocha-ts</span></div></pre>
+          </div>
+
+          <div class="codeBlockWrapper_2QGZ">
+            <pre class="prism-code language-sh codeBlock_19pQ" style="color:#bfc7d5;background-color:#292d3e"><div
+                  class="token-line" style="color:#bfc7d5"><span
+                  class="token plain"># 使用 Jest</span></div><div
+                  class="token-line" style="color:#bfc7d5"><span
+                  class="token plain">$ npx create-matman-app [project_name] --template=jest</span></div></pre>
+          </div>
+
+          <div class="codeBlockWrapper_2QGZ">
+            <pre class="prism-code language-sh codeBlock_19pQ" style="color:#bfc7d5;background-color:#292d3e"><div
+                  class="token-line" style="color:#bfc7d5"><span
+                  class="token plain"># 使用 Jest + TS</span></div><div
+                  class="token-line" style="color:#bfc7d5"><span
+                  class="token plain">$ npx create-matman-app [project_name] --template=jest-ts</span></div></pre>
+          </div>
         </div>
 
-        <div class="col">
+        <div class="col col--4">
           <img class="feature-image" alt="Easy to get started in seconds"
                src="../../images/admin_ui_dashboard.png">
         </div>
@@ -41,11 +79,16 @@ export default {};
 
   .col {
     display: block;
+    flex: 1 0;
     margin-left: 0;
     max-width: 100%;
     padding-left: 1rem;
     padding-right: 1rem;
     width: 100%;
+
+    &.col--4{
+      width: 50%;
+    }
   }
 }
 

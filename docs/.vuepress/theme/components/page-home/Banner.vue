@@ -2,8 +2,8 @@
   <div class="banner">
     <div class="container">
       <img class="logo" src="../../images/logo.png">
-      <h1 class="title">mockstar.js</h1>
-      <p class="subtitle">轻量级前端Mock工具，Design for Mock Server</p>
+      <h1 class="title">matman.js</h1>
+      <p class="subtitle">Web 端对端测试（E2E/UI Testing）框架 by JavaScript</p>
       <div class="get-started">
         <a class="button" href="./docs/getting-started">快速开始 →</a>
       </div>
@@ -11,19 +11,19 @@
         <li class="star">
           <div class="button star--button">
             <i class="icon star--icon"></i>
-            <a href="https://github.com/mockstarjs/mockstar" target="_blank">Star</a>
+            <a href="https://github.com/matmanjs/matman" target="_blank">Star</a>
           </div>
         </li>
         <li class="fork">
           <div class="button fork--button">
             <i class="icon fork--icon"></i>
-            <a href="https://github.com/mockstarjs/mockstar" target="_blank">Fork</a>
+            <a href="https://github.com/matmanjs/matman" target="_blank">Fork</a>
           </div>
         </li>
         <li class="issue">
           <div class="button issue--button">
             <i class="icon issue--icon"></i>
-            <a href="https://github.com/mockstarjs/mockstar/issues" target="_blank">Issues</a>
+            <a href="https://github.com/matmanjs/matman/issues" target="_blank">Issues</a>
           </div>
         </li>
       </ul>
