@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <h2>又要学大堆新的 API？不，拥抱开源，我们只是站在巨人肩膀上</h2>
+          <h2>复杂么？一大批配套工具已经来袭</h2>
           <p>无需准备额外的技能，使用 JS 语言来写 mock 数据，只需满足 CommonJS 规范，同步/异步皆支持，<code>pure object</code>、<code>function</code>、<code>json</code> 等形式任君选择。</p>
         </div>
 
