@@ -47,7 +47,7 @@
 
         <div class="col col--4">
           <img class="feature-image" alt="Easy to get started in seconds"
-               src="../../images/admin_ui_dashboard.png">
+               src="../../images/init.gif">
         </div>
 
       </div>
