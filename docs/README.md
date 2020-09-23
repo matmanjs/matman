@@ -1,3 +1,4 @@
 ---
 home: true
+layout: PageHomeLayout
 ---
