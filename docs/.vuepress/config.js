@@ -94,6 +94,10 @@ module.exports = {
               title: '爬虫工具：web-crawl-util',
               path: '/api/web-crawl-util',
             },
+            {
+              title: 'matman-cli',
+              path: '/api/matman-cli',
+            },
           ],
           '/tool/': [
             {
