@@ -4,12 +4,12 @@
       <div class="row">
         <div class="col">
           <h2>又要学大堆新的 API？不，拥抱开源，我们只是站在巨人肩膀上</h2>
-          <p>无需准备额外的技能，使用 JS 语言来写 mock 数据，只需满足 CommonJS 规范，同步/异步皆支持，<code>pure object</code>、<code>function</code>、<code>json</code> 等形式任君选择。</p>
+          <p>matman.js 并不要求你学习很多新的东西，只有寥寥数个 API，它提供了一套基于 <code>快照</code> 的测试思路；在底层，我们使用业界开源的技术框架，例如用 <code>puppeteer</code> 做浏览器驱动，用 <code>jQuery</code> 来写爬虫脚本，用 <code>Jest</code> 或者 <code>Mocha</code> 来做断言判断。</p>
         </div>
 
         <div class="col">
           <img class="feature-image" alt="Easy to get started in seconds"
-               src="../../images/module_use_js.png">
+               src="../../images/open_source_tools2.png">
         </div>
 
       </div>

@@ -3,13 +3,42 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <h2>复杂么？一大批配套工具已经来袭</h2>
-          <p>无需准备额外的技能，使用 JS 语言来写 mock 数据，只需满足 CommonJS 规范，同步/异步皆支持，<code>pure object</code>、<code>function</code>、<code>json</code> 等形式任君选择。</p>
+          <h2>使用复杂么？一大批配套工具已经来袭</h2>
+          <p>我们深知 web 自动化测试不是一件容易的事情，因此已经开发（或开发中）一套配套工具，降低编写用例成本，提升开发体验。</p>
         </div>
 
         <div class="col">
-          <img class="feature-image" alt="Easy to get started in seconds"
-               src="../../images/module_use_js.png">
+          <div class="box-container">
+            <div class="box">
+              <img class="feature-image" src="../../images/tools-logo/create-matman-app.jpg" />
+              <p>create-matman-app</p>
+            </div>
+
+            <div class="box">
+              <img class="feature-image" src="../../images/tools-logo/matman-chrome-devtools-extensions.jpg" />
+              <p>matman Chrome 插件</p>
+            </div>
+
+            <div class="box">
+              <img class="feature-image" src="../../images/tools-logo/matman-vscode-plugin.jpg" />
+              <p>matman VSCode 插件</p>
+            </div>
+
+            <div class="box">
+              <img class="feature-image" src="../../images/tools-logo/mockstar.png" />
+              <p>MockStar mock 工具</p>
+            </div>
+
+            <div class="box">
+              <img class="feature-image" src="../../images/tools-logo/mockstar-chrome-devtools-extensions.jpg" />
+              <p>MockStar Chrome 插件</p>
+            </div>
+
+            <div class="box">
+              <img class="feature-image" src="../../images/tools-logo/matman-coming-soon.jpg" />
+              <p>更多...</p>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -23,7 +52,7 @@ export default {};
 
 <style lang="less" scoped>
 .advantage-three {
-  background-color: #f7f7f7;
+  background-color: #fff;
 
   .container {
     text-align: left;
@@ -46,6 +75,31 @@ export default {};
     padding-left: 1rem;
     padding-right: 1rem;
     width: 100%;
+
+
+  }
+}
+
+.box-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-left: -1rem;
+  margin-right: -1rem;
+
+  .box {
+    display: block;
+    margin-left: 0;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 13%;
+
+    p {
+      margin: 0;
+      text-align: center;
+      font-size: 10px;
+    }
   }
 }
 
