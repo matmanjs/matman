@@ -23,7 +23,17 @@ $ node -v
 - 值得注意的是，如果使用 puppeteer （即 [matman-runner-puppeteer](https://www.npmjs.com/package/matman-runner-puppeteer) 组件），则需要要确保 Node.js 版本在 `10.18.1` 及以上，否则将无法运行，这是 [puppeteer 本身限定的](https://github.com/puppeteer/puppeteer/blob/72fe86fe6a51b401aa659aee555edbe8ef8d28d8/package.json#L8) 。
 
 
-## 2. puppeteer 安装问题
+## 2. 配置 npm
+
+由于我们将要使用 `npx` 命令来 [初始化项目](./getting-started)，而它会默认走 `npm`，因此，如果遇到无法安装或者安装缓慢的情况，可以切换到淘宝 npm 镜像源。
+
+> [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) 是 npm 5.2+ 才支持的特性。
+
+```bash
+$ npm config set registry https://registry.npm.taobao.org
+```
+
+## 3. puppeteer 安装问题
 
 由于种种原因，安装 puppeteer 可能会非常的慢。在没有梯子的情况下采用淘宝镜像安装是最快的方式。解决办法如下：
 

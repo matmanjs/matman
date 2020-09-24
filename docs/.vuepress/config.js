@@ -34,17 +34,21 @@ module.exports = {
               collapsable: false,
             },
             {
-              title: '快速入门',
+              title: '快速开始',
               path: '/docs/getting-started/',
               collapsable: false,
+            },
+            {
+              title: '使用指南',
+              collapsable: false,
               children: [
-                'getting-started/baidu_01',
-                'getting-started/baidu_02',
-                'getting-started/baidu_03',
+                'develop/baidu_01',
+                'develop/baidu_02',
+                'develop/test-automation-training',
               ],
             },
             {
-              title: '深入',
+              title: '综合案例详解',
               collapsable: false,
               children: [
                 'improve/summary',
