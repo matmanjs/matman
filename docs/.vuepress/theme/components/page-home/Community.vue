@@ -27,10 +27,6 @@ export default {
           logoPath:
               'https://qpic.url.cn/feeds_pic/PiajxSqBRaELREfBGmf12pwe1J0WOY5Fao1Cs8EDdMREia1eV1Micw49g/',
           href: 'https://feflowjs.com/',
-        }, {
-          logoPath:
-              'https://nowpic.gtimg.com/feeds_pic/ajNVdqHZLLA4icW5OqJ9ONwHbiaA9sSpl8oXcIAGQ1eGXBThcia0iaeqlQ/',
-          href: 'https://matmanjs.github.io/matman/',
         },
       ];
     },
