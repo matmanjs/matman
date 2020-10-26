@@ -1,7 +1,7 @@
 <template>
   <header :style="styles.navbar">
     <nav>
-      <router-link :to="localePath">
+      <router-link :to="localePath" class="logo-wrapper">
         <img :src="styles.logo" :style="styles.logoStyle" alt="logo" />
       </router-link>
       <ul class="navs">
@@ -20,7 +20,8 @@
               target="_blank"
               rel="noopener noreferrer"
               :style="styles.word"
-          >{{ nav.text }}</a>
+          >{{ nav.text }}</a
+          >
           <OutboundLink v-if="isExternal(nav.link)" />
         </li>
       </ul>
@@ -34,7 +35,6 @@ import logo from '../images/logo_white_100.png';
 import logoGreen from '../images/logo_100.png';
 
 export default {
-
   data() {
     return {
       alpha: 0,
@@ -51,7 +51,7 @@ export default {
       return config.navs || [];
     },
     styles() {
-      const alpha = this.$page.frontmatter.home ? this.alpha : 1;
+      const alpha = 1;
       let styles = {
         navbar: {
           backgroundColor: `rgba(255, 255, 255, ${alpha})`,
@@ -63,9 +63,9 @@ export default {
         langClass: 'nav__link',
         logo,
         logoStyle: {
-          // width: '220px',
           height: '50px',
         },
+        logoDescClass: 'logo-desc-white',
       };
 
       if (alpha >= 1) {
@@ -76,6 +76,7 @@ export default {
         styles.word.color = `rgba(102, 102, 102, ${alpha})`;
         styles.navClass = 'nav__link--white';
         styles.langClass = 'nav__lang--white';
+        styles.logoDescClass = 'logo-desc';
       }
 
       return styles;
@@ -110,8 +111,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../styles/content.less";
-@import "../styles/variable.less";
+@import '../styles/content.less';
+@import '../styles/variable.less';
 
 header {
   position: fixed;
@@ -141,6 +142,25 @@ nav {
   display: flex;
 }
 
+.logo-wrapper {
+  display: flex;
+
+  .logo-desc {
+    color: #4d4d4d;
+    line-height: 50px;
+    padding-left: 20px;
+    font-size: 32px;
+  }
+
+  .logo-desc-white {
+    color: #fff;
+    line-height: 50px;
+    padding-left: 20px;
+    font-size: 32px;
+  }
+}
+
+
 .nav {
   position: relative;
   height: 100%;
@@ -169,7 +189,7 @@ nav {
     color: @color-link !important;
 
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       bottom: -38px;
       width: 100%;

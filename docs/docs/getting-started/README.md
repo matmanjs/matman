@@ -1,44 +1,43 @@
----
-sidebarDepth: 0
----
+# 快速开始
 
-# 快速入门
+[create-matman-app](https://www.npmjs.com/package/create-matman-app) 主要用来初始化使用 Matman 做 web 自动化测试的项目。
 
-## 新建项目
+## 1. 创建项目
 
-按照 [安装和升级](../install.md) 一文配置好环境之后，我们将开启学习 **web 端对端测试**之旅。记下来，我们将以百度（ [https://www.baidu.com](https://www.baidu.com) ）为测试对象，使用 matman 做一些简单的 web 端对端测试。
+使用下面的一个命令，即可以创建一个名字为 `my-app` 的项目：
 
-> 如果你不想跟着步骤来做，则可以直接访问 [https://github.com/matmanjs/matman-demo-getting-started](https://github.com/matmanjs/matman-demo-getting-started) 来获取最终的代码。
-
-在开始之前，请再次确认下环境是否准备好：
+> 注意，如果遇到无法安装或执行的情况，可能是因为 npm 未正确配置，可以参考 [安装和升级](../install.html) 一文配置 npm 。
 
 ```bash
-# node 版本需 >= 10.18.1
-$ node -v
-
-# 使用脚手架初始化项目
-$ npx matman-cli init
+$ npx create-matman-app my-app
 ```
 
-## 目录结构
+<div style="text-align: center"><img src="./img/init.gif"/></div>
+
+
+## 2. 执行测试命令
+
+初始化的项目是一个简单但完整的项目，在命令执行完成之后，进入到项目中，直接执行测试命令：
 
 ```bash
-.
-├── case_modules
-│   └── page_baidu_index
-│       ├── basic-check.js
-│       ├── crawlers
-│       │   └── get-page-info-for-search.js
-│       └── search-check.js
-├── matman.config.js
-├── package.json
-└── test
-    ├── basic-check.test.js
-    └── search-check.test.js
+$ cd my-app
+$ npm run test:e2e
 ```
 
-使用脚手架新建的目录结构如上面所示，这也是我们推荐的目录结构。
+![](./img/cmd-run-result.png)
 
-- `case_modules`：存放所有的端到端测试文件，我们推荐使用 `page_<二级域名>_<URI>` 命名同一个页面的不同数据快照获取方式
-- `matman.config.js`：存放matman配置文件
-- `test`：存放所有的 mocha 测试文件
+在项目根目录下会产出测试产物 `.matman_output`，重点关注：
+
+1. `.matman_output/mochawesome`：执行结果，可以在浏览器中打开 `.matman_output/mochawesome/mochawesome.html`
+![](./img/mochawesome.png)
+
+2. `.matman_output/e2e/coverage`：代码覆盖率，可以在浏览器中打开 `.matman_output/e2e/coverage/index.html`
+![](./img/coverage.png)
+
+3. `.matman_output/e2e_build_output/screenshot_output`：测试过程的截图
+![](./img/screenshot.png)
+
+
+## 3. 试一试
+
+可以参考我们的 [练习指引](https://github.com/matmanjs/test-automation-training/blob/master/sample-create-matman-app/Training.md) 试一试！

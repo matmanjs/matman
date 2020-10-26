@@ -29,7 +29,7 @@ matman 方案推荐 [基于白盒数据做端对端测试方案](basic-concepts/
 
 ### 2.3 拥抱开源，不重复造轮子
 
-整套方案是对外开源的（代码仓库地址：https://github.com/matmanjs/matman），欢迎大家参与！
+整套方案是对外开源的（代码仓库地址：[https://github.com/matmanjs/matman](https://github.com/matmanjs/matman)），欢迎大家参与！
 
 同时，我们不重复造轮子，底层基于开源框架 [puppeteer](https://github.com/puppeteer/puppeteer) 等，可直接使用其原始的 API，无需额外的学习成本，同时扩展了一些高级 API，进一步提升编写端对端测试的效率。
 
