@@ -11,9 +11,9 @@ import { RUNNER_NAME } from '../config';
 
 import { isURLMatch } from '../util/url';
 
-interface MatmanResultObj {
+interface MatmanResultObj<T> {
   runnerName?: string;
-  data?: unknown[];
+  data?: T[];
   dataIndexMap?: {
     [key: string]: number;
   };
@@ -25,10 +25,10 @@ interface MatmanResultObj {
   };
 }
 
-export default class MatmanResult {
+export default class MatmanResult<T = Record<string | number, any>> {
   runnerName: string;
 
-  data: unknown[];
+  data: T[];
 
   globalInfo: {
     recorder?: {
@@ -51,7 +51,7 @@ export default class MatmanResult {
    * @param {Object} result
    * @author helinjiang
    */
-  constructor(result: MatmanResultObj) {
+  constructor(result: MatmanResultObj<T>) {
     this.runnerName = result.runnerName || 'unknown';
 
     /**
@@ -110,7 +110,7 @@ export default class MatmanResult {
    * @return {Object}
    * @author helinjiang
    */
-  get(actionName: string | number): unknown {
+  get(actionName: string | number): T {
     if (typeof actionName === 'number') {
       return this.data[actionName];
     } else {
