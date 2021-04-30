@@ -1,7 +1,7 @@
 {
-  "name": "matman-runner-nightmare",
-  "version": "6.0.20",
-  "description": "matman测试框架nightmare底层驱动",
+  "name": "matman-runner-puppeteer",
+  "version": "6.0.18",
+  "description": "matman的puppeteer底层驱动",
   "scripts": {
     "prepublishOnly": "npm run build",
     "build": "tsc -d",
@@ -33,15 +33,14 @@
   },
   "dependencies": {
     "fs-extra": "^9.0.1",
-    "matman-core": "^6.0.20",
-    "matman-crawler": "^6.0.20",
+    "matman-core": "^6.0.17",
+    "matman-crawler": "^6.0.17",
     "mockstar": "^1.1.6",
-    "nightmare-handler": "^1.0.10",
-    "nightmare": "^1.0.10"
+    "puppeteer": "^4.0.1"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.1",
-    "@types/nightmare": "^2.10.4",
+    "@types/puppeteer": "^3.0.0",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.5"
   }
