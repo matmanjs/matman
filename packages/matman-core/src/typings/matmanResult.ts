@@ -1,8 +1,3 @@
-export interface IMatmanResultQueueItemNightmare {
-  eventName: string;
-  args: any[];
-}
-
 export interface IMatmanResultQueueItemPuppeteerNetwork {
   eventName: string;
   url: string;
@@ -36,27 +31,12 @@ export interface IMatmanResultQueueItemPuppeteerConsole {
 }
 
 export type IMatmanResultQueueItem =
-  | IMatmanResultQueueItemNightmare
   | IMatmanResultQueueItemPuppeteerNetwork
   | IMatmanResultQueueItemPuppeteerConsole;
 
 interface IQueryOpts {
   [key: string]: string | number | boolean;
 }
-
-/**
- * nightmare 资源类型的枚举，详见 nightmare-handler 组件中的 RESOURCE_TYPE
- */
-type INightmareResourceType =
-  | 'mainFrame'
-  | 'subFrame'
-  | 'stylesheet'
-  | 'script'
-  | 'image'
-  | 'object'
-  | 'xhr'
-  | 'other'
-  | '';
 
 /**
  * puppeteer 资源类型的枚举
@@ -78,7 +58,7 @@ type IPuppeteerResourceType =
   | 'other'
   | '';
 
-export type IResourceType = IPuppeteerResourceType | INightmareResourceType;
+export type IResourceType = IPuppeteerResourceType;
 
 export interface IMatmanResultQueueHandler {
   queue: IMatmanResultQueueItem[];

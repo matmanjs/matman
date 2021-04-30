@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import Nightmare from 'nightmare';
+
 import {
   MatmanConfig,
   IPageDriver,
@@ -48,7 +48,7 @@ export default class PageDriverAsync implements IPageDriver {
   public pageUrl: string;
   public evaluateFn: null | (() => any) | string;
   public evaluateFnArgs: any[];
-  public actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
+  public actionList: ((n: puppeteer.Page) => Promise<void>)[];
   public isRunList: number[] = [];
   public dataIndexMap: { [key: string]: number };
 
@@ -65,7 +65,6 @@ export default class PageDriverAsync implements IPageDriver {
    * @param {String} [opts.tag] 标记，在某些场景下使用，例如截图保存文件中追加该标记，用于做区分
    * @param {Boolean} [opts.useRecorder] 是否使用记录器
    * @param {Boolean} [opts.doNotCloseBrowser] 是否在执行完成之后不要关闭浏览器，默认为 false
-   * @param {Boolean} [opts.nightmareConfig] 传递给 nightmare 的配置
    */
   public constructor(browserRunner: IBrowserRunner, matmanConfig: MatmanConfig, opts: IPageDriverOpts) {
     this.browserRunner = browserRunner;
@@ -118,8 +117,6 @@ export default class PageDriverAsync implements IPageDriver {
    * 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
    * 若不配置，则之前请求现网，亦可直接测试现网的服务
    *
-   * https://github.com/segmentio/nightmare#switches
-   *
    * @param {String} proxyServer 代理服务器，格式为 my_proxy_server.example.com:8080，例如 127.0.0.1:8899
    * @return {IPageDriver}
    */
@@ -160,9 +157,6 @@ export default class PageDriverAsync implements IPageDriver {
   /**
    * 注入 cookie
    *
-   * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md
-   * https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
-   *
    * @param {ICookieConfigOpts } cookieConfigOpts 支持 `mykey1=myvalue1; mykey2=myvalue2`
    * 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
    * @return {IPageDriver}
@@ -174,8 +168,6 @@ export default class PageDriverAsync implements IPageDriver {
 
   /**
    * 设置无头浏览器设备参数
-   *
-   * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exDevice.md
    *
    * {DeviceConfigOpts} deviceConfig 设备名或者设备配置
    * @return {IPageDriver}
@@ -256,12 +248,12 @@ export default class PageDriverAsync implements IPageDriver {
    * 增加测试动作
    *
    * @param {String} actionName 动作名称，后续可通过它来获得最后的数据
-   * @param {Function} actionCall 执行函数，接受一个 nightmare 对象，可以直接操作
+   * @param {Function} actionCall 执行函数，接受一个 puppeteer.Page 对象，可以直接操作
    * @return {IPageDriver}
    */
   public async addAction(
     actionName: string,
-    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+    actionCall: (n: puppeteer.Page) => Promise<void>,
   ): Promise<void> {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
@@ -284,10 +276,10 @@ export default class PageDriverAsync implements IPageDriver {
   /**
    * 增加执行动作
    *
-   * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
+   * @param {Function} actionCall 执行函数，接受一个 puppeteer.Page 或者 puppeteer 对象，可以直接操作
    * @return {Promise<void>}
    */
-  public async addRunAction(actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>): Promise<void> {
+  public async addRunAction(actionCall: (n: puppeteer.Page) => Promise<void>): Promise<void> {
     if (typeof actionCall !== 'function') {
       throw new Error('addRunAction should assign function!');
     }
@@ -299,8 +291,6 @@ export default class PageDriverAsync implements IPageDriver {
 
   /**
    * 执行爬虫脚本或者方法
-   *
-   * https://www.npmjs.com/package/nightmare#evaluatefn-arg1-arg2
    *
    * @param {String | Function} fn
    * @param [args]

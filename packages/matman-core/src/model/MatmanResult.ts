@@ -1,7 +1,6 @@
 import {
   IMatmanResultQueueHandler,
   IMatmanResultQueueItem,
-  IMatmanResultQueueItemNightmare,
   IMatmanResultQueueItemPuppeteerConsole,
   IMatmanResultQueueItemPuppeteerNetwork,
   IResourceType,
@@ -71,13 +70,9 @@ export default class MatmanResult {
     this.queueHandler = this.getQueueHandler();
   }
 
-  public getQueueHandler(): null | NightmareQueueHandler | PuppeteerQueueHandler {
+  public getQueueHandler(): null | PuppeteerQueueHandler {
     if (!this.globalInfo.recorder) {
       return null;
-    }
-
-    if (this.runnerName === RUNNER_NAME.NIGHTMARE) {
-      return new NightmareQueueHandler(this.getQueue());
     }
 
     if (this.runnerName === RUNNER_NAME.PUPPETEER) {
@@ -521,213 +516,6 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
       }
     }
 
-    return false;
-  }
-}
-
-class NightmareQueueHandler implements IMatmanResultQueueHandler {
-  public queue: IMatmanResultQueueItemNightmare[];
-
-  public constructor(queue: IMatmanResultQueueItem[]) {
-    /**
-     * 从页面获得的数据
-     * @type {Array}
-     */
-    this.queue = queue as IMatmanResultQueueItemNightmare[];
-  }
-
-  /**
-   * 从结果队列中过滤出网络请求
-   *
-   * @param {IResourceType} [resourceType] 资源类型
-   * @return {Array}
-   */
-  public getNetwork(resourceType?: IResourceType): IMatmanResultQueueItemNightmare[] {
-    const { queue } = this;
-
-    return queue.filter((item) => {
-      if (item.eventName !== 'did-get-response-details') {
-        return false;
-      }
-
-      if (!item.args || item.args.length < 4) {
-        return false;
-      }
-
-      // 如果定义了 resourceType 但又不匹配，则放弃之
-      if (resourceType && item.args[item.args.length - 1] !== resourceType) {
-        return false;
-      }
-
-      // 这是真实的请求 originalURL
-      return !!item.args[3];
-    });
-  }
-
-  /**
-   * 是否存在某个网络请求
-   *
-   * @param {String} partialURL 用于匹配的部分url
-   * @param {Object} [query] 请求携带的 query 参数
-   * @param {String} [resourceType] 资源类型
-   * @param {Number} [status] 状态码
-   * @return {Boolean}
-   */
-  public isExistInNetwork(
-    partialURL: string,
-    query?: { [key: string]: any },
-    resourceType?: IResourceType,
-    status?: number,
-  ): boolean {
-    const queue = this.getNetwork(resourceType);
-
-    let result = false;
-
-    // 只要找到其中一个匹配即可返回
-    for (let i = 0; i < queue.length; i++) {
-      const queueItem = queue[i];
-
-      // 如果没有匹配到链接则执行下一个
-      if (!isURLMatch(queueItem.args[3], partialURL, query)) {
-        continue;
-      }
-
-      // 如果匹配了链接，但未匹配 status，也算失败
-      if (status && queueItem.args[4] !== status) {
-        continue;
-      }
-
-      result = true;
-      break;
-    }
-
-    return result;
-  }
-
-  /**
-   * 是否存在某个页面
-   *
-   * @param {String} partialURL 用于匹配的部分url
-   * @param {Object} [query] 请求携带的 query 参数
-   * @param {Number} [status] 状态码
-   * @return {Boolean}
-   */
-  public isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
-    return this.isExistInNetwork(partialURL, query, 'mainFrame', status);
-  }
-
-  /**
-   * 是否存在某个 xhr 请求
-   *
-   * @param {String} partialURL 用于匹配的部分url
-   * @param {Object} [query] 请求携带的 query 参数
-   * @param {Number} [status] 状态码
-   * @return {Boolean}
-   */
-  public isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
-    return this.isExistInNetwork(partialURL, query, 'xhr', status);
-  }
-
-  /**
-   * 是否存在某个 image 请求
-   *
-   * @param {String} partialURL 用于匹配的部分url
-   * @param {Object} [query] 请求携带的 query 参数
-   * @param {Number} [status] 状态码
-   * @return {Boolean}
-   */
-  public isExistImage(
-    partialURL: string,
-    query?: { [key: string]: any },
-    status?: number,
-  ): boolean {
-    return this.isExistInNetwork(partialURL, query, 'image', status);
-  }
-
-  /**
-   * 是否存在某个 stylesheet 请求
-   *
-   * @param {String} partialURL 用于匹配的部分url
-   * @param {Object} [query] 请求携带的 query 参数
-   * @param {Number} [status] 状态码
-   * @return {Boolean}
-   */
-  public isExistStylesheet(
-    partialURL: string,
-    query?: { [key: string]: any },
-    status?: number,
-  ): boolean {
-    return this.isExistInNetwork(partialURL, query, 'stylesheet', status);
-  }
-
-  /**
-   * 是否存在某个 script 请求
-   *
-   * @param {String} partialURL 用于匹配的部分url
-   * @param {Object} [query] 请求携带的 query 参数
-   * @param {Number} [status] 状态码
-   * @return {Boolean}
-   */
-  public isExistScript(
-    partialURL: string,
-    query?: { [key: string]: any },
-    status?: number,
-  ): boolean {
-    return this.isExistInNetwork(partialURL, query, 'script', status);
-  }
-
-  /**
-   * 是否存在某个 jsbridge 的调用
-   *
-   * @param {String} partialURL 用于匹配的部分url
-   * @param {Object} [query] 请求携带的 query 参数
-   * @return {Boolean}
-   */
-  public isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
-    const { queue } = this;
-
-    let result = false;
-
-    // 只要找到其中一个匹配即可返回
-    for (let i = 0; i < queue.length; i++) {
-      const queueItem = queue[i];
-
-      if (queueItem.eventName !== 'did-fail-provisional-load') {
-        continue;
-      }
-
-      if (!queueItem.args || queueItem.args.length < 4) {
-        continue;
-      }
-
-      const jsbridge = queueItem.args[3];
-
-      // 如果没有匹配到链接则执行下一个
-      if (!isURLMatch(jsbridge, partialURL, query)) {
-        continue;
-      }
-
-      result = true;
-      break;
-    }
-
-    return result;
-  }
-
-  /**
-   * 是否存在某一条 console 记录
-   *
-   * @param {String} partialText 待匹配的文本
-   * @param {String} [type] 类型，例如 console.log，则 type=log
-   * @param {Boolean} [isFullMatch] 是否将 partialText 作为全匹配
-   * @returns {Boolean}
-   */
-  public isExistConsole(
-    partialText: string | RegExp,
-    type?: string,
-    isFullMatch?: boolean,
-  ): boolean {
-    // 暂未实现该功能
     return false;
   }
 }

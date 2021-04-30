@@ -15,7 +15,6 @@ import { IBrowserRunner } from './typings/browserRunner';
 import { IPageDriver } from './typings/pageDriver';
 import {
   IMatmanResultQueueItem,
-  IMatmanResultQueueItemNightmare,
   IMatmanResultQueueItemPuppeteerNetwork,
   IMatmanResultQueueItemPuppeteerConsole,
   IMatmanResultQueueHandler,
@@ -53,7 +52,6 @@ export {
   IPageDriver,
   MatmanResult,
   IMatmanResultQueueItem,
-  IMatmanResultQueueItemNightmare,
   IMatmanResultQueueItemPuppeteerNetwork,
   IMatmanResultQueueItemPuppeteerConsole,
   IMatmanResultQueueHandler,

@@ -1,5 +1,5 @@
-import Nightmare from 'nightmare';
 import puppeteer from 'puppeteer';
+
 import { IBrowserRunner } from './browserRunner';
 import MatmanResult from '../model/MatmanResult';
 import MatmanConfig from '../config/MatmanConfig';
@@ -55,7 +55,7 @@ export interface IPageDriver {
   pageUrl: string;
   evaluateFn: null | (() => any) | string;
   evaluateFnArgs: any[];
-  actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
+  actionList: ((n: puppeteer.Page) => Promise<void>)[];
   // 提供给 Run 方法做标记, 不产生快照
   isRunList: number[];
   dataIndexMap: { [key: string]: number };
@@ -65,8 +65,6 @@ export interface IPageDriver {
   /**
    * 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
    * 若不配置，则之前请求现网，亦可直接测试现网的服务
-   *
-   * https://github.com/segmentio/nightmare#switches
    *
    * @param {String} proxyServer 代理服务器，格式为 my_proxy_server.example.com:8080，例如 127.0.0.1:8899
    * @return {IPageDriver}
@@ -94,9 +92,6 @@ export interface IPageDriver {
   /**
    * 注入 cookie
    *
-   * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md
-   * https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
-   *
    * @param {String | Object } cookieConfig 支持 `mykey1=myvalue1; mykey2=myvalue2`
    * 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
    * @return {IPageDriver}
@@ -105,8 +100,6 @@ export interface IPageDriver {
 
   /**
    * 设置无头浏览器设备参数
-   *
-   * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exDevice.md
    *
    * @param {String | Object} deviceConfig 设备名或者设备配置，默认值为 mobile
    * @param {String} [deviceConfig.name] 设备名字
@@ -153,28 +146,26 @@ export interface IPageDriver {
    * 增加测试动作
    *
    * @param {String} actionName 动作名称，后续可通过它来获得最后的数据
-   * @param {Function} actionCall 执行函数，接受一个 nightmare 对象，可以直接操作
+   * @param {Function} actionCall 执行函数，接受一个 puppeteer.Page 对象，可以直接操作
    * @return {IPageDriver}
    */
   addAction(
     actionName: string,
-    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+    actionCall: (n: puppeteer.Page) => Promise<void>,
   ): IPageDriver | Promise<void>;
 
   /**
    * 增加执行动作
    *
-   * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
+   * @param {Function} actionCall 执行函数，接受一个 puppeteer.Page 或者 puppeteer 对象，可以直接操作
    * @return {IPageDriver | Promise<void>}
    */
   addRunAction(
-    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
+    actionCall: (n: puppeteer.Page) => Promise<void>,
   ): IPageDriver | Promise<void>;
 
   /**
    * 执行爬虫脚本或者方法获得结果
-   *
-   * https://www.npmjs.com/package/nightmare#evaluatefn-arg1-arg2
    *
    * @param {String | Function} fn
    * @param [args]

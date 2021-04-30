@@ -7,7 +7,7 @@ import { exec } from 'child_process';
  */
 export function checkIfWhistleStarted(): Promise<string | number> {
   return new Promise((resolve, reject) => {
-    exec('w2 status', (error, stdout, stderr) => {
+    exec('w2 status', (error, stdout) => {
       if (error) {
         return reject(error);
       }
@@ -29,7 +29,7 @@ export function checkIfWhistleStarted(): Promise<string | number> {
  */
 export function startWhistleDirect(): Promise<string | number> {
   return new Promise((resolve, reject) => {
-    exec('w2 start', (error, stdout, stderr) => {
+    exec('w2 start', (error, stdout) => {
       if (error) {
         return reject(error);
       }

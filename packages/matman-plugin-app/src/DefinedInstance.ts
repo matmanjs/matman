@@ -1,57 +1,36 @@
+import { DefinedInstanceBase } from 'matman-plugin-core';
+
 interface DefinedInstanceOpts {
   rootPath: string;
-  setup?: (port?: number) => void;
+  setup?: (port?: number) => Promise<void>;
+
+  getWhistleRule?: (port?: number) => Promise<void>;
 }
 
-type ICacheValue = string | number | boolean;
-
-interface ICacheData  {
-  [key: string]: ICacheValue;
-}
-
-export default class DefinedInstance {
+export default class DefinedInstance extends DefinedInstanceBase {
   /**
-   * 被测应用的根目录
+   * 被测应用/项目的根目录，即 package.json 的目录
    */
   public rootPath: string;
 
   /**
-   * 缓存信息
+   * 启动自动化测试之前执行的方法
    */
-  private cacheData: ICacheData;
+  public setupCall?: (port?: number) => Promise<void>;
 
-
-  /**
-   * @param opts {DefinedInstanceOpts}
-   */
   public constructor(opts: DefinedInstanceOpts) {
+    super();
+
     this.rootPath = opts.rootPath;
-
-    this.cacheData = {};
-  }
-
-  public setup() {
-
+    this.setupCall = opts.setup;
   }
 
   /**
-   * 设置缓存信息
+   * 启动自动化测试之前执行的方法
    */
-  public setCacheItem(key: string, value: ICacheValue): void {
-    this.cacheData[key] = value;
-  }
-
-  /**
-   * 获取缓存信息
-   */
-  public getCacheItem(key: string): ICacheValue {
-    return this.cacheData[key];
-  }
-
-  /**
-   * 获取缓存信息
-   */
-  public getCache(key?: string): ICacheData| ICacheValue {
-    return key ? this.cacheData[key] : this.cacheData;
+  public async setup(): Promise<void> {
+    if (typeof this.setupCall === 'function') {
+      await this.setupCall.call(this);
+    }
   }
 }
