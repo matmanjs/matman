@@ -76,6 +76,8 @@ export function getCallerPath(referFile?: string): string {
    * @type {String[]}
    */
   const callStackFileArr = [];
+
+  // eslint-disable-next-line @typescript-eslint/prefer-for-of
   for (let i = 0; i < stackFileArr.length; i++) {
     const item = stackFileArr[i];
     const matmanResult = item.match(/\((.*\.[j|t]s):.*\)/);
