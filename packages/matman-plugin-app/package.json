@@ -48,6 +48,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "matman-core": "^6.0.20",
     "matman-plugin-core": "^6.0.20"
   }
 }
