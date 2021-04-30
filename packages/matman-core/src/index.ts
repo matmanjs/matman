@@ -11,6 +11,8 @@ import { getAbsolutePath, findMatmanConfig, searchFilePath } from './util';
 import { requireAsync, requireSync } from './util/require-file';
 import { isURLMatch } from './util/url';
 import { createLogger, logger } from './util/logger';
+import { killPort, findAvailablePort, portIsOccupied } from './util/port';
+import { runByExec, runBySpawn } from './util/run-cmd';
 
 import { IBrowserRunner } from './typings/browserRunner';
 import { IPageDriver } from './typings/pageDriver';
@@ -38,6 +40,11 @@ export {
   requireSync,
   isURLMatch,
   createLogger,
+  killPort,
+  findAvailablePort,
+  portIsOccupied,
+  runByExec,
+  runBySpawn,
   logger,
   WhistleRule,
   CookieConfig,
