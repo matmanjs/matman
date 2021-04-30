@@ -1,12 +1,12 @@
 import yargs from 'yargs';
 import semver from 'semver';
 import chalk from 'chalk';
-import {run} from './run';
+import { run } from './run';
+import { IArgv } from './types';
 
 /**
  * cli 入口
  *
- * @author wangjq4214
  */
 export const Main = async (): Promise<void> => {
   // 验证版本
@@ -16,25 +16,21 @@ export const Main = async (): Promise<void> => {
   }
 
   // 解析参数
-  const argv = yargs
-    .command('init', '😋 初始化项目', yargs => {
-      return yargs.option('type', {
-        alias: 't',
-        describe: '生成项目的类型',
-        type: 'string',
-      });
-    })
-    .command('build', '🤔 编译爬虫脚本', yargs => {
-      return yargs.option('dev', {
-        alias: 'd',
-        describe: '是否生成调试版本',
-        type: 'boolean',
-      });
-    })
-    .help().argv;
+  const { argv } = yargs
+    .command('init', '� 初始化项目', yargs => yargs.option('type', {
+      alias: 't',
+      describe: '生成项目的类型',
+      type: 'string',
+    }))
+    .command('build', '� 编译爬虫脚本', yargs => yargs.option('dev', {
+      alias: 'd',
+      describe: '是否生成调试版本',
+      type: 'boolean',
+    }))
+    .help();
 
   // 执行方法
-  await run(argv);
+  await run(argv as IArgv);
 
   process.exit(0);
 };

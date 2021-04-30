@@ -1,3 +1,3 @@
 module.exports = {
-    rootPath: __dirname
+  rootPath: __dirname,
 };

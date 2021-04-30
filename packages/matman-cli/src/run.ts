@@ -4,18 +4,18 @@ import chalk from 'chalk';
 import inquirer from 'inquirer';
 import yeoman from 'yeoman-environment';
 import glob from 'glob';
-import {findMatmanConfig, MatmanConfig} from 'matman-core';
-import {build} from 'matman-crawler';
-import {DealWith, Argv} from './types';
+import { findMatmanConfig, MatmanConfig } from 'matman-core';
+import { build } from 'matman-crawler';
+
+import { IDealWith, IArgv } from './types';
 
 // 获取所有模板
 const generators = fs
   .readdirSync(path.resolve(__dirname, '../generators'))
   .filter(f => !(f.startsWith('.') || f.endsWith('js')))
-  .map(f => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const description = require(path.resolve(__dirname, '../generators', f, 'meta.json'))
-      .description;
+  .map((f) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { description } = require(path.resolve(__dirname, '../generators', f, 'meta.json'));
     return {
       name: `${f.padEnd(15)} - ${chalk.gray(description)}`,
       value: f,
@@ -23,7 +23,7 @@ const generators = fs
     };
   });
 
-const runGenerator = async (type: string, {name = '', cwd = process.cwd(), args = {}}) => {
+const runGenerator = async (type: string, { name = '', cwd = process.cwd(), args = {} }) => {
   // 新建文件夹
   fs.ensureDirSync(path.resolve(cwd, name));
 
@@ -49,18 +49,18 @@ const runGenerator = async (type: string, {name = '', cwd = process.cwd(), args 
   });
 };
 
-const dealWith: DealWith = {
+const dealWith: IDealWith = {
   /**
    * 新建模板项目
    */
-  init: async argv => {
+  init: async (argv) => {
     let dirname = argv._[1];
-    let type = argv.type;
+    let { type } = argv;
 
     // 处理新建模板的文件夹
     if (dirname === undefined) {
       const answer = await inquirer.prompt([
-        {type: 'input', message: '🤖请输入新建模板的文件夹名称', name: 'name'},
+        { type: 'input', message: '�请输入新建模板的文件夹名称', name: 'name' },
       ]);
 
       dirname = answer.name;
@@ -81,7 +81,7 @@ const dealWith: DealWith = {
       if (answers.confirm) {
         fs.removeSync(path.resolve(process.cwd(), dirname));
       } else {
-        console.warn(chalk.yellow(`❌ 请删除现有文件, 或重新指定文件夹名称`));
+        console.warn(chalk.yellow('❌ 请删除现有文件, 或重新指定文件夹名称'));
         process.exit(1);
       }
     }
@@ -92,7 +92,7 @@ const dealWith: DealWith = {
       const answers = await inquirer.prompt([
         {
           name: 'type',
-          message: '🤙 请选择你需要使用的模板',
+          message: '� 请选择你需要使用的模板',
           type: 'list',
           choices: generators,
         },
@@ -107,54 +107,58 @@ const dealWith: DealWith = {
       });
     } catch (e) {
       // 模板生成失败
-      console.error(chalk.red(`❌ 模板生成失败`), e);
+      console.error(chalk.red('❌ 模板生成失败'), e);
       process.exit(1);
     }
   },
+
   /**
    * 编译爬虫脚本
    */
-  build: async argv => {
+  build: async (argv) => {
     const matmanConfig = findMatmanConfig(process.cwd()) as MatmanConfig;
+
     if (argv.dev) {
       matmanConfig.isDevBuild = argv.dev;
     }
+
     const files = glob.sync('./**/+(crawlers|crawler)/*.js', {
       cwd: matmanConfig.caseModulesPath,
     });
 
     for (const item of files) {
-      console.log(chalk.yellow('😏 开始编译', item));
+      console.log(chalk.yellow('� 开始编译', item));
 
       const res = await build(`${matmanConfig.caseModulesPath}/${item}`, {
-        matmanConfig: matmanConfig,
+        matmanConfig,
       });
+
       fs.outputFileSync(`${matmanConfig.crawlerBuildPath}/${item}`, res);
 
-      console.log(chalk.green('😘 编译成功', item));
+      console.log(chalk.green('� 编译成功', item));
     }
   },
 };
 
 /**
  * 根据命令选择需要执行的方法
+ *
  * @param argv
- * @author wangjq4214
  */
-export const run = async (argv: Argv): Promise<void> => {
+export const run = async (argv: IArgv): Promise<void> => {
   const command = argv._[0] as 'build' | 'init';
 
   const method = dealWith[command];
 
   if (!method) {
-    console.error(chalk.red('👋 输入的命令不支持'));
+    console.error(chalk.red('� 输入的命令不支持'));
     process.exit(1);
   }
 
   try {
     await method(argv);
   } catch (e) {
-    console.error(chalk.red(`👋 执行失败`), e);
+    console.error(chalk.red('� 执行失败'), e);
     process.exit(1);
   }
 };

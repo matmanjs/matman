@@ -5,10 +5,8 @@
  * @member cwd 运行命令的文件夹
  * @member order 需要运行的命令
  * @member auto 是否在初始化时自动运行
- *
- * @author wangjq4214
  */
-export interface SetupOptions {
+export interface ISetupOptions {
   name: string;
   cwd?: string;
   order: string;
@@ -28,11 +26,8 @@ export interface SetupOptions {
  * @member matmanResultPath MatmanResult 执行结果数据保存的路径
  * @member isDevBuild 是否为开发模式
  * @member setupOptions 提供 IDE 的启动命令
- *
- * @author helinjiang
- * @author wangjq4214
  */
-export interface MatmanConfigOpts {
+export interface IMatmanConfigOpts {
   rootPath?: string;
   caseModulesPath?: string;
   crawlerBuildPath?: string;
@@ -41,5 +36,5 @@ export interface MatmanConfigOpts {
   coveragePath?: string;
   matmanResultPath?: string;
   isDevBuild?: boolean;
-  setupOptions?: SetupOptions[];
+  setupOptions?: ISetupOptions[];
 }

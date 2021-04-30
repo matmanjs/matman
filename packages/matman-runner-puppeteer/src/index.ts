@@ -1,2 +1,3 @@
-import {PuppeteerRunner} from './PuppeteerRunner';
+import { PuppeteerRunner } from './PuppeteerRunner';
+
 export const BrowserRunner = PuppeteerRunner;

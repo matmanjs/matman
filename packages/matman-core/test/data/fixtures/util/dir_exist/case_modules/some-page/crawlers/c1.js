@@ -1,5 +1,3 @@
-module.exports = () => {
-    return {
-        say: 'hello, c1.js!'
-    };
-};
+module.exports = () => ({
+  say: 'hello, c1.js!',
+});

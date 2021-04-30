@@ -1,4 +1,4 @@
-import {rollup} from 'rollup';
+import { rollup } from 'rollup';
 import pluginCommonjs from '@rollup/plugin-commonjs';
 import pluginJson from '@rollup/plugin-json';
 import pluginResolve from '@rollup/plugin-node-resolve';
@@ -9,7 +9,6 @@ import pluginResolve from '@rollup/plugin-node-resolve';
  * 干掉需要手工 build
  *
  * @param {String} entryPath
- * @author wangjq4214
  */
 const build = async (entryPath: string): Promise<string> => {
   // 打包
@@ -19,7 +18,7 @@ const build = async (entryPath: string): Promise<string> => {
   });
 
   // 生成
-  const {output} = await bundle.generate({
+  const { output } = await bundle.generate({
     name: 'getPageInfo',
     format: 'iife',
   });

@@ -1,5 +1,5 @@
 import 'mocha';
-import {expect} from 'chai';
+import { expect } from 'chai';
 
 import DeviceConfig from '../../../src/config/DeviceConfig';
 

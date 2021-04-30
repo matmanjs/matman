@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 // https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts
 // https://github.com/puppeteer/puppeteer/blob/v4.0.0/docs/api.md#puppeteerconnectoptions
-interface Viewport {
+interface IViewport {
   // page width in pixels.
   width: number;
 
@@ -23,16 +23,16 @@ interface Viewport {
 }
 
 // https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts
-interface Device {
+interface IDevice {
   name?: string;
   userAgent?: string;
-  viewport?: Viewport;
+  viewport?: IViewport;
 
   // 基于哪一个设备扩展
   extend?: string;
 }
 
-export type DeviceConfigOpts = string | Device;
+export type IDeviceConfigOpts = string | IDevice;
 
 const DEVICE_CHROME = {
   name: 'Chrome',
@@ -49,41 +49,43 @@ const DEVICE_CHROME = {
 };
 
 export default class DeviceConfig {
-  name: string;
-  userAgent?: string;
-  viewport?: Viewport;
-  extend?: string;
+  public name: string;
+  public userAgent?: string;
+  public viewport?: IViewport;
+  public extend?: string;
 
-  /**
-   * 构造函数
-   * @param opts 设备名或者设备配置对象
-   */
-  constructor(opts?: DeviceConfigOpts) {
+  public constructor(opts?: IDeviceConfigOpts) {
     if (opts && typeof opts === 'object') {
+      // 如果 opts 为对象
       this.name = opts.name || 'unknown device';
       this.userAgent = opts.userAgent;
       this.viewport = opts.viewport;
       this.extend = opts.extend;
     } else {
+      // 如果 opts 字符串，则指代 name
       this.name = opts || 'unknown device';
 
-      // 特殊处理
+      // 特殊处理，兼容历史
       if (this.name === 'mobile') {
         this.extend = 'iPhone 6';
       }
     }
   }
 
-  updateExtend(extendDevice: Device) {
+  public updateExtend(extendDevice: IDevice) {
     this.userAgent = extendDevice.userAgent || this.userAgent;
     this.viewport = _.merge({}, extendDevice.viewport, this.viewport);
   }
 
-  getConfig() {
+  public getConfig() {
     return _.merge({}, DEVICE_CHROME, {
       name: this.name,
       userAgent: this.userAgent,
       viewport: this.viewport,
     });
+  }
+
+  public getExtend() {
+    return this.extend;
   }
 }

@@ -1,6 +1,6 @@
 import path from 'path';
 import 'mocha';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import fse from 'fs-extra';
 
 import build from '../../../src/run-build/build';
@@ -15,8 +15,8 @@ describe('check run-build/build.ts', () => {
       __dirname,
       '../../data/expects/build-result/simple-file.js.result',
     );
-    return build(entryPath).then(result => {
-      expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+    return build(entryPath).then((result) => {
+      expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
     });
   });
 
@@ -29,8 +29,8 @@ describe('check run-build/build.ts', () => {
       __dirname,
       '../../data/expects/build-result/file-require-js-module.js.result',
     );
-    return build(entryPath).then(result => {
-      expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+    return build(entryPath).then((result) => {
+      expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
     });
   });
 
@@ -43,8 +43,8 @@ describe('check run-build/build.ts', () => {
       __dirname,
       '../../data/expects/build-result/file-require-json-module.js.result',
     );
-    return build(entryPath).then(result => {
-      expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+    return build(entryPath).then((result) => {
+      expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
     });
   });
 });

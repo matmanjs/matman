@@ -4,6 +4,7 @@ import fse from 'fs-extra';
  * 获取哪个文件在调用本方法
  *
  * @param {String} [referFile] 从调用栈中找到该文件的调用者，而不再是本方法的调用者
+ * @return {String}
  */
 export function getCallerPath(referFile?: string): string {
   let err = new Error();
@@ -31,8 +32,7 @@ export function getCallerPath(referFile?: string): string {
    at internal/main/run_main_module.js:21:11
    * @type {string | string}
    */
-  const stackStr = (err && err.stack && err.stack.toString()) || '';
-  // console.log(stackStr);
+  const stackStr = (err?.stack?.toString()) || '';
 
   /**
    * [ '(/Users/helinjiang/gitproject/matman/tmp/t1.js:17:15)',
@@ -41,15 +41,14 @@ export function getCallerPath(referFile?: string): string {
    * @type {RegExpMatchArray}
    */
   let stackFileArr = stackStr.match(/\((.*)\)/gi) || [];
-  // console.log(stackFileArr);
 
   let isFoundUserModule = false;
 
   // 过滤一些不符合要求的模块
-  stackFileArr = stackFileArr.filter(item => {
+  stackFileArr = stackFileArr.filter((item) => {
     // 是否为内部 js 模块的调用，例如：
     // (internal/modules/cjs/loader.js:598:3)
-    const isInternalModules = item.indexOf('(internal') == 0;
+    const isInternalModules = item.indexOf('(internal') === 0;
     if (isInternalModules) {
       return false;
     }
@@ -60,17 +59,15 @@ export function getCallerPath(referFile?: string): string {
       return false;
     }
 
-    //是否为 /node_modules/ 模块的调用，例如：
+    // 是否为 /node_modules/ 模块的调用，例如：
     // (/Users/helinjiang/gitprojects/matman/packages/matman/node_modules/mocha/lib/runner.js:448:14)
     const isNodeModules = item.indexOf('/node_modules/') > -1;
     if (!isNodeModules) {
       isFoundUserModule = true;
       return true;
-    } else {
-      return !isFoundUserModule;
     }
+    return !isFoundUserModule;
   });
-  // console.log(stackFileArr);
 
   /**
    * 文件调用栈列表
@@ -100,18 +97,15 @@ export function getCallerPath(referFile?: string): string {
       callStackFileArr.push(filePath);
     }
   }
-  // console.log('referFile', referFile);
-  // console.log('callStackFileArr', callStackFileArr);
 
   if (referFile && fse.existsSync(referFile)) {
     const index = callStackFileArr.indexOf(referFile);
 
     if (index < 0 || index >= callStackFileArr.length - 1) {
       return referFile;
-    } else {
-      return callStackFileArr[index + 1];
     }
-  } else {
-    return callStackFileArr[0];
+    return callStackFileArr[index + 1];
   }
+
+  return callStackFileArr[0];
 }

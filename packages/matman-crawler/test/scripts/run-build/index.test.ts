@@ -1,8 +1,8 @@
 import path from 'path';
 import 'mocha';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import fse from 'fs-extra';
-import {findMatmanConfig, MatmanConfig} from 'matman-core';
+import { findMatmanConfig, MatmanConfig } from 'matman-core';
 
 import build from '../../../src/run-build/index';
 
@@ -24,8 +24,8 @@ describe('check run-build/index.ts', () => {
         __dirname,
         '../../data/expects/demo_for_crawlers/simple-file-isIPC.js.result',
       );
-      return build(entryPath, {isIPC: true, matmanConfig}).then(result => {
-        expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+      return build(entryPath, { isIPC: true, matmanConfig }).then((result) => {
+        expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
       });
     });
 
@@ -38,8 +38,8 @@ describe('check run-build/index.ts', () => {
         __dirname,
         '../../data/expects/demo_for_crawlers/simple-file.js.result',
       );
-      return build(entryPath, {isIPC: false, matmanConfig}).then(result => {
-        expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+      return build(entryPath, { isIPC: false, matmanConfig }).then((result) => {
+        expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
       });
     });
   });
@@ -61,8 +61,8 @@ describe('check run-build/index.ts', () => {
         __dirname,
         '../../data/expects/demo_for_crawlers/matman-config-not-dev-no-jquery.js.result',
       );
-      return build(entryPath, {isIPC: false, matmanConfig}).then(result => {
-        expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+      return build(entryPath, { isIPC: false, matmanConfig }).then((result) => {
+        expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
       });
     });
 
@@ -77,8 +77,8 @@ describe('check run-build/index.ts', () => {
         __dirname,
         '../../data/expects/demo_for_crawlers/matman-config-not-dev-need-jquery.js.result',
       );
-      return build(entryPath, {isIPC: false, matmanConfig}).then(result => {
-        expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+      return build(entryPath, { isIPC: false, matmanConfig }).then((result) => {
+        expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
       });
     });
 
@@ -93,8 +93,8 @@ describe('check run-build/index.ts', () => {
         __dirname,
         '../../data/expects/demo_for_crawlers/matman-config-is-dev-no-jquery.js.result',
       );
-      return build(entryPath, {isIPC: false, matmanConfig}).then(result => {
-        expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+      return build(entryPath, { isIPC: false, matmanConfig }).then((result) => {
+        expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
       });
     });
 
@@ -109,8 +109,8 @@ describe('check run-build/index.ts', () => {
         __dirname,
         '../../data/expects/demo_for_crawlers/matman-config-is-dev-need-jquery.js.result',
       );
-      return build(entryPath, {isIPC: false, matmanConfig}).then(result => {
-        expect(result).to.equal(fse.readFileSync(outputPath, {encoding: 'utf8'}));
+      return build(entryPath, { isIPC: false, matmanConfig }).then((result) => {
+        expect(result).to.equal(fse.readFileSync(outputPath, { encoding: 'utf8' }));
       });
     });
   });

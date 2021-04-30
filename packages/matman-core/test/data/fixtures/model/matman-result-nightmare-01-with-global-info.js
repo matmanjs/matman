@@ -2,18 +2,18 @@ module.exports = {
   runnerName: 'nightmare',
   data: [
     {
-      searchInputInfo: {keyWorld: '', searchBtnText: '百度一下'},
-      searchResultInfo: {isExist: false, list: []},
+      searchInputInfo: { keyWorld: '', searchBtnText: '百度一下' },
+      searchResultInfo: { isExist: false, list: [] },
       title: '百度一下，你就知道',
     },
     {
-      searchInputInfo: {keyWorld: 'matman', searchBtnText: '百度一下'},
-      searchResultInfo: {isExist: false, list: []},
+      searchInputInfo: { keyWorld: 'matman', searchBtnText: '百度一下' },
+      searchResultInfo: { isExist: false, list: [] },
       title: '百度一下，你就知道',
     },
     {
-      searchInputInfo: {keyWorld: 'matman', searchBtnText: '百度一下'},
-      searchResultInfo: {isExist: true},
+      searchInputInfo: { keyWorld: 'matman', searchBtnText: '百度一下' },
+      searchResultInfo: { isExist: true },
       title: 'matman_百度搜索',
     },
   ],
@@ -43,7 +43,7 @@ module.exports = {
           args: [],
           t: 1588311576226,
         },
-        {eventName: 'did-start-loading', args: [{}], t: 1588311576231},
+        { eventName: 'did-start-loading', args: [{}], t: 1588311576231 },
         {
           eventName: 'did-get-response-details',
           args: [
@@ -684,7 +684,7 @@ module.exports = {
           args: [{}, true],
           t: 1588311577057,
         },
-        {eventName: 'did-finish-load', args: [{}], t: 1588311577057},
+        { eventName: 'did-finish-load', args: [{}], t: 1588311577057 },
         {
           eventName: 'did-stop-loading',
           args: [{}],
@@ -1313,7 +1313,7 @@ module.exports = {
           args: [{}],
           t: 1588311579912,
         },
-        {eventName: 'did-stop-loading', args: [{}], t: 1588311579912},
+        { eventName: 'did-stop-loading', args: [{}], t: 1588311579912 },
         {
           eventName: 'did-get-response-details',
           args: [

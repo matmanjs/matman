@@ -1,30 +1,30 @@
 import MatmanConfig from './config/MatmanConfig';
-import CookieConfig, {CookieConfigOpts} from './config/CookieConfig';
-import DeviceConfig, {DeviceConfigOpts} from './config/DeviceConfig';
-import ScreenshotConfig, {ScreenOpts} from './config/ScreenshotConfig';
-import CoverageConfig, {CoverageOpts} from './config/CoverageConfig';
-import MatmanResultConfig, {ResultOpts} from './config/MatmanResultConfig';
-import MockstarConfig, {MockstarConfigOpts, MockstarQueryDataMap} from './config/MockstarConfig';
-import {MATMAN_CONFIG_FILE, RUNNER_NAME} from './config';
+import CookieConfig, { ICookieConfigOpts } from './config/CookieConfig';
+import DeviceConfig, { IDeviceConfigOpts } from './config/DeviceConfig';
+import ScreenshotConfig, { IScreenOpts } from './config/ScreenshotConfig';
+import CoverageConfig, { ICoverageOpts } from './config/CoverageConfig';
+import MatmanResultConfig, { IResultOpts } from './config/MatmanResultConfig';
+import MockstarConfig, { IMockstarConfigOpts, IMockstarQueryDataMap } from './config/MockstarConfig';
+import { MATMAN_CONFIG_FILE, RUNNER_NAME } from './config';
 
-import {getAbsolutePath, findMatmanConfig, searchFilePath} from './util';
-import {requireAsync, requireSync} from './util/require-file';
-import {isURLMatch} from './util/url';
+import { getAbsolutePath, findMatmanConfig, searchFilePath } from './util';
+import { requireAsync, requireSync } from './util/require-file';
+import { isURLMatch } from './util/url';
 
-import {BrowserRunner} from './typings/browserRunner';
-import {PageDriver} from './typings/pageDriver';
+import { IBrowserRunner } from './typings/browserRunner';
+import { IPageDriver } from './typings/pageDriver';
 import {
-  MatmanResultQueueItem,
-  MatmanResultQueueItemNightmare,
-  MatmanResultQueueItemPuppeteerNetwork,
-  MatmanResultQueueItemPuppeteerConsole,
-  MatmanResultQueueHandler,
-  ResourceType,
+  IMatmanResultQueueItem,
+  IMatmanResultQueueItemNightmare,
+  IMatmanResultQueueItemPuppeteerNetwork,
+  IMatmanResultQueueItemPuppeteerConsole,
+  IMatmanResultQueueHandler,
+  IResourceType,
 } from './typings/matmanResult';
 
 import MatmanResult from './model/MatmanResult';
 
-import {MatmanConfigOpts} from './types';
+import { IMatmanConfigOpts } from './types';
 
 export {
   MatmanConfig,
@@ -37,26 +37,26 @@ export {
   requireSync,
   isURLMatch,
   CookieConfig,
-  CookieConfigOpts,
+  ICookieConfigOpts,
   DeviceConfig,
-  DeviceConfigOpts,
+  IDeviceConfigOpts,
   ScreenshotConfig,
-  ScreenOpts,
+  IScreenOpts,
   CoverageConfig,
-  CoverageOpts,
+  ICoverageOpts,
   MockstarConfig,
-  MockstarConfigOpts,
-  MockstarQueryDataMap,
+  IMockstarConfigOpts,
+  IMockstarQueryDataMap,
   MatmanResultConfig,
-  ResultOpts,
-  BrowserRunner,
-  PageDriver,
+  IResultOpts,
+  IBrowserRunner,
+  IPageDriver,
   MatmanResult,
-  MatmanResultQueueItem,
-  MatmanResultQueueItemNightmare,
-  MatmanResultQueueItemPuppeteerNetwork,
-  MatmanResultQueueItemPuppeteerConsole,
-  MatmanResultQueueHandler,
-  ResourceType,
-  MatmanConfigOpts,
+  IMatmanResultQueueItem,
+  IMatmanResultQueueItemNightmare,
+  IMatmanResultQueueItemPuppeteerNetwork,
+  IMatmanResultQueueItemPuppeteerConsole,
+  IMatmanResultQueueHandler,
+  IResourceType,
+  IMatmanConfigOpts,
 };

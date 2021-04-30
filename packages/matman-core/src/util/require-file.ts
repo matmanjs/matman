@@ -3,8 +3,10 @@
  * @param filePath
  */
 export function requireSync(filePath: string): never {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // 特殊业务逻辑处理必须要使用 require，因此此处才设置 ignore
+
   // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   return require(filePath);
 }
 
@@ -13,7 +15,7 @@ export function requireSync(filePath: string): never {
  * @param filePath
  */
 export async function requireAsync(filePath: string): Promise<never> {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   return import(filePath);
 }

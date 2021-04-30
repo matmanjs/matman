@@ -2,6 +2,7 @@
 
 'use strict';
 
-const {Main} = require('../lib');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { Main } = require('../lib');
 
 Main();

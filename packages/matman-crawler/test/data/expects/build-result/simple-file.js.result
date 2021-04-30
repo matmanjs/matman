@@ -5,12 +5,10 @@ var getPageInfo = (function () {
     return 'I am description';
   }
 
-  var simpleFile = () => {
-    return {
-      say: 'hello, simple-file.js!',
-      description: getDescription(),
-    };
-  };
+  var simpleFile = () => ({
+    say: 'hello, simple-file.js!',
+    description: getDescription(),
+  });
 
   return simpleFile;
 

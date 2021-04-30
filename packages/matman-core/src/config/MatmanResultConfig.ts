@@ -1,37 +1,24 @@
 import path from 'path';
 import fse from 'fs-extra';
-import _ from 'lodash';
+
 import MatmanConfig from './MatmanConfig';
 import MatmanResult from '../model/MatmanResult';
-import {getAbsolutePath} from '../util/index';
-import {getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath} from '../util/path';
+import { getAbsolutePath } from '../util';
+import { getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath } from '../util/path';
 
 /**
  * 执行结果选项
  * 是否启用执行结果，或者执行结果保存的文件名路径(如果想对路径，则相对于basePath 而言)，或者执行结果配置
- *
- * @member opts.path 执行结果保存的完成文件名，如果不填写，则将根据当前路径自动生成名字
- * @member opts.tag 标记
  */
-export type ResultOpts = string | boolean | {tag?: string; path: string};
+export type IResultOpts = string | boolean | { tag?: string; path: string };
 
-class MatmanResultConfig {
-  tag: string | undefined;
-  path: string;
+export default class MatmanResultConfig {
+  public tag: string | undefined;
+  public path: string;
 
-  /**
-   * 构造函数
-   *
-   * @param matmanConfig
-   * @param opts
-   * @param caseModuleFilePath 测试案例模块的目录
-   * @param tag 标记
-   *
-   * @author helinjiang
-   */
-  constructor(
+  public constructor(
     matmanConfig: MatmanConfig,
-    opts: ResultOpts,
+    opts: IResultOpts,
     caseModuleFilePath: string,
     tag?: string,
   ) {
@@ -50,11 +37,11 @@ class MatmanResultConfig {
       this.path = this.getMatmanResultFullPath(opts, matmanConfig.matmanResultPath);
     } else {
       // 其他情况自动生成执行结果文件保存路径
-      const relativeSavePath = getSaveDirFromPath(
-        path.relative(matmanConfig.caseModulesPath, path.dirname(caseModuleFilePath)),
-      );
+      const r = path.relative(matmanConfig.caseModulesPath, path.dirname(caseModuleFilePath));
+      const relativeSavePath = getSaveDirFromPath(r);
 
-      const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.json';
+      // 文件保存的名字
+      const saveFileName = `${getFolderNameFromPath(path.basename(caseModuleFilePath))}.json`;
 
       this.path = this.getMatmanResultFullPath(
         path.join(relativeSavePath, saveFileName),
@@ -63,7 +50,12 @@ class MatmanResultConfig {
     }
   }
 
-  save(matmanResult: MatmanResult) {
+  /**
+   * 保存结果到本地
+   *
+   * @param {MatmanResult} matmanResult
+   */
+  public save(matmanResult: MatmanResult): void {
     fse.outputJsonSync(this.path, JSON.parse(matmanResult.toString()));
   }
 
@@ -71,14 +63,11 @@ class MatmanResultConfig {
    * 获得完整的执行结果文件保存路径
    *
    * @private
-   * @param targetPath 原始路径
-   * @param basePath 根目录
-   *
-   * @author helinjiang
+   * @param {String} targetPath 原始路径
+   * @param {String} basePath 根目录
+   * @return {String}
    */
   private getMatmanResultFullPath(targetPath: string, basePath: string): string {
     return getNewFilePathWithTag(getAbsolutePath(targetPath, basePath), this.tag);
   }
 }
-
-export default MatmanResultConfig;

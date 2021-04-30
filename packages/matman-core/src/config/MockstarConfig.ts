@@ -1,20 +1,26 @@
 import _ from 'lodash';
-export interface MockstarQueryDataMap {
+
+export interface IMockstarQueryDataMap {
   [key: string]: string;
 }
 
-export type MockstarConfigOpts = {
-  queryDataMap: MockstarQueryDataMap;
+export type IMockstarConfigOpts = {
+  queryDataMap: IMockstarQueryDataMap;
 };
 
 export default class MockstarConfig {
-  queryDataMap: MockstarQueryDataMap;
+  public queryDataMap: IMockstarQueryDataMap;
 
-  constructor(mockstarConfigOpts: MockstarConfigOpts) {
+  public constructor(mockstarConfigOpts: IMockstarConfigOpts) {
     this.queryDataMap = mockstarConfigOpts.queryDataMap;
   }
 
-  update(queryDataMap: MockstarQueryDataMap): void {
+  /**
+   * 更新
+   *
+   * @param {IMockstarQueryDataMap} queryDataMap
+   */
+  public update(queryDataMap: IMockstarQueryDataMap): void {
     this.queryDataMap = _.merge({}, this.queryDataMap, queryDataMap);
   }
 }

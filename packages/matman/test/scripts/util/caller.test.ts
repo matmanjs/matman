@@ -1,8 +1,8 @@
 import path from 'path';
 import 'mocha';
-import {expect} from 'chai';
+import { expect } from 'chai';
 
-import {getCallerPath} from '../../../src/util/caller';
+import { getCallerPath } from '../../../src/util/caller';
 import getWhoCallMe from '../../data/helpers/case_module';
 
 describe('./util/caller.ts', () => {
@@ -16,9 +16,7 @@ describe('./util/caller.ts', () => {
     });
 
     it('demo: caseModuleFilePath is exist', () => {
-      expect(getWhoCallMe(path.join(__dirname, '../../data/helpers/case_module.ts'))).to.equal(
-        __filename,
-      );
+      expect(getWhoCallMe(path.join(__dirname, '../../data/helpers/case_module.ts'))).to.equal(__filename);
     });
   });
 });

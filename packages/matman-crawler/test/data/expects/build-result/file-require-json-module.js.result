@@ -28,13 +28,11 @@ var getPageInfo = (function () {
       return 'I am description';
     }
 
-    var fileRequireJsonModule = () => {
-      return {
-        say: 'hello, file-require-json-module.js!',
-        description: getDescription(),
-        userInfo,
-      };
-    };
+    var fileRequireJsonModule = () => ({
+      say: 'hello, file-require-json-module.js!',
+      description: getDescription(),
+      userInfo,
+    });
 
     return fileRequireJsonModule;
 

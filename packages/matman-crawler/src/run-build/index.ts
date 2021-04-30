@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import {MatmanConfig} from 'matman-core';
+import { MatmanConfig } from 'matman-core';
 import rollupBuild from './build';
 
 interface BuildOpts {
@@ -11,18 +11,16 @@ interface BuildOpts {
 /**
  * 构建
  *
- * @param {String} entryPath
+ * @param {String} entryPath 文件绝对路径
  * @param {BuildOpts} opts
- * @return {Promise}
- *
- * @author wangjq4214
+ * @return {Promise<string>}
  */
 export default function build(entryPath: string, opts: BuildOpts): Promise<string> {
   return new Promise((resolve, reject) => {
     const prependCodePromiseList = [];
     const evalList: string[] = [];
 
-    if (opts.matmanConfig.isDevBuild || false) {
+    if (opts.matmanConfig.isDevBuild) {
       // 如果是开发模式下
       // 追加开发模式下需要的代码，例如 jQuery
       prependCodePromiseList.push(getDevPrependCode(opts.matmanConfig.crawlerInjectJQuery));
@@ -44,18 +42,24 @@ export default function build(entryPath: string, opts: BuildOpts): Promise<strin
     prependCodePromiseList.push(rollupBuild(entryPath));
 
     Promise.all(prependCodePromiseList)
-      .then(result => {
+      .then((result) => {
         const temp = evalList.map(item => `"${item}"`).join(',');
-        result.push(`window.evalList=[${temp}]`);
+        result.push(`window.evalList=[${temp}];\n`);
+
         // 每段插入的代码之后，注意要加一个换行符号，否则在支持 source map 之后，可能会被其"注释"掉
         resolve(result.join(';\n'));
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
 }
 
+/**
+ * 获得要在 Nightmare 场景下需要注入的代码片段
+ *
+ * @return {Promise<string>}
+ */
 function getNightmareClientCode(): Promise<string> {
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(__dirname, '../../assets/nightmare-preload.js'), 'utf8', (err, data) => {
@@ -68,6 +72,11 @@ function getNightmareClientCode(): Promise<string> {
   });
 }
 
+/**
+ * 获得要在开发场景下需要注入的代码片段
+ *
+ * @return {Promise<string>}
+ */
 function getDevPrependCode(crawlerInjectJQuery: boolean): Promise<string> {
   return new Promise((resolve, reject) => {
     const injectFile = crawlerInjectJQuery ? 'dev-prepend-with-jquery.js' : 'dev-prepend.js';
@@ -82,6 +91,11 @@ function getDevPrependCode(crawlerInjectJQuery: boolean): Promise<string> {
   });
 }
 
+/**
+ * 获得需要注入的 jQuery 代码片段
+ *
+ * @return {Promise<string>}
+ */
 function getJqueryCode(key: string): Promise<string> {
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(__dirname, '../../assets/jquery.slim.min.js'), 'utf8', (err, data) => {
@@ -95,6 +109,11 @@ function getJqueryCode(key: string): Promise<string> {
   });
 }
 
+/**
+ * 根据参数获得要注入的代码片段
+ *
+ * @return {Promise<string>}
+ */
 function getRawCodeToPrepend(key: string, source: string) {
   const rawCode = JSON.stringify(source)
     .replace(/\u2028/g, '\\u2028')

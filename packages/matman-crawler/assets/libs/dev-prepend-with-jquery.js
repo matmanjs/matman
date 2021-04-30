@@ -1,6 +1,6 @@
 function loadScript(url, callback) {
-  var head = document.getElementsByTagName('head')[0];
-  var script = document.createElement('script');
+  const head = document.getElementsByTagName('head')[0];
+  const script = document.createElement('script');
 
   script.type = 'text/javascript';
   script.onreadystatechange = function () {
@@ -18,7 +18,7 @@ function loadScript(url, callback) {
 
 console.log('[matman] jQuery loading...');
 
-loadScript('//cdn.bootcss.com/jquery/3.3.1/jquery.min.js', function () {
+loadScript('//cdn.bootcss.com/jquery/3.3.1/jquery.min.js', () => {
   console.log('[matman] jQuery is loaded!');
   console.log('[matman] 脚本加载完成，您可手动运行 window.getPageInfo() 方法获得结果！');
 

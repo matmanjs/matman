@@ -1,35 +1,22 @@
 import path from 'path';
+
 import MatmanConfig from './MatmanConfig';
-import {getAbsolutePath} from '../util/index';
-import {getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath} from '../util/path';
+import { getAbsolutePath } from '../util';
+import { getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath } from '../util/path';
 
 /**
  * 覆盖率选项
  * 是否启用覆盖率, 或者覆盖率保存的文件名路径 (如果想对路径, 则相对于basePath 而言), 或者覆盖率配置
- *
- * @member opts.path 保存覆盖率文件的路径, 如果没有填写就自动生成
- * @member opts.tag 标记
  */
-export type CoverageOpts = string | boolean | {tag?: string; path: string};
+export type ICoverageOpts = string | boolean | {tag?: string; path: string};
 
 class CoverageConfig {
-  path: string;
-  tag: string | undefined;
+  private path: string;
+  private readonly tag: string | undefined;
 
-  /**
-   * 构造函数
-   *
-   * @param matmanConfig
-   * @param opts
-   * @param caseModuleFilePath 测试案例模块的目录
-   * @param tag 标记
-   *
-   * @author helinjiang
-   * @author wangjq4214
-   */
-  constructor(
+  public constructor(
     matmanConfig: MatmanConfig,
-    opts: CoverageOpts,
+    opts: ICoverageOpts,
     caseModuleFilePath: string,
     tag?: string,
   ) {
@@ -48,11 +35,10 @@ class CoverageConfig {
       this.path = this.getCoverageFullPath(opts, matmanConfig.coveragePath);
     } else {
       // 其他情况自动生成覆盖率文件保存路径
-      const relativeSavePath = getSaveDirFromPath(
-        path.relative(matmanConfig.caseModulesPath, caseModuleFilePath),
-      );
+      const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.caseModulesPath, caseModuleFilePath));
 
-      const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.json';
+      // 文件名
+      const saveFileName = `${getFolderNameFromPath(path.basename(caseModuleFilePath))}.json`;
 
       this.path = this.getCoverageFullPath(
         path.join(relativeSavePath, saveFileName),
@@ -66,12 +52,9 @@ class CoverageConfig {
    *
    * @param {String | Number} id 标志
    * @return {string} 新的路径
-   * @author helinjiang
    */
-  getPathWithId(id: string | number): string {
-    return this.path.replace(/(.*)\.(.*)/, function (match, p1, p2) {
-      return [p1, `${id}.${p2}`].join('_');
-    });
+  public getPathWithId(id: string | number): string {
+    return this.path.replace(/(.*)\.(.*)/, (match, p1, p2) => [p1, `${id}.${p2}`].join('_'));
   }
 
   /**
@@ -80,7 +63,6 @@ class CoverageConfig {
    * @param targetPath 原始路径
    * @param basePath 根目录
    * @return {String} 新的路径
-   * @author helinjiang
    * @private
    */
   private getCoverageFullPath(targetPath: string, basePath: string): string {

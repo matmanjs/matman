@@ -1,38 +1,36 @@
 import {
-  MatmanResultQueueHandler,
-  MatmanResultQueueItem,
-  MatmanResultQueueItemNightmare,
-  MatmanResultQueueItemPuppeteerConsole,
-  MatmanResultQueueItemPuppeteerNetwork,
-  ResourceType,
+  IMatmanResultQueueHandler,
+  IMatmanResultQueueItem,
+  IMatmanResultQueueItemNightmare,
+  IMatmanResultQueueItemPuppeteerConsole,
+  IMatmanResultQueueItemPuppeteerNetwork,
+  IResourceType,
 } from '../typings/matmanResult';
-
 import { RUNNER_NAME } from '../config';
-
 import { isURLMatch } from '../util/url';
 
-interface MatmanResultObj<T> {
+interface IMatmanResultObj {
   runnerName?: string;
-  data?: T[];
+  data?: unknown[];
   dataIndexMap?: {
     [key: string]: number;
   };
   globalInfo?: {
     recorder?: {
-      queue: MatmanResultQueueItem[];
+      queue: IMatmanResultQueueItem[];
       allRequestUrl: string[];
     };
   };
 }
 
-export default class MatmanResult<T = Record<string | number, any>> {
-  runnerName: string;
+export default class MatmanResult {
+  public runnerName: string;
 
-  data: T[];
+  public data: unknown[];
 
-  globalInfo: {
+  public globalInfo: {
     recorder?: {
-      queue: MatmanResultQueueItem[];
+      queue: IMatmanResultQueueItem[];
       allRequestUrl: string[];
     };
 
@@ -43,15 +41,9 @@ export default class MatmanResult<T = Record<string | number, any>> {
     [key: string]: number;
   };
 
-  private readonly queueHandler: null | MatmanResultQueueHandler;
+  private readonly queueHandler: null | IMatmanResultQueueHandler;
 
-  /**
-   * matman 框架执行的结果
-   *
-   * @param {Object} result
-   * @author helinjiang
-   */
-  constructor(result: MatmanResultObj<T>) {
+  public constructor(result: IMatmanResultObj) {
     this.runnerName = result.runnerName || 'unknown';
 
     /**
@@ -79,21 +71,23 @@ export default class MatmanResult<T = Record<string | number, any>> {
     this.queueHandler = this.getQueueHandler();
   }
 
-  private getQueueHandler(): null | NightmareQueueHandler | PuppeteerQueueHandler {
+  public getQueueHandler(): null | NightmareQueueHandler | PuppeteerQueueHandler {
     if (!this.globalInfo.recorder) {
       return null;
     }
 
     if (this.runnerName === RUNNER_NAME.NIGHTMARE) {
       return new NightmareQueueHandler(this.getQueue());
-    } else if (this.runnerName === RUNNER_NAME.PUPPETEER) {
-      return new PuppeteerQueueHandler(this.getQueue(), this.globalInfo.recorder.allRequestUrl);
-    } else {
-      return null;
     }
+
+    if (this.runnerName === RUNNER_NAME.PUPPETEER) {
+      return new PuppeteerQueueHandler(this.getQueue(), this.globalInfo.recorder.allRequestUrl);
+    }
+
+    return null;
   }
 
-  toString(): string {
+  public toString(): string {
     // 移除 queueHandler ，因为会与 globalInfo 中的数据重复
     return JSON.stringify({
       runnerName: this.runnerName,
@@ -106,27 +100,24 @@ export default class MatmanResult<T = Record<string | number, any>> {
   /**
    * 通过测试动作名字获得数据
    *
-   * @param {String || Number} actionName 测试动作名字，可以是自定义的名字，也可以是数组索引
+   * @param {String | Number} actionName 测试动作名字，可以是自定义的名字，也可以是数组索引
    * @return {Object}
-   * @author helinjiang
    */
-  get(actionName: string | number): T {
+  public get(actionName: string | number): unknown {
     if (typeof actionName === 'number') {
       return this.data[actionName];
-    } else {
-      const i = this.dataIndexMap[actionName];
-      return this.data[i];
     }
+    const i = this.dataIndexMap[actionName];
+    return this.data[i];
   }
 
   /**
    * 获得捕获到的请求队列
    *
    * @return {Array}
-   * @author helinjiang
    */
-  getQueue(): MatmanResultQueueItem[] {
-    if (this.globalInfo.recorder && this.globalInfo.recorder.queue) {
+  public getQueue(): IMatmanResultQueueItem[] {
+    if (this.globalInfo.recorder?.queue) {
       return this.globalInfo.recorder.queue;
     }
 
@@ -136,11 +127,10 @@ export default class MatmanResult<T = Record<string | number, any>> {
   /**
    * 从结果队列中过滤出网络请求
    *
-   * @param {ResourceType} [resourceType] 资源类型
+   * @param {IResourceType} [resourceType] 资源类型
    * @return {Array}
-   * @author helinjiang
    */
-  getNetwork(resourceType?: ResourceType): MatmanResultQueueItem[] {
+  public getNetwork(resourceType?: IResourceType): IMatmanResultQueueItem[] {
     return this.queueHandler?.getNetwork(resourceType) || [];
   }
 
@@ -152,12 +142,11 @@ export default class MatmanResult<T = Record<string | number, any>> {
    * @param {String} [resourceType] 资源类型
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistInNetwork(
+  public isExistInNetwork(
     partialURL: string,
     query?: { [key: string]: any },
-    resourceType?: ResourceType,
+    resourceType?: IResourceType,
     status?: number,
   ): boolean {
     return this.queueHandler?.isExistInNetwork(partialURL, query, resourceType, status) || false;
@@ -170,9 +159,8 @@ export default class MatmanResult<T = Record<string | number, any>> {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.queueHandler?.isExistPage(partialURL, query, status) || false;
   }
 
@@ -183,9 +171,8 @@ export default class MatmanResult<T = Record<string | number, any>> {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.queueHandler?.isExistXHR(partialURL, query, status) || false;
   }
 
@@ -196,9 +183,12 @@ export default class MatmanResult<T = Record<string | number, any>> {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistImage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistImage(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.queueHandler?.isExistImage(partialURL, query, status) || false;
   }
 
@@ -209,9 +199,12 @@ export default class MatmanResult<T = Record<string | number, any>> {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistStylesheet(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistStylesheet(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.queueHandler?.isExistStylesheet(partialURL, query, status) || false;
   }
 
@@ -222,9 +215,12 @@ export default class MatmanResult<T = Record<string | number, any>> {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistScript(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistScript(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.queueHandler?.isExistScript(partialURL, query, status) || false;
   }
 
@@ -234,9 +230,8 @@ export default class MatmanResult<T = Record<string | number, any>> {
    * @param {String} partialURL 用于匹配的部分url
    * @param {Object} [query] 请求携带的 query 参数
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
+  public isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
     return this.queueHandler?.isExistJSBridge(partialURL, query) || false;
   }
 
@@ -248,23 +243,27 @@ export default class MatmanResult<T = Record<string | number, any>> {
    * @param {Boolean} [isFullMatch] 是否将 partialText 作为全匹配
    * @returns {Boolean}
    */
-  isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean {
+  public isExistConsole(
+    partialText: string | RegExp,
+    type?: string,
+    isFullMatch?: boolean,
+  ): boolean {
     return this.queueHandler?.isExistConsole(partialText, type, isFullMatch) || false;
   }
 }
 
-class PuppeteerQueueHandler implements MatmanResultQueueHandler {
-  queue: MatmanResultQueueItemPuppeteerNetwork[] | MatmanResultQueueItemPuppeteerConsole[];
-  allRequestUrl: string[];
+class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
+  public queue: IMatmanResultQueueItemPuppeteerNetwork[] | IMatmanResultQueueItemPuppeteerConsole[];
+  public allRequestUrl: string[];
 
-  constructor(queue: MatmanResultQueueItem[], allRequestUrl?: string[]) {
+  public constructor(queue: IMatmanResultQueueItem[], allRequestUrl?: string[]) {
     /**
      * 从页面获得的数据
      * @type {Array}
      */
     this.queue = queue as
-      | MatmanResultQueueItemPuppeteerNetwork[]
-      | MatmanResultQueueItemPuppeteerConsole[];
+      | IMatmanResultQueueItemPuppeteerNetwork[]
+      | IMatmanResultQueueItemPuppeteerConsole[];
 
     this.allRequestUrl = allRequestUrl || [];
   }
@@ -272,15 +271,19 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
   /**
    * 从结果队列中过滤出网络请求
    *
-   * @param {ResourceType} [resourceType] 资源类型
+   * @param {IResourceType} [resourceType] 资源类型
    * @return {Array}
-   * @author helinjiang
    */
-  getNetwork(): MatmanResultQueueItemPuppeteerNetwork[] {
-    const queue = this.queue as MatmanResultQueueItemPuppeteerNetwork[];
+  public getNetwork(resourceType?: IResourceType): IMatmanResultQueueItemPuppeteerNetwork[] {
+    const queue = this.queue as IMatmanResultQueueItemPuppeteerNetwork[];
 
-    return queue.filter(item => {
-      return item.eventName === 'network';
+    return queue.filter((item) => {
+      const checkEventName = item.eventName === 'network';
+
+      // 要么不传递，要么传递了就一定是指定值
+      const checkResourceType =        !resourceType || (resourceType && item.resourceType === resourceType);
+
+      return checkEventName && checkResourceType;
     });
   }
 
@@ -289,12 +292,10 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    *
    * @returns {Array}
    */
-  getConsole(): MatmanResultQueueItemPuppeteerConsole[] {
-    const queue = this.queue as MatmanResultQueueItemPuppeteerConsole[];
+  public getConsole(): IMatmanResultQueueItemPuppeteerConsole[] {
+    const queue = this.queue as IMatmanResultQueueItemPuppeteerConsole[];
 
-    return queue.filter(item => {
-      return item.eventName === 'console';
-    });
+    return queue.filter(item => item.eventName === 'console');
   }
 
   /**
@@ -305,15 +306,14 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @param {String} [resourceType] 资源类型
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistInNetwork(
+  public isExistInNetwork(
     partialURL: string,
     query?: { [key: string]: any },
-    resourceType?: ResourceType,
+    resourceType?: IResourceType,
     status?: number,
   ): boolean {
-    const queue = this.getNetwork();
+    const queue = this.getNetwork(resourceType);
 
     let result = false;
 
@@ -323,6 +323,7 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
       const method = (queueItem.method || 'GET').toUpperCase();
 
       if (method === 'POST') {
+        // POST 请求
         try {
           // 如果没有匹配到链接则执行下一个
           if (!isURLMatch(queueItem.url, partialURL, {})) {
@@ -348,6 +349,8 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
           continue;
         }
       } else {
+        // GET 请求
+
         // 如果没有匹配到链接则执行下一个
         if (!isURLMatch(queueItem.url, partialURL, query)) {
           continue;
@@ -373,9 +376,8 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'document', status);
   }
 
@@ -386,12 +388,11 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return (
-      this.isExistInNetwork(partialURL, query, 'xhr', status) ||
-      this.isExistInNetwork(partialURL, query, 'fetch', status)
+      this.isExistInNetwork(partialURL, query, 'xhr', status)
+      || this.isExistInNetwork(partialURL, query, 'fetch', status)
     );
   }
 
@@ -402,9 +403,12 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistImage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistImage(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.isExistInNetwork(partialURL, query, 'image', status);
   }
 
@@ -415,9 +419,12 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistStylesheet(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistStylesheet(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.isExistInNetwork(partialURL, query, 'stylesheet', status);
   }
 
@@ -428,9 +435,12 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistScript(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistScript(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.isExistInNetwork(partialURL, query, 'script', status);
   }
 
@@ -440,9 +450,8 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @param {String} partialURL 用于匹配的部分url
    * @param {Object} [query] 请求携带的 query 参数
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
+  public isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
     const queue = this.allRequestUrl || [];
 
     let result = false;
@@ -471,13 +480,15 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
    * @param {Boolean} [isFullMatch] 是否将 partialText 作为全匹配
    * @returns {Boolean}
    */
-  isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean {
+  public isExistConsole(
+    partialText: string | RegExp,
+    type?: string,
+    isFullMatch?: boolean,
+  ): boolean {
     let queue = this.getConsole();
     // 是否过滤 console 的类型
     if (type) {
-      queue = queue.filter(item => {
-        return item.type === type;
-      });
+      queue = queue.filter(item => item.type === type);
     }
 
     // string 类型时完全匹配
@@ -497,13 +508,13 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
       }
     } else {
       // partialText 有可能为 number 等，因此要转义
-      const checkText = partialText + '';
+      const checkText = `${partialText}`;
 
       for (let i = 0; i < queue.length; ++i) {
-        const consoleText = queue[i].text + '';
+        const consoleText = `${queue[i].text}`;
         if (
-          (isFullMatch && consoleText === checkText) ||
-          (!isFullMatch && consoleText.indexOf(checkText) > -1)
+          (isFullMatch && consoleText === checkText)
+          || (!isFullMatch && consoleText.indexOf(checkText) > -1)
         ) {
           return true;
         }
@@ -514,28 +525,27 @@ class PuppeteerQueueHandler implements MatmanResultQueueHandler {
   }
 }
 
-class NightmareQueueHandler implements MatmanResultQueueHandler {
-  queue: MatmanResultQueueItemNightmare[];
+class NightmareQueueHandler implements IMatmanResultQueueHandler {
+  public queue: IMatmanResultQueueItemNightmare[];
 
-  constructor(queue: MatmanResultQueueItem[]) {
+  public constructor(queue: IMatmanResultQueueItem[]) {
     /**
      * 从页面获得的数据
      * @type {Array}
      */
-    this.queue = queue as MatmanResultQueueItemNightmare[];
+    this.queue = queue as IMatmanResultQueueItemNightmare[];
   }
 
   /**
    * 从结果队列中过滤出网络请求
    *
-   * @param {ResourceType} [resourceType] 资源类型
+   * @param {IResourceType} [resourceType] 资源类型
    * @return {Array}
-   * @author helinjiang
    */
-  getNetwork(resourceType?: ResourceType): MatmanResultQueueItemNightmare[] {
-    const queue = this.queue;
+  public getNetwork(resourceType?: IResourceType): IMatmanResultQueueItemNightmare[] {
+    const { queue } = this;
 
-    return queue.filter(item => {
+    return queue.filter((item) => {
       if (item.eventName !== 'did-get-response-details') {
         return false;
       }
@@ -562,12 +572,11 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @param {String} [resourceType] 资源类型
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistInNetwork(
+  public isExistInNetwork(
     partialURL: string,
     query?: { [key: string]: any },
-    resourceType?: ResourceType,
+    resourceType?: IResourceType,
     status?: number,
   ): boolean {
     const queue = this.getNetwork(resourceType);
@@ -602,9 +611,8 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'mainFrame', status);
   }
 
@@ -615,9 +623,8 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return this.isExistInNetwork(partialURL, query, 'xhr', status);
   }
 
@@ -628,9 +635,12 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistImage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistImage(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.isExistInNetwork(partialURL, query, 'image', status);
   }
 
@@ -641,9 +651,12 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistStylesheet(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistStylesheet(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.isExistInNetwork(partialURL, query, 'stylesheet', status);
   }
 
@@ -654,9 +667,12 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @param {Object} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistScript(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
+  public isExistScript(
+    partialURL: string,
+    query?: { [key: string]: any },
+    status?: number,
+  ): boolean {
     return this.isExistInNetwork(partialURL, query, 'script', status);
   }
 
@@ -666,10 +682,9 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @param {String} partialURL 用于匹配的部分url
    * @param {Object} [query] 请求携带的 query 参数
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
-    const queue = this.queue;
+  public isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean {
+    const { queue } = this;
 
     let result = false;
 
@@ -707,7 +722,12 @@ class NightmareQueueHandler implements MatmanResultQueueHandler {
    * @param {Boolean} [isFullMatch] 是否将 partialText 作为全匹配
    * @returns {Boolean}
    */
-  isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean {
+  public isExistConsole(
+    partialText: string | RegExp,
+    type?: string,
+    isFullMatch?: boolean,
+  ): boolean {
+    // 暂未实现该功能
     return false;
   }
 }

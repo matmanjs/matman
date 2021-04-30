@@ -1,4 +1,4 @@
-import {BasicGenerator} from './index';
+import { BasicGenerator } from './index';
 
 export default class Generator extends BasicGenerator {
   writing(): void {

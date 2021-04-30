@@ -1,9 +1,9 @@
 import path from 'path';
 import 'mocha';
-import {expect} from 'chai';
+import { expect } from 'chai';
 
 import ScreenshotConfig from '../../../src/config/ScreenshotConfig';
-import {findMatmanConfig} from '../../../src/util';
+import { findMatmanConfig } from '../../../src/util';
 import MatmanConfig from '../../../src/config/MatmanConfig';
 
 describe('check config/ScreenshotConfig.js', () => {
@@ -40,9 +40,7 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is String(relative path) and tag is undefined', () => {
-      expect(
-        new ScreenshotConfig(matmanConfig, './is/relative/file.png', caseModuleFilePath),
-      ).to.eql({
+      expect(new ScreenshotConfig(matmanConfig, './is/relative/file.png', caseModuleFilePath)).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file.png'),
         tag: undefined,
         fullPage: true,
@@ -50,9 +48,7 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is String(relative path) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(matmanConfig, './is/relative/file.png', caseModuleFilePath, 'mytag'),
-      ).to.eql({
+      expect(new ScreenshotConfig(matmanConfig, './is/relative/file.png', caseModuleFilePath, 'mytag')).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file_mytag.png'),
         tag: 'mytag',
         fullPage: true,
@@ -60,9 +56,7 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is String(absolute path) and tag is undefined', () => {
-      expect(
-        new ScreenshotConfig(matmanConfig, '/is/absolute/file.png', caseModuleFilePath),
-      ).to.eql({
+      expect(new ScreenshotConfig(matmanConfig, '/is/absolute/file.png', caseModuleFilePath)).to.eql({
         path: '/is/absolute/file.png',
         tag: undefined,
         fullPage: true,
@@ -70,9 +64,7 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is String(absolute path) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(matmanConfig, '/is/absolute/file.png', caseModuleFilePath, 'mytag'),
-      ).to.eql({
+      expect(new ScreenshotConfig(matmanConfig, '/is/absolute/file.png', caseModuleFilePath, 'mytag')).to.eql({
         path: '/is/absolute/file_mytag.png',
         tag: 'mytag',
         fullPage: true,
@@ -80,9 +72,7 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is Object(relative path) and tag is undefined', () => {
-      expect(
-        new ScreenshotConfig(matmanConfig, {path: './is/relative/file.png'}, caseModuleFilePath),
-      ).to.eql({
+      expect(new ScreenshotConfig(matmanConfig, { path: './is/relative/file.png' }, caseModuleFilePath)).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file.png'),
         clip: undefined,
         tag: undefined,
@@ -91,14 +81,12 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is Object(relative path) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {path: './is/relative/file.png'},
-          caseModuleFilePath,
-          'mytag',
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        { path: './is/relative/file.png' },
+        caseModuleFilePath,
+        'mytag',
+      )).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file_mytag.png'),
         clip: undefined,
         tag: 'mytag',
@@ -107,66 +95,58 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is Object(relative path, clip) and tag is undefined', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: './is/relative/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-          },
-          caseModuleFilePath,
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: './is/relative/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+        },
+        caseModuleFilePath,
+      )).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file.png'),
-        clip: {x: 1, y: 2, width: 3, height: 4},
+        clip: { x: 1, y: 2, width: 3, height: 4 },
         tag: undefined,
         fullPage: true,
       });
     });
 
     it('if opts is Object(relative path, clip, tag) and tag is undefined', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: './is/relative/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-            tag: 'customtag',
-          },
-          caseModuleFilePath,
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: './is/relative/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+          tag: 'customtag',
+        },
+        caseModuleFilePath,
+      )).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file_customtag.png'),
-        clip: {x: 1, y: 2, width: 3, height: 4},
+        clip: { x: 1, y: 2, width: 3, height: 4 },
         tag: 'customtag',
         fullPage: true,
       });
     });
 
     it('if opts is Object(relative path, clip, tag) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: './is/relative/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-            tag: 'customtag',
-          },
-          caseModuleFilePath,
-          'mytag',
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: './is/relative/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+          tag: 'customtag',
+        },
+        caseModuleFilePath,
+        'mytag',
+      )).to.eql({
         path: path.join(matmanConfig.screenshotPath, './is/relative/file_customtag.png'),
-        clip: {x: 1, y: 2, width: 3, height: 4},
+        clip: { x: 1, y: 2, width: 3, height: 4 },
         tag: 'customtag',
         fullPage: true,
       });
     });
 
     it('if opts is Object(absolute path) and tag is undefined', () => {
-      expect(
-        new ScreenshotConfig(matmanConfig, {path: '/is/absolute/file.png'}, caseModuleFilePath),
-      ).to.eql({
+      expect(new ScreenshotConfig(matmanConfig, { path: '/is/absolute/file.png' }, caseModuleFilePath)).to.eql({
         path: '/is/absolute/file.png',
         clip: undefined,
         tag: undefined,
@@ -175,14 +155,12 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is Object(absolute path) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {path: '/is/absolute/file.png'},
-          caseModuleFilePath,
-          'mytag',
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        { path: '/is/absolute/file.png' },
+        caseModuleFilePath,
+        'mytag',
+      )).to.eql({
         path: '/is/absolute/file_mytag.png',
         clip: undefined,
         tag: 'mytag',
@@ -191,78 +169,70 @@ describe('check config/ScreenshotConfig.js', () => {
     });
 
     it('if opts is Object(absolute path, clip) and tag is undefined', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: '/is/absolute/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-          },
-          caseModuleFilePath,
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: '/is/absolute/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+        },
+        caseModuleFilePath,
+      )).to.eql({
         path: '/is/absolute/file.png',
-        clip: {x: 1, y: 2, width: 3, height: 4},
+        clip: { x: 1, y: 2, width: 3, height: 4 },
         tag: undefined,
         fullPage: true,
       });
     });
 
     it('if opts is Object(absolute path, clip, tag) and tag is undefined', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: '/is/absolute/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-            tag: 'customtag',
-          },
-          caseModuleFilePath,
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: '/is/absolute/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+          tag: 'customtag',
+        },
+        caseModuleFilePath,
+      )).to.eql({
         path: '/is/absolute/file_customtag.png',
-        clip: {x: 1, y: 2, width: 3, height: 4},
+        clip: { x: 1, y: 2, width: 3, height: 4 },
         tag: 'customtag',
         fullPage: true,
       });
     });
 
     it('if opts is Object(absolute path, clip, tag) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: '/is/absolute/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-            tag: 'customtag',
-          },
-          caseModuleFilePath,
-          'mytag',
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: '/is/absolute/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+          tag: 'customtag',
+        },
+        caseModuleFilePath,
+        'mytag',
+      )).to.eql({
         path: '/is/absolute/file_customtag.png',
-        clip: {x: 1, y: 2, width: 3, height: 4},
+        clip: { x: 1, y: 2, width: 3, height: 4 },
         tag: 'customtag',
         fullPage: true,
       });
     });
 
     it('if opts is Object() and fullPage is false', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: '/is/absolute/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-            tag: 'customtag',
-            fullPage: false,
-          },
-          caseModuleFilePath,
-          'mytag',
-        ),
-      ).to.eql({
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: '/is/absolute/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+          tag: 'customtag',
+          fullPage: false,
+        },
+        caseModuleFilePath,
+        'mytag',
+      )).to.eql({
         path: '/is/absolute/file_customtag.png',
-        clip: {x: 1, y: 2, width: 3, height: 4},
+        clip: { x: 1, y: 2, width: 3, height: 4 },
         tag: 'customtag',
         fullPage: false,
       });
@@ -280,66 +250,54 @@ describe('check config/ScreenshotConfig.js', () => {
     }) as MatmanConfig;
 
     it('if opts is Boolean and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(matmanConfig, true, caseModuleFilePath, 'mytag').getPathWithId(1024),
-      ).to.equal(
-        path.join(
-          matmanConfig.screenshotPath,
-          './page_baidu_index/basic-check_js/basic-check_js_mytag_1024.png',
-        ),
-      );
+      expect(new ScreenshotConfig(matmanConfig, true, caseModuleFilePath, 'mytag').getPathWithId(1024)).to.equal(path.join(
+        matmanConfig.screenshotPath,
+        './page_baidu_index/basic-check_js/basic-check_js_mytag_1024.png',
+      ));
     });
 
     it('if opts is String(relative path) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          './is/relative/file.png',
-          caseModuleFilePath,
-          'mytag',
-        ).getPathWithId(1024),
-      ).to.equal(path.join(matmanConfig.screenshotPath, './is/relative/file_mytag_1024.png'));
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        './is/relative/file.png',
+        caseModuleFilePath,
+        'mytag',
+      ).getPathWithId(1024)).to.equal(path.join(matmanConfig.screenshotPath, './is/relative/file_mytag_1024.png'));
     });
 
     it('if opts is String(absolute path) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          '/is/absolute/file.png',
-          caseModuleFilePath,
-          'mytag',
-        ).getPathWithId(1024),
-      ).to.equal('/is/absolute/file_mytag_1024.png');
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        '/is/absolute/file.png',
+        caseModuleFilePath,
+        'mytag',
+      ).getPathWithId(1024)).to.equal('/is/absolute/file_mytag_1024.png');
     });
 
     it('if opts is Object(relative path, clip, tag) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: './is/relative/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-            tag: 'customtag',
-          },
-          caseModuleFilePath,
-          'mytag',
-        ).getPathWithId(1024),
-      ).to.equal(path.join(matmanConfig.screenshotPath, './is/relative/file_customtag_1024.png'));
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: './is/relative/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+          tag: 'customtag',
+        },
+        caseModuleFilePath,
+        'mytag',
+      ).getPathWithId(1024)).to.equal(path.join(matmanConfig.screenshotPath, './is/relative/file_customtag_1024.png'));
     });
 
     it('if opts is Object(absolute path, clip, tag) and tag is "mytag"', () => {
-      expect(
-        new ScreenshotConfig(
-          matmanConfig,
-          {
-            path: '/is/absolute/file.png',
-            clip: {x: 1, y: 2, width: 3, height: 4},
-            tag: 'customtag',
-          },
-          caseModuleFilePath,
-          'mytag',
-        ).getPathWithId(1024),
-      ).to.equal('/is/absolute/file_customtag_1024.png');
+      expect(new ScreenshotConfig(
+        matmanConfig,
+        {
+          path: '/is/absolute/file.png',
+          clip: { x: 1, y: 2, width: 3, height: 4 },
+          tag: 'customtag',
+        },
+        caseModuleFilePath,
+        'mytag',
+      ).getPathWithId(1024)).to.equal('/is/absolute/file_customtag_1024.png');
     });
   });
 });

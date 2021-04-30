@@ -9,9 +9,8 @@
  * @param {String} coveragePath 覆盖率文件保存的路径
  * @param {String} matmanResultPath MatmanResult 执行结果数据保存的路径
  * @param {Boolean} isDevBuild 是否为开发模式
- * @author helinjiang
  */
-export interface MatmanConfigOpts {
+export interface IMatmanConfigOpts {
   rootPath?: string;
   caseModulesPath?: string;
   crawlerBuildPath?: string;
@@ -22,7 +21,7 @@ export interface MatmanConfigOpts {
   isDevBuild?: boolean;
 }
 
-export interface PageDriverOpts {
+export interface IPageDriverOpts {
   caseModuleFilePath: string;
   tag?: string;
   show?: boolean;

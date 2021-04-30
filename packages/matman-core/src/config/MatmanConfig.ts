@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import {getAbsolutePath} from '../util';
-import {MatmanConfigOpts, SetupOptions} from '../types';
+import { getAbsolutePath } from '../util';
+import { IMatmanConfigOpts, ISetupOptions } from '../types';
 
 /**
  * 定义 check 配置的函数的返回数据
@@ -10,30 +10,24 @@ import {MatmanConfigOpts, SetupOptions} from '../types';
  * @member result 检查结果
  * @member msg 额外的信息
  *
- * @author wangjq4214
  */
-interface CheckResult {
+interface ICheckResult {
   result: boolean;
   msg?: string;
 }
 
 export default class MatmanConfig {
-  rootPath: string;
-  caseModulesPath: string;
-  crawlerBuildPath: string;
-  crawlerInjectJQuery: boolean;
-  screenshotPath: string;
-  coveragePath: string;
-  matmanResultPath: string;
-  isDevBuild: boolean;
-  setupOptions: SetupOptions[];
+  public rootPath: string;
+  public caseModulesPath: string;
+  public crawlerBuildPath: string;
+  public crawlerInjectJQuery: boolean;
+  public screenshotPath: string;
+  public coveragePath: string;
+  public matmanResultPath: string;
+  public isDevBuild: boolean;
+  public setupOptions: ISetupOptions[];
 
-  /**
-   * 构造函数
-   * @param rootPath 项目的根路径
-   * @param opts 传入的配置文件
-   */
-  constructor(rootPath: string, opts: MatmanConfigOpts = {}) {
+  public constructor(rootPath: string, opts: IMatmanConfigOpts = {}) {
     // 消除警告, 其实会被覆盖
     this.isDevBuild = false;
 
@@ -94,9 +88,8 @@ export default class MatmanConfig {
    * 设置当前是不是开发场景的构建模式
    *
    * @param {Boolean} isDevBuild
-   * @author helinjiang
    */
-  setIsDevBuild(isDevBuild: boolean): void {
+  public setIsDevBuild(isDevBuild: boolean): void {
     // 是否为开发模式
     this.isDevBuild = isDevBuild;
 
@@ -104,7 +97,7 @@ export default class MatmanConfig {
     if (this.isDevBuild) {
       this.crawlerBuildPath = path.join(
         path.dirname(this.crawlerBuildPath),
-        path.basename(this.crawlerBuildPath) + '_dev',
+        `${path.basename(this.crawlerBuildPath)}_dev`,
       );
     }
   }
@@ -113,31 +106,30 @@ export default class MatmanConfig {
    * 校验参数是否合法有效
    *
    * @private
-   * @author helinjiang
-   * @author wangjq4214
    */
-  private check(): CheckResult {
+  private check(): ICheckResult {
     if (!fs.existsSync(this.rootPath)) {
       return {
         result: false,
-        msg: 'Unknown rootPath=' + this.rootPath,
+        msg: `Unknown rootPath=${this.rootPath}`,
       };
     }
 
     // 检查启动脚本
     for (const item of this.setupOptions) {
       // 必须有名字
-      if (typeof item.name !== 'string' || item.name === '') {
+      if (item.name === '') {
         return {
           result: false,
-          msg: 'Unknown order name=' + item.name,
+          msg: `Unknown order name=${item.name}`,
         };
       }
+
       // 必须存在命令
-      if (typeof item.order !== 'string' || item.order === '') {
+      if (item.order === '') {
         return {
           result: false,
-          msg: 'Unknown order=' + item.order,
+          msg: `Unknown order=${item.order}`,
         };
       }
 
@@ -149,7 +141,7 @@ export default class MatmanConfig {
       if (!fs.existsSync(item.cwd)) {
         return {
           result: false,
-          msg: 'Unknown option cwd=' + item.cwd,
+          msg: `Unknown option cwd=${item.cwd}`,
         };
       }
     }

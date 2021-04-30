@@ -3,15 +3,16 @@ import path from 'path';
 import _ from 'lodash';
 
 import MatmanConfig from '../config/MatmanConfig';
-import {MATMAN_CONFIG_FILE} from '../config';
-import {MatmanConfigOpts} from '../types';
-import {requireSync} from './require-file';
+import { MATMAN_CONFIG_FILE } from '../config';
+import { IMatmanConfigOpts } from '../types';
+import { requireSync } from './require-file';
 
 /**
  * 获得绝对路径地址
  *
- * @param targetPath 目标路径
- * @param basePath 根路径，如果目标路径为相对路径，则将用该路径作为其根路径
+ * @param {String} targetPath 目标路径
+ * @param {String} [basePath] 根路径，如果目标路径为相对路径，则将用该路径作为其根路径
+ * @return {String}
  */
 export function getAbsolutePath(targetPath: string, basePath?: string): string {
   if (!targetPath) {
@@ -28,11 +29,13 @@ export function getAbsolutePath(targetPath: string, basePath?: string): string {
 /**
  * 从指定目录开始向上查找 config 配置文件。
  *
- * @param {String} fromCwd 起始搜索的目录
+ * @param {String} fromCwdInParam 起始搜索的目录
  * @param {String} fileName 需要搜索的文件
  * @return {String}
  */
-export function searchFilePath(fromCwd: string, fileName: string): string {
+export function searchFilePath(fromCwdInParam: string, fileName: string): string {
+  let fromCwd = fromCwdInParam;
+
   // 非法的路径时，默认为本文件夹的 dirname
   if (!fromCwd || !fs.existsSync(fromCwd)) {
     // console.log('Unknow configPath=' + configPath);
@@ -41,7 +44,7 @@ export function searchFilePath(fromCwd: string, fileName: string): string {
 
   // 如果不是 config file，则从当前路径往上找 config file
   if (fromCwd.indexOf(fileName) < 0) {
-    const result = _search(fromCwd, fileName);
+    const result = search(fromCwd, fileName);
 
     // 如果没有找到，则直接返回空路径即可
     if (!result) {
@@ -63,9 +66,9 @@ export function searchFilePath(fromCwd: string, fileName: string): string {
  */
 export function findMatmanConfig(
   basePath: string,
-  matmanConfigOpts?: MatmanConfigOpts,
+  matmanConfigOpts?: IMatmanConfigOpts,
 ): null | MatmanConfig {
-  let configData: MatmanConfigOpts = {};
+  let configData: IMatmanConfigOpts;
 
   // matman 所需要的配置数据有两个来源，优先级依次降低
   // 1. 通过 MatmanConfigOpts 直接传递数据
@@ -99,21 +102,20 @@ export function findMatmanConfig(
       if (!packageFilePath) {
         // 如果连 package.json 都找不到，直接报错吧
         return null;
-      } else {
-        configData.rootPath = path.dirname(packageFilePath);
       }
+      configData.rootPath = path.dirname(packageFilePath);
     }
   }
 
-  try {
-    // 根据配置内容获得 matmanConfig 的对象
-    if (!configData.rootPath) {
-      throw new Error('rootPath must be defined');
-    }
+  // 根据配置内容获得 matmanConfig 的对象
+  if (!configData.rootPath) {
+    throw new Error('rootPath must be defined');
+  }
 
+  try {
     return new MatmanConfig(configData.rootPath, configData);
   } catch (err) {
-    console.error((err && err.message) || err);
+    console.error((err?.message) || err);
     return null;
   }
 }
@@ -127,7 +129,7 @@ export function findMatmanConfig(
  * @param {String} fileName 需要搜索的文件
  * @return {String}
  */
-function _search(fromCwd: string, fileName: string): string {
+function search(fromCwd: string, fileName: string): string {
   let currDir = fromCwd || process.cwd();
   let isExist = true;
 
@@ -137,7 +139,6 @@ function _search(fromCwd: string, fileName: string): string {
     // unix跟目录为/， win32系统根目录为 C:\\格式的
     if (currDir === '/' || /^[a-zA-Z]:\\$/.test(currDir)) {
       isExist = false;
-      // console.log('未找到 ' + fileName);
       break;
     }
   }

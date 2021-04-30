@@ -1,6 +1,6 @@
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import MatmanResult from '../model/MatmanResult';
-import {PageDriver} from './pageDriver';
+import { IPageDriver } from './pageDriver';
 
 /**
  * 执行器需要实现的方法
@@ -10,13 +10,11 @@ import {PageDriver} from './pageDriver';
  * @function gotoPage 跳转页面
  * @function runActions 运行 Actions
  * @function cleanEffect 清除副作用
- *
- * @author wangjq4214
  */
-export interface BrowserRunner extends EventEmitter {
+export interface IBrowserRunner extends EventEmitter {
   name: string;
 
-  setPageDriver(p: PageDriver): void;
+  setPageDriver(p: IPageDriver): void;
   getResult(): Promise<MatmanResult>;
   getConfig(): void;
   getNewInstance(): void;

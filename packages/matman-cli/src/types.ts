@@ -1,4 +1,4 @@
-export interface Argv {
+export interface IArgv {
   [x: string]: unknown;
   type: string | undefined;
   dev: boolean | undefined;
@@ -6,7 +6,7 @@ export interface Argv {
   $0: string;
 }
 
-export interface DealWith {
-  init: (argv: Argv) => Promise<void>;
-  build: (argv: Argv) => Promise<void>;
+export interface IDealWith {
+  init: (argv: IArgv) => Promise<void>;
+  build: (argv: IArgv) => Promise<void>;
 }

@@ -17,14 +17,17 @@ export function evaluate() {
   }
 
   // 如果存在需要前端执行的代码，则在所有逻辑开始之前执行
-  if (window.evalList && window.evalList.length) {
-    window.evalList.forEach(item => {
+  if (window.evalList?.length) {
+    window.evalList.forEach((item) => {
+      // eslint-disable-next-line no-eval
       eval(window[item]);
     });
   }
 
-  const pageInfo = getPageInfo();
+  // 执行爬虫脚本
+  const pageInfo = window.getPageInfo();
 
+  // 计算覆盖率，这个值是固定值，由 istanbul-instrumenter-loader 这个注入的
   if (window.__coverage__ && pageInfo) {
     pageInfo.__coverage__ = window.__coverage__;
   }

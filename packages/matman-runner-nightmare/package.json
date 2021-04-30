@@ -36,7 +36,8 @@
     "matman-core": "^6.0.20",
     "matman-crawler": "^6.0.20",
     "mockstar": "^1.1.6",
-    "nightmare-handler": "^1.0.10"
+    "nightmare-handler": "^1.0.10",
+    "nightmare": "^1.0.10"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.1",

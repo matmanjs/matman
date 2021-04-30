@@ -1,12 +1,13 @@
 import path from 'path';
+
 import MatmanConfig from './MatmanConfig';
-import {getAbsolutePath} from '../util/index';
-import {getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath} from '../util/path';
+import { getAbsolutePath } from '../util';
+import { getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath } from '../util/path';
 
 /**
  * 截图区域的配置信息
  */
-interface ClipOpts {
+interface IClipOpts {
   x: number;
   y: number;
   width: number;
@@ -16,38 +17,26 @@ interface ClipOpts {
 /**
  * 是否启用截图, 或者截图保存的文件名路径(如果想对路径, 则相对于basePath 而言), 或者截图配置
  */
-export type ScreenOpts =
+export type IScreenOpts =
   | string
   | boolean
-  | {tag?: string; path: string; fullPage?: boolean; clip?: ClipOpts};
+  | { tag?: string; path: string; fullPage?: boolean; clip?: IClipOpts };
 
 export default class ScreenshotConfig {
-  tag: string | undefined;
-  path: string;
-  clip: ClipOpts | undefined;
-  fullPage = true;
+  public tag: string | undefined;
+  public path: string;
+  public clip: IClipOpts | undefined;
+  public fullPage = true;
 
-  /**
-   * 构造函数
-   *
-   * https://github.com/segmentio/nightmare#screenshotpath-clip
-   *
-   * @param {MatmanConfig} matmanConfig
-   * @param {String | Boolean | Object} opts
-   * @param {String} [caseModuleFilePath] 测试案例模块的目录
-   * @param {String} [tag] 标记
-   *
-   * @author helinjiang
-   * @author wangjq4214
-   */
-  constructor(
+  public constructor(
     matmanConfig: MatmanConfig,
-    opts: ScreenOpts,
+    opts: IScreenOpts,
     caseModuleFilePath: string,
     tag?: string,
   ) {
     this.tag = tag;
 
+    // https://github.com/segmentio/nightmare#screenshotpath-clip
     if (opts && typeof opts === 'object') {
       // 对象中传递的标记优先
       if (opts.tag) {
@@ -59,11 +48,9 @@ export default class ScreenshotConfig {
         this.path = this.getScreenshotFullPath(opts.path, matmanConfig.screenshotPath);
       } else {
         // 其他情况自动生成截图保存路径
-        const relativeSavePath = getSaveDirFromPath(
-          path.relative(matmanConfig.caseModulesPath, caseModuleFilePath),
-        );
+        const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.caseModulesPath, caseModuleFilePath));
 
-        const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.png';
+        const saveFileName = `${getFolderNameFromPath(path.basename(caseModuleFilePath))}.png`;
 
         this.path = this.getScreenshotFullPath(
           path.join(relativeSavePath, saveFileName),
@@ -74,17 +61,15 @@ export default class ScreenshotConfig {
       // 截图的区域，例如 { x: 0, y: 0, width: 0, height: 0 }
       // https://github.com/electron/electron/blob/master/docs/api/browser-window.md#winsetthumbnailclipregion-windows
       this.clip = opts.clip;
-      this.fullPage = opts.fullPage === false ? false : true;
+      this.fullPage = (opts.fullPage !== false);
     } else if (typeof opts === 'string') {
       // 如果 opts 为字符串，则代表设置的是截图保存路径
       this.path = this.getScreenshotFullPath(opts, matmanConfig.screenshotPath);
     } else {
       // 其他情况自动生成截图保存路径
-      const relativeSavePath = getSaveDirFromPath(
-        path.relative(matmanConfig.caseModulesPath, caseModuleFilePath),
-      );
+      const relativeSavePath = getSaveDirFromPath(path.relative(matmanConfig.caseModulesPath, caseModuleFilePath));
 
-      const saveFileName = getFolderNameFromPath(path.basename(caseModuleFilePath)) + '.png';
+      const saveFileName = `${getFolderNameFromPath(path.basename(caseModuleFilePath))}.png`;
 
       this.path = this.getScreenshotFullPath(
         path.join(relativeSavePath, saveFileName),
@@ -98,12 +83,9 @@ export default class ScreenshotConfig {
    *
    * @param {String | Number} id 标志
    * @return {string} 新的路径
-   * @author helinjiang
    */
-  getPathWithId(id: string | number): string {
-    return this.path.replace(/(.*)\.(.*)/, function (match, p1, p2) {
-      return [p1, `${id}.${p2}`].join('_');
-    });
+  public getPathWithId(id: string | number): string {
+    return this.path.replace(/(.*)\.(.*)/, (match, p1, p2) => [p1, `${id}.${p2}`].join('_'));
   }
 
   /**
@@ -112,7 +94,6 @@ export default class ScreenshotConfig {
    * @param targetPath 原始路径
    * @param basePath 根目录
    * @return {String} 新的路径
-   * @author helinjiang
    * @private
    */
   private getScreenshotFullPath(targetPath: string, basePath: string): string {

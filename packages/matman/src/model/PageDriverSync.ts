@@ -4,56 +4,56 @@ import puppeteer from 'puppeteer';
 import Nightmare from 'nightmare';
 import {
   MatmanConfig,
-  PageDriver,
+  IPageDriver,
   DeviceConfig,
   ScreenshotConfig,
   CoverageConfig,
   MatmanResultConfig,
-  DeviceConfigOpts,
-  ScreenOpts,
-  CoverageOpts,
-  ResultOpts,
-  BrowserRunner,
+  IDeviceConfigOpts,
+  IScreenOpts,
+  ICoverageOpts,
+  IResultOpts,
+  IBrowserRunner,
   CookieConfig,
-  CookieConfigOpts,
+  ICookieConfigOpts,
   MatmanResult,
   MockstarConfig,
-  MockstarQueryDataMap,
+  IMockstarQueryDataMap,
 } from 'matman-core';
 
-import { PageDriverOpts } from '../types';
+import { IPageDriverOpts } from '../types';
 
 /**
  * 页面操作类，使用这个类可以实现对浏览器页面的控制
  */
-export default class PageDriverSync implements PageDriver {
+export default class PageDriverSync implements IPageDriver {
   // 配置项目
-  matmanConfig: MatmanConfig;
-  caseModuleFilePath: string;
-  show: boolean;
-  doNotCloseBrowser: boolean;
-  useRecorder: boolean;
-  tag: string | undefined;
-  delayBeforeRun: number;
-  executablePath: string | undefined;
-  proxyServer: string;
-  mockstarConfig: null | MockstarConfig;
-  cookieConfig: null | CookieConfig;
-  deviceConfig: null | DeviceConfig;
-  screenshotConfig: null | ScreenshotConfig;
-  coverageConfig: null | CoverageConfig;
-  matmanResultConfig: null | MatmanResultConfig;
+  public matmanConfig: MatmanConfig;
+  public caseModuleFilePath: string;
+  public show: boolean;
+  public doNotCloseBrowser: boolean;
+  public useRecorder: boolean;
+  public tag: string | undefined;
+  public delayBeforeRun: number;
+  public executablePath: string | undefined;
+  public proxyServer: string;
+  public mockstarConfig: null | MockstarConfig;
+  public cookieConfig: null | CookieConfig;
+  public deviceConfig: null | DeviceConfig;
+  public screenshotConfig: null | ScreenshotConfig;
+  public coverageConfig: null | CoverageConfig;
+  public matmanResultConfig: null | MatmanResultConfig;
 
   // 页面信息
-  pageUrl: string;
-  evaluateFn: null | (() => any) | string;
-  evaluateFnArgs: any[];
-  actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
-  isRunList: number[] = [];
-  dataIndexMap: { [key: string]: number };
+  public pageUrl: string;
+  public evaluateFn: null | (() => any) | string;
+  public evaluateFnArgs: any[];
+  public actionList: ((n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>)[];
+  public isRunList: number[] = [];
+  public dataIndexMap: { [key: string]: number };
 
   // master
-  private browserRunner: BrowserRunner;
+  private readonly browserRunner: IBrowserRunner;
 
   /**
    * 构造函数
@@ -66,9 +66,12 @@ export default class PageDriverSync implements PageDriver {
    * @param {Boolean} [opts.useRecorder] 是否使用记录器
    * @param {Boolean} [opts.doNotCloseBrowser] 是否在执行完成之后不要关闭浏览器，默认为 false
    * @param {Boolean} [opts.nightmareConfig] 传递给 nightmare 的配置
-   * @author helinjiang
    */
-  constructor(browserRunner: BrowserRunner, matmanConfig: MatmanConfig, opts: PageDriverOpts) {
+  public constructor(
+    browserRunner: IBrowserRunner,
+    matmanConfig: MatmanConfig,
+    opts: IPageDriverOpts,
+  ) {
     this.browserRunner = browserRunner;
 
     this.matmanConfig = matmanConfig;
@@ -110,7 +113,7 @@ export default class PageDriverSync implements PageDriver {
     this.dataIndexMap = {};
   }
 
-  getRunner(): BrowserRunner {
+  public getRunner(): IBrowserRunner {
     return this.browserRunner;
   }
 
@@ -122,9 +125,8 @@ export default class PageDriverSync implements PageDriver {
    *
    * @param {String} proxyServer 代理服务器，格式为 my_proxy_server.example.com:8080，例如 127.0.0.1:8899
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  useProxyServer(proxyServer: string): PageDriverSync {
+  public useProxyServer(proxyServer: string): PageDriverSync {
     this.proxyServer = proxyServer;
 
     return this;
@@ -136,9 +138,8 @@ export default class PageDriverSync implements PageDriver {
    * https://github.com/mockstarjs/mockstar
    *
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  useMockstar(queryDataMap: MockstarQueryDataMap): PageDriverSync {
+  public useMockstar(queryDataMap: IMockstarQueryDataMap): PageDriverSync {
     this.mockstarConfig = new MockstarConfig({ queryDataMap });
 
     return this;
@@ -149,10 +150,9 @@ export default class PageDriverSync implements PageDriver {
    *
    * https://github.com/mockstarjs/mockstar
    *
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  changeMockstar(queryDataMap: MockstarQueryDataMap): PageDriverSync {
+  public changeMockstar(queryDataMap: IMockstarQueryDataMap): PageDriverSync {
     if (this.mockstarConfig) {
       this.mockstarConfig.update(queryDataMap);
     }
@@ -166,11 +166,11 @@ export default class PageDriverSync implements PageDriver {
    * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md
    * https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
    *
-   * @param {CookieConfigOpts } cookieConfigOpts 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
+   * @param {ICookieConfigOpts } cookieConfigOpts 支持 `mykey1=myvalue1; mykey2=myvalue2`
+   * 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  setCookieConfig(cookieConfigOpts: CookieConfigOpts): PageDriverSync {
+  public setCookieConfig(cookieConfigOpts: ICookieConfigOpts): PageDriverSync {
     this.cookieConfig = new CookieConfig(cookieConfigOpts);
     return this;
   }
@@ -180,11 +180,10 @@ export default class PageDriverSync implements PageDriver {
    *
    * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exDevice.md
    *
-   * @param {DeviceConfigOpts} deviceConfig 设备名或者设备配置
+   * @param {IDeviceConfigOpts} deviceConfig 设备名或者设备配置
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  setDeviceConfig(deviceConfig: DeviceConfigOpts): PageDriverSync {
+  public setDeviceConfig(deviceConfig: IDeviceConfigOpts): PageDriverSync {
     this.deviceConfig = new DeviceConfig(deviceConfig);
     return this;
   }
@@ -194,9 +193,8 @@ export default class PageDriverSync implements PageDriver {
    *
    * @param {Boolean | String | Object} screenshotConfig
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  setScreenshotConfig(screenshotConfig: ScreenOpts): PageDriverSync {
+  public setScreenshotConfig(screenshotConfig: IScreenOpts): PageDriverSync {
     if (screenshotConfig) {
       this.screenshotConfig = new ScreenshotConfig(
         this.matmanConfig,
@@ -213,9 +211,8 @@ export default class PageDriverSync implements PageDriver {
    *
    * @param {Boolean | String | Object} coverageConfig
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  setCoverageConfig(coverageConfig: CoverageOpts): PageDriverSync {
+  public setCoverageConfig(coverageConfig: ICoverageOpts): PageDriverSync {
     if (coverageConfig) {
       this.coverageConfig = new CoverageConfig(
         this.matmanConfig,
@@ -233,9 +230,8 @@ export default class PageDriverSync implements PageDriver {
    *
    * @param {Boolean | String | Object} matmanResultConfig
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  setMatmanResultConfig(matmanResultConfig: ResultOpts): PageDriverSync {
+  public setMatmanResultConfig(matmanResultConfig: IResultOpts): PageDriverSync {
     if (matmanResultConfig) {
       this.matmanResultConfig = new MatmanResultConfig(
         this.matmanConfig,
@@ -253,9 +249,8 @@ export default class PageDriverSync implements PageDriver {
    *
    * @param pageUrl
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  setPageUrl(pageUrl: string): PageDriverSync {
+  public setPageUrl(pageUrl: string): PageDriverSync {
     this.pageUrl = pageUrl;
     return this;
   }
@@ -266,16 +261,15 @@ export default class PageDriverSync implements PageDriver {
    * @param {String} actionName 动作名称，后续可通过它来获得最后的数据
    * @param {Function} actionCall 执行函数，接受一个 nightmare 对象，可以直接操作
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  addAction(
+  public addAction(
     actionName: string,
     actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
   ): PageDriverSync {
     if (typeof actionCall === 'function') {
       this.actionList.push(actionCall);
       // 注意 run 引入后需要统计的是前面有多少个非 run action
-      this.dataIndexMap[actionName + ''] = this.isRunList.reduce(
+      this.dataIndexMap[`${actionName}`] = this.isRunList.reduce(
         (count, value) => (value === 0 ? count + 1 : count),
         0,
       );
@@ -296,9 +290,7 @@ export default class PageDriverSync implements PageDriver {
    * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
    * @return {Promise<void>}
    */
-  addRunAction(
-    actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
-  ): PageDriver {
+  public addRunAction(actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>): IPageDriver {
     if (typeof actionCall !== 'function') {
       throw new Error('addRunAction should assign function!');
     }
@@ -316,11 +308,13 @@ export default class PageDriverSync implements PageDriver {
    * @param {String | Function} fn
    * @param [args]
    * @return {PageDriverSync}
-   * @author helinjiang
    */
-  evaluate(fn: string): Promise<MatmanResult | PageDriverSync>;
-  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriverSync>;
-  evaluate(fn: string | (() => any), ...args: any[]): Promise<MatmanResult | PageDriverSync> {
+  public evaluate(fn: string): Promise<MatmanResult | PageDriverSync>;
+  public evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriverSync>;
+  public evaluate(
+    fn: string | (() => any),
+    ...args: any[]
+  ): Promise<MatmanResult | PageDriverSync> {
     this.evaluateFn = fn;
     this.evaluateFnArgs = args;
 
@@ -331,9 +325,8 @@ export default class PageDriverSync implements PageDriver {
   /**
    * 结束，获取结果
    * @return {Promise<{}>}
-   * @author helinjiang
    */
-  getResult(): Promise<MatmanResult | PageDriverSync> {
+  public getResult(): Promise<MatmanResult | PageDriverSync> {
     // 如果没有 actionList 则直接抛出错误
     if (!this.actionList.length) {
       throw new Error('No action! Please use addAction(name, callback) to add your actions!');
@@ -357,12 +350,12 @@ export default class PageDriverSync implements PageDriver {
     this.browserRunner?.setPageDriver(this);
 
     if (process.env.IS_IN_IDE) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         resolve(this);
       });
     }
 
-    return this.browserRunner?.getResult().then(matmanResult => {
+    return this.browserRunner?.getResult().then((matmanResult) => {
       // 保存数据快照
       if (this.matmanResultConfig) {
         this.matmanResultConfig.save(matmanResult);

@@ -1,18 +1,19 @@
 import fs from 'fs';
-import { BrowserRunner, findMatmanConfig, MATMAN_CONFIG_FILE } from 'matman-core';
+import { IBrowserRunner, findMatmanConfig, MATMAN_CONFIG_FILE } from 'matman-core';
 import _ from 'lodash';
 import PageDriverSync from './model/PageDriverSync';
 import PageDriverAsync from './model/PageDriverAsync';
-import { MatmanConfigOpts, PageDriverOpts } from './types';
+import { IMatmanConfigOpts, IPageDriverOpts } from './types';
 import { getCallerPath } from './util/caller';
 import { checkIfWhistleStarted } from './util/whistle';
 
 /**
  * 获取新的 PageDriverOpts
  *
- * @param {PageDriverOpts} opts
+ * @param {IPageDriverOpts} opts 原始的
+ * @return {IPageDriverOpts} 新的
  */
-function getPageDriverOpts(opts?: PageDriverOpts): PageDriverOpts {
+function getPageDriverOpts(opts?: IPageDriverOpts): IPageDriverOpts {
   const pageDriverOpts = _.merge({}, opts);
 
   let { caseModuleFilePath } = pageDriverOpts;
@@ -25,7 +26,7 @@ function getPageDriverOpts(opts?: PageDriverOpts): PageDriverOpts {
 
     // 如果无法获得 caseModuleFilePath，则直接抛出错误
     if (!caseModuleFilePath || !fs.existsSync(caseModuleFilePath)) {
-      throw new Error(`Could not find caseModuleFilePath!`);
+      throw new Error('Could not find caseModuleFilePath!');
     }
 
     // 更新
@@ -50,14 +51,15 @@ function getPageDriverOpts(opts?: PageDriverOpts): PageDriverOpts {
 /**
  * 获得异步的 PageDriver
  *
- * @param {BrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
- * @param {PageDriverOpts} pageDriverOpts
- * @param {MatmanConfigOpts} matmanConfigOpts
+ * @param {IBrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
+ * @param {IPageDriverOpts} pageDriverOpts
+ * @param {IMatmanConfigOpts} matmanConfigOpts
+ * @return {PageDriverAsync}
  */
 export function launch(
-  browserRunner: BrowserRunner,
-  pageDriverOpts?: PageDriverOpts,
-  matmanConfigOpts?: MatmanConfigOpts,
+  browserRunner: IBrowserRunner,
+  pageDriverOpts?: IPageDriverOpts,
+  matmanConfigOpts?: IMatmanConfigOpts,
 ): PageDriverAsync {
   // 处理下原始传入的 pageDriverOpts，部分设置默认值
   const newPageDriverOpts = getPageDriverOpts(pageDriverOpts);
@@ -76,23 +78,21 @@ export function launch(
     throw new Error(`Could not find ${MATMAN_CONFIG_FILE} or matman config setting!`);
   }
 
-  // console.log('newPageDriverOpts', newPageDriverOpts);
-  // console.log('matmanConfig', matmanConfig);
-
   return new PageDriverAsync(browserRunner, matmanConfig, newPageDriverOpts);
 }
 
 /**
  * 获得同步的 PageDriver
  *
- * @param {BrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
- * @param {PageDriverOpts} pageDriverOpts
- * @param {MatmanConfigOpts} matmanConfigOpts
+ * @param {IBrowserRunner} browserRunner 浏览器运行器，目前支持 puppeteer 和 nightmare 两种
+ * @param {IPageDriverOpts} pageDriverOpts
+ * @param {IMatmanConfigOpts} matmanConfigOpts
+ * @return {PageDriverSync}
  */
 export function launchSync(
-  browserRunner: BrowserRunner,
-  pageDriverOpts?: PageDriverOpts,
-  matmanConfigOpts?: MatmanConfigOpts,
+  browserRunner: IBrowserRunner,
+  pageDriverOpts?: IPageDriverOpts,
+  matmanConfigOpts?: IMatmanConfigOpts,
 ): PageDriverSync {
   // 处理下原始传入的 pageDriverOpts，部分设置默认值
   const newPageDriverOpts = getPageDriverOpts(pageDriverOpts);
@@ -105,9 +105,6 @@ export function launchSync(
     throw new Error(`Could not find ${MATMAN_CONFIG_FILE} or matman config setting!`);
   }
 
-  // console.log('newPageDriverOpts', newPageDriverOpts);
-  // console.log('matmanConfig', matmanConfig);
-
   return new PageDriverSync(browserRunner, matmanConfig, newPageDriverOpts);
 }
 
@@ -116,6 +113,7 @@ export function launchSync(
  *
  * @param {Number} port 指定端口
  * @param {Boolean} doNotAutoCheckStartedPort 不需要自动获得已经启动的端口
+ * @return {Promise<string>}
  */
 export async function getLocalWhistleServer(
   port: number,

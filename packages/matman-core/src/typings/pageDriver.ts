@@ -1,14 +1,14 @@
 import Nightmare from 'nightmare';
 import puppeteer from 'puppeteer';
-import { BrowserRunner } from './browserRunner';
+import { IBrowserRunner } from './browserRunner';
 import MatmanResult from '../model/MatmanResult';
 import MatmanConfig from '../config/MatmanConfig';
-import CookieConfig, { CookieConfigOpts } from '../config/CookieConfig';
-import DeviceConfig, { DeviceConfigOpts } from '../config/DeviceConfig';
-import ScreenshotConfig, { ScreenOpts } from '../config/ScreenshotConfig';
-import CoverageConfig, { CoverageOpts } from '../config/CoverageConfig';
-import MatmanResultConfig, { ResultOpts } from '../config/MatmanResultConfig';
-import MockstarConfig, { MockstarQueryDataMap } from '../config/MockstarConfig';
+import CookieConfig, { ICookieConfigOpts } from '../config/CookieConfig';
+import DeviceConfig, { IDeviceConfigOpts } from '../config/DeviceConfig';
+import ScreenshotConfig, { IScreenOpts } from '../config/ScreenshotConfig';
+import CoverageConfig, { ICoverageOpts } from '../config/CoverageConfig';
+import MatmanResultConfig, { IResultOpts } from '../config/MatmanResultConfig';
+import MockstarConfig, { IMockstarQueryDataMap } from '../config/MockstarConfig';
 
 /**
  * PageDriver 需要实现的接口
@@ -20,7 +20,7 @@ import MockstarConfig, { MockstarQueryDataMap } from '../config/MockstarConfig';
  * @member tag 标记, 主要控制生成多组结果
  * @member delayBeforeRun 在运行前是否推迟执行
  * @member proxyServer 代理
- * @member mockstarQuery mockstar 查询函数
+ * @member mockstarConfig mockstar 查询函数
  * @member cookies 需要设置的 cookies
  * @member deviceConfig 设备配置信息
  * @member screenshotConfig 屏幕截图配置信息
@@ -31,10 +31,8 @@ import MockstarConfig, { MockstarQueryDataMap } from '../config/MockstarConfig';
  * @member evaluateFnArgs
  * @member actionList 存放 action 的数组
  * @member dataIndexMap 描述与索引的映射, 用户一般不用操作
- *
- * @author wangjq4214
  */
-export interface PageDriver {
+export interface IPageDriver {
   // 配置类
   matmanConfig: MatmanConfig;
   caseModuleFilePath: string;
@@ -62,7 +60,7 @@ export interface PageDriver {
   isRunList: number[];
   dataIndexMap: { [key: string]: number };
 
-  getRunner(): BrowserRunner;
+  getRunner(): IBrowserRunner;
 
   /**
    * 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
@@ -71,30 +69,27 @@ export interface PageDriver {
    * https://github.com/segmentio/nightmare#switches
    *
    * @param {String} proxyServer 代理服务器，格式为 my_proxy_server.example.com:8080，例如 127.0.0.1:8899
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  useProxyServer(proxyServer: string): PageDriver | Promise<void>;
+  useProxyServer(proxyServer: string): IPageDriver | Promise<void>;
 
   /**
    * 使用 mockstar 工具来做接口 mock 数据
    *
    * https://github.com/mockstarjs/mockstar
    *
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  useMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
+  useMockstar(queryMap: IMockstarQueryDataMap): IPageDriver | Promise<void>;
 
   /**
    * 更新 mockstar 中的请求
    *
    * https://github.com/mockstarjs/mockstar
    *
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  changeMockstar(queryMap: MockstarQueryDataMap): PageDriver | Promise<void>;
+  changeMockstar(queryMap: IMockstarQueryDataMap): IPageDriver | Promise<void>;
 
   /**
    * 注入 cookie
@@ -102,11 +97,11 @@ export interface PageDriver {
    * https://github.com/helinjiang/nightmare-handler/blob/master/docs/exCookies.md
    * https://github.com/helinjiang/nightmare-handler/tree/master/demo/extend-exCookies
    *
-   * @param {String | Object } cookieConfig 支持 `mykey1=myvalue1; mykey2=myvalue2` 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
-   * @return {PageDriver}
-   * @author helinjiang
+   * @param {String | Object } cookieConfig 支持 `mykey1=myvalue1; mykey2=myvalue2`
+   * 和 `{mykey1:'myvalue1', mykey2:'myvalue'}` 写法
+   * @return {IPageDriver}
    */
-  setCookieConfig(cookieConfig: CookieConfigOpts): PageDriver | Promise<void>;
+  setCookieConfig(cookieConfig: ICookieConfigOpts): IPageDriver | Promise<void>;
 
   /**
    * 设置无头浏览器设备参数
@@ -118,69 +113,63 @@ export interface PageDriver {
    * @param {String} [deviceConfig.UA] userAgent
    * @param {Number} [deviceConfig.width] 视窗宽度
    * @param {Number} [deviceConfig.height] 视窗高度，注意这里不是指页面的高度，页面高度要小于这个值
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  setDeviceConfig(deviceConfig: DeviceConfigOpts): PageDriver | Promise<void>;
+  setDeviceConfig(deviceConfig: IDeviceConfigOpts): IPageDriver | Promise<void>;
 
   /**
    * 设置截屏参数，默认不截图
    *
    * @param {Boolean | String | Object} screenshotConfig
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  setScreenshotConfig(screenshotConfig: ScreenOpts): PageDriver | Promise<void>;
+  setScreenshotConfig(screenshotConfig: IScreenOpts): IPageDriver | Promise<void>;
 
   /**
    * 设置覆盖率参数
    *
    * @param {Boolean | String | Object} coverageConfig
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  setCoverageConfig(coverageConfig: CoverageOpts): PageDriver | Promise<void>;
+  setCoverageConfig(coverageConfig: ICoverageOpts): IPageDriver | Promise<void>;
 
   /**
    * 设置 MatmanResult 执行结果参数
    *
    * @param {Boolean | String | Object} matmanResultConfig
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  setMatmanResultConfig(matmanResultConfig: ResultOpts): PageDriver | Promise<void>;
+  setMatmanResultConfig(matmanResultConfig: IResultOpts): IPageDriver | Promise<void>;
 
   /**
    * 加载指定的页面地址
    *
    * @param pageUrl
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
-  setPageUrl(pageUrl: string): PageDriver | Promise<void>;
+  setPageUrl(pageUrl: string): IPageDriver | Promise<void>;
 
   /**
    * 增加测试动作
    *
    * @param {String} actionName 动作名称，后续可通过它来获得最后的数据
    * @param {Function} actionCall 执行函数，接受一个 nightmare 对象，可以直接操作
-   * @return {PageDriver}
-   * @author helinjiang
+   * @return {IPageDriver}
    */
   addAction(
     actionName: string,
     actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
-  ): PageDriver | Promise<void>;
+  ): IPageDriver | Promise<void>;
 
   /**
    * 增加执行动作
    *
    * @param {Function} actionCall 执行函数，接受一个 nightmare 或者 puppeteer 对象，可以直接操作
-   * @return {PageDriver | Promise<void>}
+   * @return {IPageDriver | Promise<void>}
    */
   addRunAction(
     actionCall: (n: Nightmare & puppeteer.Page) => Nightmare | Promise<void>,
-  ): PageDriver | Promise<void>;
+  ): IPageDriver | Promise<void>;
 
   /**
    * 执行爬虫脚本或者方法获得结果
@@ -189,9 +178,8 @@ export interface PageDriver {
    *
    * @param {String | Function} fn
    * @param [args]
-   * @return {Promise<MatmanResult|PageDriver>}
-   * @author helinjiang
+   * @return {Promise<MatmanResult|IPageDriver>}
    */
-  evaluate(fn: string): Promise<MatmanResult | PageDriver>;
-  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | PageDriver>;
+  evaluate(fn: string): Promise<MatmanResult | IPageDriver>;
+  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | IPageDriver>;
 }

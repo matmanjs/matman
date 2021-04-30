@@ -35,7 +35,7 @@ export function getNewFilePathWithTag(filePath: string, tag?: string): string {
 
   if (fileNameArr.length > 1) {
     const lastOne = fileNameArr.pop();
-    newFileName = fileNameArr.join('.') + gap + tag + '.' + lastOne;
+    newFileName = `${fileNameArr.join('.') + gap + tag}.${lastOne}`;
   } else {
     newFileName = newFileName + gap + tag;
   }
@@ -59,7 +59,6 @@ export function getNewFilePathWithTag(filePath: string, tag?: string): string {
  *
  * @param {String} targetPath 路径
  * @return {String}
- * @author {helinjiang}
  */
 export function getFolderNameFromPath(targetPath: string): string {
   return (
@@ -88,7 +87,6 @@ export function getFolderNameFromPath(targetPath: string): string {
  *
  * @param {String} targetPath 路径
  * @return {String}
- * @author {helinjiang}
  */
 export function getSaveDirFromPath(targetPath: string): string {
   // 找到相对路径，即从测试项目根目录到行为模块文件的路径，例如： page-xxx/cases/basic-check

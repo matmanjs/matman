@@ -1,7 +1,7 @@
 import 'mocha';
-import {expect} from 'chai';
+import { expect } from 'chai';
 
-import {isURLMatch} from '../../../src/util/url';
+import { isURLMatch } from '../../../src/util/url';
 
 describe('./util/url.ts', () => {
   describe('check isURLMatch(URLToCheck, partialURL, query)', () => {
@@ -24,15 +24,15 @@ describe('./util/url.ts', () => {
     });
 
     it('with query', () => {
-      expect(isURLMatch(URLToCheck, 'report/pv', {report_id: 987})).to.be.true;
+      expect(isURLMatch(URLToCheck, 'report/pv', { report_id: 987 })).to.be.true;
     });
 
     it('with error query', () => {
-      expect(isURLMatch(URLToCheck, 'report/pv', {report_id: 666})).to.be.false;
+      expect(isURLMatch(URLToCheck, 'report/pv', { report_id: 666 })).to.be.false;
     });
 
     it('with error query and error key', () => {
-      expect(isURLMatch(URLToCheck, 'report/pv', {id: 987})).to.be.false;
+      expect(isURLMatch(URLToCheck, 'report/pv', { id: 987 })).to.be.false;
     });
   });
 });

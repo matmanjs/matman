@@ -1,9 +1,9 @@
-export interface MatmanResultQueueItemNightmare {
+export interface IMatmanResultQueueItemNightmare {
   eventName: string;
   args: any[];
 }
 
-export interface MatmanResultQueueItemPuppeteerNetwork {
+export interface IMatmanResultQueueItemPuppeteerNetwork {
   eventName: string;
   url: string;
   method: string;
@@ -29,25 +29,25 @@ export interface MatmanResultQueueItemPuppeteerNetwork {
   };
 }
 
-export interface MatmanResultQueueItemPuppeteerConsole {
+export interface IMatmanResultQueueItemPuppeteerConsole {
   eventName: string;
   type: string;
   text: string;
 }
 
-export type MatmanResultQueueItem =
-  | MatmanResultQueueItemNightmare
-  | MatmanResultQueueItemPuppeteerNetwork
-  | MatmanResultQueueItemPuppeteerConsole;
+export type IMatmanResultQueueItem =
+  | IMatmanResultQueueItemNightmare
+  | IMatmanResultQueueItemPuppeteerNetwork
+  | IMatmanResultQueueItemPuppeteerConsole;
 
-interface QueryOpts {
+interface IQueryOpts {
   [key: string]: string | number | boolean;
 }
 
 /**
  * nightmare 资源类型的枚举，详见 nightmare-handler 组件中的 RESOURCE_TYPE
  */
-type NightmareResourceType =
+type INightmareResourceType =
   | 'mainFrame'
   | 'subFrame'
   | 'stylesheet'
@@ -62,7 +62,7 @@ type NightmareResourceType =
  * puppeteer 资源类型的枚举
  * https://github.com/puppeteer/puppeteer/blob/v4.0.0/docs/api.md#httprequestresourcetype
  */
-type PuppeteerResourceType =
+type IPuppeteerResourceType =
   | 'document'
   | 'stylesheet'
   | 'image'
@@ -78,34 +78,32 @@ type PuppeteerResourceType =
   | 'other'
   | '';
 
-export type ResourceType = PuppeteerResourceType | NightmareResourceType;
+export type IResourceType = IPuppeteerResourceType | INightmareResourceType;
 
-export interface MatmanResultQueueHandler {
-  queue: MatmanResultQueueItem[];
+export interface IMatmanResultQueueHandler {
+  queue: IMatmanResultQueueItem[];
 
   /**
    * 从结果队列中过滤出网络请求
    *
-   * @param {ResourceType} [resourceType] 资源类型
+   * @param {IResourceType} [resourceType] 资源类型
    * @return {Array}
-   * @author helinjiang
    */
-  getNetwork(resourceType?: ResourceType): MatmanResultQueueItem[];
+  getNetwork(resourceType?: IResourceType): IMatmanResultQueueItem[];
 
   /**
    * 是否存在某个网络请求
    *
    * @param {String} partialURL 用于匹配的部分url
-   * @param {QueryOpts} [query] 请求携带的 query 参数
-   * @param {ResourceType} [resourceType] 资源类型
+   * @param {IQueryOpts} [query] 请求携带的 query 参数
+   * @param {IResourceType} [resourceType] 资源类型
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
   isExistInNetwork(
     partialURL: string,
-    query?: QueryOpts,
-    resourceType?: ResourceType,
+    query?: IQueryOpts,
+    resourceType?: IResourceType,
     status?: number,
   ): boolean;
 
@@ -113,56 +111,51 @@ export interface MatmanResultQueueHandler {
    * 是否存在某个页面
    *
    * @param {String} partialURL 用于匹配的部分url
-   * @param {QueryOpts} [query] 请求携带的 query 参数
+   * @param {IQueryOpts} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistPage(partialURL: string, query?: QueryOpts, status?: number): boolean;
+  isExistPage(partialURL: string, query?: IQueryOpts, status?: number): boolean;
 
   /**
    * 是否存在某个 xhr 请求
    *
    * @param {String} partialURL 用于匹配的部分url
-   * @param {QueryOpts} [query] 请求携带的 query 参数
+   * @param {IQueryOpts} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistXHR(partialURL: string, query?: QueryOpts, status?: number): boolean;
+  isExistXHR(partialURL: string, query?: IQueryOpts, status?: number): boolean;
 
   /**
    * 是否存在某个 image 请求
    *
    * @param {String} partialURL 用于匹配的部分url
-   * @param {QueryOpts} [query] 请求携带的 query 参数
+   * @param {IQueryOpts} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistImage(partialURL: string, query?: QueryOpts, status?: number): boolean;
+  isExistImage(partialURL: string, query?: IQueryOpts, status?: number): boolean;
 
   /**
    * 是否存在某个 stylesheet 请求
    *
    * @param {String} partialURL 用于匹配的部分url
-   * @param {QueryOpts} [query] 请求携带的 query 参数
+   * @param {IQueryOpts} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistStylesheet(partialURL: string, query?: QueryOpts, status?: number): boolean;
+  isExistStylesheet(partialURL: string, query?: IQueryOpts, status?: number): boolean;
 
   /**
    * 是否存在某个 script 请求
    *
    * @param {String} partialURL 用于匹配的部分url
-   * @param {QueryOpts} [query] 请求携带的 query 参数
+   * @param {IQueryOpts} [query] 请求携带的 query 参数
    * @param {Number} [status] 状态码
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistScript(partialURL: string, query?: QueryOpts, status?: number): boolean;
+  isExistScript(partialURL: string, query?: IQueryOpts, status?: number): boolean;
 
   /**
    * 是否存在某个 jsbridge 的调用
@@ -170,9 +163,8 @@ export interface MatmanResultQueueHandler {
    * @param {String} partialURL 用于匹配的部分url
    * @param {Object} [query] 请求携带的 query 参数
    * @return {Boolean}
-   * @author helinjiang
    */
-  isExistJSBridge(partialURL: string, query?: QueryOpts): boolean;
+  isExistJSBridge(partialURL: string, query?: IQueryOpts): boolean;
 
   /**
    * 是否存在某一条 console 记录

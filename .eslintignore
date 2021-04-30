@@ -1,5 +1,6 @@
 node_modules
 asserts
+assets
 docs
 packages/matman-cli/generators/**/templates
 demo

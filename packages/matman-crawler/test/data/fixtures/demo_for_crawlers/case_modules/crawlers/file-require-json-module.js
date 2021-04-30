@@ -4,10 +4,8 @@ function getDescription() {
   return 'I am description';
 }
 
-module.exports = () => {
-  return {
-    say: 'hello, file-require-json-module.js!',
-    description: getDescription(),
-    userInfo,
-  };
-};
+module.exports = () => ({
+  say: 'hello, file-require-json-module.js!',
+  description: getDescription(),
+  userInfo,
+});

@@ -11,13 +11,11 @@ var getPageInfo = (function () {
     return 'I am description';
   }
 
-  var fileRequireJsModule = () => {
-    return {
-      say: 'hello, file-require-js-module.js!',
-      description: getDescription(),
-      userInfo: userJs,
-    };
-  };
+  var fileRequireJsModule = () => ({
+    say: 'hello, file-require-js-module.js!',
+    description: getDescription(),
+    userInfo: userJs,
+  });
 
   return fileRequireJsModule;
 

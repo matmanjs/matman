@@ -2,30 +2,29 @@ import path from 'path';
 import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import { BrowserRunner, MatmanResult, MatmanResultQueueItem, PageDriver } from 'matman-core';
+import { IBrowserRunner, MatmanResult, IMatmanResultQueueItem, IPageDriver } from 'matman-core';
 import { build } from 'matman-crawler';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { createMockStarQuery } from 'mockstar';
+
 import { evaluate } from './utils/master';
 
-export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
-  private url = '';
-  name = 'puppeteer';
-  pageDriver: PageDriver | null;
-  puppeteerConfig: puppeteer.LaunchOptions;
-  browser: null | puppeteer.Browser;
-  page: null | puppeteer.Page;
-  globalInfo: {
+export class PuppeteerRunner extends EventEmitter implements IBrowserRunner {
+  public url = '';
+  public name = 'puppeteer';
+  public pageDriver: IPageDriver | null;
+  public puppeteerConfig: puppeteer.LaunchOptions;
+  public browser: null | puppeteer.Browser;
+  public page: null | puppeteer.Page;
+  public globalInfo: {
     recorder?: {
-      queue: MatmanResultQueueItem[];
+      queue: IMatmanResultQueueItem[];
       allRequestUrl: string[];
     };
     isExistCoverageReport?: boolean;
   };
-  script = '';
+  public script = '';
 
-  constructor(opts: puppeteer.LaunchOptions = {}) {
+  public constructor(opts: puppeteer.LaunchOptions = {}) {
     super();
 
     this.pageDriver = null;
@@ -40,7 +39,12 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     this.globalInfo = {};
   }
 
-  setPageDriver(n: PageDriver): void {
+  /**
+   * 设置 pageDriver
+   *
+   * @param {IPageDriver} n
+   */
+  public setPageDriver(n: IPageDriver): void {
     this.pageDriver = n;
     this.url = n.pageUrl;
 
@@ -52,7 +56,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     }
   }
 
-  async getConfig(): Promise<void> {
+  /**
+   * 初始化配置
+   */
+  public async getConfig(): Promise<void> {
     // 触发开始事件
     this.emit('beforeGetConfig');
 
@@ -96,11 +103,11 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     //   this.puppeteerConfig.devtools = true;
     // }
 
-    // 如果传入了浏览器则使用
+    // 如果传入了浏览器路径，则使用本地浏览器
     this.puppeteerConfig.executablePath = this.pageDriver?.executablePath;
     if (
-      this.puppeteerConfig.executablePath &&
-      /firefox/gi.test(this.puppeteerConfig.executablePath)
+      this.puppeteerConfig.executablePath
+      && /firefox/gi.test(this.puppeteerConfig.executablePath)
     ) {
       this.puppeteerConfig.product = 'firefox';
     }
@@ -109,8 +116,12 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     this.emit('afterGetConfig', this.puppeteerConfig);
   }
 
-  async getNewInstance(): Promise<void> {
+  /**
+   * 初始化对象
+   */
+  public async getNewInstance(): Promise<void> {
     this.emit('beforeGetNewInstance');
+
     // 创建 puppeteer 对象, 需要创建到 page
     this.browser = await puppeteer.launch(this.puppeteerConfig);
     this.page = (await this.browser.pages())[0];
@@ -123,16 +134,12 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     // 使用 mockstar 作为 mock server
     if (this.pageDriver?.mockstarConfig) {
-      this.page.on('request', request => {
-        // console.log('\npageUrl', this.pageDriver?.pageUrl);
-        // console.log('request.resourceType()', request.resourceType());
-        // console.log('request.url()', request.url());
+      this.page.on('request', (request) => {
+        // https://github.com/puppeteer/puppeteer/blob/v5.5.0/docs/api.md#class-httprequest
 
         if (request.resourceType() === 'xhr' || request.resourceType() === 'fetch') {
           // 必须放在这里，每次都实时获取，后续在更换 mockstar 桩数据时才会生效
-          const mockstarQuery = createMockStarQuery(
-            this.pageDriver?.mockstarConfig?.queryDataMap as any,
-          );
+          const mockstarQuery = createMockStarQuery(this.pageDriver?.mockstarConfig?.queryDataMap as any);
           const mockstarQueryString = mockstarQuery.getString();
 
           // Override headers
@@ -149,13 +156,13 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
 
     // 使用记录器，记录网络请求和浏览器事件等 暂时不使用
     if (this.globalInfo.recorder) {
-      this.page.on('response', async msg => {
+      this.page.on('response', async (msg) => {
         const request = msg.request();
 
         let responseBody = null;
         if (
-          msg.headers()['content-type'] &&
-          msg.headers()['content-type'].indexOf('application/json') !== -1
+          msg.headers()['content-type']
+          && msg.headers()['content-type'].indexOf('application/json') !== -1
         ) {
           try {
             responseBody = await msg.json();
@@ -165,6 +172,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
           }
         }
 
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         this.addRecordInQueue({
           eventName: 'network',
           url: request.url(),
@@ -183,22 +191,23 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
             fromCache: msg.fromCache(),
             body: responseBody,
           },
-        } as MatmanResultQueueItem);
+        } as IMatmanResultQueueItem);
       });
 
-      this.page.on('console', log => {
+      this.page.on('console', (log) => {
         const logText = log.text();
 
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         this.addRecordInQueue({
           eventName: 'console',
           type: log.type(),
           // args: log.args(),
           // location: log.location(),
           text: logText,
-        } as MatmanResultQueueItem);
+        } as IMatmanResultQueueItem);
 
         // 将符合输出格式的 console 加入到请求队列
-        const matchResult = logText.match(/^\[e2e\](.*)/);
+        const matchResult = logText.match(/^\[e2e](.*)/);
         if (matchResult && matchResult.length > 1) {
           // 这里因为之后的 URLMatch 函数中比较时会进行编码, 所以此时将 uri 编码统一格式
           // 需要注意的是不能使用 encodeURIComponent 因为其会将特殊字符也编码导致匹配失败
@@ -206,7 +215,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
         }
       });
 
-      this.page.on('request', request => {
+      this.page.on('request', (request) => {
         this.globalInfo.recorder?.allRequestUrl?.push(request.url());
       });
 
@@ -214,12 +223,12 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       const client = await this.page.target().createCDPSession();
       await client.send('Network.enable');
       client.on('Network.requestWillBeSent', (e: any) => {
-        const url = e.request.url;
+        const { url } = e.request;
         // 删选 jsbridge 同类的相关协议
         if (url === e.documentURL && !url.match(/^http/)) {
           this.globalInfo.recorder?.allRequestUrl?.push(url);
         }
-      })
+      });
     }
 
     // 使用 mockstar 作为 mock server
@@ -230,7 +239,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     // 设置额外请求头
     await this.page.setExtraHTTPHeaders({
       'x-mat-from': 'puppeteer',
-      'x-mat-timestamp': Date.now() + '',
+      'x-mat-timestamp': `${Date.now()}`,
     });
 
     // 设置设备
@@ -257,7 +266,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       const temp: puppeteer.SetCookie[] = [];
       const arr = this.pageDriver.cookieConfig.getCookieObjectArr(this.pageDriver?.pageUrl);
 
-      arr.forEach(item => {
+      arr.forEach((item) => {
         temp.push(item);
       });
 
@@ -269,7 +278,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     });
   }
 
-  async gotoPage(): Promise<void> {
+  /**
+   * 加载页面
+   */
+  public async gotoPage(): Promise<void> {
     this.emit('beforeGotoPage', this.pageDriver?.pageUrl);
 
     if (!this.pageDriver?.pageUrl) {
@@ -305,15 +317,21 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     this.emit('afterGotoPage', { url: this.pageDriver?.pageUrl, page: this.page });
   }
 
-  async runActions(stop?: number): Promise<any[]> {
+  /**
+   * 执行行为动作
+   *
+   * @param {Number} [stop] 停在某一步
+   */
+  public async runActions(stop?: number): Promise<any[]> {
     // 循环处理多个 action
     const result: any[] = [];
+
     // 触发开始事件
-    this.emit('beforeRunActions', { index: 0, result: result });
+    this.emit('beforeRunActions', { index: 0, result });
 
     let i = 0;
     const actionList = this.pageDriver?.actionList as ((n: puppeteer.Page) => Promise<void>)[];
-    const length = actionList.length;
+    const { length } = actionList;
 
     for (i; i < length; i++) {
       // 停止在某一步
@@ -322,7 +340,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       }
 
       // 开始执行 action
-      this.emit('beforeRunCase', { index: i, result: result });
+      this.emit('beforeRunCase', { index: i, result });
 
       // 执行 action
       if (!this.page) {
@@ -381,7 +399,7 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       }
 
       // 结束执行 action
-      this.emit('afterRunCase', { index: i, result: result });
+      this.emit('afterRunCase', { index: i, result });
     }
 
     // 因为要等待请求完成, 所以强制停 500ms
@@ -389,16 +407,19 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
       await this.page?.waitFor(500);
     }
 
-    this.emit('afterRunActions', { index: i, result: result });
+    this.emit('afterRunActions', { index: i, result });
 
     return result;
   }
 
-  async cleanEffect(): Promise<void> {
+  /**
+   * 关闭浏览器
+   */
+  public async cleanEffect(): Promise<void> {
     // 如果配置了不关闭界面，且当前是展示浏览器界面的场景，则不再自动关闭浏览器界面，以方便调试
     if (
-      (process.env.IS_IN_IDE || this.pageDriver?.doNotCloseBrowser) &&
-      this.puppeteerConfig.headless === false
+      (process.env.IS_IN_IDE || this.pageDriver?.doNotCloseBrowser)
+      && this.puppeteerConfig.headless === false
     ) {
       console.log('do not close browser');
     } else {
@@ -406,7 +427,10 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     }
   }
 
-  async getResult(): Promise<MatmanResult> {
+  /**
+   * 获取爬取结果
+   */
+  public async getResult(): Promise<MatmanResult> {
     await this.getConfig();
 
     await this.getNewInstance();
@@ -425,7 +449,12 @@ export class PuppeteerRunner extends EventEmitter implements BrowserRunner {
     });
   }
 
-  addRecordInQueue(queueItem: MatmanResultQueueItem): void {
+  /**
+   * 追加记录
+   *
+   * @param queueItem
+   */
+  public addRecordInQueue(queueItem: IMatmanResultQueueItem): void {
     this.globalInfo.recorder?.queue?.push(queueItem);
   }
 }
