@@ -4,18 +4,6 @@ import path from 'path';
 import { getAbsolutePath } from '../util';
 import { IMatmanConfigOpts, ISetupOptions } from '../types';
 
-/**
- * 定义 check 配置的函数的返回数据
- *
- * @member result 检查结果
- * @member msg 额外的信息
- *
- */
-interface ICheckResult {
-  result: boolean;
-  msg?: string;
-}
-
 export default class MatmanConfig {
   public rootPath: string;
   public caseModulesPath: string;
@@ -36,8 +24,12 @@ export default class MatmanConfig {
     // 获取值的优先级为：参数指定 > matman.config.js 路径 > package.json 路径
     this.rootPath = getAbsolutePath(rootPath);
 
+    if (!fs.existsSync(this.rootPath)) {
+      throw new Error(`Unknown rootPath=${this.rootPath}`);
+    }
+
     // 测试案例的根目录
-    this.caseModulesPath = getAbsolutePath(opts.caseModulesPath || './case_modules', this.rootPath);
+    this.caseModulesPath = getAbsolutePath(opts.caseModulesPath || './src/case_modules', this.rootPath);
 
     // 如果默认的 caseModulesPath 不存在，则复用 rootPath
     if (!fs.existsSync(this.caseModulesPath)) {
@@ -76,12 +68,6 @@ export default class MatmanConfig {
 
     // 设置启动脚本
     this.setupOptions = opts.setupOptions || [];
-
-    // 检查参数是否合法
-    const checkResult = this.check();
-    if (!checkResult.result) {
-      throw new Error(checkResult.msg);
-    }
   }
 
   /**
@@ -100,54 +86,5 @@ export default class MatmanConfig {
         `${path.basename(this.crawlerBuildPath)}_dev`,
       );
     }
-  }
-
-  /**
-   * 校验参数是否合法有效
-   *
-   * @private
-   */
-  private check(): ICheckResult {
-    if (!fs.existsSync(this.rootPath)) {
-      return {
-        result: false,
-        msg: `Unknown rootPath=${this.rootPath}`,
-      };
-    }
-
-    // 检查启动脚本
-    for (const item of this.setupOptions) {
-      // 必须有名字
-      if (item.name === '') {
-        return {
-          result: false,
-          msg: `Unknown order name=${item.name}`,
-        };
-      }
-
-      // 必须存在命令
-      if (item.order === '') {
-        return {
-          result: false,
-          msg: `Unknown order=${item.order}`,
-        };
-      }
-
-      // 指定默认的命令执行路径
-      if (!item.cwd) {
-        item.cwd = process.cwd();
-      }
-
-      if (!fs.existsSync(item.cwd)) {
-        return {
-          result: false,
-          msg: `Unknown option cwd=${item.cwd}`,
-        };
-      }
-    }
-
-    return {
-      result: true,
-    };
   }
 }

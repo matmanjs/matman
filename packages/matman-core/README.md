@@ -23,21 +23,27 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 
 `MatmanConfig` 类的字段如下：
 
-| 字段名 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| `rootPath` | `String` | 无 | matman 项目的根目录，一般情况是 `matman.config.js` 的目录 |
-| `caseModulesPath` | `String` | `path.resolve(rootPath, './case_modules')` | 测试案例的根目录 |
-| `crawlerBuildPath` | `String` | `path.resolve(rootPath, './build/crawler-script')` | 前端爬虫脚本构建之后的目录 |
-| `crawlerInjectJQuery` | `Boolean` | `true` | 前端爬虫脚本中是否注入jQuery |
-| `screenshotPath` | `String` | `path.resolve(rootPath, './build/screenshot_output')` | 屏幕截图保存的路径 |
-| `coveragePath` | `String` | `path.resolve(rootPath, './build/coverage_output')` | 测试覆盖率文件保存的路径 |
-| `matmanResultPath` | `String` | `path.resolve(rootPath, './build/matman_result_output')` | `MatmanResult` 执行结果数据保存的路径 |
-| `isDevBuild` | `Boolean` | `false` | 是否为开发模式，若值为 `true`，则构建之后的前端爬虫脚本可用于代码调试 |
+| 字段名                | 类型      | 默认值                                                   | 说明                                                                  |
+| --------------------- | --------- | -------------------------------------------------------- | --------------------------------------------------------------------- |
+| `rootPath`            | `String`  | 无                                                       | matman 项目的根目录，与 `matman.config.js` 同级的目录                 |
+| `caseModulesPath`     | `String`  | `path.resolve(rootPath, './src/case_modules')`           | 测试案例的根目录                                                      |
+| `crawlerBuildPath`    | `String`  | `path.resolve(rootPath, './build/crawler-script')`       | 前端爬虫脚本构建之后的目录                                            |
+| `crawlerInjectJQuery` | `Boolean` | `true`                                                   | 前端爬虫脚本中是否注入 jQuery                                         |
+| `screenshotPath`      | `String`  | `path.resolve(rootPath, './build/screenshot_output')`    | 屏幕截图保存的路径                                                    |
+| `coveragePath`        | `String`  | `path.resolve(rootPath, './build/coverage_output')`      | 测试覆盖率文件保存的路径                                              |
+| `matmanResultPath`    | `String`  | `path.resolve(rootPath, './build/matman_result_output')` | `MatmanResult` 执行结果数据保存的路径                                 |
+| `isDevBuild`          | `Boolean` | `false`                                                  | 是否为开发模式，若值为 `true`，则构建之后的前端爬虫脚本可用于代码调试 |
 
 注意，必须要满足以下条件，否则会直接报错：
 
 - `rootPath` 必须真实存在
 - `caseModulesPath` 必须真实存在
+
+#### 2.1.2 setIsDevBuild(isDevBuild)
+
+设置当前是不是开发场景的构建模式。
+
+- `isDevBuild`: `Boolean`，是否为 dev 模式
 
 ### 2.2 MATMAN_CONFIG_FILE
 
@@ -70,7 +76,7 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 - `filePath`: `String`， 模块文件的绝对路径
 
 ### 2.7 isURLMatch(URLToCheck, partialURL, query)
- 
+
 判断指定的 url 是否被部分匹配到
 
 - `URLToCheck`: `String`，待匹配的地址
@@ -80,9 +86,13 @@ matman 方案中的配置文件，默认由项目中的 `matman.config.js` 提�
 ```js
 // true
 isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv');
-isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv',{report_id: 987});
+isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv', {
+  report_id: 987,
+});
 
 // false
 isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv2');
-isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv',{report_id: 123});
+isURLMatch('http://now.qq.com/maybe/report/pv?report_id=987', 'now.qq.com/maybe/report/pv', {
+  report_id: 123,
+});
 ```
