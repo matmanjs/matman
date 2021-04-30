@@ -313,6 +313,7 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
     let result = false;
 
     // 只要找到其中一个匹配即可返回
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < queue.length; i++) {
       const queueItem = queue[i];
       const method = (queueItem.method || 'GET').toUpperCase();
@@ -452,6 +453,7 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
     let result = false;
 
     // 只要找到其中一个匹配即可返回
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < queue.length; i++) {
       const queueItem = queue[i];
 
@@ -488,6 +490,7 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
 
     // string 类型时完全匹配
     if (typeof partialText === 'string') {
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < queue.length; ++i) {
         if (queue[i].text === partialText) {
           return true;
@@ -496,6 +499,7 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
     }
 
     if (partialText instanceof RegExp) {
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < queue.length; ++i) {
         if (partialText.test(queue[i].text)) {
           return true;
@@ -505,6 +509,7 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
       // partialText 有可能为 number 等，因此要转义
       const checkText = `${partialText}`;
 
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < queue.length; ++i) {
         const consoleText = `${queue[i].text}`;
         if (

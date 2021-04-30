@@ -22,6 +22,7 @@ import {
 } from './typings/matmanResult';
 
 import MatmanResult from './model/MatmanResult';
+import WhistleRule from './model/WhistleRule';
 
 import { IMatmanConfigOpts } from './types';
 
@@ -35,6 +36,7 @@ export {
   requireAsync,
   requireSync,
   isURLMatch,
+  WhistleRule,
   CookieConfig,
   ICookieConfigOpts,
   DeviceConfig,
