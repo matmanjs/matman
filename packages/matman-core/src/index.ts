@@ -10,6 +10,7 @@ import { MATMAN_CONFIG_FILE, RUNNER_NAME } from './config';
 import { getAbsolutePath, findMatmanConfig, searchFilePath } from './util';
 import { requireAsync, requireSync } from './util/require-file';
 import { isURLMatch } from './util/url';
+import { createLogger, logger } from './util/logger';
 
 import { IBrowserRunner } from './typings/browserRunner';
 import { IPageDriver } from './typings/pageDriver';
@@ -36,6 +37,8 @@ export {
   requireAsync,
   requireSync,
   isURLMatch,
+  createLogger,
+  logger,
   WhistleRule,
   CookieConfig,
   ICookieConfigOpts,
