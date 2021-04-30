@@ -1,4 +1,4 @@
-export default class PluginCore {
+export default class PluginBase {
   /**
    * 插件名字
    */
