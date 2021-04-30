@@ -1,3 +1,10 @@
 import PluginCore from './PluginApp';
+import DefinedInstance from './DefinedInstance';
 
-export { PluginCore };
+import { buildApp } from './utils';
+
+export {
+  DefinedInstance,
+  PluginCore,
+  buildApp,
+};
