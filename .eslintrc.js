@@ -1,21 +1,13 @@
 module.exports = {
   env: {
-    es2020: true,
+    es6: true,
     node: true,
     mocha: true,
   },
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
+    '@tencent/eslint-config-tencent',
+    '@tencent/eslint-config-tencent/ts',
   ],
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 11,
-    sourceType: 'module',
-  },
-  plugins: ['@typescript-eslint'],
-  rules: {},
   overrides: [
     {
       files: ['*.test.ts', '*.test.js'],
