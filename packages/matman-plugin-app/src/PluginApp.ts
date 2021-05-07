@@ -58,6 +58,8 @@ export default class PluginApp extends PluginBase {
   }
 
   public async setup() {
+    // TODO 从 instance 里面读取 setup 方法并执行
+
     await this.build();
   }
 }

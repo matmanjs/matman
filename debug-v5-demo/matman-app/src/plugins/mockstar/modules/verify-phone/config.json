@@ -1,0 +1,9 @@
+{
+  "description": "手机认证",
+  "route": "/cgi-bin/a/b/verify-phone",
+  "defaultModule": "success",
+  "method": "GET",
+  "tags": [
+    "身份证认证页"
+  ]
+}

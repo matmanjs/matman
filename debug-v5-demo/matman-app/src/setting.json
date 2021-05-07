@@ -1,0 +1,7 @@
+{
+  "plugins": {
+    "app": {
+      "activeInstance": "${definedInstanceDir}/dev.js"
+    }
+  }
+}

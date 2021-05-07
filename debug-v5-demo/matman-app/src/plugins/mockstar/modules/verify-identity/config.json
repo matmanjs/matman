@@ -1,0 +1,9 @@
+{
+  "description": "身份证认证",
+  "route": "/cgi-bin/a/b/verify-identity",
+  "defaultModule": "success",
+  "method": "POST",
+  "tags": [
+    "身份证认证页"
+  ]
+}
