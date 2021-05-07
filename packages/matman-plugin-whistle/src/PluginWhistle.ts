@@ -1,6 +1,8 @@
 // import path from 'path';
 import { PluginBase } from 'matman-plugin-core';
 
+import { startWhistle } from './utils';
+
 
 export default class PluginWhistle extends PluginBase {
   /**
@@ -22,5 +24,9 @@ export default class PluginWhistle extends PluginBase {
 
   public async setup() {
     console.log('==whistle== setup');
+
+    await startWhistle({
+      seqId: this.seqId,
+    });
   }
 }
