@@ -5,7 +5,7 @@ import { ChildProcess, ExecOptions } from 'child_process';
 
 export interface IBuildAppOpts {
   cwd?: string;
-  port?: number;
+  port?: number | string;
   usePort?: boolean;
   checkIfBuildCompleted?: (stdoutData: string) => boolean,
 }
@@ -89,7 +89,7 @@ async function  runByExec(
   //   cmd,
   // });
 
-  logger.info(`即将为${name}执行：${cmd}`);
+  logger.info(`即将为 ${name} 执行：${cmd}`);
 
   // 执行命令
   const cmdRun = await cmdHubUtil.runCmd.runByExec(cmd, options, customCloseHandler);
