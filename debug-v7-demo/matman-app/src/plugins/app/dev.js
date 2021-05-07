@@ -1,6 +1,5 @@
 const path = require('path');
 const { DefinedInstance } = require('../../../../../packages/matman-plugin-app');
-// const { WhistleRule } = require('../../../../../packages/matman');
 
 module.exports = opts => {
   // app 项目根目录
@@ -22,16 +21,19 @@ module.exports = opts => {
 
       // this.cacheData.setCacheItem('projectPort', projectPort);
     },
-    // getWhistleRule: async port => {
-    //   // 代理规则
-    //   const name = opts.name || 'dev';
-    //   const ruleList = [
-    //     'a.com 1.2.3.4',
-    //     `b.com 5.6.7.8:${port}`,
-    //     `c.com/index.html ${rootPath}/build/index.html`,
-    //   ];
+    getWhistleRule: async port => {
+      // 代理规则
+      const name = opts.name || 'dev';
+      const rules = [
+        'a.com 1.2.3.4',
+        `b.com 5.6.7.8:${port}`,
+        `c.com/index.html ${rootPath}/build/index.html`,
+      ];
 
-    //   return new WhistleRule(name, ruleList);
-    // },
+      return {
+        name,
+        rules,
+      };
+    },
   });
 };

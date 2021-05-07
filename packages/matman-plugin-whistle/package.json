@@ -1,0 +1,54 @@
+{
+  "name": "matman-plugin-whistle",
+  "version": "6.0.20",
+  "description": "Matman plugin for whistle",
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsc -d",
+    "test": "npm run test:unit",
+    "test:unit": "mocha 'test/**/*.test.{ts,tsx}'",
+    "test:cover": "nyc npm run test:unit",
+    "lint": "npx eslint src test --ext .ts"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "keywords": [
+    "matman",
+    "e2e",
+    "test",
+    "end-to-end"
+  ],
+  "author": "helinjiang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matmanjs/matman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matmanjs/matman/issues"
+  },
+  "homepage": "https://github.com/matmanjs/matman#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/expect": "^24.3.0",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.11",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "matman-core": "^6.0.20",
+    "matman-plugin-core": "^6.0.20"
+  }
+}
