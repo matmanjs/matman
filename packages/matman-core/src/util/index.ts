@@ -7,6 +7,9 @@ import { MATMAN_CONFIG_FILE } from '../config';
 import { IMatmanConfigOpts } from '../types';
 import { requireSync } from './require-file';
 
+
+type ITargetFunc<P, T> = (...params: P[]) => T;
+
 /**
  * 获得绝对路径地址
  *
@@ -144,4 +147,19 @@ function search(fromCwd: string, fileName: string): string {
   }
 
   return isExist ? currDir : '';
+}
+
+/**
+ * 根据传入的字符串或函数来获得最终的字符串
+ *
+ * @param {String | Function} target 判断目标
+ * @param args 如果 target 为函数，则该值将传入给该函数
+ * @return {String}
+ * @author linjianghe
+ */
+export function getFromStrOrFunc<T, P>(
+  target: string | ITargetFunc<P, T>,
+  ...args: P[]
+): string | T {
+  return typeof target === 'function' ? target(...args) : target;
 }

@@ -7,7 +7,7 @@ import MatmanResultConfig, { IResultOpts } from './config/MatmanResultConfig';
 import MockstarConfig, { IMockstarConfigOpts, IMockstarQueryDataMap } from './config/MockstarConfig';
 import { MATMAN_CONFIG_FILE, RUNNER_NAME } from './config';
 
-import { getAbsolutePath, findMatmanConfig, searchFilePath } from './util';
+import { getAbsolutePath, findMatmanConfig, searchFilePath, getFromStrOrFunc } from './util';
 import { requireAsync, requireSync } from './util/require-file';
 import { isURLMatch } from './util/url';
 import { createLogger, logger } from './util/logger';
@@ -35,6 +35,7 @@ export {
   RUNNER_NAME,
   getAbsolutePath,
   searchFilePath,
+  getFromStrOrFunc,
   findMatmanConfig,
   requireAsync,
   requireSync,
