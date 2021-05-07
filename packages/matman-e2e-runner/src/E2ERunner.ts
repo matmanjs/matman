@@ -82,7 +82,7 @@ export default class E2ERunner {
     for (let index = 0; index < this.plugins.length; index++) {
       const plugin = this.plugins[index];
 
-      await plugin.setup();
+      await plugin.setup.call(plugin);
     }
   }
 
