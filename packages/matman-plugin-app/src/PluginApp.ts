@@ -56,4 +56,8 @@ export default class PluginApp extends PluginBase {
 
     return buildApp(cmd, opts);
   }
+
+  public async setup() {
+    await this.build();
+  }
 }

@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "fs-extra": "^10.0.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "matman-plugin-core": "^6.0.20"
   }
 }

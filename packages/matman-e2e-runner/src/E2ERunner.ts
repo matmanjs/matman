@@ -1,13 +1,14 @@
 import fse from 'fs-extra';
+import { PluginBase } from 'matman-plugin-core';
 
 import { getSeqId } from './util';
 
-interface ProcessCmd {
-  originalCmd: string;
-  processKey: string;
-  cmd: string;
-  t: number;
-}
+// interface ProcessCmd {
+//   originalCmd: string;
+//   processKey: string;
+//   cmd: string;
+//   t: number;
+// }
 
 interface E2ERunnerConfig {
   outputPath: string;
@@ -18,7 +19,7 @@ interface E2ERunnerConfig {
   isRunE2ETest?: boolean;
 }
 
-type StringObject<T> = { [key: string]: T };
+// type StringObject<T> = { [key: string]: T };
 
 export default class E2ERunner {
   public outputPath: string;
@@ -26,10 +27,10 @@ export default class E2ERunner {
   public seqId: string;
   public isDev: boolean;
   public npmRunner?: string;
-  public plugins: string[];
-  private cacheData: StringObject<unknown>;
-  private readonly cacheProcessArr: ProcessCmd[];
-  private readonly startTime: number;
+  public plugins: PluginBase[];
+  // private cacheData: StringObject<unknown>;
+  // private readonly cacheProcessArr: ProcessCmd[];
+  // private readonly startTime: number;
 
   public constructor(config: E2ERunnerConfig) {
     if (!config.outputPath) {
@@ -55,26 +56,39 @@ export default class E2ERunner {
     // 注意不要出现等号，否则whistle里面会有问题
     this.seqId = getSeqId(this.outputPath, this.isDev);
 
-    // 缓存数据
-    this.cacheData = {
-      outputPath: this.outputPath,
-    };
+    // // 缓存数据
+    // this.cacheData = {
+    //   outputPath: this.outputPath,
+    // };
 
-    // 缓存进程，方便后续进行清理
-    this.cacheProcessArr = [];
+    // // 缓存进程，方便后续进行清理
+    // this.cacheProcessArr = [];
 
-    // 初始化开始时间，最终用于计算执行时长
-    this.startTime = Date.now();
+    // // 初始化开始时间，最终用于计算执行时长
+    // this.startTime = Date.now();
 
     this.plugins = [];
+  }
+
+  public addPlugin(plugin: PluginBase) {
+    this.plugins.push(plugin);
   }
 
   public async setup() {
     // 启动构建
     // 启动 mockstar
     // 启动 whistle
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let index = 0; index < this.plugins.length; index++) {
+      const plugin = this.plugins[index];
 
-    // [].forEach setup
+      await plugin.setup();
+    }
+  }
+
+
+  public async runTest() {
+
   }
 
   public async teardown() {
