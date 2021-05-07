@@ -1,21 +1,33 @@
 import { PluginBase } from 'matman-plugin-core';
 
 interface IPluginAppOpts {
-  source: string
+  definedInstanceDir: string
 }
 
 export default class PluginApp extends PluginBase {
   /**
    * 配置文件的目录
    */
-  public source: string;
+  public definedInstanceDir: string;
 
   /**
-   * @param opts {IPluginAppOpts}
+   * 序列号
    */
+  public seqId: string;
+
+
   public constructor(opts: IPluginAppOpts) {
     super('app');
 
-    this.source = opts.source;
+    this.definedInstanceDir = opts.definedInstanceDir;
+    this.seqId = `${this.name}-${Math.random()}`;
+  }
+
+
+  /**
+   * 构建业务工程项目
+   */
+  public build() {
+
   }
 }
