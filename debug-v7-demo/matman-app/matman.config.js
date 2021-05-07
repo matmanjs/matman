@@ -1,7 +1,7 @@
 const path = require('path');
-const { MatmanPluginApp } = require('./npm/matman-plugin-app');
-const { MatmanPluginMockstar } = require('./npm/matman-plugin-mockstar');
-const { MatmanPluginPuppeteer } = require('./npm/matman-plugin-puppeteer');
+const { PluginApp } = require('../../packages/matman-plugin-app');
+
+const workspacePath = '/Users/helinjiang/gitprojects/matman-v7-demo';
 
 // 更多配置说明，请参考 https://matmanjs.github.io/matman/api/matman-config.html
 module.exports = {
@@ -29,29 +29,13 @@ module.exports = {
   // 是否为开发模式
   // isDevBuild: false,
 
-  workspacePath: path.join(__dirname, '../'),
-  outputPath: path.join(__dirname, '../.matman_output'),
+  workspacePath: workspacePath,
+  outputPath: path.join(workspacePath, '.matman_output'),
   plugins: [
-    new MatmanPluginApp({
+    new PluginApp({
       definedInstanceDir: './src/plugins/app',
-      options: {},
-    }),
-    new MatmanPluginMockstar({
-      definedInstanceDir: './src/plugins/mockstar',
-      // TODO 是否需要自动注册代理规则？
-      options: {},
-    }),
-    new MatmanPluginPuppeteer({
-      deviceDefinedInstanceDir: './src/plugins/puppeteer/device',
-      networkConditionDefinedInstanceDir: './src/plugins/puppeteer/network-condition',
-      screenshotConfig: true,
-      // TODO 本地 chrome 浏览器的目录地址
-      options: {},
     }),
   ],
-  pluginSettings: {
-    appInstance: './src/plugins/app',
-  },
   events: {
     setup: () => {
       // install -> build project

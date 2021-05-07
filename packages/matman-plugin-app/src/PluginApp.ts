@@ -1,7 +1,7 @@
-import path from 'path';
+// import path from 'path';
 import { PluginBase } from 'matman-plugin-core';
 
-import { buildApp } from './utils';
+// import { buildApp } from './utils';
 
 interface IPluginAppOpts {
   definedInstanceDir: string
@@ -40,26 +40,32 @@ export default class PluginApp extends PluginBase {
    */
   public async build() {
     // TODO 该值从 setting.json 中的 plugins.app.activeInstance 获取对应的配置读取
-    const cmd = (port?: number) => `npx cross-env ENABLE_E2E_TEST=1 PORT=${port} npm start`;
+    // const cmd = (port?: number) => `npx cross-env ENABLE_E2E_TEST=1 PORT=${port} npm start`;
 
-    // TODO 读取配置
-    const rootPath = path.resolve('/Users/helinjiang/gitprojects/matman-v7-demo');
+    // // TODO 读取配置
+    // const rootPath = path.resolve('/Users/helinjiang/gitprojects/matman-v7-demo');
 
-    // TODO 读取配置
-    const opts = {
-      cwd: rootPath,
-      port: process.env.PROJECT_PORT,
-      usePort: true,
-      checkIfBuildCompleted: (stdoutData: string) => !!(stdoutData && stdoutData.indexOf('Compiled successfully') > -1),
-    } ;
+    // // TODO 读取配置
+    // const opts = {
+    //   cwd: rootPath,
+    //   port: process.env.PROJECT_PORT,
+    //   usePort: true,
+    //   checkIfBuildCompleted: (stdoutData: string) => !!(stdoutData && stdoutData.indexOf('Compiled successfully') > -1),
+    // } ;
 
 
-    return buildApp(cmd, opts);
+    // return buildApp(cmd, opts);
+
+    console.log('====1=====');
   }
 
   public async setup() {
     // TODO 从 instance 里面读取 setup 方法并执行
+    const activeInstance = '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/app/dev.js';
 
-    await this.build();
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const instance = require(activeInstance)();
+
+    await instance.setup(this);
   }
 }

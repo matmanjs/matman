@@ -5,3 +5,5 @@ docs
 packages/matman-cli/generators/**/templates
 demo
 /test
+debug-v7-demo
+tmp

@@ -1,9 +1,10 @@
 import { WhistleRule } from 'matman-core';
 import { DefinedInstanceBase } from 'matman-plugin-core';
+import PluginApp from './PluginApp';
 
 interface DefinedInstanceOpts {
   rootPath: string;
-  setup?: (port?: number) => Promise<void>;
+  setup?: (plugin: PluginApp) => Promise<void>;
   getWhistleRule?: () => Promise<WhistleRule>;
 }
 
@@ -16,7 +17,7 @@ export default class DefinedInstance extends DefinedInstanceBase {
   /**
    * 启动自动化测试之前执行的方法
    */
-  public setupCall?: (port?: number) => Promise<void>;
+  public setupCall?: (plugin: PluginApp) => Promise<void>;
 
 
   /**
@@ -35,9 +36,9 @@ export default class DefinedInstance extends DefinedInstanceBase {
   /**
    * 启动自动化测试之前执行的方法
    */
-  public async setup(): Promise<void> {
+  public async setup(plugin: PluginApp): Promise<void> {
     if (typeof this.setupCall === 'function') {
-      await this.setupCall.call(this);
+      await this.setupCall.call(this, plugin);
     }
   }
 
