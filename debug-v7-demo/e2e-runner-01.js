@@ -10,6 +10,8 @@ const { PluginPuppeteer, CaseModule } = require('../packages/matman-plugin-puppe
     outputPath: path.join(__dirname, '../.matman_output'),
   });
 
+  // 测试地址 https://now.qq.com/index.html
+
   // TODO 读取 matman.config.js 中的内容
   const pluginApp = new PluginApp({
     definedInstanceDir: './src/plugins/app',
@@ -17,7 +19,9 @@ const { PluginPuppeteer, CaseModule } = require('../packages/matman-plugin-puppe
   e2eRunner.addPlugin(pluginApp);
 
   // TODO 读取 matman.config.js 中的内容
-  const pluginWhistle = new PluginWhistle();
+  const pluginWhistle = new PluginWhistle({
+    port: 9430,
+  });
   e2eRunner.addPlugin(pluginWhistle);
 
   // TODO 读取 matman.config.js 中的内容
