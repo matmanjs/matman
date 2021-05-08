@@ -75,9 +75,6 @@ export default class E2ERunner {
   }
 
   public async setup() {
-    // 启动构建
-    // 启动 mockstar
-    // 启动 whistle
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.plugins.length; index++) {
       const plugin = this.plugins[index];
@@ -92,10 +89,11 @@ export default class E2ERunner {
   }
 
   public async teardown() {
-    // 启动构建
-    // 启动 mockstar
-    // 启动 whistle
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let index = 0; index < this.plugins.length; index++) {
+      const plugin = this.plugins[index];
 
-    // [].forEach setup
+      await plugin.teardown.call(plugin);
+    }
   }
 }

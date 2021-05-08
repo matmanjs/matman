@@ -38,4 +38,9 @@ export default class PluginWhistle extends PluginBase {
 
     await this.whistleSDK.start();
   }
+
+  public async teardown() {
+    console.log('==whistle== teardown');
+    await this.whistleSDK.stop();
+  }
 }
