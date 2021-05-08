@@ -1,4 +1,4 @@
-export type ICacheValue = string | number | boolean;
+export type ICacheValue = string | number | boolean | undefined | null;
 
 export interface ICacheData  {
   [key: string]: ICacheValue;

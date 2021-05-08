@@ -25,6 +25,8 @@ export default class PluginMockstar extends PluginBase {
     console.log('==mockstar== setup');
 
     await this.mockstarSDK.start();
+
+    this.cacheData.setCacheItem('port', this.mockstarSDK.port);
   }
 
   public async teardown() {
@@ -49,7 +51,7 @@ export default class PluginMockstar extends PluginBase {
   public getWhistleRule(): WhistleRule | null {
     const instance = this.getActiveInstance();
 
-    const rules = instance.getWhistleRules();
+    const rules = instance.getWhistleRules(this.cacheData);
     if (!rules) {
       return null;
     }

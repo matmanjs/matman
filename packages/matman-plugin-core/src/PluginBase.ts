@@ -1,8 +1,14 @@
+import CacheData from './CacheData';
 export default class PluginBase {
   /**
    * 插件名字
    */
   public name: string;
+
+  /**
+   * 缓存数据
+   */
+  public cacheData: CacheData;
 
   /**
    * 序列号
@@ -11,6 +17,8 @@ export default class PluginBase {
 
   public constructor(name: string) {
     this.name = name;
+
+    this.cacheData = new CacheData;
 
     this.seqId = `${this.name}-${Math.random()}`;
   }

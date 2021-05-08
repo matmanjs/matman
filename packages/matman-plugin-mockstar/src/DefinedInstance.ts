@@ -1,4 +1,4 @@
-import { DefinedInstanceBase } from 'matman-plugin-core';
+import { DefinedInstanceBase, CacheData } from 'matman-plugin-core';
 
 interface IQueryMap{
   [key: string]: string
@@ -27,11 +27,13 @@ export default class DefinedInstance extends DefinedInstanceBase {
   /**
    * 获取 whistle 规则
    */
-  public getWhistleRules(): string | string[] {
+  public getWhistleRules(cacheData: CacheData): string | string[] {
+    const port = cacheData.getCacheItem('port');
+
     // TODO 应该从 queryMap 中自动获取
     return [
-      '/(.*)/cgi-bin/a/b/verify-identity(.*)/ 127.0.0.1:9440',
-      '/(.*)/cgi-bin/a/b/verify-phone(.*)/ 127.0.0.1:9440',
+      `/(.*)/cgi-bin/a/b/verify-identity(.*)/ 127.0.0.1:${port}`,
+      `/(.*)/cgi-bin/a/b/verify-phone(.*)/ 127.0.0.1:${port}`,
     ];
   }
 }
