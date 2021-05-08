@@ -18,21 +18,10 @@ export default class PluginApp extends PluginBase {
    */
   public cwd?: string;
 
-  /**
-   * 序列号
-   */
-  public seqId: string;
-
-
   public constructor(opts: IPluginAppOpts) {
     super('app');
 
     this.definedInstanceDir = opts.definedInstanceDir;
-    this.seqId = `${this.name}-${Math.random()}`;
-  }
-
-  public setSeqId(seqId: string) {
-    this.seqId = seqId;
   }
 
   /**

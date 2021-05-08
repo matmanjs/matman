@@ -4,8 +4,15 @@ export default class PluginBase {
    */
   public name: string;
 
+  /**
+   * 序列号
+   */
+  public seqId: string;
+
   public constructor(name: string) {
     this.name = name;
+
+    this.seqId = `${this.name}-${Math.random()}`;
   }
 
   /**
@@ -20,5 +27,9 @@ export default class PluginBase {
    */
   public async teardown() {
     // 例如清理工作、处理测试产物等
+  }
+
+  public setSeqId(seqId: string) {
+    this.seqId = seqId;
   }
 }
