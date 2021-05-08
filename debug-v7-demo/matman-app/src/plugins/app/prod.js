@@ -13,7 +13,12 @@ module.exports = opts => {
       });
     },
     getWhistleRules: () => {
-      return ['a.com 1.2.3.4', `b.com 5.6.7.8`, `c.com/index.html ${rootPath}/build/index.html`];
+      return [
+        'now.qq.com/maybe/report statusCode://200',
+        `now.qq.com/manifest.json ${rootPath}/build/manifest.json`,
+        `/^https?://now\\.qq\\.com/static/(.*)$/ ${rootPath}/build/static/$1`,
+        `/^https?://now\\.qq\\.com/([\\w\\-]*)(.*)$/ ${rootPath}/build/index.html`,
+      ];
     },
   });
 };

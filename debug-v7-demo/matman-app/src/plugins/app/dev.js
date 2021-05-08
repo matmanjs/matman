@@ -18,9 +18,9 @@ module.exports = opts => {
     },
     getWhistleRules: port => {
       return [
-        'a.com 1.2.3.4',
-        `b.com 5.6.7.8:${port}`,
-        `c.com/index.html ${rootPath}/build/index.html`,
+        'now.qq.com/maybe/report statusCode://200',
+        `now.qq.com 127.0.0.1:${port}`,
+        `now.qq.com/manifest.json ${rootPath}/public/manifest.json`,
       ];
     },
   });
