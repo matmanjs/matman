@@ -49,7 +49,7 @@ const { PluginMockstar } = require('../packages/matman-plugin-mockstar');
     filename: __filename,
   });
 
-  await caseModule.handleDependencies(pluginWhistle, pluginApp);
+  await caseModule.handleDependencies(pluginWhistle, pluginApp, pluginMockstar);
 
   // 设置代理规则：项目 & mockstar
 
