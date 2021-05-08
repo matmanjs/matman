@@ -5,7 +5,7 @@ module.exports = opts => {
   // app 项目根目录
   const rootPath = path.resolve(__dirname, '/Users/helinjiang/gitprojects/matman-v7-demo');
 
-  return new DefinedInstance({
+  return new DefinedInstance('构建本地开发版本', {
     rootPath,
     setup: async pluginApp => {
       await pluginApp.build(port => `npx cross-env ENABLE_E2E_TEST=1 PORT=${port} npm start`, {

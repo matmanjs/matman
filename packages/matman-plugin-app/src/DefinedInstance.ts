@@ -24,8 +24,8 @@ export default class DefinedInstance extends DefinedInstanceBase {
    */
   public getWhistleRulesCall?: () => string | string[];
 
-  public constructor(opts: DefinedInstanceOpts) {
-    super();
+  public constructor(name: string, opts: DefinedInstanceOpts) {
+    super(name);
 
     this.rootPath = opts.rootPath;
     this.setupCall = opts.setup;
