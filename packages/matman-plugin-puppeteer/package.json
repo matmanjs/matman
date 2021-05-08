@@ -49,7 +49,9 @@
   },
   "dependencies": {
     "matman-core": "^6.0.20",
+    "matman-plugin-app": "^6.0.20",
     "matman-plugin-core": "^6.0.20",
+    "matman-plugin-whistle": "^6.0.20",
     "whistle-sdk": "^0.1.0"
   }
 }
