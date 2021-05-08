@@ -85,7 +85,12 @@ export default class E2ERunner {
 
 
   public async runTest() {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let index = 0; index < this.plugins.length; index++) {
+      const plugin = this.plugins[index];
 
+      await plugin.runTest.call(plugin);
+    }
   }
 
   public async teardown() {

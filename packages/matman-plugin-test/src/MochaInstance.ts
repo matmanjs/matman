@@ -1,11 +1,13 @@
 import { DefinedInstanceBase } from 'matman-plugin-core';
+import { util as cmdHubUtil } from 'cmd-hub';
 
+import { ITestDefinedInstance } from './types';
 interface MochaInstanceOpts {
   cwd: string;
   mochawesomeJsonFilePath?: string;
 }
 
-export default class MochaInstance extends DefinedInstanceBase {
+export default class MochaInstance extends DefinedInstanceBase implements ITestDefinedInstance {
   public cmd: string;
   public cwd: string;
   public mochawesomeJsonFilePath?: string;
@@ -17,5 +19,14 @@ export default class MochaInstance extends DefinedInstanceBase {
     this.cmd = cmd;
     this.cwd = opts.cwd;
     this.mochawesomeJsonFilePath = opts.mochawesomeJsonFilePath;
+  }
+
+  public async run(): Promise<void> {
+    console.log('==run test===', this.cmd);
+
+    // 执行命令
+    await cmdHubUtil.runCmd.runByExec(this.cmd, {
+      cwd: this.cwd,
+    });
   }
 }

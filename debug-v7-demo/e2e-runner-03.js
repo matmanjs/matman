@@ -4,6 +4,7 @@ const { PluginApp } = require('../packages/matman-plugin-app/lib');
 const { PluginWhistle } = require('../packages/matman-plugin-whistle/lib');
 const { PluginPuppeteer, CaseModule } = require('../packages/matman-plugin-puppeteer/lib');
 const { PluginMockstar } = require('../packages/matman-plugin-mockstar');
+const { PluginTest } = require('../packages/matman-plugin-test');
 
 (async () => {
   const e2eRunner = new E2ERunner({
@@ -41,6 +42,12 @@ const { PluginMockstar } = require('../packages/matman-plugin-mockstar');
   });
   e2eRunner.addPlugin(pluginPuppeteer);
 
+  // TODO 读取 matman.config.js 中的内容
+  const pluginTest = new PluginTest({
+    definedInstanceDir: './src/plugins/test',
+  });
+  e2eRunner.addPlugin(pluginTest);
+
   await e2eRunner.setup();
 
   // await pluginPuppeteer.handleDependencies(pluginWhistle, pluginApp);
@@ -53,7 +60,7 @@ const { PluginMockstar } = require('../packages/matman-plugin-mockstar');
 
   // 设置代理规则：项目 & mockstar
 
-  // await e2eRunner.runTest();
+  await e2eRunner.runTest();
 
   // await e2eRunner.teardown();
 })();
