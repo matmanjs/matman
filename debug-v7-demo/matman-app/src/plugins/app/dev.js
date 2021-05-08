@@ -8,18 +8,13 @@ module.exports = opts => {
   return new DefinedInstance({
     rootPath,
     setup: async pluginApp => {
-      const projectPort = await pluginApp.build(
-        port => `npx cross-env ENABLE_E2E_TEST=1 PORT=${port} npm start`,
-        {
-          cwd: rootPath,
-          port: process.env.PROJECT_PORT,
-          usePort: true,
-          checkIfBuildCompleted: stdoutData =>
-            stdoutData && stdoutData.indexOf('Compiled successfully') > -1,
-        },
-      );
-
-      // this.cacheData.setCacheItem('projectPort', projectPort);
+      await pluginApp.build(port => `npx cross-env ENABLE_E2E_TEST=1 PORT=${port} npm start`, {
+        cwd: rootPath,
+        port: process.env.PROJECT_PORT,
+        usePort: true,
+        checkIfBuildCompleted: stdoutData =>
+          stdoutData && stdoutData.indexOf('Compiled successfully') > -1,
+      });
     },
     getWhistleRule: async port => {
       // 代理规则
