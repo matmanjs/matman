@@ -5,12 +5,12 @@
 ## 1. 安装
 
 ```
-$ npm install matman-plugin-whistle --save
+$ npm install matman-plugin-test --save
 ```
 
 ## 2. 功能介绍
 
-自动化测试插件，用于在自动化测试时做代理服务。
+自动化测试插件，用于在自动化测试之前构建本地的项目。
 
 ## 3. API 说明
 

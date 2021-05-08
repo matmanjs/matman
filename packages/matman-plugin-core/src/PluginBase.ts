@@ -31,6 +31,13 @@ export default class PluginBase {
   }
 
   /**
+   * 执行自动化测试
+   */
+  public async runTest() {
+    // 例如 run test
+  }
+
+  /**
    * 自动化测试之后执行
    */
   public async teardown() {
