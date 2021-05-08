@@ -1,5 +1,6 @@
 // import path from 'path';
 import { PluginBase } from 'matman-plugin-core';
+import { WhistleRule } from 'whistle-sdk';
 
 import { buildApp, IBuildAppCmd, IBuildAppOpts } from './utils';
 import DefinedInstance from './DefinedInstance';
@@ -65,5 +66,16 @@ export default class PluginApp extends PluginBase {
     console.log('--PluginApp instance--', instance);
 
     return instance;
+  }
+
+  public getWhistleRule(): WhistleRule | null {
+    const instance = this.getActiveInstance();
+
+    const data = instance.getWhistleRule();
+    if (!data) {
+      return data;
+    }
+
+    return new WhistleRule(data.name, data.rules);
   }
 }

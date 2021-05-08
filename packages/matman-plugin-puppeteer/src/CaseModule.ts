@@ -24,18 +24,14 @@ export default class CaseModule {
     // buildApp
     // useMockServer
 
-    // TODO 从 instance 里面读取 setup 方法并执行
-    // const activeInstance = '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/app/dev.js';
-    const activeInstance = '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/app/prod.js';
+    debugger;
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const instance = require(activeInstance)();
-
-    console.log('--PluginPuppeteer instance--', instance);
-
-    pluginWhistle.setRules({
-      getWhistleRules: instance.getWhistleRules,
-    });
+    const whistleRule = pluginApp.getWhistleRule();
+    if (whistleRule) {
+      pluginWhistle.setRules({
+        getWhistleRules: () => whistleRule.getConfig(),
+      });
+    }
   }
 }
 

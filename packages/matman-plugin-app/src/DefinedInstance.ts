@@ -1,11 +1,15 @@
-import { WhistleRule } from 'matman-core';
 import { DefinedInstanceBase } from 'matman-plugin-core';
 import PluginApp from './PluginApp';
+
+interface IWhistleRuleResult {
+  name: string;
+  rules: string | string[];
+}
 
 interface DefinedInstanceOpts {
   rootPath: string;
   setup?: (plugin: PluginApp) => Promise<void>;
-  getWhistleRule?: () => Promise<WhistleRule>;
+  getWhistleRule?: () => IWhistleRuleResult;
 }
 
 export default class DefinedInstance extends DefinedInstanceBase {
@@ -23,7 +27,7 @@ export default class DefinedInstance extends DefinedInstanceBase {
   /**
    * 获取 whistle 规则
    */
-  public getWhistleRuleCall?: () => Promise<WhistleRule>;
+  public getWhistleRuleCall?: () => IWhistleRuleResult;
 
   public constructor(opts: DefinedInstanceOpts) {
     super();
@@ -45,7 +49,7 @@ export default class DefinedInstance extends DefinedInstanceBase {
   /**
    * 获取 whistle 规则
    */
-  public async getWhistleRule(): Promise<WhistleRule | null> {
+  public getWhistleRule(): IWhistleRuleResult | null{
     if (typeof this.getWhistleRuleCall === 'function') {
       return this.getWhistleRuleCall.call(this);
     }

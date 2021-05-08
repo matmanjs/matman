@@ -14,7 +14,7 @@ module.exports = opts => {
     },
     getWhistleRule: () => {
       // 代理规则
-      const name = opts.name || 'prod';
+      const name = 'prod';
       const rules = [
         'a.com 1.2.3.4',
         `b.com 5.6.7.8`,
@@ -23,7 +23,7 @@ module.exports = opts => {
 
       return {
         name,
-        rules: rules.join('\n'),
+        rules,
       };
     },
   });

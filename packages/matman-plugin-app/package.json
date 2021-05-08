@@ -50,6 +50,7 @@
   "dependencies": {
     "cmd-hub": "^0.1.0",
     "matman-core": "^6.0.20",
-    "matman-plugin-core": "^6.0.20"
+    "matman-plugin-core": "^6.0.20",
+    "whistle-sdk": "^0.2.0"
   }
 }
