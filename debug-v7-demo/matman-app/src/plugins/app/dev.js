@@ -32,7 +32,7 @@ module.exports = opts => {
 
       return {
         name,
-        rules,
+        rules: rules.join('\n'),
       };
     },
   });
