@@ -53,6 +53,6 @@
     "lodash": "^4.17.21",
     "matman-core": "^6.0.20",
     "matman-plugin-core": "^6.0.20",
-    "whistle-sdk": "^0.2.0"
+    "mockstar-local-server": "^1.3.21"
   }
 }
