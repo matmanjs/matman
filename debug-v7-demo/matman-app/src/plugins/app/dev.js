@@ -16,19 +16,12 @@ module.exports = opts => {
           stdoutData && stdoutData.indexOf('Compiled successfully') > -1,
       });
     },
-    getWhistleRule: port => {
-      // 代理规则
-      const name = 'dev';
-      const rules = [
+    getWhistleRules: port => {
+      return [
         'a.com 1.2.3.4',
         `b.com 5.6.7.8:${port}`,
         `c.com/index.html ${rootPath}/build/index.html`,
       ];
-
-      return {
-        name,
-        rules,
-      };
     },
   });
 };

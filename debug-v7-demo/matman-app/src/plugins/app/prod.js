@@ -12,19 +12,8 @@ module.exports = opts => {
         cwd: rootPath,
       });
     },
-    getWhistleRule: () => {
-      // 代理规则
-      const name = 'prod';
-      const rules = [
-        'a.com 1.2.3.4',
-        `b.com 5.6.7.8`,
-        `c.com/index.html ${rootPath}/build/index.html`,
-      ];
-
-      return {
-        name,
-        rules,
-      };
+    getWhistleRules: () => {
+      return ['a.com 1.2.3.4', `b.com 5.6.7.8`, `c.com/index.html ${rootPath}/build/index.html`];
     },
   });
 };

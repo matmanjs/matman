@@ -71,11 +71,12 @@ export default class PluginApp extends PluginBase {
   public getWhistleRule(): WhistleRule | null {
     const instance = this.getActiveInstance();
 
-    const data = instance.getWhistleRule();
-    if (!data) {
-      return data;
+    const rules = instance.getWhistleRules();
+    if (!rules) {
+      return null;
     }
 
-    return new WhistleRule(data.name, data.rules);
+    // TODO 这里的 name 需要自动生成，例如按照当前 case module 的名字来生成
+    return new WhistleRule('prod', rules);
   }
 }
