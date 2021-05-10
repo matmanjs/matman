@@ -37,7 +37,7 @@ export default class CaseModule {
     this.pluginMockstar = pluginMockstar;
   }
 
-  public async handleDependencies(pluginWhistle: PluginWhistle, pluginApp: PluginApp, pluginMockstar: PluginMockstar) {
+  public async handleDependencies() {
     console.log('==CaseModule== handleDependencies');
 
     // appInstance
@@ -55,12 +55,12 @@ export default class CaseModule {
     // }
 
 
-    const whistleRuleFromApp = pluginApp.getWhistleRule();
-    const whistleRuleFromMockstar = pluginMockstar.getWhistleRule();
+    const whistleRuleFromApp = this.pluginApp?.getWhistleRule();
+    const whistleRuleFromMockstar = this.pluginMockstar?.getWhistleRule();
 
 
     if (whistleRuleFromApp || whistleRuleFromMockstar) {
-      pluginWhistle.setRules({
+      this.pluginWhistle?.setRules({
         getWhistleRules: () => {
           const name = 'none';
           const newContentArr: string[] = [];
