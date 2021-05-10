@@ -1,8 +1,13 @@
-// import path from 'path';
+import path from 'path';
+import _ from 'lodash';
+
+import matman from 'matman';
+
 import { PluginWhistle } from 'matman-plugin-whistle';
 import { PluginApp } from 'matman-plugin-app';
 import { PluginMockstar } from 'matman-plugin-mockstar';
-import { getPuppeteerDefinedDevice } from 'matman-runner-puppeteer';
+import { BrowserRunner, getPuppeteerDefinedDevice } from 'matman-runner-puppeteer';
+
 
 interface ICaseModuleOpts {
   filename?: string;
@@ -11,8 +16,25 @@ interface ICaseModuleOpts {
 export default class CaseModule {
   public filename?: string;
 
+
+  public pluginWhistle?: PluginWhistle;
+  public pluginApp?: PluginApp;
+  public pluginMockstar?: PluginMockstar;
+
   public constructor(opts: ICaseModuleOpts) {
     this.filename = opts.filename;
+  }
+
+  public setPluginWhistle(pluginWhistle: PluginWhistle) {
+    this.pluginWhistle = pluginWhistle;
+  }
+
+  public setPluginApp(pluginApp: PluginApp) {
+    this.pluginApp = pluginApp;
+  }
+
+  public setPluginMockstar(pluginMockstar: PluginMockstar) {
+    this.pluginMockstar = pluginMockstar;
   }
 
   public async handleDependencies(pluginWhistle: PluginWhistle, pluginApp: PluginApp, pluginMockstar: PluginMockstar) {
@@ -86,6 +108,37 @@ export default class CaseModule {
       return definedDevice;
     });
     console.log(r);
+
+    //
+  }
+
+  // 执行
+  public async run(pageDriverOpts: any) {
+    // 创建 PageDriver
+
+
+    // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
+    const pageDriver = await matman.launch(
+      new BrowserRunner(),
+      _.merge({}, pageDriverOpts, { caseModuleFilePath: this.filename }),
+    );
+
+    // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
+    await pageDriver.useProxyServer(await matman.getLocalWhistleServer(8899));
+
+    // 使用 mockstar 来做 mock server 用于构造假数据
+    // if (queryDataMap || pageDriverOpts.queryDataMap) {
+    //   await pageDriver.useMockstar(_.merge({}, queryDataMap, pageDriverOpts.queryDataMap));
+    // }
+
+    // 设置浏览器设备型号
+    // await pageDriver.setDeviceConfig(DEVICE.IOS_IPHONE_6);
+
+    // 设置截屏
+    await pageDriver.setScreenshotConfig(true);
+
+    // 获取结果
+    return pageDriver.evaluate(path.join(__dirname, './crawlers/get-page-info.js'));
   }
 }
 

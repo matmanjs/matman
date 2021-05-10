@@ -42,7 +42,10 @@ const { PluginPuppeteer, CaseModule } = require('../packages/matman-plugin-puppe
     filename: __filename,
   });
 
-  await caseModule.handleDependencies(pluginWhistle, pluginApp);
+  caseModule.setPluginApp(pluginApp);
+  caseModule.setPluginWhistle(pluginWhistle);
+
+  await caseModule.handleDependencies();
 
   // 设置代理规则：项目 & mockstar
 
