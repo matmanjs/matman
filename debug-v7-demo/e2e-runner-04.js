@@ -78,7 +78,9 @@ const { PluginTest } = require('../packages/matman-plugin-test');
   caseModule.setPluginMockstar(pluginMockstar);
 
   await caseModule.handleDependencies();
-  await caseModule.run();
+  const result = await caseModule.run();
+
+  console.log(JSON.stringify(result, null, 2));
 
   // 设置代理规则：项目 & mockstar
 

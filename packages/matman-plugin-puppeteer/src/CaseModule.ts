@@ -1,7 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
 
-import { getLocalWhistleServer, launch, PageDriverAsync } from 'matman';
+import { launch, PageDriverAsync } from 'matman';
 
 import { PluginWhistle } from 'matman-plugin-whistle';
 import { PluginApp } from 'matman-plugin-app';
@@ -152,7 +152,7 @@ export default class CaseModule {
     await this.handler(pageDriver);
 
     // 获取结果
-    return pageDriver.evaluate(path.join(path.dirname(__filename), './crawlers/get-page-info.js'));
+    return pageDriver.evaluate(path.join(path.dirname(this.filename), './crawlers/get-page-info.js'));
   }
 }
 
