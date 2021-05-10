@@ -2,12 +2,11 @@
 import { PluginWhistle } from 'matman-plugin-whistle';
 import { PluginApp } from 'matman-plugin-app';
 import { PluginMockstar } from 'matman-plugin-mockstar';
-
+import { getPuppeteerDefinedDevice } from 'matman-runner-puppeteer';
 
 interface ICaseModuleOpts {
   filename?: string;
 }
-
 
 export default class CaseModule {
   public filename?: string;
@@ -65,6 +64,28 @@ export default class CaseModule {
         },
       });
     }
+  }
+
+  public async handleExtends() {
+    console.log('==CaseModule== handleExtends');
+
+    // 获取 deviceInstance
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const deviceInstance01 = require('/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/puppeteer/device/iPhone6.js');
+    console.log(deviceInstance01);
+
+    // 获取 deviceInstance
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const deviceInstance02 = require('/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/puppeteer/device/iPhoneXCustom.js');
+    const r = deviceInstance02((deviceName: string) => {
+      const definedDevice = getPuppeteerDefinedDevice(deviceName);
+      if (!definedDevice) {
+        throw new Error(`${deviceName} is not in puppeteer.devices! Please check https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts`);
+      }
+
+      return definedDevice;
+    });
+    console.log(r);
   }
 }
 
