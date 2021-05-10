@@ -1,7 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
 
-import matman from 'matman';
+import { getLocalWhistleServer, launch, PageDriverAsync } from 'matman';
 
 import { PluginWhistle } from 'matman-plugin-whistle';
 import { PluginApp } from 'matman-plugin-app';
@@ -10,11 +10,15 @@ import { BrowserRunner, getPuppeteerDefinedDevice } from 'matman-runner-puppetee
 
 
 interface ICaseModuleOpts {
-  filename?: string;
+  filename: string;
+  handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
+  crawler: string;
 }
 
 export default class CaseModule {
-  public filename?: string;
+  public filename: string;
+  public handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
+  public crawler: string;
 
 
   public pluginWhistle?: PluginWhistle;
@@ -23,6 +27,8 @@ export default class CaseModule {
 
   public constructor(opts: ICaseModuleOpts) {
     this.filename = opts.filename;
+    this.handler = opts.handler;
+    this.crawler = opts.crawler;
   }
 
   public setPluginWhistle(pluginWhistle: PluginWhistle) {
@@ -118,13 +124,18 @@ export default class CaseModule {
 
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
-    const pageDriver = await matman.launch(
+    const pageDriver = await launch(
       new BrowserRunner(),
-      _.merge({}, pageDriverOpts, { caseModuleFilePath: this.filename }),
+      _.merge({
+        show: true,
+        doNotCloseBrowser: true,
+        useRecorder: true,
+      }, pageDriverOpts, { caseModuleFilePath: this.filename }),
     );
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
-    await pageDriver.useProxyServer(await matman.getLocalWhistleServer(8899));
+    // await pageDriver.useProxyServer(await getLocalWhistleServer(this.pluginWhistle?.cacheData.getCacheItem('port') as number));
+    await pageDriver.useProxyServer('127.0.0.1:9430');
 
     // 使用 mockstar 来做 mock server 用于构造假数据
     // if (queryDataMap || pageDriverOpts.queryDataMap) {
@@ -137,8 +148,11 @@ export default class CaseModule {
     // 设置截屏
     await pageDriver.setScreenshotConfig(true);
 
+    // 操作
+    await this.handler(pageDriver);
+
     // 获取结果
-    return pageDriver.evaluate(path.join(__dirname, './crawlers/get-page-info.js'));
+    return pageDriver.evaluate(path.join(path.dirname(__filename), './crawlers/get-page-info.js'));
   }
 }
 
