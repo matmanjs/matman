@@ -17,7 +17,7 @@ export interface ISetupOptions {
  * matman 的配置类型
  * 同时为配置文件的结构, 当前对配置文件的解析只限制为 JS
  *
- * @member rootPath  matman 项目的根目录
+ * @member matmanRootPath  matman 项目的根目录
  * @member caseModulesPath 测试案例的根目录
  * @member crawlerBuildPath 前端爬虫脚本构建之后的目录
  * @member crawlerInjectJQuery 前端爬虫脚本中是否注入jQuery
@@ -28,7 +28,7 @@ export interface ISetupOptions {
  * @member setupOptions 提供 IDE 的启动命令
  */
 export interface IMatmanConfigOpts {
-  rootPath?: string;
+  matmanRootPath?: string;
   caseModulesPath?: string;
   crawlerBuildPath?: string;
   crawlerInjectJQuery?: boolean;

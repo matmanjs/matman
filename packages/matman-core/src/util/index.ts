@@ -7,7 +7,6 @@ import { MATMAN_CONFIG_FILE } from '../config';
 import { IMatmanConfigOpts } from '../types';
 import { requireSync } from './require-file';
 
-
 type ITargetFunc<P, T> = (...params: P[]) => T;
 
 /**
@@ -77,7 +76,7 @@ export function findMatmanConfig(
   // 1. 通过 MatmanConfigOpts 直接传递数据
   // 2. 使用 matman.config.js 文件，我们自行读取
 
-  // 获取 rootPath，优先级：matmanConfigOpts > matman.config.js 中的定义 > matman.config.js 目录 > package.json 目录
+  // 获取 matmanRootPath，优先级：matmanConfigOpts > matman.config.js 中的定义 > matman.config.js 目录 > package.json 目录
 
   // 尝试获得 matman.config.js 文件
   const matmanConfigFilePath = searchFilePath(basePath, MATMAN_CONFIG_FILE);
@@ -93,12 +92,12 @@ export function findMatmanConfig(
     configData = _.merge({}, matmanConfigOpts);
   }
 
-  // 获取 rootPath，优先级：matmanConfigOpts > matman.config.js 中的定义 > matman.config.js 目录 > package.json 目录
-  // 如果 rootPath 不存在，则需要自动计算
-  if (!configData.rootPath || !fs.existsSync(configData.rootPath)) {
+  // 获取 matmanRootPath，优先级：matmanConfigOpts > matman.config.js 中的定义 > matman.config.js 目录 > package.json 目录
+  // 如果 matmanRootPath 不存在，则需要自动计算
+  if (!configData.matmanRootPath || !fs.existsSync(configData.matmanRootPath)) {
     if (matmanConfigFilePath) {
       // 如果存在 matman.config.js 文件，则取该文件目录
-      configData.rootPath = path.dirname(matmanConfigFilePath);
+      configData.matmanRootPath = path.dirname(matmanConfigFilePath);
     } else {
       // 否则获取 package.json 目录
       const packageFilePath = searchFilePath(basePath, 'package.json');
@@ -106,19 +105,19 @@ export function findMatmanConfig(
         // 如果连 package.json 都找不到，直接报错吧
         return null;
       }
-      configData.rootPath = path.dirname(packageFilePath);
+      configData.matmanRootPath = path.dirname(packageFilePath);
     }
   }
 
   // 根据配置内容获得 matmanConfig 的对象
-  if (!configData.rootPath) {
-    throw new Error('rootPath must be defined');
+  if (!configData.matmanRootPath) {
+    throw new Error('matmanRootPath should defined!');
   }
 
   try {
-    return new MatmanConfig(configData.rootPath, configData);
+    return new MatmanConfig(configData.matmanRootPath, configData);
   } catch (err) {
-    console.error((err?.message) || err);
+    console.error(err?.message || err);
     return null;
   }
 }

@@ -5,7 +5,7 @@ import { getAbsolutePath } from '../util';
 import { IMatmanConfigOpts, ISetupOptions } from '../types';
 
 export default class MatmanConfig {
-  public rootPath: string;
+  public matmanRootPath: string;
   public caseModulesPath: string;
   public crawlerBuildPath: string;
   public crawlerInjectJQuery: boolean;
@@ -15,31 +15,34 @@ export default class MatmanConfig {
   public isDevBuild: boolean;
   public setupOptions: ISetupOptions[];
 
-  public constructor(rootPath: string, opts: IMatmanConfigOpts = {}) {
+  public constructor(matmanRootPath: string, opts: IMatmanConfigOpts = {}) {
     // 消除警告, 其实会被覆盖
     this.isDevBuild = false;
 
     // 项目根目录
     // 根目录是必须的，因为会有一些默认值都是基于这个根目录而言
     // 获取值的优先级为：参数指定 > matman.config.js 路径 > package.json 路径
-    this.rootPath = getAbsolutePath(rootPath);
+    this.matmanRootPath = getAbsolutePath(matmanRootPath);
 
-    if (!fs.existsSync(this.rootPath)) {
-      throw new Error(`Unknown rootPath=${this.rootPath}`);
+    if (!fs.existsSync(this.matmanRootPath)) {
+      throw new Error(`Unknown matmanRootPath=${this.matmanRootPath}`);
     }
 
     // 测试案例的根目录
-    this.caseModulesPath = getAbsolutePath(opts.caseModulesPath || './src/case_modules', this.rootPath);
+    this.caseModulesPath = getAbsolutePath(
+      opts.caseModulesPath || './src/case_modules',
+      this.matmanRootPath,
+    );
 
-    // 如果默认的 caseModulesPath 不存在，则复用 rootPath
+    // 如果默认的 caseModulesPath 不存在，则复用 matmanRootPath
     if (!fs.existsSync(this.caseModulesPath)) {
-      this.caseModulesPath = this.rootPath;
+      this.caseModulesPath = this.matmanRootPath;
     }
 
     // crawler script 构建之后的目录
     this.crawlerBuildPath = getAbsolutePath(
       opts.crawlerBuildPath || './build/crawler-script',
-      this.rootPath,
+      this.matmanRootPath,
     );
 
     // 前端爬虫脚本中是否注入jQuery，默认值为 true
@@ -48,19 +51,19 @@ export default class MatmanConfig {
     // 屏幕截图保存的路径
     this.screenshotPath = getAbsolutePath(
       opts.screenshotPath || './build/screenshot_output',
-      this.rootPath,
+      this.matmanRootPath,
     );
 
     // 覆盖率文件保存的路径
     this.coveragePath = getAbsolutePath(
       opts.coveragePath || './build/coverage_output',
-      this.rootPath,
+      this.matmanRootPath,
     );
 
     // MatmanResult 执行结果数据保存的路径
     this.matmanResultPath = getAbsolutePath(
       opts.matmanResultPath || './build/matman_result_output',
-      this.rootPath,
+      this.matmanRootPath,
     );
 
     // 设置 dev 开发模式
