@@ -21,10 +21,12 @@ export default class PluginTest extends PluginBase {
   }
 
   public async runTest(e2eRunner: E2ERunner) {
+    debugger;
+
     await super.runTest(e2eRunner);
 
     logger.info('Begin to runTest ...');
-
+    debugger;
     const instance = this.getActiveInstance();
 
     await instance.run();

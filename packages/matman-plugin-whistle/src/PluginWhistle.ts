@@ -6,7 +6,8 @@ import { E2ERunner } from 'matman-core';
 import WhistleSDK, { ISetRulesOpts } from 'whistle-sdk';
 
 interface IPluginWhistleOpts {
-  port?: number
+  port?: number;
+  seqId?: string;
 }
 
 export default class PluginWhistle extends PluginBase {
@@ -14,6 +15,10 @@ export default class PluginWhistle extends PluginBase {
 
   public constructor(opts?: IPluginWhistleOpts) {
     super('whistle');
+
+    if (opts?.seqId) {
+      this.seqId = opts.seqId;
+    }
 
     this.whistleSDK = new WhistleSDK({
       seqId: this.seqId,

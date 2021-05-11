@@ -2,19 +2,13 @@ import path from 'path';
 import _ from 'lodash';
 
 import { launch, PageDriverAsync, IPageDriverOpts } from 'matman';
+import { CacheData } from 'matman-core';
 
-import { PluginWhistle } from 'matman-plugin-whistle';
-import { PluginApp, PluginAppInstance } from 'matman-plugin-app';
-import {
-  PluginMockstar,
-  PluginMockstarInstance,
-  getPluginMockstarInstance,
-} from 'matman-plugin-mockstar';
+import { PluginAppInstance, getPluginAppInstance } from 'matman-plugin-app';
+import { PluginMockstarInstance, getPluginMockstarInstance } from 'matman-plugin-mockstar';
+import { PluginWhistle, getLocalWhistleServer } from 'matman-plugin-whistle';
 import { BrowserRunner } from 'matman-runner-puppeteer';
 import DeviceInstance, { getDeviceInstance } from './DeviceInstance';
-import { E2ERunner } from 'matman-core';
-
-const globalAny: any = global;
 
 interface ICaseModuleOpts {
   filename: string;
@@ -27,23 +21,24 @@ interface ICaseModuleOpts {
   };
 }
 
+
 export default class CaseModule {
   public filename: string;
   public handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
   public crawler: string;
 
-  public pluginWhistle?: PluginWhistle;
-  public pluginApp?: PluginApp;
-  public pluginMockstar?: PluginMockstar;
 
   private readonly deviceInstance: DeviceInstance | null;
   private pluginAppInstance: PluginAppInstance | null;
   private pluginMockstarInstance: PluginMockstarInstance | null;
 
+  private readonly pluginAppInstanceFromOpts?: boolean;
+
   public constructor(opts: ICaseModuleOpts) {
     this.filename = opts.filename;
     this.handler = opts.handler;
     this.crawler = opts.crawler;
+    this.pluginAppInstanceFromOpts = opts.dependencies?.pluginAppInstance;
 
     this.deviceInstance = getDeviceInstance(opts.dependencies?.deviceInstance);
 
@@ -51,23 +46,26 @@ export default class CaseModule {
     this.pluginAppInstance = null;
   }
 
-  public setPluginWhistle(pluginWhistle: PluginWhistle) {
-    this.pluginWhistle = pluginWhistle;
-  }
+  // public setPluginWhistle(pluginWhistle: PluginWhistle) {
+  //   this.pluginWhistle = pluginWhistle;
+  // }
 
-  public setPluginApp(pluginApp: PluginApp) {
-    this.pluginApp = pluginApp;
+  // public setPluginApp(pluginApp: PluginApp) {
+  //   this.pluginApp = pluginApp;
 
-    this.pluginAppInstance = this.pluginApp.getActiveInstance();
-  }
-
-  public setPluginMockstar(pluginMockstar: PluginMockstar) {
-    this.pluginMockstar = pluginMockstar;
-  }
+  //   this.pluginAppInstance = this.pluginApp.getActiveInstance();
+  // }
 
   // 执行
   public async run(pageDriverOpts?: IPageDriverOpts) {
-    this.setRequiredPlugins() ;
+    console.log('==============run=============', process.env.MATMAN_TMP_PLUGIN_JSON_DATA);
+    const pluginJsonData = JSON.parse(process.env.MATMAN_TMP_PLUGIN_JSON_DATA || '{}');
+    if (this.pluginAppInstanceFromOpts) {
+      this.pluginAppInstance = getPluginAppInstance(
+        pluginJsonData.pluginApp?.definedInstanceDir,
+        pluginJsonData.pluginApp?.activeInstance,
+      );
+    }
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launch(
@@ -76,12 +74,12 @@ export default class CaseModule {
     );
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
-    if (this.pluginWhistle) {
+    if (pluginJsonData.pluginWhistle) {
       // 设置走 whistle 代理
-      await pageDriver.useProxyServer(this.pluginWhistle.getLocalWhistleServer());
+      await pageDriver.useProxyServer(getLocalWhistleServer(pluginJsonData.pluginWhistle.cacheData?.data?.port));
 
       // 设置代理规则
-      await this.setWhistleRuleBeforeRun();
+      await this.setWhistleRuleBeforeRun(pluginJsonData);
     }
 
     // 设置浏览器设备型号
@@ -100,43 +98,29 @@ export default class CaseModule {
   }
 
 
-  private setRequiredPlugins() {
-    // 该参数为全局参数
-    if (!globalAny.matmanE2ERunner) {
+  private async setWhistleRuleBeforeRun(pluginJsonData: any): Promise<void> {
+    if (!pluginJsonData || !pluginJsonData.pluginWhistle) {
       return;
     }
 
-    const e2eRunner = globalAny.matmanE2ERunner as E2ERunner;
+    const whistleRuleFromApp = this.pluginAppInstance?.getWhistleRule(
+      new CacheData(pluginJsonData.pluginApp?.cacheData)
+    );
 
-    const pluginApp = e2eRunner.matmanConfig.getPlugin('app') as PluginApp;
-    if (pluginApp) {
-      this.setPluginApp(pluginApp);
-    }
-
-    const pluginWhistle = e2eRunner.matmanConfig.getPlugin('whistle') as PluginWhistle;
-    if (pluginWhistle) {
-      this.setPluginWhistle(pluginWhistle);
-    }
-
-    const pluginMockstar = e2eRunner.matmanConfig.getPlugin('mockstar') as PluginMockstar;
-    if (pluginMockstar) {
-      this.setPluginMockstar(pluginMockstar);
-    }
-  }
-
-
-  private async setWhistleRuleBeforeRun(): Promise<void> {
-    if (!this.pluginWhistle) {
-      return;
-    }
-
-    const whistleRuleFromApp = this.pluginAppInstance?.getWhistleRule(this.pluginApp?.cacheData);
     const whistleRuleFromMockstar = this.pluginMockstarInstance?.getWhistleRule(
-      this.pluginMockstar?.cacheData,
+      new CacheData(pluginJsonData.pluginMockstar?.cacheData)
     );
 
     if (whistleRuleFromApp || whistleRuleFromMockstar) {
-      await this.pluginWhistle?.setRules({
+      const pluginWhistle = new PluginWhistle(pluginJsonData.pluginWhistle);
+
+      const cachePort = pluginJsonData.pluginWhistle.cacheData?.port;
+      if (cachePort) {
+        pluginWhistle.cacheData.setCacheItem('port', cachePort);
+      }
+
+      // 设置规则
+      await pluginWhistle?.setRules({
         getWhistleRules: () => {
           const name = 'none';
           const newContentArr: string[] = [];

@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cmd-hub": "^0.1.0",
     "mockstar-local-server": "^1.3.21"
   },
   "devDependencies": {

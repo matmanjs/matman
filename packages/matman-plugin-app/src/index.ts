@@ -1,4 +1,4 @@
 import PluginApp from './PluginApp';
-import PluginAppInstance from './PluginAppInstance';
+import PluginAppInstance, { getPluginAppInstance } from './PluginAppInstance';
 
-export { PluginAppInstance, PluginApp };
+export { PluginAppInstance, PluginApp, getPluginAppInstance };

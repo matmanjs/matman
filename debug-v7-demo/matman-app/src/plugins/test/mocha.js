@@ -7,6 +7,10 @@ const { PluginTestMochaInstance } = require('../../../../../packages/matman-plug
 //   // mochawesomeJsonFilePath: path.join(e2eRunner.outputPath, './mochawesome/mochawesome.json'),
 // });
 
-module.exports = new PluginTestMochaInstance('npm run test:e2e:direct', {
+// module.exports = new PluginTestMochaInstance('npm run test:e2e:direct', {
+//   cwd: '/Users/helinjiang/gitprojects/matman/debug-v7-demo',
+// });
+
+module.exports = new PluginTestMochaInstance('npx mocha', {
   cwd: '/Users/helinjiang/gitprojects/matman/debug-v7-demo',
 });

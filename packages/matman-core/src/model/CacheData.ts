@@ -1,3 +1,4 @@
+import _ from 'lodash';
 export type ICacheValue = string | number | boolean | undefined | null;
 
 export interface ICacheData  {
@@ -7,8 +8,8 @@ export interface ICacheData  {
 export default class CacheData {
   private data: ICacheData;
 
-  public constructor() {
-    this.data = {};
+  public constructor(opts?: any) {
+    this.data = _.merge({}, opts);
   }
 
   /**

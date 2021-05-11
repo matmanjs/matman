@@ -1,6 +1,7 @@
+import path from 'path';
 import { WhistleRule } from 'whistle-sdk';
 import { DefinedInstanceBase } from 'matman-plugin-core';
-import { CacheData } from 'matman-core';
+import { CacheData, E2ERunner } from 'matman-core';
 import PluginApp from './PluginApp';
 
 interface DefinedInstanceOpts {
@@ -8,6 +9,8 @@ interface DefinedInstanceOpts {
   setup?: (plugin: PluginApp) => Promise<void>;
   getWhistleRules?: () => string | string[];
 }
+
+const globalAny: any = global;
 
 export default class PluginAppInstance extends DefinedInstanceBase {
   /**
@@ -62,4 +65,19 @@ export default class PluginAppInstance extends DefinedInstanceBase {
 
     return new WhistleRule('prod', rules);
   }
+}
+
+
+export function getPluginAppInstance(definedInstanceDir: string, activeInstance: string): PluginAppInstance | null {
+  if (!globalAny.matmanE2ERunner) {
+    return null;
+  }
+
+  const e2eRunner = globalAny.matmanE2ERunner as E2ERunner;
+
+  const targetActiveInstance = path.join(definedInstanceDir, activeInstance);
+  const activeInstanceFullPath = path.resolve(e2eRunner.matmanConfig.matmanRootPath, targetActiveInstance);
+
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require(activeInstanceFullPath)() as PluginAppInstance;
 }
