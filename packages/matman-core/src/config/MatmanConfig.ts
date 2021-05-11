@@ -2,25 +2,49 @@ import fs from 'fs';
 import path from 'path';
 
 import { getAbsolutePath } from '../util';
-import { IMatmanConfigOpts, ISetupOptions } from '../types';
+import { IMatmanConfigOpts } from '../types';
+import { IPluginBase } from '../typings/PluginBase';
 
 export default class MatmanConfig {
+  // 用于同源测试的项目源码的根目录，一般指 package.json 的目录
+  public workspacePath?: string;
+
+  // 测试产物的输出目录
+  public outputPath?: string;
+
+  // matman 项目的根目录
   public matmanRootPath: string;
+
+  // 测试案例的根目录
   public caseModulesPath: string;
+
+  // 前端爬虫脚本构建之后的目录
   public crawlerBuildPath: string;
+
+  // 前端爬虫脚本中是否注入jQuery
   public crawlerInjectJQuery: boolean;
+
+  // 屏幕截图保存的路径
   public screenshotPath: string;
+
+  // 覆盖率文件保存的路径
   public coveragePath: string;
+
+  // MatmanResult 执行结果数据保存的路径
   public matmanResultPath: string;
+
+  // 是否为开发模式
   public isDevBuild: boolean;
-  public setupOptions: ISetupOptions[];
+
+  // 插件列表
+  public plugins: IPluginBase[];
 
   public constructor(matmanRootPath: string, opts: IMatmanConfigOpts = {}) {
     // 消除警告, 其实会被覆盖
     this.isDevBuild = false;
 
-    // 项目根目录
-    // 根目录是必须的，因为会有一些默认值都是基于这个根目录而言
+    // matman 项目的根目录
+    // 它在内部处理时是必须的，因为会有一些默认值都是基于这个根目录而言
     // 获取值的优先级为：参数指定 > matman.config.js 路径 > package.json 路径
     this.matmanRootPath = getAbsolutePath(matmanRootPath);
 
@@ -70,7 +94,7 @@ export default class MatmanConfig {
     this.setIsDevBuild(!!opts.isDevBuild);
 
     // 设置启动脚本
-    this.setupOptions = opts.setupOptions || [];
+    this.plugins = opts.plugins || [];
   }
 
   /**
@@ -89,5 +113,22 @@ export default class MatmanConfig {
         `${path.basename(this.crawlerBuildPath)}_dev`,
       );
     }
+  }
+
+  public getPlugin(pluginName: string): IPluginBase|null{
+    if (!this.plugins || !this.plugins.length) {
+      return null;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let index = 0; index < this.plugins.length; index++) {
+      const element = this.plugins[index] as IPluginBase;
+
+      if (element.name === pluginName) {
+        return element;
+      }
+    }
+
+    return null;
   }
 }
