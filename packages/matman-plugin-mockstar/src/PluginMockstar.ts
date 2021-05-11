@@ -1,5 +1,6 @@
 // import path from 'path';
 import { PluginBase } from 'matman-plugin-core';
+import { E2ERunner } from 'matman-core';
 
 import MockstarSDK from './MockstarSDK';
 
@@ -18,16 +19,17 @@ export default class PluginMockstar extends PluginBase {
     });
   }
 
-  public async setup() {
-    console.log('==mockstar== setup');
+  public async setup(e2eRunner: E2ERunner) {
+    await super.setup(e2eRunner);
 
     await this.mockstarSDK.start();
 
     this.cacheData.setCacheItem('port', this.mockstarSDK.port);
   }
 
-  public async teardown() {
-    console.log('==mockstar== teardown');
+  public async teardown(e2eRunner: E2ERunner) {
+    await super.teardown(e2eRunner);
+
     await this.mockstarSDK.stop();
   }
 }

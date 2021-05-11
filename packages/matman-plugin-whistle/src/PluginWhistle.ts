@@ -1,6 +1,7 @@
 // import path from 'path';
 import _ from 'lodash';
 import { PluginBase } from 'matman-plugin-core';
+import { E2ERunner } from 'matman-core';
 
 import WhistleSDK, { ISetRulesOpts } from 'whistle-sdk';
 
@@ -22,7 +23,9 @@ export default class PluginWhistle extends PluginBase {
     });
   }
 
-  public async setup() {
+  public async setup(e2eRunner: E2ERunner) {
+    await super.setup(e2eRunner);
+
     // 启动 whistle
     await this.whistleSDK.start();
 
@@ -30,7 +33,9 @@ export default class PluginWhistle extends PluginBase {
     this.cacheData.setCacheItem('port', this.whistleSDK.port);
   }
 
-  public async teardown() {
+  public async teardown(e2eRunner: E2ERunner) {
+    await super.teardown(e2eRunner);
+
     // 停止 whistle
     await this.whistleSDK.stop();
   }

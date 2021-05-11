@@ -1,5 +1,6 @@
 // import path from 'path';
 import { PluginBase } from 'matman-plugin-core';
+import { E2ERunner, logger } from 'matman-core';
 
 import { ITestDefinedInstance } from './types';
 
@@ -19,21 +20,17 @@ export default class PluginTest extends PluginBase {
     this.definedInstanceDir = opts.definedInstanceDir;
   }
 
-  public async setup() {
-    console.log('==test== setup');
-  }
+  public async runTest(e2eRunner: E2ERunner) {
+    await super.runTest(e2eRunner);
 
-  public async runTest() {
-    console.log('==test== runTest');
+    logger.info('Begin to runTest ...');
+
     const instance = this.getActiveInstance();
 
     await instance.run();
-  }
 
-  public async teardown() {
-    console.log('==test== teardown');
+    logger.info('Finished of runTest ...');
   }
-
 
   public getActiveInstance(): ITestDefinedInstance {
     // TODO 从 instance 里面读取 setup 方法并执行

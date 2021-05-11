@@ -1,5 +1,6 @@
 import { CacheData, IPluginBase, E2ERunner } from 'matman-core';
 
+const globalAny: any = global;
 export default class PluginBase implements IPluginBase {
   /**
    * 插件名字
@@ -32,6 +33,8 @@ export default class PluginBase implements IPluginBase {
     if (process.env.CONSOLE_E2E_RUNNER) {
       console.log(e2eRunner);
     }
+
+    globalAny.matmanE2ERunner = e2eRunner;
   }
 
   /**
@@ -42,6 +45,8 @@ export default class PluginBase implements IPluginBase {
     if (process.env.CONSOLE_E2E_RUNNER) {
       console.log(e2eRunner);
     }
+
+    globalAny.matmanE2ERunner = e2eRunner;
   }
 
   /**
@@ -52,6 +57,8 @@ export default class PluginBase implements IPluginBase {
     if (process.env.CONSOLE_E2E_RUNNER) {
       console.log(e2eRunner);
     }
+
+    globalAny.matmanE2ERunner = e2eRunner;
   }
 
   public setSeqId(seqId: string): void  {

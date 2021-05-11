@@ -19,12 +19,4 @@ export default class PluginPuppeteer extends PluginBase {
     this.networkConditionDefinedInstanceDir = opts.networkConditionDefinedInstanceDir;
     this.screenshotConfig = opts.screenshotConfig;
   }
-
-  public async setup() {
-    console.log('==puppeteer== setup');
-  }
-
-  public async teardown() {
-    console.log('==puppeteer== teardown');
-  }
 }
