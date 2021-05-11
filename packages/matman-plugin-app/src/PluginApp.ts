@@ -1,7 +1,7 @@
 import { PluginBase } from 'matman-plugin-core';
 
 import { buildApp, IBuildAppCmd, IBuildAppOpts } from './utils';
-import DefinedInstance from './DefinedInstance';
+import PluginAppInstance from './PluginAppInstance';
 
 interface IPluginAppOpts {
   definedInstanceDir: string;
@@ -39,14 +39,14 @@ export default class PluginApp extends PluginBase {
     await instance.setup.call(instance, this);
   }
 
-  public getActiveInstance(): DefinedInstance {
+  public getActiveInstance(): PluginAppInstance {
     // TODO 从 instance 里面读取 setup 方法并执行
     // const activeInstance = '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/app/dev.js';
     const activeInstance =
       '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/app/prod.js';
 
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const instance = require(activeInstance)() as DefinedInstance;
+    const instance = require(activeInstance)() as PluginAppInstance;
 
     console.log('--PluginApp instance--', instance);
 

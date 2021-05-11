@@ -1,6 +1,6 @@
-const { DefinedInstance } = require('../../../../../packages/matman-plugin-mockstar');
+const { PluginMockstarInstance } = require('../../../../../packages/matman-plugin-mockstar');
 
-module.exports = new DefinedInstance('身份证和手机都校验成功', {
+module.exports = new PluginMockstarInstance('身份证和手机都校验成功', {
   queryMap: {
     // 校验身份证
     'verify-identity': 'success',

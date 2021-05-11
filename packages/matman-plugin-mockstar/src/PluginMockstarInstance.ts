@@ -9,10 +9,10 @@ interface DefinedInstanceOpts {
   queryMap: IQueryMap;
 }
 
-type IGetDefinedInstanceCallFn = () => DefinedInstance;
-type IRequiredModule = DefinedInstance | IGetDefinedInstanceCallFn;
+type IGetDefinedInstanceCallFn = () => PluginMockstarInstance;
+type IRequiredModule = PluginMockstarInstance | IGetDefinedInstanceCallFn;
 
-export default class DefinedInstance extends DefinedInstanceBase {
+export default class PluginMockstarInstance extends DefinedInstanceBase {
   public queryMap: IQueryMap;
 
   /**
@@ -48,13 +48,15 @@ export default class DefinedInstance extends DefinedInstanceBase {
   }
 }
 
-export function getDefinedInstance(requiredModule?: IRequiredModule): DefinedInstance | null {
+export function getPluginMockstarInstance(
+  requiredModule?: IRequiredModule,
+): PluginMockstarInstance | null {
   if (!requiredModule) {
     return null;
   }
 
   // 如果模块已经是 DefinedInstance，则直接返回
-  if (requiredModule instanceof DefinedInstance) {
+  if (requiredModule instanceof PluginMockstarInstance) {
     return requiredModule;
   }
 

@@ -78,7 +78,11 @@ const { PluginTest } = require('../packages/matman-plugin-test');
   caseModule.setPluginMockstar(pluginMockstar);
 
   await caseModule.handleDependencies();
-  const result = await caseModule.run();
+  const result = await caseModule.run({
+    show: true,
+    doNotCloseBrowser: true,
+    useRecorder: true,
+  });
 
   console.log(JSON.stringify(result, null, 2));
 

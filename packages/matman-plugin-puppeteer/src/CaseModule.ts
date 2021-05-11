@@ -1,11 +1,15 @@
 import path from 'path';
 import _ from 'lodash';
 
-import { launch, PageDriverAsync } from 'matman';
+import { launch, PageDriverAsync, IPageDriverOpts } from 'matman';
 
 import { PluginWhistle } from 'matman-plugin-whistle';
-import { PluginApp, DefinedInstance as AppDefinedInstance } from 'matman-plugin-app';
-import { PluginMockstar, DefinedInstance as MockstarDefinedInstance, getDefinedInstance as getMockstarDefinedInstance } from 'matman-plugin-mockstar';
+import { PluginApp, PluginAppInstance } from 'matman-plugin-app';
+import {
+  PluginMockstar,
+  PluginMockstarInstance,
+  getPluginMockstarInstance,
+} from 'matman-plugin-mockstar';
 import { BrowserRunner } from 'matman-runner-puppeteer';
 import DeviceInstance, { getDeviceInstance } from './DeviceInstance';
 
@@ -18,7 +22,7 @@ interface ICaseModuleOpts {
   };
   dependencies?: {
     buildApp?: boolean;
-    useMockServer?: MockstarDefinedInstance;
+    useMockServer?: PluginMockstarInstance;
   };
 }
 
@@ -32,18 +36,18 @@ export default class CaseModule {
   public pluginMockstar?: PluginMockstar;
 
   private readonly deviceInstance: DeviceInstance | null;
-  private appDefinedInstance: AppDefinedInstance | null;
-  private mockstarDefinedInstance: MockstarDefinedInstance | null;
+  private pluginAppInstance: PluginAppInstance | null;
+  private pluginMockstarInstance: PluginMockstarInstance | null;
 
   public constructor(opts: ICaseModuleOpts) {
     this.filename = opts.filename;
     this.handler = opts.handler;
     this.crawler = opts.crawler;
 
-    this.appDefinedInstance = null;
-
     this.deviceInstance = getDeviceInstance(opts.extends?.device);
-    this.mockstarDefinedInstance = getMockstarDefinedInstance(opts.dependencies?.useMockServer);
+
+    this.pluginMockstarInstance = getPluginMockstarInstance(opts.dependencies?.useMockServer);
+    this.pluginAppInstance = null;
   }
 
   public setPluginWhistle(pluginWhistle: PluginWhistle) {
@@ -53,7 +57,7 @@ export default class CaseModule {
   public setPluginApp(pluginApp: PluginApp) {
     this.pluginApp = pluginApp;
 
-    this.appDefinedInstance = this.pluginApp.getActiveInstance();
+    this.pluginAppInstance = this.pluginApp.getActiveInstance();
   }
 
   public setPluginMockstar(pluginMockstar: PluginMockstar) {
@@ -69,8 +73,10 @@ export default class CaseModule {
     // buildApp
     // useMockServer
 
-    const whistleRuleFromApp = this.appDefinedInstance?.getWhistleRule(this.pluginApp?.cacheData);
-    const whistleRuleFromMockstar = this.mockstarDefinedInstance?.getWhistleRule(this.pluginMockstar?.cacheData);
+    const whistleRuleFromApp = this.pluginAppInstance?.getWhistleRule(this.pluginApp?.cacheData);
+    const whistleRuleFromMockstar = this.pluginMockstarInstance?.getWhistleRule(
+      this.pluginMockstar?.cacheData,
+    );
 
     if (whistleRuleFromApp || whistleRuleFromMockstar) {
       this.pluginWhistle?.setRules({
@@ -102,21 +108,13 @@ export default class CaseModule {
   }
 
   // 执行
-  public async run(pageDriverOpts: any) {
+  public async run(pageDriverOpts: IPageDriverOpts) {
     // 创建 PageDriver
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launch(
       new BrowserRunner(),
-      _.merge(
-        {
-          show: true,
-          doNotCloseBrowser: true,
-          useRecorder: true,
-        },
-        pageDriverOpts,
-        { caseModuleFilePath: this.filename },
-      ),
+      _.merge({}, pageDriverOpts, { caseModuleFilePath: this.filename }) as IPageDriverOpts,
     );
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
@@ -141,7 +139,9 @@ export default class CaseModule {
     await this.handler(pageDriver);
 
     // 获取结果
-    return pageDriver.evaluate(path.join(path.dirname(this.filename), './crawlers/get-page-info.js'));
+    return pageDriver.evaluate(
+      path.join(path.dirname(this.filename), './crawlers/get-page-info.js'),
+    );
   }
 }
 

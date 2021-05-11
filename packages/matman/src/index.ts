@@ -7,9 +7,7 @@ import { IMatmanConfigOpts, IPageDriverOpts } from './types';
 import { getCallerPath } from './util/caller';
 import { checkIfWhistleStarted } from './util/whistle';
 
-export {
-  PageDriverAsync,
-};
+export { PageDriverAsync, IPageDriverOpts };
 
 /**
  * 获取新的 PageDriverOpts

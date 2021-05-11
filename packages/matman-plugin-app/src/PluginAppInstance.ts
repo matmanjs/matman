@@ -8,7 +8,7 @@ interface DefinedInstanceOpts {
   getWhistleRules?: () => string | string[];
 }
 
-export default class DefinedInstance extends DefinedInstanceBase {
+export default class PluginAppInstance extends DefinedInstanceBase {
   /**
    * 被测应用/项目的根目录，即 package.json 的目录
    */

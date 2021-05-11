@@ -1,7 +1,4 @@
 import PluginApp from './PluginApp';
-import DefinedInstance from './DefinedInstance';
+import PluginAppInstance from './PluginAppInstance';
 
-export {
-  DefinedInstance,
-  PluginApp,
-};
+export { PluginAppInstance, PluginApp };
