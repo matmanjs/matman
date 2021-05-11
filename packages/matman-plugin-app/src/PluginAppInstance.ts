@@ -44,7 +44,7 @@ export default class PluginAppInstance extends DefinedInstanceBase {
   /**
    * 获取 whistle 规则
    */
-  public getWhistleRule(cacheData?: CacheData): WhistleRule {
+  public getWhistleRule(cacheData?: CacheData): WhistleRule | null {
     if (!cacheData) {
       console.log('TODO 还要处理下使用端口的情况');
     }
@@ -56,7 +56,7 @@ export default class PluginAppInstance extends DefinedInstanceBase {
     }
 
     if (!rules) {
-      return new WhistleRule('prod', ['# mockstar 代理设置失败！']);
+      return null;
     }
 
     return new WhistleRule('prod', rules);

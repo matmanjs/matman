@@ -29,9 +29,9 @@ export default class PluginMockstarInstance extends DefinedInstanceBase {
   /**
    * 获取 whistle 规则
    */
-  public getWhistleRule(cacheData?: CacheData): WhistleRule {
+  public getWhistleRule(cacheData?: CacheData): WhistleRule | null {
     if (!cacheData) {
-      return new WhistleRule('prod', ['# mockstar 代理设置失败！']);
+      return null;
     }
 
     const port = cacheData.getCacheItem('port');

@@ -17,12 +17,10 @@ interface ICaseModuleOpts {
   filename: string;
   handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
   crawler: string;
-  extends?: {
-    device?: DeviceInstance;
-  };
   dependencies?: {
-    buildApp?: boolean;
-    useMockServer?: PluginMockstarInstance;
+    pluginAppInstance?: boolean;
+    pluginMockstarInstance?: PluginMockstarInstance;
+    deviceInstance?: DeviceInstance;
   };
 }
 
@@ -44,9 +42,9 @@ export default class CaseModule {
     this.handler = opts.handler;
     this.crawler = opts.crawler;
 
-    this.deviceInstance = getDeviceInstance(opts.extends?.device);
+    this.deviceInstance = getDeviceInstance(opts.dependencies?.deviceInstance);
 
-    this.pluginMockstarInstance = getPluginMockstarInstance(opts.dependencies?.useMockServer);
+    this.pluginMockstarInstance = getPluginMockstarInstance(opts.dependencies?.pluginMockstarInstance);
     this.pluginAppInstance = null;
   }
 
@@ -64,14 +62,44 @@ export default class CaseModule {
     this.pluginMockstar = pluginMockstar;
   }
 
-  public async handleDependencies() {
-    console.log('==CaseModule== handleDependencies');
+  // 执行
+  public async run(pageDriverOpts: IPageDriverOpts) {
+    // 创建 PageDriver
 
-    // appInstance
-    // mockstarInstance
+    // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
+    const pageDriver = await launch(
+      new BrowserRunner(),
+      _.merge({}, pageDriverOpts, { caseModuleFilePath: this.filename }) as IPageDriverOpts,
+    );
 
-    // buildApp
-    // useMockServer
+    // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
+    if (this.pluginWhistle) {
+      // 设置走 whistle 代理
+      await pageDriver.useProxyServer(this.pluginWhistle.getLocalWhistleServer());
+
+      // 设置代理规则
+      this.setWhistleRuleBeforeRun();
+    }
+
+    // 设置浏览器设备型号
+    if (this.deviceInstance) {
+      await pageDriver.setDeviceConfig(this.deviceInstance);
+    }
+
+    // 设置截屏
+    await pageDriver.setScreenshotConfig(true);
+
+    // 操作
+    await this.handler(pageDriver);
+
+    // 获取结果
+    return pageDriver.evaluate(path.join(path.dirname(this.filename), './crawlers/get-page-info.js'));
+  }
+
+  private setWhistleRuleBeforeRun(): void {
+    if (!this.pluginWhistle) {
+      return;
+    }
 
     const whistleRuleFromApp = this.pluginAppInstance?.getWhistleRule(this.pluginApp?.cacheData);
     const whistleRuleFromMockstar = this.pluginMockstarInstance?.getWhistleRule(
@@ -105,43 +133,6 @@ export default class CaseModule {
         },
       });
     }
-  }
-
-  // 执行
-  public async run(pageDriverOpts: IPageDriverOpts) {
-    // 创建 PageDriver
-
-    // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
-    const pageDriver = await launch(
-      new BrowserRunner(),
-      _.merge({}, pageDriverOpts, { caseModuleFilePath: this.filename }) as IPageDriverOpts,
-    );
-
-    // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
-    if (this.pluginWhistle) {
-      await pageDriver.useProxyServer(this.pluginWhistle.getLocalWhistleServer());
-    }
-
-    // 使用 mockstar 来做 mock server 用于构造假数据
-    // if (queryDataMap || pageDriverOpts.queryDataMap) {
-    //   await pageDriver.useMockstar(_.merge({}, queryDataMap, pageDriverOpts.queryDataMap));
-    // }
-
-    // 设置浏览器设备型号
-    if (this.deviceInstance) {
-      await pageDriver.setDeviceConfig(this.deviceInstance);
-    }
-
-    // 设置截屏
-    await pageDriver.setScreenshotConfig(true);
-
-    // 操作
-    await this.handler(pageDriver);
-
-    // 获取结果
-    return pageDriver.evaluate(
-      path.join(path.dirname(this.filename), './crawlers/get-page-info.js'),
-    );
   }
 }
 
