@@ -1,7 +1,8 @@
 import { DefinedInstanceBase } from 'matman-plugin-core';
 import _ from 'lodash';
+import { getPuppeteerDefinedDevice, puppeteer } from 'matman-runner-puppeteer';
 
-type DeviceInstanceOpts = {
+type DeviceInstanceOpts = DeviceInstance | {
   userAgent: string;
   viewport?: {
     width?: number;
@@ -10,8 +11,12 @@ type DeviceInstanceOpts = {
     isMobile?: boolean;
     hasTouch?: boolean;
     isLandscape?: boolean;
-  }
-} | DeviceInstance;
+  };
+};
+
+type ICloneCallFn = (deviceName: string) => puppeteer.devices.Device;
+type IGetDeviceInstanceCallFn = (clone: ICloneCallFn) => DeviceInstance;
+type IRequiredModule = DeviceInstance | IGetDeviceInstanceCallFn;
 
 // https://github.com/puppeteer/puppeteer/blob/v9.1.1/docs/api.md#puppeteerlaunchoptions
 const defaultViewport = {
@@ -23,7 +28,7 @@ const defaultViewport = {
   isLandscape: false,
 };
 
-export default class DeviceInstance extends DefinedInstanceBase  {
+export default class DeviceInstance extends DefinedInstanceBase {
   public userAgent: string;
   public viewport: {
     width: number;
@@ -41,4 +46,30 @@ export default class DeviceInstance extends DefinedInstanceBase  {
 
     this.viewport = _.merge({}, defaultViewport, opts.viewport);
   }
+}
+
+export function getDeviceInstance(requiredModule?: IRequiredModule): DeviceInstance | null {
+  if (!requiredModule) {
+    return null;
+  }
+
+  // 如果模块已经是 DeviceInstance，则直接返回
+  if (requiredModule instanceof DeviceInstance) {
+    return requiredModule;
+  }
+
+  // 如果模块是函数，则传入 clone 函数
+  if (typeof requiredModule === 'function') {
+    return requiredModule((deviceName: string) => {
+      const definedDevice = getPuppeteerDefinedDevice(deviceName);
+
+      if (!definedDevice) {
+        throw new Error(`${deviceName} is not in puppeteer.devices! Please check https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts`);
+      }
+
+      return definedDevice;
+    });
+  }
+
+  return null;
 }

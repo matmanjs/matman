@@ -7,12 +7,16 @@ import { PluginWhistle } from 'matman-plugin-whistle';
 import { PluginApp } from 'matman-plugin-app';
 import { PluginMockstar } from 'matman-plugin-mockstar';
 import { BrowserRunner, getPuppeteerDefinedDevice } from 'matman-runner-puppeteer';
+import DeviceInstance, { getDeviceInstance } from './DeviceInstance';
 
 
 interface ICaseModuleOpts {
   filename: string;
   handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
   crawler: string;
+  extends?: {
+    device?: DeviceInstance
+  }
 }
 
 export default class CaseModule {
@@ -25,10 +29,14 @@ export default class CaseModule {
   public pluginApp?: PluginApp;
   public pluginMockstar?: PluginMockstar;
 
+  private readonly deviceInstance: DeviceInstance | null;
+
   public constructor(opts: ICaseModuleOpts) {
     this.filename = opts.filename;
     this.handler = opts.handler;
     this.crawler = opts.crawler;
+
+    this.deviceInstance = getDeviceInstance(opts.extends?.device);
   }
 
   public setPluginWhistle(pluginWhistle: PluginWhistle) {
@@ -143,7 +151,9 @@ export default class CaseModule {
     // }
 
     // 设置浏览器设备型号
-    // await pageDriver.setDeviceConfig(DEVICE.IOS_IPHONE_6);
+    if (this.deviceInstance) {
+      await pageDriver.setDeviceConfig(this.deviceInstance);
+    }
 
     // 设置截屏
     await pageDriver.setScreenshotConfig(true);
