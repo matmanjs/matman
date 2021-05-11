@@ -46,5 +46,8 @@
     "nyc": "^15.1.0",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "matman-core": "^6.0.20"
   }
 }

@@ -26,8 +26,10 @@ import {
   IMatmanResultQueueHandler,
   IResourceType,
 } from './typings/matmanResult';
+import { IPluginBase } from './typings/PluginBase';
 
 import MatmanResult from './model/MatmanResult';
+import CacheData from './model/CacheData';
 
 import { IMatmanConfigOpts } from './types';
 
@@ -71,4 +73,6 @@ export {
   IMatmanResultQueueHandler,
   IResourceType,
   IMatmanConfigOpts,
+  IPluginBase,
+  CacheData,
 };

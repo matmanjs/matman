@@ -1,5 +1,6 @@
-import CacheData from './CacheData';
-export default class PluginBase {
+import { CacheData, IPluginBase } from 'matman-core';
+
+export default class PluginBase implements IPluginBase {
   /**
    * 插件名字
    */
@@ -26,25 +27,25 @@ export default class PluginBase {
   /**
    * 自动化测试之前执行
    */
-  public async setup() {
+  public async setup(): Promise<void> {
     // 例如 build 项目、启动代理、启动 mock server 等
   }
 
   /**
    * 执行自动化测试
    */
-  public async runTest() {
+  public async runTest(): Promise<void>  {
     // 例如 run test
   }
 
   /**
    * 自动化测试之后执行
    */
-  public async teardown() {
+  public async teardown(): Promise<void>  {
     // 例如清理工作、处理测试产物等
   }
 
-  public setSeqId(seqId: string) {
+  public setSeqId(seqId: string): void  {
     this.seqId = seqId;
   }
 }

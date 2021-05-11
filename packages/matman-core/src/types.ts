@@ -1,3 +1,5 @@
+import { IPluginBase } from './typings/PluginBase';
+
 /**
  * 供 IDE 使用的启动项目的配置
  *
@@ -17,6 +19,8 @@ export interface ISetupOptions {
  * matman 的配置类型
  * 同时为配置文件的结构, 当前对配置文件的解析只限制为 JS
  *
+ * @member workspacePath  用于同源测试的项目源码的根目录，一般指 package.json 的目录
+ * @member outputPath  测试产物的输出目录
  * @member matmanRootPath  matman 项目的根目录
  * @member caseModulesPath 测试案例的根目录
  * @member crawlerBuildPath 前端爬虫脚本构建之后的目录
@@ -25,9 +29,11 @@ export interface ISetupOptions {
  * @member coveragePath 覆盖率文件保存的路径
  * @member matmanResultPath MatmanResult 执行结果数据保存的路径
  * @member isDevBuild 是否为开发模式
- * @member setupOptions 提供 IDE 的启动命令
+ * @member plugins 插件列表
  */
 export interface IMatmanConfigOpts {
+  workspacePath?: string;
+  outputPath?: string;
   matmanRootPath?: string;
   caseModulesPath?: string;
   crawlerBuildPath?: string;
@@ -36,5 +42,5 @@ export interface IMatmanConfigOpts {
   coveragePath?: string;
   matmanResultPath?: string;
   isDevBuild?: boolean;
-  setupOptions?: ISetupOptions[];
+  plugins?: IPluginBase[];
 }
