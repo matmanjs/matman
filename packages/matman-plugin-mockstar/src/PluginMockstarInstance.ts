@@ -1,4 +1,5 @@
-import { CacheData, DefinedInstanceBase } from 'matman-plugin-core';
+import { DefinedInstanceBase } from 'matman-plugin-core';
+import { CacheData } from 'matman-core';
 import { WhistleRule } from 'whistle-sdk';
 
 interface IQueryMap {

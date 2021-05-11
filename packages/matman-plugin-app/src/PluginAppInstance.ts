@@ -1,5 +1,6 @@
 import { WhistleRule } from 'whistle-sdk';
-import { CacheData, DefinedInstanceBase } from 'matman-plugin-core';
+import { DefinedInstanceBase } from 'matman-plugin-core';
+import { CacheData } from 'matman-core';
 import PluginApp from './PluginApp';
 
 interface DefinedInstanceOpts {

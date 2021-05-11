@@ -1,6 +1,6 @@
 const { CaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
 
-const { E2ERunner } = require('../../../../../packages/matman-e2e-runner');
+// const { E2ERunner } = require('../../../../../packages/matman-core');
 
 const iPhone6 = require('../../plugins/puppeteer/device/iPhone6');
 // const fast3G = require('../../plugins/puppeteer/network-condition/fast-3g');
