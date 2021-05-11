@@ -22,11 +22,14 @@ export default class PluginWhistle extends PluginBase {
     });
   }
 
-
   public async setup() {
     console.log('==whistle== setup');
 
+    // 启动 whistle
     await this.whistleSDK.start();
+
+    // 缓存 whistle 的端口
+    this.cacheData.setCacheItem('port', this.whistleSDK.port);
   }
 
   public async teardown() {
@@ -45,5 +48,9 @@ export default class PluginWhistle extends PluginBase {
     }, opts);
 
     await this.whistleSDK.setRules(params);
+  }
+
+  public getLocalWhistleServer() {
+    return `127.0.0.1:${this.cacheData.getCacheItem('port') || 8899}`;
   }
 }

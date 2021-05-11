@@ -6,7 +6,7 @@ import { launch, PageDriverAsync } from 'matman';
 import { PluginWhistle } from 'matman-plugin-whistle';
 import { PluginApp } from 'matman-plugin-app';
 import { PluginMockstar } from 'matman-plugin-mockstar';
-import { BrowserRunner, getPuppeteerDefinedDevice } from 'matman-runner-puppeteer';
+import { BrowserRunner } from 'matman-runner-puppeteer';
 import DeviceInstance, { getDeviceInstance } from './DeviceInstance';
 
 
@@ -60,15 +60,6 @@ export default class CaseModule {
     // buildApp
     // useMockServer
 
-
-    // const whistleRule = pluginApp.getWhistleRule();
-    // if (whistleRule) {
-    //   pluginWhistle.setRules({
-    //     getWhistleRules: () => whistleRule.getConfig(),
-    //   });
-    // }
-
-
     const whistleRuleFromApp = this.pluginApp?.getWhistleRule();
     const whistleRuleFromMockstar = this.pluginMockstar?.getWhistleRule();
 
@@ -102,30 +93,6 @@ export default class CaseModule {
     }
   }
 
-  public async handleExtends() {
-    console.log('==CaseModule== handleExtends');
-
-    // 获取 deviceInstance
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const deviceInstance01 = require('/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/puppeteer/device/iPhone6.js');
-    console.log(deviceInstance01);
-
-    // 获取 deviceInstance
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const deviceInstance02 = require('/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/puppeteer/device/iPhoneXCustom.js');
-    const r = deviceInstance02((deviceName: string) => {
-      const definedDevice = getPuppeteerDefinedDevice(deviceName);
-      if (!definedDevice) {
-        throw new Error(`${deviceName} is not in puppeteer.devices! Please check https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts`);
-      }
-
-      return definedDevice;
-    });
-    console.log(r);
-
-    //
-  }
-
   // 执行
   public async run(pageDriverOpts: any) {
     // 创建 PageDriver
@@ -142,13 +109,15 @@ export default class CaseModule {
     );
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
-    // await pageDriver.useProxyServer(await getLocalWhistleServer(this.pluginWhistle?.cacheData.getCacheItem('port') as number));
-    await pageDriver.useProxyServer('127.0.0.1:9430');
+    if (this.pluginWhistle) {
+      await pageDriver.useProxyServer(this.pluginWhistle.getLocalWhistleServer());
+    }
 
     // 使用 mockstar 来做 mock server 用于构造假数据
     // if (queryDataMap || pageDriverOpts.queryDataMap) {
     //   await pageDriver.useMockstar(_.merge({}, queryDataMap, pageDriverOpts.queryDataMap));
     // }
+
 
     // 设置浏览器设备型号
     if (this.deviceInstance) {
