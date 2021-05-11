@@ -23,8 +23,6 @@ export default class PluginWhistle extends PluginBase {
   }
 
   public async setup() {
-    console.log('==whistle== setup');
-
     // 启动 whistle
     await this.whistleSDK.start();
 
@@ -33,7 +31,7 @@ export default class PluginWhistle extends PluginBase {
   }
 
   public async teardown() {
-    console.log('==whistle== teardown');
+    // 停止 whistle
     await this.whistleSDK.stop();
   }
 
@@ -44,7 +42,7 @@ export default class PluginWhistle extends PluginBase {
       forceOverride: true,
       // saveDir: path.join(__dirname, 'tmp'),
       // fileName: 'test.whistle.js',
-      handleRuleContent: (ruleContent: string, saveDir: string) => `${ruleContent}\n\n# ${saveDir}`,
+      handleRuleContent: (ruleContent: string, saveDir: string) => `${ruleContent}\n\n# ${saveDir}\n# ${new Date()}`,
     }, opts);
 
     await this.whistleSDK.setRules(params);

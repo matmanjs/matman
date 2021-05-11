@@ -48,9 +48,7 @@ export default class PluginMockstarInstance extends DefinedInstanceBase {
   }
 }
 
-export function getPluginMockstarInstance(
-  requiredModule?: IRequiredModule,
-): PluginMockstarInstance | null {
+export function getPluginMockstarInstance(requiredModule?: IRequiredModule): PluginMockstarInstance | null {
   if (!requiredModule) {
     return null;
   }
