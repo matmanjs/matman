@@ -1,7 +1,4 @@
 import PluginMockstar from './PluginMockstar';
-import DefinedInstance from './DefinedInstance';
+import DefinedInstance, { getDefinedInstance } from './DefinedInstance';
 
-export {
-  DefinedInstance,
-  PluginMockstar,
-};
+export { DefinedInstance, PluginMockstar, getDefinedInstance };

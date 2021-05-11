@@ -1,16 +1,19 @@
-import { DefinedInstanceBase, CacheData } from 'matman-plugin-core';
+import { CacheData, DefinedInstanceBase } from 'matman-plugin-core';
+import { WhistleRule } from 'whistle-sdk';
 
-interface IQueryMap{
-  [key: string]: string
+interface IQueryMap {
+  [key: string]: string;
 }
 
 interface DefinedInstanceOpts {
   queryMap: IQueryMap;
 }
 
+type IGetDefinedInstanceCallFn = () => DefinedInstance;
+type IRequiredModule = DefinedInstance | IGetDefinedInstanceCallFn;
+
 export default class DefinedInstance extends DefinedInstanceBase {
   public queryMap: IQueryMap;
-
 
   /**
    * 获取 whistle 规则
@@ -23,17 +26,42 @@ export default class DefinedInstance extends DefinedInstanceBase {
     this.queryMap = opts.queryMap;
   }
 
-
   /**
    * 获取 whistle 规则
    */
-  public getWhistleRules(cacheData: CacheData): string | string[] {
+  public getWhistleRule(cacheData?: CacheData): WhistleRule {
+    if (!cacheData) {
+      return new WhistleRule('prod', ['# mockstar 代理设置失败！']);
+    }
+
     const port = cacheData.getCacheItem('port');
 
     // TODO 应该从 queryMap 中自动获取
-    return [
+    const rules = [
+      `# ${JSON.stringify(this.queryMap)}`,
       `/(.*)/cgi-bin/a/b/verify-identity(.*)/ 127.0.0.1:${port}`,
       `/(.*)/cgi-bin/a/b/verify-phone(.*)/ 127.0.0.1:${port}`,
     ];
+
+    // TODO 这里的 name 需要自动生成，例如按照当前 case module 的名字来生成
+    return new WhistleRule('prod', rules);
   }
+}
+
+export function getDefinedInstance(requiredModule?: IRequiredModule): DefinedInstance | null {
+  if (!requiredModule) {
+    return null;
+  }
+
+  // 如果模块已经是 DefinedInstance，则直接返回
+  if (requiredModule instanceof DefinedInstance) {
+    return requiredModule;
+  }
+
+  // 如果模块是函数
+  if (typeof requiredModule === 'function') {
+    return requiredModule();
+  }
+
+  return null;
 }
