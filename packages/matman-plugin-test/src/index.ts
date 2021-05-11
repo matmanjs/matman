@@ -1,7 +1,7 @@
 import PluginTest from './PluginTest';
-import MochaInstance from './MochaInstance';
+import PluginTestMochaInstance from './PluginTestMochaInstance';
 
 export {
-  MochaInstance,
+  PluginTestMochaInstance,
   PluginTest,
 };

@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 
-const checkPage = require('../../matman-app/src/case_modules/page-index/case-01');
+const caseModule = require('../../matman-app/src/case_modules/page-index/case-01');
 
 describe('index.html 身份证认证页面：常规检查', function () {
   this.timeout(30000);
@@ -8,10 +8,10 @@ describe('index.html 身份证认证页面：常规检查', function () {
   let matmanResult;
 
   before(async function () {
-    matmanResult = await checkPage({
-      show: false,
+    matmanResult = await caseModule.run({
+      show: true,
       doNotCloseBrowser: false,
-      useRecorder: true
+      useRecorder: true,
     });
   });
 
@@ -27,7 +27,7 @@ describe('index.html 身份证认证页面：常规检查', function () {
         formBtnInfo: {
           isBtnActive: false,
           isExist: true,
-          text: '申请验证'
+          text: '申请验证',
         },
         formContentInfo: {
           idValue: '',
@@ -38,13 +38,13 @@ describe('index.html 身份证认证页面：常规检查', function () {
           nameValue: '',
           nameValueInputType: 'text',
           nameValueLabel: '姓名',
-          nameValuePlaceholder: '请输入姓名'
+          nameValuePlaceholder: '请输入姓名',
         },
         messageTipsInfo: { isExist: false },
         titleInfo: {
           isExist: true,
-          title: '请核实身份信息，确保成功提现'
-        }
+          title: '请核实身份信息，确保成功提现',
+        },
       });
     });
   });

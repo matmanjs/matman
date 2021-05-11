@@ -4,12 +4,23 @@
   "description": "",
   "main": "e2e-runner-01.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:e2e": "node e2e-runner-10.js",
+    "test:e2e:show": "cross-env SHOW_BROWSER=1 npm run test:e2e",
+    "test:e2e:direct": "mocha",
+    "test:e2e:direct:show": "cross-env SHOW_BROWSER=1 npm run test:e2e:direct"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "mockstar-local-server": "^1.3.21"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "chai": "^4.3.4",
+    "ignore-styles": "^5.0.1",
+    "mocha": "^8.4.0",
+    "mochawesome": "^6.2.2",
+    "nyc": "^15.1.0"
   }
 }
