@@ -70,8 +70,6 @@ export function findMatmanConfig(
   basePath: string,
   matmanConfigOpts?: IMatmanConfigOpts,
 ): null | MatmanConfig {
-  let configData: IMatmanConfigOpts;
-
   // matman 所需要的配置数据有两个来源，优先级依次降低
   // 1. 通过 MatmanConfigOpts 直接传递数据
   // 2. 使用 matman.config.js 文件，我们自行读取
@@ -80,6 +78,26 @@ export function findMatmanConfig(
 
   // 尝试获得 matman.config.js 文件
   const matmanConfigFilePath = searchFilePath(basePath, MATMAN_CONFIG_FILE);
+
+  // 获取处理之后的 MatmanConfig
+  return getFormattedMatmanConfig(matmanConfigFilePath, matmanConfigOpts, basePath);
+}
+
+
+/**
+ * 获得 matman.config.js 文件路径，并返回 matmanConfig 对象
+ *
+ * @param {String} [matmanConfigFilePath] matman.config.js 文件路径
+ * @param {Object} [matmanConfigOpts] 额外传递给 MatmanConfig 的参数，可覆盖 matman.config.js 中配置内容
+ * @param {String} [basePath] 起始路径
+ * @return {null | MatmanConfig}
+ */
+export function getFormattedMatmanConfig(
+  matmanConfigFilePath?: string,
+  matmanConfigOpts?: IMatmanConfigOpts,
+  basePath?: string,
+): null | MatmanConfig {
+  let configData: IMatmanConfigOpts;
 
   // 如果查到这个配置文件，则使用之
   if (matmanConfigFilePath) {
@@ -99,12 +117,19 @@ export function findMatmanConfig(
       // 如果存在 matman.config.js 文件，则取该文件目录
       configData.matmanRootPath = path.dirname(matmanConfigFilePath);
     } else {
+      if (!basePath) {
+        // 如果既不传入 matman.config.js 文件目录，又不给一个基础寻找路径，就算找不到了
+        return null;
+      }
+
       // 否则获取 package.json 目录
       const packageFilePath = searchFilePath(basePath, 'package.json');
+
       if (!packageFilePath) {
         // 如果连 package.json 都找不到，直接报错吧
         return null;
       }
+
       configData.matmanRootPath = path.dirname(packageFilePath);
     }
   }

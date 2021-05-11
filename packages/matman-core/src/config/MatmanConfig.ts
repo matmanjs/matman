@@ -1,16 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 
-import { getAbsolutePath } from '../util';
+import { getAbsolutePath, searchFilePath } from '../util';
 import { IMatmanConfigOpts } from '../types';
 import { IPluginBase } from '../typings/PluginBase';
 
 export default class MatmanConfig {
   // 用于同源测试的项目源码的根目录，一般指 package.json 的目录
-  public workspacePath?: string;
+  public workspacePath: string;
 
   // 测试产物的输出目录
-  public outputPath?: string;
+  public outputPath: string;
 
   // matman 项目的根目录
   public matmanRootPath: string;
@@ -46,49 +46,31 @@ export default class MatmanConfig {
     // matman 项目的根目录
     // 它在内部处理时是必须的，因为会有一些默认值都是基于这个根目录而言
     // 获取值的优先级为：参数指定 > matman.config.js 路径 > package.json 路径
-    this.matmanRootPath = getAbsolutePath(matmanRootPath);
+    this.matmanRootPath = this.getFullPath('', matmanRootPath, true);
 
-    if (!fs.existsSync(this.matmanRootPath)) {
-      throw new Error(`Unknown matmanRootPath=${this.matmanRootPath}`);
-    }
+    // 用于同源测试的项目源码的根目录，一般指 package.json 的目录
+    this.workspacePath = this.getFullPath(searchFilePath(this.matmanRootPath, 'package.json'), opts.workspacePath, true);
+
+    // 测试产物的输出目录
+    this.outputPath = this.getFullPath(path.join(this.workspacePath, '.matman_output'), opts.outputPath);
 
     // 测试案例的根目录
-    this.caseModulesPath = getAbsolutePath(
-      opts.caseModulesPath || './src/case_modules',
-      this.matmanRootPath,
-    );
-
-    // 如果默认的 caseModulesPath 不存在，则复用 matmanRootPath
-    if (!fs.existsSync(this.caseModulesPath)) {
-      this.caseModulesPath = this.matmanRootPath;
-    }
+    this.caseModulesPath = this.getFullPath('./src/case_modules', opts.caseModulesPath, true);
 
     // crawler script 构建之后的目录
-    this.crawlerBuildPath = getAbsolutePath(
-      opts.crawlerBuildPath || './build/crawler-script',
-      this.matmanRootPath,
-    );
+    this.crawlerBuildPath = this.getFullPath('./build/crawler-script', opts.crawlerBuildPath);
 
     // 前端爬虫脚本中是否注入jQuery，默认值为 true
     this.crawlerInjectJQuery = !!opts.crawlerInjectJQuery;
 
     // 屏幕截图保存的路径
-    this.screenshotPath = getAbsolutePath(
-      opts.screenshotPath || './build/screenshot_output',
-      this.matmanRootPath,
-    );
+    this.screenshotPath = this.getFullPath('./build/screenshot_output', opts.screenshotPath);
 
     // 覆盖率文件保存的路径
-    this.coveragePath = getAbsolutePath(
-      opts.coveragePath || './build/coverage_output',
-      this.matmanRootPath,
-    );
+    this.coveragePath = this.getFullPath('./build/coverage_output', opts.coveragePath);
 
     // MatmanResult 执行结果数据保存的路径
-    this.matmanResultPath = getAbsolutePath(
-      opts.matmanResultPath || './build/matman_result_output',
-      this.matmanRootPath,
-    );
+    this.matmanResultPath = this.getFullPath('./build/matman_result_output', opts.matmanResultPath);
 
     // 设置 dev 开发模式
     this.setIsDevBuild(!!opts.isDevBuild);
@@ -130,5 +112,15 @@ export default class MatmanConfig {
     }
 
     return null;
+  }
+
+  private getFullPath(defaultValue: string, pathFromParam?: string, shouldCheckExists?: boolean): string {
+    const pathResult = getAbsolutePath(pathFromParam || defaultValue, this.matmanRootPath);
+
+    if (shouldCheckExists && !fs.existsSync(pathResult)) {
+      throw new Error(`Unknown path=${pathResult}, pathFromParam=${pathFromParam}, defaultValue=${defaultValue}`);
+    }
+
+    return pathResult;
   }
 }

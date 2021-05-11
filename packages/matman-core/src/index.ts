@@ -10,7 +10,7 @@ import MockstarConfig, {
 } from './config/MockstarConfig';
 import { MATMAN_CONFIG_FILE, RUNNER_NAME } from './config';
 
-import { getAbsolutePath, findMatmanConfig, searchFilePath, getFromStrOrFunc } from './util';
+import { getAbsolutePath, findMatmanConfig, getFormattedMatmanConfig, searchFilePath, getFromStrOrFunc } from './util';
 import { requireAsync, requireSync } from './util/require-file';
 import { isURLMatch } from './util/url';
 import { createLogger, logger } from './util/logger';
@@ -41,6 +41,7 @@ export {
   searchFilePath,
   getFromStrOrFunc,
   findMatmanConfig,
+  getFormattedMatmanConfig,
   requireAsync,
   requireSync,
   isURLMatch,
