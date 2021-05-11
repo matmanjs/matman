@@ -12,6 +12,9 @@ import {
 } from 'matman-plugin-mockstar';
 import { BrowserRunner } from 'matman-runner-puppeteer';
 import DeviceInstance, { getDeviceInstance } from './DeviceInstance';
+import { E2ERunner } from 'matman-e2e-runner';
+
+const globalAny: any = global;
 
 interface ICaseModuleOpts {
   filename: string;
@@ -63,8 +66,8 @@ export default class CaseModule {
   }
 
   // 执行
-  public async run(pageDriverOpts: IPageDriverOpts) {
-    // 创建 PageDriver
+  public async run(pageDriverOpts?: IPageDriverOpts) {
+    this.setRequiredPlugins() ;
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launch(
@@ -95,6 +98,32 @@ export default class CaseModule {
     // 获取结果
     return pageDriver.evaluate(path.join(path.dirname(this.filename), './crawlers/get-page-info.js'));
   }
+
+
+  private setRequiredPlugins() {
+    // 该参数为全局参数
+    if (!globalAny.matmanE2ERunner) {
+      return;
+    }
+
+    const e2eRunner = globalAny.matmanE2ERunner as E2ERunner;
+
+    const pluginApp = e2eRunner.matmanConfig.getPlugin('app') as PluginApp;
+    if (pluginApp) {
+      this.setPluginApp(pluginApp);
+    }
+
+    const pluginWhistle = e2eRunner.matmanConfig.getPlugin('whistle') as PluginWhistle;
+    if (pluginWhistle) {
+      this.setPluginWhistle(pluginWhistle);
+    }
+
+    const pluginMockstar = e2eRunner.matmanConfig.getPlugin('mockstar') as PluginMockstar;
+    if (pluginMockstar) {
+      this.setPluginMockstar(pluginMockstar);
+    }
+  }
+
 
   private setWhistleRuleBeforeRun(): void {
     if (!this.pluginWhistle) {

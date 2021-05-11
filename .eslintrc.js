@@ -4,10 +4,10 @@ module.exports = {
     node: true,
     mocha: true,
   },
-  extends: [
-    '@tencent/eslint-config-tencent',
-    '@tencent/eslint-config-tencent/ts',
-  ],
+  globals: {
+    matmanE2ERunner: true,
+  },
+  extends: ['@tencent/eslint-config-tencent', '@tencent/eslint-config-tencent/ts'],
   overrides: [
     {
       files: ['*.test.ts', '*.test.js'],

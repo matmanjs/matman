@@ -24,28 +24,13 @@ module.exports = new CaseModule({
     '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/matman.config.js',
   );
 
+  global.matmanE2ERunner = e2eRunner;
+
   // 测试地址 https://now.qq.com/index.html
   await e2eRunner.setup();
 
-  const caseModule = module.exports;
-
-  const pluginApp = e2eRunner.matmanConfig.getPlugin('app');
-  if (pluginApp) {
-    caseModule.setPluginApp(pluginApp);
-  }
-
-  const pluginWhistle = e2eRunner.matmanConfig.getPlugin('whistle');
-  if (pluginWhistle) {
-    caseModule.setPluginWhistle(pluginWhistle);
-  }
-
-  const pluginMockstar = e2eRunner.matmanConfig.getPlugin('mockstar');
-  if (pluginMockstar) {
-    caseModule.setPluginMockstar(pluginMockstar);
-  }
-
   // await caseModule.handleDependencies();
-  const result = await caseModule.run({
+  const result = await module.exports.run({
     show: true,
     doNotCloseBrowser: true,
     useRecorder: true,

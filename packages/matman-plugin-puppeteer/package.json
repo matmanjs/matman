@@ -52,6 +52,7 @@
     "lodash": "^4.17.21",
     "matman": "^6.0.20",
     "matman-core": "^6.0.20",
+    "matman-e2e-runner": "^6.0.20",
     "matman-plugin-app": "^6.0.20",
     "matman-plugin-core": "^6.0.20",
     "matman-plugin-mockstar": "^6.0.20",
