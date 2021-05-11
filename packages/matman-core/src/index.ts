@@ -30,6 +30,7 @@ import { IPluginBase } from './typings/PluginBase';
 
 import MatmanResult from './model/MatmanResult';
 import CacheData from './model/CacheData';
+import E2ERunner from './model/E2ERunner';
 
 import { IMatmanConfigOpts } from './types';
 
@@ -76,4 +77,5 @@ export {
   IMatmanConfigOpts,
   IPluginBase,
   CacheData,
+  E2ERunner,
 };

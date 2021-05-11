@@ -12,7 +12,7 @@ import {
 } from 'matman-plugin-mockstar';
 import { BrowserRunner } from 'matman-runner-puppeteer';
 import DeviceInstance, { getDeviceInstance } from './DeviceInstance';
-import { E2ERunner } from 'matman-e2e-runner';
+import { E2ERunner } from 'matman-core';
 
 const globalAny: any = global;
 
@@ -81,7 +81,7 @@ export default class CaseModule {
       await pageDriver.useProxyServer(this.pluginWhistle.getLocalWhistleServer());
 
       // 设置代理规则
-      this.setWhistleRuleBeforeRun();
+      await this.setWhistleRuleBeforeRun();
     }
 
     // 设置浏览器设备型号
@@ -125,7 +125,7 @@ export default class CaseModule {
   }
 
 
-  private setWhistleRuleBeforeRun(): void {
+  private async setWhistleRuleBeforeRun(): Promise<void> {
     if (!this.pluginWhistle) {
       return;
     }
@@ -136,7 +136,7 @@ export default class CaseModule {
     );
 
     if (whistleRuleFromApp || whistleRuleFromMockstar) {
-      this.pluginWhistle?.setRules({
+      await this.pluginWhistle?.setRules({
         getWhistleRules: () => {
           const name = 'none';
           const newContentArr: string[] = [];
