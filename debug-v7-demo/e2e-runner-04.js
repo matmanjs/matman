@@ -61,16 +61,13 @@ const { PluginTest } = require('../packages/matman-plugin-test');
   const caseModule = new CaseModule({
     filename:
       '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/case_modules/page-index/case-01.js',
-    dependencies: {
-      appRunner: true,
-      mockRunner: mockOfBasic,
-    },
-    extends: {
-      device: iPhone6,
-      // networkCondition: fast3G,
-    },
     handler: handlerOfBasicCheck,
     crawler: './crawlers/get-page-info.js',
+    dependencies: {
+      pluginAppInstance: true,
+      pluginMockstarInstance: mockOfBasic,
+      deviceInstance: iPhone6,
+    },
   });
 
   caseModule.setPluginApp(pluginApp);
