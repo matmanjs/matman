@@ -1,0 +1,7 @@
+require:
+  - 'babel-core/register'
+  - 'ignore-styles'
+reporter: 'mochawesome'
+reporterOptions:
+  - 'reportDir=.matman_output/mochawesome'
+recursive: true
