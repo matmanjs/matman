@@ -1,4 +1,5 @@
-import { DefinedInstanceBase } from 'matman-plugin-core';
+import { WhistleRule } from 'whistle-sdk';
+import { CacheData, DefinedInstanceBase } from 'matman-plugin-core';
 import PluginApp from './PluginApp';
 
 interface DefinedInstanceOpts {
@@ -17,7 +18,6 @@ export default class DefinedInstance extends DefinedInstanceBase {
    * 启动自动化测试之前执行的方法
    */
   public setupCall?: (plugin: PluginApp) => Promise<void>;
-
 
   /**
    * 获取 whistle 规则
@@ -44,11 +44,21 @@ export default class DefinedInstance extends DefinedInstanceBase {
   /**
    * 获取 whistle 规则
    */
-  public getWhistleRules(): string | string[] | null{
-    if (typeof this.getWhistleRulesCall === 'function') {
-      return this.getWhistleRulesCall.call(this);
+  public getWhistleRule(cacheData?: CacheData): WhistleRule {
+    if (!cacheData) {
+      console.log('TODO 还要处理下使用端口的情况');
     }
 
-    return null;
+    let rules;
+
+    if (typeof this.getWhistleRulesCall === 'function') {
+      rules = this.getWhistleRulesCall.call(this);
+    }
+
+    if (!rules) {
+      return new WhistleRule('prod', ['# mockstar 代理设置失败！']);
+    }
+
+    return new WhistleRule('prod', rules);
   }
 }
