@@ -21,7 +21,6 @@ interface ICaseModuleOpts {
   };
 }
 
-
 export default class CaseModule {
   public filename: string;
   public handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
@@ -60,8 +59,10 @@ export default class CaseModule {
   public async run(pageDriverOpts?: IPageDriverOpts) {
     console.log('==============run=============', process.env.MATMAN_TMP_PLUGIN_JSON_DATA);
     const pluginJsonData = JSON.parse(process.env.MATMAN_TMP_PLUGIN_JSON_DATA || '{}');
+
     if (this.pluginAppInstanceFromOpts) {
       this.pluginAppInstance = getPluginAppInstance(
+        pluginJsonData.extraInfo.matmanRootPath,
         pluginJsonData.pluginApp?.definedInstanceDir,
         pluginJsonData.pluginApp?.activeInstance,
       );
@@ -103,12 +104,13 @@ export default class CaseModule {
       return;
     }
 
+    debugger;
     const whistleRuleFromApp = this.pluginAppInstance?.getWhistleRule(
-      new CacheData(pluginJsonData.pluginApp?.cacheData)
+      new CacheData(pluginJsonData.pluginApp?.cacheData?.data)
     );
 
     const whistleRuleFromMockstar = this.pluginMockstarInstance?.getWhistleRule(
-      new CacheData(pluginJsonData.pluginMockstar?.cacheData)
+      new CacheData(pluginJsonData.pluginMockstar?.cacheData?.data)
     );
 
     if (whistleRuleFromApp || whistleRuleFromMockstar) {

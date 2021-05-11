@@ -36,7 +36,11 @@ export default class PluginTestMochaInstance extends DefinedInstanceBase impleme
     }
 
     const e2eRunner = globalAny.matmanE2ERunner as E2ERunner;
-    const pluginJsonData: {[key: string]: any} = {};
+    const pluginJsonData: {[key: string]: any} = {
+      extraInfo: {
+        matmanRootPath: e2eRunner.matmanConfig.matmanRootPath,
+      },
+    };
 
     const pluginApp = e2eRunner.matmanConfig.getPlugin('app') ;
     if (pluginApp) {

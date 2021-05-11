@@ -9,6 +9,8 @@ interface IPluginAppOpts {
   activeInstance: string;
 }
 
+const globalAny: any = global;
+
 export default class PluginApp extends PluginBase {
   /**
    * 配置文件的目录
@@ -46,6 +48,12 @@ export default class PluginApp extends PluginBase {
   }
 
   public getActiveInstance(): PluginAppInstance | null {
-    return getPluginAppInstance(this.definedInstanceDir, this.activeInstance);
+    if (!globalAny.matmanE2ERunner) {
+      return null;
+    }
+
+    const e2eRunner = globalAny.matmanE2ERunner as E2ERunner;
+
+    return getPluginAppInstance(e2eRunner.matmanConfig.matmanRootPath, this.definedInstanceDir, this.activeInstance);
   }
 }
