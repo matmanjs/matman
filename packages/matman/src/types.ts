@@ -22,7 +22,7 @@ export interface IMatmanConfigOpts {
 }
 
 export interface IPageDriverOpts {
-  caseModuleFilePath: string;
+  caseModuleFilePath?: string;
   tag?: string;
   show?: boolean;
   doNotCloseBrowser?: boolean;

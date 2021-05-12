@@ -71,7 +71,7 @@ export default class PageDriverAsync implements IPageDriver {
 
     this.matmanConfig = matmanConfig;
 
-    this.caseModuleFilePath = opts.caseModuleFilePath;
+    this.caseModuleFilePath = opts.caseModuleFilePath || '';
 
     this.show = !!opts.show;
     this.doNotCloseBrowser = !!opts.doNotCloseBrowser;

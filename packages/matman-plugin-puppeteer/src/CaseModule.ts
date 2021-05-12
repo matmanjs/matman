@@ -21,13 +21,14 @@ interface ICaseModuleOpts {
     pluginMockstarInstance?: PluginMockstarInstance;
     deviceInstance?: DeviceInstance;
   };
+  pageDriverOpts?: IPageDriverOpts;
 }
 
 export default class CaseModule {
   public filename: string;
   public handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
   public crawler: string;
-
+  public pageDriverOpts: IPageDriverOpts;
 
   private readonly deviceInstance: DeviceInstance | null;
   private pluginAppInstance: PluginAppInstance | null;
@@ -39,6 +40,7 @@ export default class CaseModule {
     this.filename = opts.filename;
     this.handler = opts.handler;
     this.crawler = opts.crawler;
+    this.pageDriverOpts = this.getPageDriverOpts(opts.pageDriverOpts);
     this.pluginAppInstanceFromOpts = opts.dependencies?.pluginAppInstance;
 
     this.deviceInstance = getDeviceInstance(opts.dependencies?.deviceInstance);
@@ -60,7 +62,7 @@ export default class CaseModule {
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launch(
       new BrowserRunner(),
-      _.merge({}, pageDriverOpts, { caseModuleFilePath: this.filename }) as IPageDriverOpts,
+      this.getPageDriverOpts(pageDriverOpts),
     );
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
@@ -85,6 +87,10 @@ export default class CaseModule {
 
     // 获取结果
     return pageDriver.evaluate(path.join(path.dirname(this.filename), './crawlers/get-page-info.js'));
+  }
+
+  private getPageDriverOpts(pageDriverOpts?: IPageDriverOpts): IPageDriverOpts {
+    return _.merge({}, this.pageDriverOpts, pageDriverOpts, { caseModuleFilePath: this.filename }) as IPageDriverOpts;
   }
 
   private setPluginAppInstance(e2eRunnerJsonData: IE2ERunnerJsonData | null) {

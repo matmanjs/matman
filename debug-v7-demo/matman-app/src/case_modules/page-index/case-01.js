@@ -17,30 +17,7 @@ module.exports = new CaseModule({
     pluginMockstarInstance: mockOfBasic,
     deviceInstance: iPhone6,
   },
+  pageDriverOpts: {
+    useRecorder: true,
+  },
 });
-
-// (async () => {
-//   const e2eRunner = new E2ERunner(
-//     '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/matman.config.js',
-//   );
-//
-//   global.matmanE2ERunner = e2eRunner;
-//
-//   // 测试地址 https://now.qq.com/index.html
-//   await e2eRunner.setup();
-//
-//   // await caseModule.handleDependencies();
-//   const result = await module.exports.run({
-//     show: true,
-//     doNotCloseBrowser: true,
-//     useRecorder: true,
-//   });
-//
-//   console.log(JSON.stringify(result, null, 2));
-//
-//   // 设置代理规则：项目 & mockstar
-//
-//   // await e2eRunner.runTest();
-//
-//   // await e2eRunner.teardown();
-// })();

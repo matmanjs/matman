@@ -16,7 +16,7 @@ export { PageDriverAsync, IPageDriverOpts };
  * @return {IPageDriverOpts} 新的
  */
 function getPageDriverOpts(opts?: IPageDriverOpts): IPageDriverOpts {
-  const pageDriverOpts = _.merge({}, opts);
+  const pageDriverOpts = _.merge({}, opts) as IPageDriverOpts;
 
   let { caseModuleFilePath } = pageDriverOpts;
 
@@ -73,7 +73,7 @@ export function launch(
   }
 
   // 查找 matman config
-  const matmanConfig = findMatmanConfig(newPageDriverOpts.caseModuleFilePath, matmanConfigOpts);
+  const matmanConfig = findMatmanConfig(newPageDriverOpts?.caseModuleFilePath || '', matmanConfigOpts);
 
   // matman config 必须得存在
   if (!matmanConfig) {
