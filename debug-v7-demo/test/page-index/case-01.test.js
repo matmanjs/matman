@@ -8,11 +8,7 @@ describe('index.html 身份证认证页面：常规检查', function () {
   let matmanResult;
 
   before(async function () {
-    matmanResult = await caseModule.run({
-      show: true,
-      doNotCloseBrowser: false,
-      useRecorder: true,
-    });
+    matmanResult = await caseModule.run();
   });
 
   describe('检查基本信息', function () {

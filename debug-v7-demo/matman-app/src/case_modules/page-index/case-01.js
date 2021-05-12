@@ -1,9 +1,6 @@
 const { CaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
 
-// const { E2ERunner } = require('../../../../../packages/matman-core');
-
 const iPhone6 = require('../../plugins/puppeteer/device/iPhone6');
-// const fast3G = require('../../plugins/puppeteer/network-condition/fast-3g');
 const mockOfBasic = require('../../plugins/mockstar/page-index-basic');
 
 const handlerOfBasicCheck = require('./handlers/basic-check');
@@ -21,3 +18,18 @@ module.exports = new CaseModule({
     useRecorder: true,
   },
 });
+
+// (() => {
+//   const { debugCaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
+//
+//   // 调试
+//   debugCaseModule(module.exports, {
+//     doNotCloseBrowser: false,
+//   })
+//     .then(data => {
+//       console.log(JSON.stringify(data, null, 2));
+//     })
+//     .catch(err => {
+//       console.error(err);
+//     });
+// })();

@@ -1,16 +1,35 @@
-const { CaseModule } = require('../../../npm/matman-plugin-puppeteer');
+const { CaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
 
-const iPhoneX = require('../../plugins/device/iPhoneX');
-const proxyDev = require('../../plugins/whistle/proxy-dev');
-const proxyProd = require('../../plugins/whistle/proxy-prod');
+const iPhoneXCustom = require('../../plugins/puppeteer/device/iPhoneXCustom');
 const mockOfBasic = require('../../plugins/mockstar/page-index-basic');
+
 const handlerOfVerifyBasic = require('./handlers/verify-basic');
 
 module.exports = new CaseModule({
   filename: __filename,
-  device: iPhoneX,
-  proxyServer: process.env.DEBUG_DEV ? proxyDev : proxyProd,
-  mock: mockOfBasic,
-  crawler: './crawlers/get-page-info.js',
   handler: handlerOfVerifyBasic,
+  crawler: './crawlers/get-page-info.js',
+  dependencies: {
+    pluginAppInstance: true,
+    pluginMockstarInstance: mockOfBasic,
+    deviceInstance: iPhoneXCustom,
+  },
+  pageDriverOpts: {
+    useRecorder: true,
+  },
 });
+
+// (() => {
+//   const { debugCaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
+//
+//   // 调试
+//   debugCaseModule(module.exports, {
+//     doNotCloseBrowser: false,
+//   })
+//     .then(data => {
+//       console.log(JSON.stringify(data, null, 2));
+//     })
+//     .catch(err => {
+//       console.error(err);
+//     });
+// })();
