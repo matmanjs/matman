@@ -8,6 +8,7 @@ import CaseModule from './CaseModule';
 
 interface IDebugCaseModuleOpts{
   doNotSetup?: boolean;
+  showResultInConsole?: boolean;
 }
 
 export async function debugCaseModule(
@@ -25,15 +26,25 @@ export async function debugCaseModule(
   // 一定要设置变量
   setE2ERunnerJsonDataToEnv(e2eRunner);
 
-
   // await caseModule.handleDependencies();
   const result = await caseModule.run(_.merge({
     show: true,
-    doNotCloseBrowser: true,
+    doNotCloseBrowser: false,
   }, pageDriverOpts));
 
-  console.log(JSON.stringify(result, null, 2));
+  console.log('\n===========================');
+  console.log('');
+  console.log('The run result is in the follow file: ');
+  console.log('');
+  console.log(caseModule.pageDriver?.matmanResultConfig?.path);
+  console.log('');
+  console.log('===========================\n');
 
+  if (debugOpts?.showResultInConsole) {
+    console.log(JSON.stringify(result, null, 2));
+  }
 
   // TODO 关闭和清理
+
+  return result;
 }

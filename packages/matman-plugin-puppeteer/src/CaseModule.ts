@@ -30,6 +30,8 @@ export default class CaseModule {
   public crawler: string;
   public pageDriverOpts: IPageDriverOpts;
 
+  public pageDriver: PageDriverAsync | null;
+
   private readonly deviceInstance: DeviceInstance | null;
   private pluginAppInstance: PluginAppInstance | null;
   private pluginMockstarInstance: PluginMockstarInstance | null;
@@ -49,6 +51,9 @@ export default class CaseModule {
 
     // 注意它比较特殊，配置项在 matman.config.js 中，所以需要在 run 方法执行时才设置
     this.pluginAppInstance = null;
+
+    // 初始的时候 pageDriver 为 null，执行时再设置，避免浪费性能
+    this.pageDriver = null;
   }
 
   // 执行
@@ -64,6 +69,8 @@ export default class CaseModule {
       new BrowserRunner(),
       this.getPageDriverOpts(pageDriverOpts),
     );
+
+    this.pageDriver = pageDriver;
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
     if (e2eRunnerJsonData?.pluginWhistle) {
