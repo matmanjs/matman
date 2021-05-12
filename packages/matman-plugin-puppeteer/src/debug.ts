@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { E2ERunner } from 'matman-core';
+import { E2ERunner, searchFilePath, MATMAN_CONFIG_FILE } from 'matman-core';
 import { IPageDriverOpts } from 'matman';
 
 import { setE2ERunnerJsonDataToEnv } from 'matman-plugin-test';
@@ -16,7 +16,9 @@ export async function debugCaseModule(
   pageDriverOpts?: IPageDriverOpts,
   debugOpts?: IDebugCaseModuleOpts,
 ) {
-  const e2eRunner = new E2ERunner('/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/matman.config.js');
+  // 自动获取 matman.config.js 路径
+  const matmanConfigFilePath = searchFilePath(caseModule.filename, MATMAN_CONFIG_FILE);
+  const e2eRunner = new E2ERunner(matmanConfigFilePath);
 
   if (!debugOpts?.doNotSetup) {
     // 测试地址 https://now.qq.com/index.html
