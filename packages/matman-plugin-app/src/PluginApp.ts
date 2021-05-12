@@ -33,11 +33,15 @@ export default class PluginApp extends PluginBase {
   /**
    * 构建业务工程项目
    */
-  public async build(cmd: IBuildAppCmd, opts?: IBuildAppOpts) {
-    return buildApp(cmd, opts);
+  public async build(cmd: IBuildAppCmd, opts?: IBuildAppOpts): Promise<void>  {
+    const appPort = await buildApp(cmd, opts);
+
+    if (appPort) {
+      this.cacheData.setCacheItem('port', appPort);
+    }
   }
 
-  public async setup(e2eRunner: E2ERunner) {
+  public async setup(e2eRunner: E2ERunner): Promise<void> {
     await super.setup(e2eRunner);
 
     // 获取当前激活的模块

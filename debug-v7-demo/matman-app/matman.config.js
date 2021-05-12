@@ -43,7 +43,7 @@ module.exports = {
   plugins: [
     new PluginApp({
       definedInstanceDir: './src/plugins/app',
-      activeInstance: 'prod.js',
+      activeInstance: 'dev.js',
     }),
     new PluginWhistle({
       port: 9430,

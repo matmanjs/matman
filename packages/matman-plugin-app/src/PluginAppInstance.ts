@@ -7,7 +7,7 @@ import PluginApp from './PluginApp';
 interface DefinedInstanceOpts {
   rootPath: string;
   setup?: (plugin: PluginApp) => Promise<void>;
-  getWhistleRules?: () => string | string[];
+  getWhistleRules?: (port?: number) => string | string[];
 }
 
 export default class PluginAppInstance extends DefinedInstanceBase {
@@ -24,7 +24,7 @@ export default class PluginAppInstance extends DefinedInstanceBase {
   /**
    * 获取 whistle 规则
    */
-  public getWhistleRulesCall?: () => string | string[];
+  public getWhistleRulesCall?: (port?: number) => string | string[];
 
   public constructor(name: string, opts: DefinedInstanceOpts) {
     super(name);
@@ -47,14 +47,10 @@ export default class PluginAppInstance extends DefinedInstanceBase {
    * 获取 whistle 规则
    */
   public getWhistleRule(cacheData?: CacheData): WhistleRule | null {
-    if (!cacheData) {
-      console.log('TODO 还要处理下使用端口的情况');
-    }
-
     let rules;
 
     if (typeof this.getWhistleRulesCall === 'function') {
-      rules = this.getWhistleRulesCall.call(this);
+      rules = this.getWhistleRulesCall(cacheData?.getCacheItem('port') as number);
     }
 
     if (!rules) {
@@ -64,7 +60,6 @@ export default class PluginAppInstance extends DefinedInstanceBase {
     return new WhistleRule('prod', rules);
   }
 }
-
 
 export function getPluginAppInstance(
   matmanRootPath: string,
