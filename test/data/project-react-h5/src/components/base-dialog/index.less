@@ -1,0 +1,98 @@
+.dialog-wrapper {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.4);
+
+    .dialog-inner {
+        width: 296px;
+        border-radius: 4px;
+        border-top: 4px solid #05D380;
+        box-sizing: border-box;
+        background-color: #fff;
+    }
+
+    .dialog-text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        margin: 22px 14px 22px;
+        min-height: 44px;
+
+        &:before,
+        &:after {
+            content: " ";
+            display: block;
+            -webkit-box-flex: 1;
+            visibility: hidden;
+        }
+
+        & > .title {
+            font-size: 18px;
+            line-height: 22px;
+            color: #000;
+            text-align: center;
+
+            & ~ .text {
+                margin-top: 12px;
+            }
+        }
+
+        & > .text {
+            font-size: 16px;
+            line-height: 20px;
+            color: #000;
+        }
+    }
+
+    .dialog-buttons {
+        display: flex;
+        position: relative;
+
+        &:before {
+            display: block;
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 1px;
+            background: #ddd;
+            transform: scale3d(1, .5, 1);
+        }
+
+        .dialog-btn {
+            flex: 1;
+            display: block;
+            position: relative;
+            height: 45px;
+            line-height: 45px;
+            font-size: 16px;
+            text-align: center;
+            color: #000;
+
+            &:nth-child(even) {
+                color: #05d380;
+            }
+
+            & ~ .dialog-btn {
+                &:before {
+                    display: block;
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    bottom: 0;
+                    width: 1px;
+                    background: #ddd;
+                    transform: scale3d(.5, 1, 1);
+                }
+            }
+        }
+    }
+}

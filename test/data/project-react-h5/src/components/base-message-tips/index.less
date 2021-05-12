@@ -1,0 +1,49 @@
+.message-tips {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -45px;
+    margin: auto;
+    padding: 8px 5px;
+    width: 260px;
+    background-color: #fff;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px 2px #999;
+    text-align: center;
+
+    animation: display-message-tips-animation 3s;
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        background-size: 100% 100%;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+
+    .icon-err {
+        background-image: url(./img/iconWarning.png);
+    }
+
+    .icon-success {
+        background-image: url(./img/iconSuccess.png);
+    }
+}
+
+@keyframes display-message-tips-animation {
+    0% {
+        top: -45px
+    }
+    20% {
+        top: 5px
+    }
+    80% {
+        top: 5px
+    }
+    100% {
+        top: -45px
+    }
+}
