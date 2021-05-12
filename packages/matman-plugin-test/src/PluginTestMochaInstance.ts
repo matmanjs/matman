@@ -15,8 +15,8 @@ export default class PluginTestMochaInstance extends DefinedInstanceBase impleme
   public mochawesomeJsonFilePath?: string;
 
 
-  public constructor(cmd: string, opts: MochaInstanceOpts) {
-    super('Use Mocha');
+  public constructor(name: string, cmd: string, opts: MochaInstanceOpts) {
+    super(name);
 
     this.cmd = cmd;
     this.cwd = opts.cwd;

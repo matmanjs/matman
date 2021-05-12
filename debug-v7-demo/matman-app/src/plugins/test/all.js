@@ -12,6 +12,6 @@ const { PluginTestMochaInstance } = require('../../../../../packages/matman-plug
 //   cwd: '/Users/helinjiang/gitprojects/matman/debug-v7-demo',
 // });
 
-module.exports = new PluginTestMochaInstance('npx mocha', {
+module.exports = new PluginTestMochaInstance('测试所有用例', 'npx mocha', {
   cwd: path.join(__dirname, '../../../../'),
 });
