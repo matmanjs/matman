@@ -7,6 +7,11 @@ interface IMockstarSDKOpts {
   port?: number;
 }
 
+export interface IStartOpts{
+  rootPath: string;
+  mockServerPath: string;
+}
+
 export default class MockstarSDK {
   public port?: number;
 
@@ -19,7 +24,7 @@ export default class MockstarSDK {
   /**
    * 启动 mockstar
    */
-  public async start(): Promise<void> {
+  public async start(opts: IStartOpts): Promise<void> {
     logger.info('Ready to start mockstar ...');
 
     // 寻找并设置即将要占用的端口
@@ -28,8 +33,8 @@ export default class MockstarSDK {
     // mockstar: 启动
     const configOpts = {
       port: this.port,
-      rootPath: '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app',
-      mockServerPath: '/Users/helinjiang/gitprojects/matman/debug-v7-demo/matman-app/src/plugins/mockstar/modules',
+      rootPath: opts.rootPath,
+      mockServerPath: opts.mockServerPath,
     };
 
     this.runServer = startServer(configOpts, (isSuccess, data) => {

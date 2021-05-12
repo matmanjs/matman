@@ -49,6 +49,7 @@ module.exports = {
       port: 9430,
     }),
     new PluginMockstar({
+      definedInstanceDir: './src/plugins/mockstar',
       port: 9440,
     }),
     new PluginPuppeteer({
