@@ -7,6 +7,8 @@ import { CacheData } from 'matman-core';
 import { PluginAppInstance, getPluginAppInstance } from 'matman-plugin-app';
 import { PluginMockstarInstance, getPluginMockstarInstance } from 'matman-plugin-mockstar';
 import { PluginWhistle, getLocalWhistleServer } from 'matman-plugin-whistle';
+import { getE2ERunnerJsonDataFromEnv, IE2ERunnerJsonData } from 'matman-plugin-test';
+
 import { BrowserRunner } from 'matman-runner-puppeteer';
 import DeviceInstance, { getDeviceInstance } from './DeviceInstance';
 
@@ -42,31 +44,18 @@ export default class CaseModule {
     this.deviceInstance = getDeviceInstance(opts.dependencies?.deviceInstance);
 
     this.pluginMockstarInstance = getPluginMockstarInstance(opts.dependencies?.pluginMockstarInstance);
+
+    // 注意它比较特殊，配置项在 matman.config.js 中，所以需要在 run 方法执行时才设置
     this.pluginAppInstance = null;
   }
 
-  // public setPluginWhistle(pluginWhistle: PluginWhistle) {
-  //   this.pluginWhistle = pluginWhistle;
-  // }
-
-  // public setPluginApp(pluginApp: PluginApp) {
-  //   this.pluginApp = pluginApp;
-
-  //   this.pluginAppInstance = this.pluginApp.getActiveInstance();
-  // }
-
   // 执行
   public async run(pageDriverOpts?: IPageDriverOpts) {
-    console.log('==============run=============', process.env.MATMAN_TMP_PLUGIN_JSON_DATA);
-    const pluginJsonData = JSON.parse(process.env.MATMAN_TMP_PLUGIN_JSON_DATA || '{}');
+    const e2eRunnerJsonData = getE2ERunnerJsonDataFromEnv();
 
-    if (this.pluginAppInstanceFromOpts) {
-      this.pluginAppInstance = getPluginAppInstance(
-        pluginJsonData.extraInfo.matmanRootPath,
-        pluginJsonData.pluginApp?.definedInstanceDir,
-        pluginJsonData.pluginApp?.activeInstance,
-      );
-    }
+    // 设置 appInstance
+    this.setPluginAppInstance(e2eRunnerJsonData);
+
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launch(
@@ -75,12 +64,12 @@ export default class CaseModule {
     );
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
-    if (pluginJsonData.pluginWhistle) {
+    if (e2eRunnerJsonData?.pluginWhistle) {
       // 设置走 whistle 代理
-      await pageDriver.useProxyServer(getLocalWhistleServer(pluginJsonData.pluginWhistle.cacheData?.data?.port));
+      await pageDriver.useProxyServer(getLocalWhistleServer(e2eRunnerJsonData.pluginWhistle.cacheData?.data?.port));
 
       // 设置代理规则
-      await this.setWhistleRuleBeforeRun(pluginJsonData);
+      await this.setWhistleRuleBeforeRun(e2eRunnerJsonData);
     }
 
     // 设置浏览器设备型号
@@ -98,30 +87,44 @@ export default class CaseModule {
     return pageDriver.evaluate(path.join(path.dirname(this.filename), './crawlers/get-page-info.js'));
   }
 
-
-  private async setWhistleRuleBeforeRun(pluginJsonData: any): Promise<void> {
-    if (!pluginJsonData || !pluginJsonData.pluginWhistle) {
+  private setPluginAppInstance(e2eRunnerJsonData: IE2ERunnerJsonData | null) {
+    if (!this.pluginAppInstanceFromOpts || !e2eRunnerJsonData) {
       return;
     }
 
-    debugger;
+    this.pluginAppInstance = getPluginAppInstance(
+      e2eRunnerJsonData.extraInfo.matmanRootPath,
+      e2eRunnerJsonData.pluginApp?.definedInstanceDir,
+      e2eRunnerJsonData.pluginApp?.activeInstance,
+    );
+  }
+
+  private async setWhistleRuleBeforeRun(e2eRunnerJsonData: IE2ERunnerJsonData | null): Promise<void> {
+    if (!e2eRunnerJsonData || !e2eRunnerJsonData.pluginWhistle) {
+      return;
+    }
+
+    // Plugin App 中的代理配置
     const whistleRuleFromApp = this.pluginAppInstance?.getWhistleRule(
-      new CacheData(pluginJsonData.pluginApp?.cacheData?.data)
+      new CacheData(e2eRunnerJsonData.pluginApp?.cacheData?.data)
     );
 
+    // Plugin Mockstar 中的代理配置
     const whistleRuleFromMockstar = this.pluginMockstarInstance?.getWhistleRule(
-      new CacheData(pluginJsonData.pluginMockstar?.cacheData?.data)
+      new CacheData(e2eRunnerJsonData.pluginMockstar?.cacheData?.data)
     );
 
+    // 设置代理
     if (whistleRuleFromApp || whistleRuleFromMockstar) {
-      const pluginWhistle = new PluginWhistle(pluginJsonData.pluginWhistle);
+      // 这里是近似处理
+      const pluginWhistle = new PluginWhistle(e2eRunnerJsonData.pluginWhistle);
 
-      const cachePort = pluginJsonData.pluginWhistle.cacheData?.port;
+      const cachePort = e2eRunnerJsonData.pluginWhistle.cacheData?.port;
       if (cachePort) {
         pluginWhistle.cacheData.setCacheItem('port', cachePort);
       }
 
-      // 设置规则
+      // 为 Plugin Whistle 设置代理规则
       await pluginWhistle?.setRules({
         getWhistleRules: () => {
           const name = 'none';
@@ -150,17 +153,3 @@ export default class CaseModule {
     }
   }
 }
-
-// module.exports = new CaseModule({
-//   filename: __filename,
-//   dependencies: {
-//     appRunner: true,
-//     mockRunner: mockOfBasic,
-//   },
-//   extends: {
-//     device: iPhone6,
-//     networkCondition: fast3G,
-//   },
-//   handler: handlerOfBasicCheck,
-//   crawler: './crawlers/get-page-info.js',
-// });

@@ -55,6 +55,7 @@
     "matman-plugin-app": "^6.0.20",
     "matman-plugin-core": "^6.0.20",
     "matman-plugin-mockstar": "^6.0.20",
+    "matman-plugin-test": "^6.0.20",
     "matman-plugin-whistle": "^6.0.20",
     "matman-runner-puppeteer": "^6.0.18"
   }
