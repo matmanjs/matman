@@ -3,7 +3,7 @@ const { PluginAppInstance } = require('../../../../../packages/matman-plugin-app
 
 module.exports = () => {
   // app 项目根目录
-  const rootPath = path.resolve(__dirname, '/Users/helinjiang/gitprojects/matman-v7-demo');
+  const rootPath = path.resolve(__dirname, '../../../../../test/data/project-react-h5');
 
   return new PluginAppInstance('构建本地开发版本', {
     rootPath,

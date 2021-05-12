@@ -1,11 +1,12 @@
 const path = require('path');
+
 const { PluginApp } = require('../../packages/matman-plugin-app');
 const { PluginWhistle } = require('../../packages/matman-plugin-whistle');
 const { PluginMockstar } = require('../../packages/matman-plugin-mockstar');
 const { PluginPuppeteer } = require('../../packages/matman-plugin-puppeteer');
 const { PluginTest } = require('../../packages/matman-plugin-test');
 
-const workspacePath = '/Users/helinjiang/gitprojects/matman-v7-demo';
+const workspacePath = path.resolve(__dirname, '../../test/data/project-react-h5');
 
 // 更多配置说明，请参考 https://matmanjs.github.io/matman/api/matman-config.html
 module.exports = {
