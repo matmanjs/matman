@@ -61,6 +61,7 @@ module.exports = {
     }),
     new PluginTest({
       definedInstanceDir: './src/plugins/test',
+      activeInstance: 'prod.js',
     }),
   ],
   events: {

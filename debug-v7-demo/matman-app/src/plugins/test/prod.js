@@ -1,3 +1,4 @@
+const path = require('path');
 const { PluginTestMochaInstance } = require('../../../../../packages/matman-plugin-test');
 
 // module.exports = new MochaInstance('npm run test:e2e:direct', {
@@ -12,5 +13,5 @@ const { PluginTestMochaInstance } = require('../../../../../packages/matman-plug
 // });
 
 module.exports = new PluginTestMochaInstance('npx mocha', {
-  cwd: '/Users/helinjiang/gitprojects/matman/debug-v7-demo',
+  cwd: path.join(__dirname, '../../../../'),
 });
