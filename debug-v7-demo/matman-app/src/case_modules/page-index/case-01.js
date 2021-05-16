@@ -5,7 +5,7 @@ const mockOfBasic = require('../../plugins/mockstar/page-index-basic');
 
 const handlerOfBasicCheck = require('./handlers/basic-check');
 
-module.exports = new CaseModule({
+module.exports = new CaseModule('观测页面的基础UI信息', {
   filename: __filename,
   handler: handlerOfBasicCheck,
   crawler: './crawlers/get-page-info.js',

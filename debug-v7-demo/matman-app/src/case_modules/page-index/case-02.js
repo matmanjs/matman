@@ -5,7 +5,7 @@ const mockOfBasic = require('../../plugins/mockstar/page-index-basic');
 
 const handlerOfVerifyBasic = require('./handlers/verify-basic');
 
-module.exports = new CaseModule({
+module.exports = new CaseModule('验证输入正确姓名和身份证号', {
   filename: __filename,
   handler: handlerOfVerifyBasic,
   crawler: './crawlers/get-page-info.js',

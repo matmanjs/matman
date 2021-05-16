@@ -25,6 +25,7 @@ interface ICaseModuleOpts {
 }
 
 export default class CaseModule {
+  public name: string;
   public filename: string;
   public handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
   public crawler: string;
@@ -38,7 +39,8 @@ export default class CaseModule {
 
   private readonly pluginAppInstanceFromOpts?: boolean;
 
-  public constructor(opts: ICaseModuleOpts) {
+  public constructor(name: string, opts: ICaseModuleOpts) {
+    this.name = name;
     this.filename = opts.filename;
     this.handler = opts.handler;
     this.crawler = opts.crawler;
