@@ -24,7 +24,7 @@ module.exports = async pageDriver => {
   });
 
   // 第五步：身份证输入框继续输入: 199909098888
-  await pageDriver.addAction('inputIdPart2', async page => {
+  await pageDriver.addAction(' 第五步：身份证输入框继续输入: 199909098888', async page => {
     await page.type('#id-value', '199909098888');
   });
 

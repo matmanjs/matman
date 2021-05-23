@@ -6,6 +6,7 @@ const { PluginMockstar } = require('../../packages/matman-plugin-mockstar');
 const { PluginPuppeteer } = require('../../packages/matman-plugin-puppeteer');
 const { PluginTest } = require('../../packages/matman-plugin-test');
 
+// FIXME: 如果不是同源测试方式，例如只是针对测试环境的测试，该怎么办呢？
 const workspacePath = path.resolve(__dirname, '../../test/data/project-react-h5');
 
 // 更多配置说明，请参考 https://matmanjs.github.io/matman/api/matman-config.html
