@@ -4,7 +4,7 @@ const mockstarLocalServer = require('mockstar-local-server');
 // 服务启动参数
 const configOpts = {
   rootPath: __dirname,
-  mockServerPath: path.resolve(__dirname, './matman-app/src/plugins/mockstar/modules'),
+  mockServerPath: path.resolve(__dirname, './matman-app/src/dependencies/mockstar/mockers'),
 };
 
 // 启动本地服务

@@ -1,0 +1,9 @@
+{
+  "description": "获取金额",
+  "route": "/cgi-bin/a/b/get-money",
+  "defaultModule": "success",
+  "method": "GET",
+  "tags": [
+    "提现页"
+  ]
+}
