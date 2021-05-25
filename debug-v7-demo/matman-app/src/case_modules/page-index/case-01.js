@@ -1,18 +1,17 @@
 const { CaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
 
-const iPhone6 = require('../../plugins/puppeteer/device/iPhone6');
-const mockOfBasic = require('../../plugins/mockstar/page-index-basic');
-
-const handlerOfBasicCheck = require('./handlers/basic-check');
+const deviceInstance = require('../../materials/puppeteer/device/iPhone6');
+const pluginMockstarInstance = require('./mock-services/basic');
+const userAction = require('./user-actions/basic-check');
 
 module.exports = new CaseModule('观测页面的基础UI信息', {
   filename: __filename,
-  handler: handlerOfBasicCheck,
-  crawler: './crawlers/get-page-info.js',
-  dependencies: {
+  userAction,
+  webCrawler: './web-crawlers/get-page-info.js',
+  materials: {
     pluginAppInstance: true,
-    pluginMockstarInstance: mockOfBasic,
-    deviceInstance: iPhone6,
+    pluginMockstarInstance,
+    deviceInstance,
   },
   pageDriverOpts: {
     useRecorder: true,
