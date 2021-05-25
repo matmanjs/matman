@@ -48,6 +48,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "fs-handler": "^0.1.2",
     "matman-core": "^6.0.20"
   }
 }

@@ -1,5 +1,5 @@
 import path from 'path';
-import { PluginBase } from 'matman-plugin-core';
+import { PluginBase, getAllDefinedInstances } from 'matman-plugin-core';
 import { E2ERunner } from 'matman-core';
 
 import { buildApp, IBuildAppCmd, IBuildAppOpts } from './utils';
@@ -64,12 +64,15 @@ export default class PluginApp extends PluginBase {
     return getPluginAppInstance(this.definedInstanceDir, this.activeInstance);
   }
 
-  public getAllInstance(): PluginAppInstance []| null  {
-    const activeInstance = this.getActiveInstance();
-    if (!activeInstance) {
-      return null;
-    }
+  public getAllInstance(): PluginAppInstance [] {
+    const all = getAllDefinedInstances(this.definedInstanceDir);
 
-    return [activeInstance];
+    const result: PluginAppInstance[] = [];
+
+    all.forEach((element: any) => {
+      result.push(typeof element === 'function' ? element() : element);
+    });
+
+    return result;
   }
 }

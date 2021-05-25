@@ -27,6 +27,7 @@ import {
   IResourceType,
 } from './typings/matmanResult';
 import { IPluginBase } from './typings/PluginBase';
+import { IDefinedInstanceBase } from './typings/DefinedInstanceBase';
 
 import MatmanResult from './model/MatmanResult';
 import CacheData from './model/CacheData';
@@ -76,6 +77,7 @@ export {
   IResourceType,
   IMatmanConfigOpts,
   IPluginBase,
+  IDefinedInstanceBase,
   CacheData,
   E2ERunner,
 };
