@@ -14,9 +14,9 @@ import DeviceInstance, { getDeviceInstance } from './DeviceInstance';
 
 interface ICaseModuleOpts {
   filename: string;
-  handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
-  crawler: string;
-  dependencies?: {
+  userAction: (pageDriver: PageDriverAsync) => PageDriverAsync;
+  webCrawler: string;
+  materials?: {
     pluginAppInstance?: boolean;
     pluginMockstarInstance?: PluginMockstarInstance;
     deviceInstance?: DeviceInstance;
@@ -27,8 +27,8 @@ interface ICaseModuleOpts {
 export default class CaseModule {
   public name: string;
   public filename: string;
-  public handler: (pageDriver: PageDriverAsync) => PageDriverAsync;
-  public crawler: string;
+  public userAction: (pageDriver: PageDriverAsync) => PageDriverAsync;
+  public webCrawler: string;
   public pageDriverOpts: IPageDriverOpts;
 
   public pageDriver: PageDriverAsync | null;
@@ -42,14 +42,14 @@ export default class CaseModule {
   public constructor(name: string, opts: ICaseModuleOpts) {
     this.name = name;
     this.filename = opts.filename;
-    this.handler = opts.handler;
-    this.crawler = opts.crawler;
+    this.userAction = opts.userAction;
+    this.webCrawler = opts.webCrawler;
     this.pageDriverOpts = this.getPageDriverOpts(opts.pageDriverOpts);
-    this.pluginAppInstanceFromOpts = opts.dependencies?.pluginAppInstance;
+    this.pluginAppInstanceFromOpts = opts.materials?.pluginAppInstance;
 
-    this.deviceInstance = getDeviceInstance(opts.dependencies?.deviceInstance);
+    this.deviceInstance = getDeviceInstance(opts.materials?.deviceInstance);
 
-    this.pluginMockstarInstance = getPluginMockstarInstance(opts.dependencies?.pluginMockstarInstance);
+    this.pluginMockstarInstance = getPluginMockstarInstance(opts.materials?.pluginMockstarInstance);
 
     // 注意它比较特殊，配置项在 matman.config.js 中，所以需要在 run 方法执行时才设置
     this.pluginAppInstance = null;
@@ -92,10 +92,10 @@ export default class CaseModule {
     await pageDriver.setScreenshotConfig(true);
 
     // 操作
-    await this.handler(pageDriver);
+    await this.userAction(pageDriver);
 
     // 获取结果
-    return pageDriver.evaluate(path.join(path.dirname(this.filename), './crawlers/get-page-info.js'));
+    return pageDriver.evaluate(path.join(path.dirname(this.filename), this.webCrawler));
   }
 
   private getPageDriverOpts(pageDriverOpts?: IPageDriverOpts): IPageDriverOpts {

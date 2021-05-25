@@ -44,25 +44,26 @@ module.exports = {
   // 插件列表
   plugins: [
     new PluginApp({
-      definedInstanceDir: './src/plugins/app',
+      definedInstanceDir: './src/materials/app',
       activeInstance: 'prod.js',
     }),
     new PluginWhistle({
       port: 9430,
     }),
     new PluginMockstar({
-      definedInstanceDir: './src/plugins/mockstar',
+      mockersDir: './src/dependencies/mockstar/mockers',
+      definedInstanceDir: './src/materials/mockstar',
       port: 9440,
     }),
     new PluginPuppeteer({
-      deviceDefinedInstanceDir: './src/plugins/puppeteer/device',
-      networkConditionDefinedInstanceDir: './src/plugins/puppeteer/network-condition',
+      deviceDefinedInstanceDir: './src/materials/puppeteer/device',
+      networkConditionDefinedInstanceDir: './src/materials/puppeteer/network-condition',
       screenshotConfig: true,
       // TODO 本地 chrome 浏览器的目录地址
       options: {},
     }),
     new PluginTest({
-      definedInstanceDir: './src/plugins/test',
+      definedInstanceDir: './src/materials/test',
       activeInstance: 'all.js',
     }),
   ],
