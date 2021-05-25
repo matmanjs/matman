@@ -30,14 +30,31 @@ export default class PluginMockstar extends PluginBase {
     });
   }
 
+  /**
+   * 初始化插件
+   */
+  public async initPlugin(e2eRunner: E2ERunner): Promise<void> {
+    await super.initPlugin(e2eRunner);
+
+    // 修改为绝对路径，方便后续处理
+    this.definedInstanceDir = path.resolve(
+      e2eRunner.matmanConfig.matmanRootPath,
+      this.definedInstanceDir,
+    );
+    this.mockersDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.mockersDir);
+  }
+
   public async setup(e2eRunner: E2ERunner) {
     await super.setup(e2eRunner);
 
     // 设置默认值
-    this.startOpts = _.merge({
-      rootPath: e2eRunner.matmanConfig.matmanRootPath,
-      mockServerPath: path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.mockersDir),
-    }, this.startOpts);
+    this.startOpts = _.merge(
+      {
+        rootPath: e2eRunner.matmanConfig.matmanRootPath,
+        mockServerPath: this.mockersDir,
+      },
+      this.startOpts,
+    );
 
     // 启动 mockstar
     await this.mockstarSDK.start(this.startOpts);
