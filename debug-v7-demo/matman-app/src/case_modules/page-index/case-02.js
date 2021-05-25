@@ -1,18 +1,17 @@
 const { CaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
 
-const iPhoneXCustom = require('../../plugins/puppeteer/device/iPhoneXCustom');
-const mockOfBasic = require('../../plugins/mockstar/page-index-basic');
-
-const handlerOfVerifyBasic = require('./handlers/verify-basic');
+const deviceInstance = require('../../materials/puppeteer/device/iPhoneXCustom');
+const pluginMockstarInstance = require('./mock-services/basic');
+const userAction = require('./user-actions/verify-basic');
 
 module.exports = new CaseModule('验证输入正确姓名和身份证号', {
   filename: __filename,
-  handler: handlerOfVerifyBasic,
-  crawler: './crawlers/get-page-info.js',
-  dependencies: {
+  userAction,
+  webCrawler: './web-crawlers/get-page-info.js',
+  materials: {
     pluginAppInstance: true,
-    pluginMockstarInstance: mockOfBasic,
-    deviceInstance: iPhoneXCustom,
+    pluginMockstarInstance,
+    deviceInstance,
   },
   pageDriverOpts: {
     useRecorder: true,
