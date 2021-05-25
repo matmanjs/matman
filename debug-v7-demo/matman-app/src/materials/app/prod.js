@@ -17,7 +17,7 @@ module.exports = () => {
         'now.qq.com/maybe/report statusCode://200',
         `now.qq.com/manifest.json ${rootPath}/build/manifest.json`,
         `/^https?://now\\.qq\\.com/static/(.*)$/ ${rootPath}/build/static/$1`,
-        `/^https?://now\\.qq\\.com/([\\w\\-]*)(.*)$/ ${rootPath}/build/index.html`,
+        `/^https?://now\\.qq\\.com/([\\w\\-]*)(.*)$/ ${rootPath}/build/$1$2`,
       ];
     },
   });

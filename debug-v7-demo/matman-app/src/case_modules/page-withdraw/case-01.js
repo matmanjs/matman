@@ -18,17 +18,17 @@ module.exports = new CaseModule('观测页面的基础UI信息', {
   },
 });
 
-(() => {
-  const { debugCaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
-
-  // 调试
-  debugCaseModule(module.exports, {
-    doNotCloseBrowser: false,
-  })
-    .then(data => {
-      console.log(JSON.stringify(data, null, 2));
-    })
-    .catch(err => {
-      console.error(err);
-    });
-})();
+// (() => {
+//   const { debugCaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
+//
+//   // 调试
+//   debugCaseModule(module.exports, {
+//     doNotCloseBrowser: false,
+//   })
+//     .then(data => {
+//       console.log(JSON.stringify(data, null, 2));
+//     })
+//     .catch(err => {
+//       console.error(err);
+//     });
+// })();
