@@ -9,8 +9,6 @@ interface IPluginTestOpts {
   activeInstance: string;
 }
 
-const globalAny: any = global;
-
 export default class PluginTest extends PluginBase {
   /**
    * 配置文件的目录
@@ -23,6 +21,16 @@ export default class PluginTest extends PluginBase {
 
     this.definedInstanceDir = opts.definedInstanceDir;
     this.activeInstance = opts.activeInstance;
+  }
+
+  /**
+   * 初始化插件
+   */
+  public async initPlugin(e2eRunner: E2ERunner): Promise<void> {
+    await super.initPlugin(e2eRunner);
+
+    // 修改为绝对路径，方便后续处理
+    this.definedInstanceDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.definedInstanceDir);
   }
 
   public async runTest(e2eRunner: E2ERunner) {
@@ -40,32 +48,23 @@ export default class PluginTest extends PluginBase {
   }
 
   public getActiveInstance(): ITestDefinedInstance | null {
-    if (!globalAny.matmanE2ERunner) {
-      return null;
-    }
-
-    const e2eRunner = globalAny.matmanE2ERunner as E2ERunner;
-
-    return getPluginTestMochaInstance(
-      e2eRunner.matmanConfig.matmanRootPath,
-      this.definedInstanceDir,
-      this.activeInstance,
-    );
+    return getPluginTestMochaInstance(this.definedInstanceDir, this.activeInstance);
   }
 }
 
 export function getPluginTestMochaInstance(
-  matmanRootPath: string,
   definedInstanceDir: string,
   activeInstance: string,
 ): ITestDefinedInstance | null {
-  if (!matmanRootPath) {
+  const targetActiveInstance = path.join(definedInstanceDir, activeInstance);
+  const activeInstanceFullPath = path.resolve(targetActiveInstance);
+
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    return require(activeInstanceFullPath) as ITestDefinedInstance;
+  } catch (err) {
+    console.error('getPluginTestMochaInstance catch err', activeInstanceFullPath, err);
+
     return null;
   }
-
-  const targetActiveInstance = path.join(definedInstanceDir, activeInstance);
-  const activeInstanceFullPath = path.resolve(matmanRootPath, targetActiveInstance);
-
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require(activeInstanceFullPath) as ITestDefinedInstance;
 }

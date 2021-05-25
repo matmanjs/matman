@@ -26,6 +26,18 @@ export default class PluginBase implements IPluginBase {
   }
 
   /**
+   * 初始化插件
+   */
+  public async initPlugin(e2eRunner: E2ERunner): Promise<void> {
+    // 例如将相对路径修改为绝对路径等
+    if (process.env.CONSOLE_E2E_RUNNER) {
+      console.log(e2eRunner);
+    }
+
+    globalAny.matmanE2ERunner = e2eRunner;
+  }
+
+  /**
    * 自动化测试之前执行
    */
   public async setup(e2eRunner: E2ERunner): Promise<void> {

@@ -62,17 +62,18 @@ export default class PluginAppInstance extends DefinedInstanceBase {
 }
 
 export function getPluginAppInstance(
-  matmanRootPath: string,
   definedInstanceDir: string,
   activeInstance: string,
 ): PluginAppInstance | null {
-  if (!matmanRootPath) {
+  const targetActiveInstance = path.join(definedInstanceDir, activeInstance);
+  const activeInstanceFullPath = path.resolve(targetActiveInstance);
+
+  try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+    return require(activeInstanceFullPath)() as PluginAppInstance;
+  } catch (err) {
+    console.error('getPluginAppInstance catch err', activeInstanceFullPath, err);
+
     return null;
   }
-
-  const targetActiveInstance = path.join(definedInstanceDir, activeInstance);
-  const activeInstanceFullPath = path.resolve(matmanRootPath, targetActiveInstance);
-
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require(activeInstanceFullPath)() as PluginAppInstance;
 }

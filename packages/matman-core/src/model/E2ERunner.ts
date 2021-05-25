@@ -27,7 +27,10 @@ export default class E2ERunner {
     this.seqId = getSeqId(this.matmanConfig.outputPath, this.matmanConfig.isDevBuild);
 
     // TODO 有些默认的插件需要追加到 this.matmanConfig.plugins
+
+    this.initPlugin();
   }
+
 
   public async setup() {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -53,6 +56,15 @@ export default class E2ERunner {
       const plugin = this.matmanConfig.plugins[index];
 
       await plugin.teardown.call(plugin, this);
+    }
+  }
+
+  private async initPlugin() {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
+      const plugin = this.matmanConfig.plugins[index];
+
+      await plugin.initPlugin.call(plugin, this);
     }
   }
 }

@@ -65,12 +65,8 @@ export default class CaseModule {
     // 设置 appInstance
     this.setPluginAppInstance(e2eRunnerJsonData);
 
-
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
-    const pageDriver = await launch(
-      new BrowserRunner(),
-      this.getPageDriverOpts(pageDriverOpts),
-    );
+    const pageDriver = await launch(new BrowserRunner(), this.getPageDriverOpts(pageDriverOpts));
 
     this.pageDriver = pageDriver;
 
@@ -99,7 +95,9 @@ export default class CaseModule {
   }
 
   private getPageDriverOpts(pageDriverOpts?: IPageDriverOpts): IPageDriverOpts {
-    return _.merge({}, this.pageDriverOpts, pageDriverOpts, { caseModuleFilePath: this.filename }) as IPageDriverOpts;
+    return _.merge({}, this.pageDriverOpts, pageDriverOpts, {
+      caseModuleFilePath: this.filename,
+    }) as IPageDriverOpts;
   }
 
   private setPluginAppInstance(e2eRunnerJsonData: IE2ERunnerJsonData | null) {
@@ -108,7 +106,6 @@ export default class CaseModule {
     }
 
     this.pluginAppInstance = getPluginAppInstance(
-      e2eRunnerJsonData.extraInfo.matmanRootPath,
       e2eRunnerJsonData.pluginApp?.definedInstanceDir,
       e2eRunnerJsonData.pluginApp?.activeInstance,
     );
@@ -121,12 +118,12 @@ export default class CaseModule {
 
     // Plugin App 中的代理配置
     const whistleRuleFromApp = this.pluginAppInstance?.getWhistleRule(
-      new CacheData(e2eRunnerJsonData.pluginApp?.cacheData?.data)
+      new CacheData(e2eRunnerJsonData.pluginApp?.cacheData?.data),
     );
 
     // Plugin Mockstar 中的代理配置
     const whistleRuleFromMockstar = this.pluginMockstarInstance?.getWhistleRule(
-      new CacheData(e2eRunnerJsonData.pluginMockstar?.cacheData?.data)
+      new CacheData(e2eRunnerJsonData.pluginMockstar?.cacheData?.data),
     );
 
     // 设置代理
