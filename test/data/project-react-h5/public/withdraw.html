@@ -36,6 +36,7 @@
      console.log(data);
 
      $('#money').text(`余额剩余：${data.result.money/100}元`);
+    $('body').append('<i id="loaded"></i>');
   });
 </script>
 

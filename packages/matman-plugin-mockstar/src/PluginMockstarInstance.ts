@@ -42,6 +42,7 @@ export default class PluginMockstarInstance extends DefinedInstanceBase {
       `# ${JSON.stringify(this.queryMap)}`,
       `/(.*)/cgi-bin/a/b/verify-identity(.*)/ 127.0.0.1:${port}`,
       `/(.*)/cgi-bin/a/b/verify-phone(.*)/ 127.0.0.1:${port}`,
+      `/(.*)/cgi-bin/a/b/get-money(.*)/ 127.0.0.1:${port}`,
     ];
 
     // TODO 这里的 name 需要自动生成，例如按照当前 case module 的名字来生成
