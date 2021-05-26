@@ -51,7 +51,7 @@ export default class PluginTest extends PluginBase {
     return getPluginTestMochaInstance(this.definedInstanceDir, this.activeInstance);
   }
 
-  public getAllInstance(): ITestDefinedInstance [] {
+  public getAllDefinedInstances(): ITestDefinedInstance [] {
     const all = getAllDefinedInstances(this.definedInstanceDir);
 
     const result: ITestDefinedInstance[] = [];

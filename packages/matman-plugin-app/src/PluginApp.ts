@@ -64,7 +64,7 @@ export default class PluginApp extends PluginBase {
     return getPluginAppInstance(this.definedInstanceDir, this.activeInstance);
   }
 
-  public getAllInstance(): PluginAppInstance [] {
+  public getAllDefinedInstances(): PluginAppInstance [] {
     const all = getAllDefinedInstances(this.definedInstanceDir);
 
     const result: PluginAppInstance[] = [];
