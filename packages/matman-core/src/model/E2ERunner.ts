@@ -59,12 +59,12 @@ export default class E2ERunner {
     }
   }
 
-  private async initPlugin() {
+  private initPlugin() {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
       const plugin = this.matmanConfig.plugins[index];
 
-      await plugin.initPlugin.call(plugin, this);
+      plugin.initPlugin.call(plugin, this);
     }
   }
 }

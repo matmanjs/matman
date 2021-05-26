@@ -4,7 +4,7 @@ export interface IPluginBase {
   name: string;
   seqId: string;
 
-  initPlugin(e2eRunner: E2ERunner): Promise<void>;
+  initPlugin(e2eRunner: E2ERunner): void;
   setup(e2eRunner: E2ERunner): Promise<void>;
   runTest(e2eRunner: E2ERunner): Promise<void> ;
   teardown(e2eRunner: E2ERunner): Promise<void>;

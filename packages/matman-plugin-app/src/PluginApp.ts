@@ -32,8 +32,8 @@ export default class PluginApp extends PluginBase {
   /**
    * 初始化插件
    */
-  public async initPlugin(e2eRunner: E2ERunner): Promise<void> {
-    await super.initPlugin(e2eRunner);
+  public initPlugin(e2eRunner: E2ERunner): void {
+    super.initPlugin(e2eRunner);
 
     // 修改为绝对路径，方便后续处理
     this.definedInstanceDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.definedInstanceDir);

@@ -28,7 +28,7 @@ export default class PluginBase implements IPluginBase {
   /**
    * 初始化插件
    */
-  public async initPlugin(e2eRunner: E2ERunner): Promise<void> {
+  public initPlugin(e2eRunner: E2ERunner): void {
     // 例如将相对路径修改为绝对路径等
     if (process.env.CONSOLE_E2E_RUNNER) {
       console.log(e2eRunner);

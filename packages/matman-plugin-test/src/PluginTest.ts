@@ -1,5 +1,5 @@
 import path from 'path';
-import { PluginBase } from 'matman-plugin-core';
+import { PluginBase, getAllDefinedInstances } from 'matman-plugin-core';
 import { E2ERunner, logger } from 'matman-core';
 
 import { ITestDefinedInstance } from './types';
@@ -26,8 +26,8 @@ export default class PluginTest extends PluginBase {
   /**
    * 初始化插件
    */
-  public async initPlugin(e2eRunner: E2ERunner): Promise<void> {
-    await super.initPlugin(e2eRunner);
+  public initPlugin(e2eRunner: E2ERunner): void {
+    super.initPlugin(e2eRunner);
 
     // 修改为绝对路径，方便后续处理
     this.definedInstanceDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.definedInstanceDir);
@@ -49,6 +49,18 @@ export default class PluginTest extends PluginBase {
 
   public getActiveInstance(): ITestDefinedInstance | null {
     return getPluginTestMochaInstance(this.definedInstanceDir, this.activeInstance);
+  }
+
+  public getAllInstance(): ITestDefinedInstance [] {
+    const all = getAllDefinedInstances(this.definedInstanceDir);
+
+    const result: ITestDefinedInstance[] = [];
+
+    all.forEach((element: any) => {
+      result.push(typeof element === 'function' ? element() : element);
+    });
+
+    return result;
   }
 }
 
