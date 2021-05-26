@@ -1,4 +1,4 @@
-const { PluginMockstarInstance } = require('../../../../../../packages/matman-plugin-mockstar');
+const { PluginMockstarInstance } = require('../../../../../../../packages/matman-plugin-mockstar');
 
 module.exports = new PluginMockstarInstance('存在金额', {
   queryMap: {
