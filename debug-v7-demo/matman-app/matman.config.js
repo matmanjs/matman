@@ -51,7 +51,7 @@ module.exports = {
       port: 9430,
     }),
     new PluginMockstar({
-      mockersDir: './src/dependencies/mockstar/mockers',
+      mockerDir: './src/dependencies/mockstar/mockers',
       definedInstanceDir: './src/materials/mockstar',
       port: 9440,
     }),

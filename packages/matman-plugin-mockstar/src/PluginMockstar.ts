@@ -6,14 +6,14 @@ import { E2ERunner } from 'matman-core';
 import MockstarSDK, { IStartOpts } from './MockstarSDK';
 
 interface IPluginMockstarOpts {
-  mockersDir: string;
+  mockerDir: string;
   definedInstanceDir: string;
   port?: number;
   startOpts?: IStartOpts;
 }
 
 export default class PluginMockstar extends PluginBase {
-  public mockersDir: string;
+  public mockerDir: string;
   public definedInstanceDir: string;
   public startOpts?: IStartOpts;
   private readonly mockstarSDK: MockstarSDK;
@@ -21,7 +21,7 @@ export default class PluginMockstar extends PluginBase {
   public constructor(opts: IPluginMockstarOpts) {
     super('mockstar');
 
-    this.mockersDir = opts.mockersDir;
+    this.mockerDir = opts.mockerDir;
     this.definedInstanceDir = opts.definedInstanceDir;
     this.startOpts = opts.startOpts;
 
@@ -41,7 +41,7 @@ export default class PluginMockstar extends PluginBase {
       e2eRunner.matmanConfig.matmanRootPath,
       this.definedInstanceDir,
     );
-    this.mockersDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.mockersDir);
+    this.mockerDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.mockerDir);
   }
 
   public async setup(e2eRunner: E2ERunner) {
@@ -51,7 +51,7 @@ export default class PluginMockstar extends PluginBase {
     this.startOpts = _.merge(
       {
         rootPath: e2eRunner.matmanConfig.matmanRootPath,
-        mockServerPath: this.mockersDir,
+        mockServerPath: this.mockerDir,
       },
       this.startOpts,
     );
