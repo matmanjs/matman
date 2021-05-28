@@ -7,10 +7,13 @@ console.log(e2eRunner);
 
 for (let index = 0; index < e2eRunner.matmanConfig.plugins.length; index++) {
   const plugin = e2eRunner.matmanConfig.plugins[index];
+  console.log('\n', plugin.name);
 
-  if (typeof plugin.getAllDefinedInstances === 'function') {
-    console.log('\n', plugin.name);
-    console.log(plugin.getAllDefinedInstances());
+  if (typeof plugin.getAllMaterial === 'function') {
+    console.log(plugin.getAllMaterial());
+  }
+  if (typeof plugin.getActivatedMaterial === 'function') {
+    console.log(plugin.getActivatedMaterial());
   }
 }
 

@@ -1,4 +1,4 @@
-const { DeviceInstance } = require('../../../../../../packages/matman-plugin-puppeteer');
+const { DeviceMaterial } = require('../../../../../../packages/matman-plugin-puppeteer');
 
 module.exports = clone => {
   // https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts
@@ -11,5 +11,5 @@ module.exports = clone => {
   device.viewport.width = 375;
   device.viewport.height = device.viewport.height + 100;
 
-  return new DeviceInstance('自定义的 iPhone X机型', device);
+  return new DeviceMaterial('自定义的 iPhone X机型', device);
 };
