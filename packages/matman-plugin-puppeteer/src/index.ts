@@ -1,12 +1,12 @@
 import PluginPuppeteer from './PluginPuppeteer';
 import CaseModule from './CaseModule';
 
-import DeviceInstance from './DeviceInstance';
+import DeviceMaterial from './DeviceMaterial';
 import { debugCaseModule } from './debug';
 
 export {
   PluginPuppeteer,
   CaseModule,
-  DeviceInstance,
+  DeviceMaterial,
   debugCaseModule,
 };

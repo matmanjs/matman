@@ -44,8 +44,8 @@ module.exports = {
   // 插件列表
   plugins: [
     new PluginApp({
-      definedInstanceDir: './src/materials/app',
-      activeInstance: 'prod.js',
+      materialDir: './src/materials/app',
+      activated: 'prod.js',
     }),
     new PluginWhistle({
       port: 9430,
@@ -63,8 +63,8 @@ module.exports = {
       options: {},
     }),
     new PluginTest({
-      definedInstanceDir: './src/materials/test',
-      activeInstance: 'all.js',
+      materialDir: './src/materials/test',
+      activated: 'all.js',
     }),
   ],
   events: {

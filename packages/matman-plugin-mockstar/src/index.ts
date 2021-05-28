@@ -1,4 +1,4 @@
 import PluginMockstar from './PluginMockstar';
-import PluginMockstarInstance, { getPluginMockstarInstance } from './PluginMockstarInstance';
+import PluginMockstarMaterial, { getPluginMockstarMaterial } from './PluginMockstarMaterial';
 
-export { PluginMockstarInstance, PluginMockstar, getPluginMockstarInstance };
+export { PluginMockstarMaterial, PluginMockstar, getPluginMockstarMaterial };

@@ -1,21 +1,21 @@
 import path from 'path';
-import { PluginBase, getAllDefinedInstances } from 'matman-plugin-core';
+import { PluginBase, getFileItemFromDir, IFSHandlerItem } from 'matman-plugin-core';
 import { E2ERunner } from 'matman-core';
 
 import { buildApp, IBuildAppCmd, IBuildAppOpts } from './utils';
-import PluginAppInstance, { getPluginAppInstance } from './PluginAppInstance';
+import PluginAppMaterial, { getPluginAppMaterial } from './PluginAppMaterial';
 
 interface IPluginAppOpts {
-  definedInstanceDir: string;
-  activeInstance: string;
+  materialDir: string;
+  activated: string;
 }
 
 export default class PluginApp extends PluginBase {
   /**
    * 配置文件的目录
    */
-  public definedInstanceDir: string;
-  public activeInstance: string;
+  public materialDir: string;
+  public activated: string;
 
   /**
    * 业务工程项目的根目录
@@ -25,8 +25,8 @@ export default class PluginApp extends PluginBase {
   public constructor(opts: IPluginAppOpts) {
     super('app');
 
-    this.definedInstanceDir = opts.definedInstanceDir;
-    this.activeInstance = opts.activeInstance;
+    this.materialDir = opts.materialDir;
+    this.activated = opts.activated;
   }
 
   /**
@@ -36,7 +36,7 @@ export default class PluginApp extends PluginBase {
     super.initPlugin(e2eRunner);
 
     // 修改为绝对路径，方便后续处理
-    this.definedInstanceDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.definedInstanceDir);
+    this.materialDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.materialDir);
   }
 
   /**
@@ -53,24 +53,27 @@ export default class PluginApp extends PluginBase {
   public async setup(e2eRunner: E2ERunner): Promise<void> {
     await super.setup(e2eRunner);
 
-    // 获取当前激活的模块
-    const activeInstance = this.getActiveInstance();
-    if (activeInstance && typeof activeInstance.setup === 'function') {
-      await activeInstance.setup.call(activeInstance, this);
+    // 获取当前激活的物料
+    const activated = this.getActivatedMaterial();
+    if (activated && typeof activated.setup === 'function') {
+      await activated.setup.call(activated, this);
     }
   }
 
-  public getActiveInstance(): PluginAppInstance | null {
-    return getPluginAppInstance(this.definedInstanceDir, this.activeInstance);
+  public getActivatedMaterial(): PluginAppMaterial | null {
+    return getPluginAppMaterial(path.join(this.materialDir, this.activated));
   }
 
-  public getAllDefinedInstances(): PluginAppInstance [] {
-    const all = getAllDefinedInstances(this.definedInstanceDir);
+  public getAllMaterial(): PluginAppMaterial [] {
+    const all = getFileItemFromDir(this.materialDir);
 
-    const result: PluginAppInstance[] = [];
+    const result: PluginAppMaterial[] = [];
 
-    all.forEach((element: any) => {
-      result.push(typeof element === 'function' ? element() : element);
+    all.forEach((fileItem: IFSHandlerItem) => {
+      const item = getPluginAppMaterial(path.join(this.materialDir, fileItem.relativePath));
+      if (item) {
+        result.push(item);
+      }
     });
 
     return result;

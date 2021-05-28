@@ -1,9 +1,11 @@
 import PluginBase from './PluginBase';
-import DefinedInstanceBase from './DefinedInstanceBase';
-import { getAllDefinedInstances } from './utils';
+import MaterialBase from './MaterialBase';
+import { requireModule, getFileItemFromDir, IFSHandlerItem } from './utils';
 
 export {
   PluginBase,
-  DefinedInstanceBase,
-  getAllDefinedInstances,
+  MaterialBase,
+  requireModule,
+  getFileItemFromDir,
+  IFSHandlerItem,
 };

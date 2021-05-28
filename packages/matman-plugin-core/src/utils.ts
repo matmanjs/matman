@@ -2,18 +2,11 @@
 // @ts-ignore
 import fsHandler from 'fs-handler';
 
-import path from 'path';
-
-import { IDefinedInstanceBase } from 'matman-core';
-
-interface IFSHandlerItem {
+export interface IFSHandlerItem {
   relativePath: string;
   basePath: string;
   isDirectory: () => boolean;
 }
-
-type IDefinedInstance = IDefinedInstanceBase | (() => IDefinedInstanceBase);
-
 
 /**
  * 加载模块
@@ -52,12 +45,18 @@ export function requireModule(moduleId: string, ignoreCache?: boolean): any {
   return require(filePath);
 }
 
-export function getAllDefinedInstances(definedInstanceDir: string): IDefinedInstance[] {
-  const result: IDefinedInstance[] = [];
+/**
+ * 从某个目录下获取文件
+ *
+ * @param dir
+ * @param all
+ * @returns
+ */
+export function getFileItemFromDir(dir: string, all?: boolean): IFSHandlerItem[] {
+  const result: IFSHandlerItem[] = [];
 
-  fsHandler.search.getAll(definedInstanceDir, { globs: ['*'] }).forEach((item: IFSHandlerItem) => {
-    const requiredResult = requireModule(path.join(definedInstanceDir, item.relativePath)) as IDefinedInstance;
-    result.push(requiredResult);
+  fsHandler.search.getAll(dir, { globs: [all ? '**' : '*'] }).forEach((item: IFSHandlerItem) => {
+    result.push(item);
   });
 
   return result;

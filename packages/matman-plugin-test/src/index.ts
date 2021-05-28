@@ -1,9 +1,9 @@
 import PluginTest from './PluginTest';
-import PluginTestMochaInstance from './PluginTestMochaInstance';
+import PluginTestMochaMaterial from './PluginTestMochaMaterial';
 import { setE2ERunnerJsonDataToEnv, getE2ERunnerJsonDataFromEnv, IE2ERunnerJsonData } from './utils';
 
 export {
-  PluginTestMochaInstance,
+  PluginTestMochaMaterial,
   PluginTest,
   setE2ERunnerJsonDataToEnv,
   getE2ERunnerJsonDataFromEnv,

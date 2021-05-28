@@ -1,26 +1,26 @@
 import path from 'path';
-import { PluginBase, getAllDefinedInstances } from 'matman-plugin-core';
+import { PluginBase, getFileItemFromDir, IFSHandlerItem, requireModule } from 'matman-plugin-core';
 import { E2ERunner, logger } from 'matman-core';
 
-import { ITestDefinedInstance } from './types';
+import { IPluginTestMaterial } from './types';
 
 interface IPluginTestOpts {
-  definedInstanceDir: string;
-  activeInstance: string;
+  materialDir: string;
+  activated: string;
 }
 
 export default class PluginTest extends PluginBase {
   /**
    * 配置文件的目录
    */
-  public definedInstanceDir: string;
-  public activeInstance: string;
+  public materialDir: string;
+  public activated: string;
 
   public constructor(opts: IPluginTestOpts) {
     super('test');
 
-    this.definedInstanceDir = opts.definedInstanceDir;
-    this.activeInstance = opts.activeInstance;
+    this.materialDir = opts.materialDir;
+    this.activated = opts.activated;
   }
 
   /**
@@ -30,7 +30,7 @@ export default class PluginTest extends PluginBase {
     super.initPlugin(e2eRunner);
 
     // 修改为绝对路径，方便后续处理
-    this.definedInstanceDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.definedInstanceDir);
+    this.materialDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.materialDir);
   }
 
   public async runTest(e2eRunner: E2ERunner) {
@@ -38,44 +38,43 @@ export default class PluginTest extends PluginBase {
 
     logger.info('RunTest begin ...');
 
-    // 获取当前激活的模块
-    const activeInstance = this.getActiveInstance();
-    if (activeInstance && typeof activeInstance.run === 'function') {
-      await activeInstance.run.call(activeInstance);
+    // 获取当前激活的物料
+    const activated = this.getActivatedMaterial();
+    if (activated && typeof activated.run === 'function') {
+      await activated.run.call(activated);
     }
 
     logger.info('RunTest finished!');
   }
 
-  public getActiveInstance(): ITestDefinedInstance | null {
-    return getPluginTestMochaInstance(this.definedInstanceDir, this.activeInstance);
+  public getActivatedMaterial(): IPluginTestMaterial | null {
+    return getPluginTestMochaMaterial(path.join(this.materialDir, this.activated));
   }
 
-  public getAllDefinedInstances(): ITestDefinedInstance [] {
-    const all = getAllDefinedInstances(this.definedInstanceDir);
+  public getAllMaterial(): IPluginTestMaterial [] {
+    const all = getFileItemFromDir(this.materialDir);
 
-    const result: ITestDefinedInstance[] = [];
+    const result: IPluginTestMaterial[] = [];
 
-    all.forEach((element: any) => {
-      result.push(typeof element === 'function' ? element() : element);
+    all.forEach((fileItem: IFSHandlerItem) => {
+      const item = getPluginTestMochaMaterial(path.join(this.materialDir, fileItem.relativePath));
+      if (item) {
+        result.push(item);
+      }
     });
 
     return result;
   }
 }
 
-export function getPluginTestMochaInstance(
-  definedInstanceDir: string,
-  activeInstance: string,
-): ITestDefinedInstance | null {
-  const targetActiveInstance = path.join(definedInstanceDir, activeInstance);
-  const activeInstanceFullPath = path.resolve(targetActiveInstance);
-
+export function getPluginTestMochaMaterial(activatedFullPath: string): IPluginTestMaterial | null {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    return require(activeInstanceFullPath) as ITestDefinedInstance;
+    const requiredResult = requireModule(activatedFullPath);
+    const result = (typeof requiredResult === 'function') ? requiredResult() : requiredResult;
+
+    return result as IPluginTestMaterial;
   } catch (err) {
-    console.error('getPluginTestMochaInstance catch err', activeInstanceFullPath, err);
+    console.error('getPluginTestMochaMaterial catch err', activatedFullPath, err);
 
     return null;
   }
