@@ -52,12 +52,12 @@ module.exports = {
     }),
     new PluginMockstar({
       mockerDir: './src/dependencies/mockstar/mockers',
-      definedInstanceDir: './src/materials/mockstar',
+      materialDir: './src/materials/mockstar',
       port: 9440,
     }),
     new PluginPuppeteer({
-      deviceDefinedInstanceDir: './src/materials/puppeteer/device',
-      networkConditionDefinedInstanceDir: './src/materials/puppeteer/network-condition',
+      deviceMaterialDir: './src/materials/puppeteer/device',
+      networkConditionMaterialDir: './src/materials/puppeteer/network-condition',
       screenshotConfig: true,
       // TODO 本地 chrome 浏览器的目录地址
       options: {},
