@@ -7,14 +7,14 @@ import MockstarSDK, { IStartOpts } from './MockstarSDK';
 
 interface IPluginMockstarOpts {
   mockerDir: string;
-  definedInstanceDir: string;
+  materialDir: string;
   port?: number;
   startOpts?: IStartOpts;
 }
 
 export default class PluginMockstar extends PluginBase {
   public mockerDir: string;
-  public definedInstanceDir: string;
+  public materialDir: string;
   public startOpts?: IStartOpts;
   private readonly mockstarSDK: MockstarSDK;
 
@@ -22,7 +22,7 @@ export default class PluginMockstar extends PluginBase {
     super('mockstar');
 
     this.mockerDir = opts.mockerDir;
-    this.definedInstanceDir = opts.definedInstanceDir;
+    this.materialDir = opts.materialDir;
     this.startOpts = opts.startOpts;
 
     this.mockstarSDK = new MockstarSDK({
@@ -37,9 +37,9 @@ export default class PluginMockstar extends PluginBase {
     super.initPlugin(e2eRunner);
 
     // 修改为绝对路径，方便后续处理
-    this.definedInstanceDir = path.resolve(
+    this.materialDir = path.resolve(
       e2eRunner.matmanConfig.matmanRootPath,
-      this.definedInstanceDir,
+      this.materialDir,
     );
     this.mockerDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.mockerDir);
   }
