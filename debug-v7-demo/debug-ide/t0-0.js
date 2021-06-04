@@ -12,33 +12,55 @@ const _ = require('lodash');
 //     }
 //   });
 
+// src/materials/app/prod.js => {'src/materials': { app: [ prod.js ] }}
+// src/case_modules/page-index/materials/mock-services/basic.js => {'src/case_modules/page-index/materials': { mock-services: [ basic.js ] }}
+function getMaterialMap(matmanAppPath, materialDir) {
+  // 相对于 matmanAppPath 的目录，例如  src/materials/app
+  const pureRelativePath = path.relative(matmanAppPath, materialDir);
+  console.log('\npureRelativePath', pureRelativePath);
+
+  const result = [];
+
+  fsHandler.search
+    .getAll(matmanAppPath, {
+      globs: [`${pureRelativePath}/**`],
+    })
+    .forEach(item => {
+      // 目录无需处理
+      if (item.isDirectory()) {
+        // console.log(item.relativePath, '目录无需处理\n');
+        return;
+      }
+
+      const relativePathSplitArr = item.relativePath.split('/');
+
+      // 需要以 materials 来分组，数组分隔序号
+      const splitIndex = _.indexOf(relativePathSplitArr, 'materials') + 1;
+
+      // 获取：分组名称
+      const groupName = relativePathSplitArr.slice(0, splitIndex).join('/');
+
+      // 获取：物料名字和物料
+      const materialInfoArr = relativePathSplitArr.slice(splitIndex);
+      const element = materialInfoArr.pop();
+      const name = materialInfoArr.join('/');
+
+      result.push({
+        fullPath: path.join(item.basePath, item.relativePath),
+        groupName,
+        name,
+        element,
+      });
+    });
+
+  console.log(result, '\n');
+}
+
 const matmanAppPath = path.join(__dirname, '../matman-app');
-const materialDir = path.join(matmanAppPath, './src/case_modules/*/materials/mock-services');
+const materialDir1 = path.join(matmanAppPath, './src/case_modules/*/materials/mock-services');
+const materialDir2 = path.join(matmanAppPath, './src/materials/app');
+const materialDir3 = path.join(matmanAppPath, './src/materials/puppeteer/device');
 
-const pureRelativePath = path.relative(matmanAppPath, materialDir);
-console.log(pureRelativePath);
-
-fsHandler.search
-  .getAll(matmanAppPath, {
-    globs: [`${pureRelativePath}/**`],
-  })
-  .forEach(item => {
-    if (item.isDirectory()) {
-      console.log('目录\n');
-      return;
-    }
-
-    console.log(item, path.join(item.basePath, item.relativePath));
-    const a1 = item.relativePath.split('/');
-    const a2 = pureRelativePath.split('/');
-    console.log(a1);
-    console.log(a2);
-    console.log(_.indexOf(a1, '*'));
-    const pageName = a1[_.indexOf(a2, '*')];
-    console.log('pageName', pageName);
-  });
-
-// const a = 'src/case_modules/page-withdraw/materials/mock-services/basic.js';
-// // const reg = new RegExp('src/case_modules/*', 'i');
-// const reg = /src\/case_modules\/+/;
-// console.log(a.match(reg));
+getMaterialMap(matmanAppPath, materialDir1);
+getMaterialMap(matmanAppPath, materialDir2);
+getMaterialMap(matmanAppPath, materialDir3);
