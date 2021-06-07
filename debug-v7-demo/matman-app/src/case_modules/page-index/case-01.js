@@ -1,17 +1,17 @@
 const { CaseModule } = require('../../../../../packages/matman');
 
-const deviceInstance = require('../../materials/puppeteer/device/iPhone6');
-const pluginMockstarMaterial = require('./materials/mock-services/basic');
+const device = require('../../materials/puppeteer/device/iPhone6');
+const mockService = require('./materials/mock-services/basic');
 const userAction = require('./materials/user-actions/basic-check');
 
 module.exports = new CaseModule('观测页面的基础UI信息', {
   filename: __filename,
-  userAction,
-  webCrawler: './materials/web-crawlers/get-page-info.js',
   materials: {
-    pluginAppMaterial: true,
-    pluginMockstarMaterial,
-    deviceInstance,
+    // pluginAppMaterial: true,
+    userAction,
+    webCrawler: './materials/web-crawlers/get-page-info.js',
+    mockService,
+    device,
   },
   pageDriverOpts: {
     useRecorder: true,
@@ -24,7 +24,7 @@ module.exports = new CaseModule('观测页面的基础UI信息', {
 //   // 调试
 //   debugCaseModule(module.exports, {
 //     doNotCloseBrowser: false,
-//   })
+//   }, 'prod.js')
 //     .then(data => {
 //       console.log(JSON.stringify(data, null, 2));
 //     })

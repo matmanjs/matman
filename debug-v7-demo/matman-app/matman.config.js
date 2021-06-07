@@ -49,7 +49,7 @@ module.exports = {
   plugins: [
     new PluginApp({
       materialDir: './src/materials/app',
-      activated: 'prod.js',
+      // activated: 'prod.js',
     }),
     new PluginWhistle({
       port: 9430,
@@ -70,7 +70,7 @@ module.exports = {
     }),
     new PluginTest({
       materialDir: './src/materials/test',
-      activated: 'all.js',
+      // activated: 'all.js',
     }),
   ],
   events: {

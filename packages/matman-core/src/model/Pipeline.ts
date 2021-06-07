@@ -1,7 +1,13 @@
 import MatmanConfig from '../config/MatmanConfig';
-import { getFormattedMatmanConfig } from '../util';
+import { findMatmanConfig } from '../util';
+import { getCallerPath } from '../launch/caller';
 
+export interface IPipelineOpts {
+  matmanConfigFilePath?: string;
+
+}
 export default class Pipeline {
+  public name: string;
   public matmanConfig: MatmanConfig;
   public seqId: string;
 
@@ -9,11 +15,17 @@ export default class Pipeline {
   // private readonly cacheProcessArr: ProcessCmd[];
   // private readonly startTime: number;
 
-  public constructor(matmanConfigFilePath: string) {
-    const matmanConfig = getFormattedMatmanConfig(matmanConfigFilePath);
+  public constructor(name: string, opts: IPipelineOpts) {
+    this.name = name;
+
+    // 自动获取 new Pipeline 的那个文件
+    const pathOfNewPipeline = getCallerPath();
+
+    // 查找并获取 matman.config.js 的内容
+    const matmanConfig = findMatmanConfig(pathOfNewPipeline);
 
     if (!matmanConfig) {
-      throw new Error(`[E2ERunner] Could not get MatmanConfig from ${matmanConfigFilePath}`);
+      throw new Error(`[Pipeline] Could not get MatmanConfig from ${opts.matmanConfigFilePath}`);
     }
 
     this.matmanConfig = matmanConfig;

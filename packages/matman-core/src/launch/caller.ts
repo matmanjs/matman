@@ -54,7 +54,7 @@ export function getCallerPath(referFile?: string): string {
     }
 
     // 是否为 matman 组件内部自己模块间调用
-    const isMatmanSelf = item.indexOf('/matman/src/') > -1 || item.indexOf('/matman/lib/') > -1;
+    const isMatmanSelf = item.indexOf('/matman-core/src/') > -1 || item.indexOf('/matman-core/lib/') > -1;
     if (isMatmanSelf) {
       return false;
     }
