@@ -1,5 +1,6 @@
 const path = require('path');
-const { E2ERunner } = require('../../../../packages/matman-core');
+const { Pipeline } = require('../../../../packages/matman-core');
+const { setPipelineJsonDataToEnv } = require('../../../../packages/matman-plugin-test');
 
 // TODO 增加 matman-plugin-test matman-plugin-command
 // TODO 应该有不同的全局执行脚本，就像本文件一样，它是不同命令的有序组合，用于初始化、销毁、调试、dev场景，
@@ -8,11 +9,15 @@ const { E2ERunner } = require('../../../../packages/matman-core');
 // pipeline start/bootstrap/clean
 
 module.exports = async () => {
-  const e2eRunner = new E2ERunner(path.join(__dirname, './matman-app/matman.config.js'));
+  const pipeline = new Pipeline(path.join(__dirname, './matman-app/matman.config.js'));
 
-  await e2eRunner.setup();
+  await pipeline.setup();
 
-  await e2eRunner.runTest();
+  // 一定要设置变量
+  setPipelineJsonDataToEnv(pipeline);
 
-  await e2eRunner.teardown();
+
+  await pipeline.runTest();
+
+  // await pipeline.teardown();
 };

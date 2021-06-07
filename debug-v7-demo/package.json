@@ -4,7 +4,7 @@
   "description": "",
   "main": "e2e-runner-01.js",
   "scripts": {
-    "test:e2e": "node e2e-runner.js",
+    "test:e2e": "node pipeline.js",
     "test:e2e:show": "cross-env SHOW_BROWSER=1 npm run test:e2e",
     "test:e2e:direct": "mocha",
     "test:e2e:direct:show": "cross-env SHOW_BROWSER=1 npm run test:e2e:direct"
