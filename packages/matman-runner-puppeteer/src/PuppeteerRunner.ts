@@ -2,10 +2,11 @@ import path from 'path';
 import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
-import { IBrowserRunner, MatmanResult, IMatmanResultQueueItem, IPageDriver } from 'matman-core';
+import { IBrowserRunner, IMatmanResultQueueItem, IPageDriver } from 'matman-core';
 import { build } from 'matman-crawler';
 import { createMockStarQuery } from 'mockstar';
 
+import MatmanResult from './MatmanResult';
 import { evaluate } from './utils/master';
 
 export class PuppeteerRunner extends EventEmitter implements IBrowserRunner {

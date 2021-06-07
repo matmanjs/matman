@@ -1,12 +1,13 @@
 import {
+  IMatmanResult,
   IMatmanResultQueueHandler,
   IMatmanResultQueueItem,
   IMatmanResultQueueItemPuppeteerConsole,
   IMatmanResultQueueItemPuppeteerNetwork,
   IResourceType,
-} from '../typings/matman-result';
-import { RUNNER_NAME } from '../config';
-import { isURLMatch } from '../util/url';
+  RUNNER_NAME,
+  isURLMatch,
+} from 'matman-core';
 
 interface IMatmanResultObj {
   runnerName?: string;
@@ -22,7 +23,7 @@ interface IMatmanResultObj {
   };
 }
 
-export default class MatmanResult {
+export default class MatmanResult implements IMatmanResult {
   public runnerName: string;
 
   public data: unknown[];
@@ -36,11 +37,11 @@ export default class MatmanResult {
     isExistCoverageReport?: boolean;
   };
 
-  private readonly dataIndexMap: {
+  public readonly dataIndexMap: {
     [key: string]: number;
   };
 
-  private readonly queueHandler: null | IMatmanResultQueueHandler;
+  public readonly queueHandler: null | IMatmanResultQueueHandler;
 
   public constructor(result: IMatmanResultObj) {
     this.runnerName = result.runnerName || 'unknown';
@@ -272,12 +273,11 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
   public getNetwork(resourceType?: IResourceType): IMatmanResultQueueItemPuppeteerNetwork[] {
     const queue = this.queue as IMatmanResultQueueItemPuppeteerNetwork[];
 
-    return queue.filter(item => {
+    return queue.filter((item) => {
       const checkEventName = item.eventName === 'network';
 
       // 要么不传递，要么传递了就一定是指定值
-      const checkResourceType =
-        !resourceType || (resourceType && item.resourceType === resourceType);
+      const checkResourceType =        !resourceType || (resourceType && item.resourceType === resourceType);
 
       return checkEventName && checkResourceType;
     });
@@ -388,8 +388,8 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
    */
   public isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean {
     return (
-      this.isExistInNetwork(partialURL, query, 'xhr', status) ||
-      this.isExistInNetwork(partialURL, query, 'fetch', status)
+      this.isExistInNetwork(partialURL, query, 'xhr', status)
+      || this.isExistInNetwork(partialURL, query, 'fetch', status)
     );
   }
 
@@ -514,8 +514,8 @@ class PuppeteerQueueHandler implements IMatmanResultQueueHandler {
       for (let i = 0; i < queue.length; ++i) {
         const consoleText = `${queue[i].text}`;
         if (
-          (isFullMatch && consoleText === checkText) ||
-          (!isFullMatch && consoleText.indexOf(checkText) > -1)
+          (isFullMatch && consoleText === checkText)
+          || (!isFullMatch && consoleText.indexOf(checkText) > -1)
         ) {
           return true;
         }
