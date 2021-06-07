@@ -5,26 +5,23 @@ const mockService = require('./materials/mock-services/basic');
 const userAction = require('./materials/user-actions/basic-check');
 
 module.exports = new CaseModule('观测页面的基础UI信息', {
-  filename: __filename,
-  materials: {
-    // pluginAppMaterial: true,
-    userAction,
-    webCrawler: './materials/web-crawlers/get-page-info.js',
-    mockService,
-    device,
-  },
-  pageDriverOpts: {
-    useRecorder: true,
-  },
+  // pluginAppMaterial: true,
+  userAction,
+  webCrawler: './materials/web-crawlers/get-page-info.js',
+  mockService,
+  device,
+}, {
+  useRecorder: true,
 });
 
 // (() => {
 //   const { debugCaseModule } = require('../../../../../packages/matman');
+//   const pipeline = require('../../pipelines/prod');
 //
 //   // 调试
-//   debugCaseModule(module.exports, {
+//   debugCaseModule(pipeline, module.exports, {
 //     doNotCloseBrowser: false,
-//   }, 'prod.js')
+//   })
 //     .then(data => {
 //       console.log(JSON.stringify(data, null, 2));
 //     })
