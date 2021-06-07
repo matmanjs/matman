@@ -10,8 +10,7 @@ import CoverageConfig, { ICoverageOpts } from '../config/CoverageConfig';
 import MatmanResultConfig, { IResultOpts } from '../config/MatmanResultConfig';
 import MockstarConfig, { IMockstarQueryDataMap } from '../config/MockstarConfig';
 
-import MatmanResult from '../model/MatmanResult';
-
+import { IMatmanResult } from '../typings/matman-result';
 import { IBrowserRunner } from '../typings/browser-runner';
 import { IPageDriverOpts, IPageDriver } from '../typings/page-driver';
 
@@ -292,12 +291,12 @@ export default class PageDriverAsync implements IPageDriver {
    * @param [args]
    * @return {IPageDriver}
    */
-  public async evaluate(fn: string): Promise<MatmanResult | IPageDriver>;
-  public async evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | IPageDriver>;
+  public async evaluate(fn: string): Promise<IMatmanResult | IPageDriver>;
+  public async evaluate(fn: () => any, ...args: any[]): Promise<IMatmanResult | IPageDriver>;
   public async evaluate(
     fn: string | (() => any),
     ...args: any[]
-  ): Promise<MatmanResult | IPageDriver> {
+  ): Promise<IMatmanResult | IPageDriver> {
     this.evaluateFn = fn;
     this.evaluateFnArgs = args;
 
@@ -309,7 +308,7 @@ export default class PageDriverAsync implements IPageDriver {
    * 结束，获取结果
    * @return {Promise<{}>}
    */
-  public async getResult(): Promise<MatmanResult | IPageDriver> {
+  public async getResult(): Promise<IMatmanResult | IPageDriver> {
     // 如果没有 actionList 则直接抛出错误
     if (!this.actionList.length) {
       throw new Error('No action! Please use addAction(name, callback) to add your actions!');

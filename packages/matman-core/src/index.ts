@@ -26,6 +26,7 @@ import { runByExec, runBySpawn } from './util/run-cmd';
 import { IBrowserRunner } from './typings/browser-runner';
 import { IPageDriver } from './typings/page-driver';
 import {
+  IMatmanResult,
   IMatmanResultQueueItem,
   IMatmanResultQueueItemPuppeteerNetwork,
   IMatmanResultQueueItemPuppeteerConsole,
@@ -35,7 +36,6 @@ import {
 import { IPluginBase } from './typings/plugin';
 import { IMaterialBase } from './typings/material';
 
-import MatmanResult from './model/MatmanResult';
 import CacheData from './model/CacheData';
 import E2ERunner from './model/E2ERunner';
 
@@ -73,7 +73,7 @@ export {
   IResultOpts,
   IBrowserRunner,
   IPageDriver,
-  MatmanResult,
+  IMatmanResult,
   IMatmanResultQueueItem,
   IMatmanResultQueueItemPuppeteerNetwork,
   IMatmanResultQueueItemPuppeteerConsole,

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import MatmanResult from '../model/MatmanResult';
+import { IMatmanResult } from './matman-result';
 import { IPageDriver } from './page-driver';
 
 /**
@@ -15,7 +15,7 @@ export interface IBrowserRunner extends EventEmitter {
   name: string;
 
   setPageDriver(p: IPageDriver): void;
-  getResult(): Promise<MatmanResult>;
+  getResult(): Promise<IMatmanResult>;
   getConfig(): void;
   getNewInstance(): void;
   gotoPage(): void;

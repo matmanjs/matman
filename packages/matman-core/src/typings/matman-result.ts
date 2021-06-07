@@ -1,3 +1,51 @@
+/**
+ * 执行器需要实现的方法
+ * @function getResult 获取结果
+ * @function getConfig 获取配置
+ * @function getNewInstance 获取实例
+ * @function gotoPage 跳转页面
+ * @function runActions 运行 Actions
+ * @function cleanEffect 清除副作用
+ */
+export interface IMatmanResult {
+  runnerName: string;
+  data: unknown[];
+  globalInfo: {
+    // 记录
+    recorder?: {
+      queue: IMatmanResultQueueItem[];
+      allRequestUrl: string[];
+    };
+
+    // 是否已经生成了覆盖率报告
+    isExistCoverageReport?: boolean;
+  };
+  dataIndexMap: {
+    [key: string]: number;
+  };
+  queueHandler: null | IMatmanResultQueueHandler;
+
+  getQueueHandler(): null | IMatmanResultQueueHandler;
+  toString(): string;
+  get(actionName: string | number): unknown;
+  getQueue(): IMatmanResultQueueItem[];
+  getNetwork(resourceType?: IResourceType): IMatmanResultQueueItem[];
+
+  isExistInNetwork(
+    partialURL: string,
+    query?: { [key: string]: any },
+    resourceType?: IResourceType,
+    status?: number,
+  ): boolean;
+  isExistPage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean;
+  isExistXHR(partialURL: string, query?: { [key: string]: any }, status?: number): boolean;
+  isExistImage(partialURL: string, query?: { [key: string]: any }, status?: number): boolean;
+  isExistStylesheet(partialURL: string, query?: { [key: string]: any }, status?: number): boolean;
+  isExistScript(partialURL: string, query?: { [key: string]: any }, status?: number): boolean;
+  isExistJSBridge(partialURL: string, query?: { [key: string]: any }): boolean;
+  isExistConsole(partialText: string | RegExp, type?: string, isFullMatch?: boolean): boolean;
+}
+
 export interface IMatmanResultQueueItemPuppeteerNetwork {
   eventName: string;
   url: string;

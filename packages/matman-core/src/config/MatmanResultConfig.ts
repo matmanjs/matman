@@ -2,7 +2,7 @@ import path from 'path';
 import fse from 'fs-extra';
 
 import MatmanConfig from './MatmanConfig';
-import MatmanResult from '../model/MatmanResult';
+import { IMatmanResult } from '../typings/matman-result';
 import { getAbsolutePath } from '../util';
 import { getFolderNameFromPath, getNewFilePathWithTag, getSaveDirFromPath } from '../util/path';
 
@@ -53,9 +53,9 @@ export default class MatmanResultConfig {
   /**
    * 保存结果到本地
    *
-   * @param {MatmanResult} matmanResult
+   * @param {IMatmanResult} matmanResult
    */
-  public save(matmanResult: MatmanResult): void {
+  public save(matmanResult: IMatmanResult): void {
     fse.outputJsonSync(this.path, JSON.parse(matmanResult.toString()));
   }
 

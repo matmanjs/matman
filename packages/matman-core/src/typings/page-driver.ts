@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 
 import { IBrowserRunner } from './browser-runner';
-import MatmanResult from '../model/MatmanResult';
+import { IMatmanResult } from './matman-result';
 import MatmanConfig from '../config/MatmanConfig';
 import CookieConfig, { ICookieConfigOpts } from '../config/CookieConfig';
 import DeviceConfig, { IDeviceConfigOpts } from '../config/DeviceConfig';
@@ -180,6 +180,6 @@ export interface IPageDriver {
    * @param [args]
    * @return {Promise<MatmanResult|IPageDriver>}
    */
-  evaluate(fn: string): Promise<MatmanResult | IPageDriver>;
-  evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | IPageDriver>;
+  evaluate(fn: string): Promise<IMatmanResult | IPageDriver>;
+  evaluate(fn: () => any, ...args: any[]): Promise<IMatmanResult | IPageDriver>;
 }
