@@ -1,4 +1,4 @@
-const { DeviceMaterial } = require('../../../../../../packages/matman-plugin-puppeteer');
+const { DeviceMaterial } = require('../../../../../../packages/matman');
 
 module.exports = new DeviceMaterial('iPhone 6', {
   userAgent:

@@ -1,5 +1,5 @@
 const path = require('path');
-const { PluginTestMochaMaterial } = require('../../../../../packages/matman-plugin-test');
+const { PluginTestMochaMaterial } = require('../../../../../packages/matman');
 
 // module.exports = new MochaInstance('npm run test:e2e:direct', {
 //   // cwd: e2eRunner.workspacePath,

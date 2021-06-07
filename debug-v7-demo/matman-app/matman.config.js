@@ -1,10 +1,12 @@
 const path = require('path');
 
-const { PluginApp } = require('../../packages/matman-plugin-app');
-const { PluginWhistle } = require('../../packages/matman-plugin-whistle');
-const { PluginMockstar } = require('../../packages/matman-plugin-mockstar');
-const { PluginPuppeteer } = require('../../packages/matman-plugin-puppeteer');
-const { PluginTest } = require('../../packages/matman-plugin-test');
+const {
+  PluginApp,
+  PluginWhistle,
+  PluginMockstar,
+  PluginPuppeteer,
+  PluginTest,
+} = require('../../packages/matman');
 
 // FIXME: 如果不是同源测试方式，例如只是针对测试环境的测试，该怎么办呢？
 const workspacePath = path.resolve(__dirname, '../../test/data/project-react-h5');

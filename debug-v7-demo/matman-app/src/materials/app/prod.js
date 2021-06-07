@@ -1,5 +1,5 @@
 const path = require('path');
-const { PluginAppMaterial } = require('../../../../../packages/matman-plugin-app');
+const { PluginAppMaterial } = require('../../../../../packages/matman');
 
 module.exports = () => {
   // app 项目根目录

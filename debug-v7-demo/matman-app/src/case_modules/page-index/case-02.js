@@ -1,4 +1,4 @@
-const { CaseModule } = require('../../../../../packages/matman-plugin-puppeteer');
+const { CaseModule } = require('../../../../../packages/matman');
 
 const deviceInstance = require('../../materials/puppeteer/device/iPhoneXCustom');
 const pluginMockstarInstance = require('./materials/mock-services/basic');

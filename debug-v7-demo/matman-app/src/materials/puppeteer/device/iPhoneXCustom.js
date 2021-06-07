@@ -1,4 +1,4 @@
-const { DeviceMaterial } = require('../../../../../../packages/matman-plugin-puppeteer');
+const { DeviceMaterial } = require('../../../../../../packages/matman');
 
 module.exports = clone => {
   // https://github.com/puppeteer/puppeteer/blob/main/src/common/DeviceDescriptors.ts

@@ -1,4 +1,4 @@
-const { PluginMockstarInstance } = require('../../../../../../../packages/matman-plugin-mockstar');
+const { PluginMockstarInstance } = require('../../../../../../../packages/matman');
 
 module.exports = new PluginMockstarInstance('身份证和手机都校验成功', {
   queryMap: {
