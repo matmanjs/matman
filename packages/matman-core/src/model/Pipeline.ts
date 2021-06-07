@@ -8,6 +8,7 @@ export interface IPipelineOpts {
 }
 export default class Pipeline {
   public name: string;
+  public filename: string;
   public matmanConfig: MatmanConfig;
   public seqId: string;
 
@@ -19,10 +20,10 @@ export default class Pipeline {
     this.name = name;
 
     // 自动获取 new Pipeline 的那个文件
-    const pathOfNewPipeline = getCallerPath();
+    this.filename = getCallerPath();
 
     // 查找并获取 matman.config.js 的内容
-    const matmanConfig = findMatmanConfig(pathOfNewPipeline);
+    const matmanConfig = findMatmanConfig(this.filename);
 
     if (!matmanConfig) {
       throw new Error(`[Pipeline] Could not get MatmanConfig from ${opts.matmanConfigFilePath}`);

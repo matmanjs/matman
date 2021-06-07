@@ -1,9 +1,9 @@
 import path from 'path';
 import _ from 'lodash';
 
-import { CacheData, IPageDriverOpts, PageDriver } from 'matman-core';
+import { CacheData, IPageDriverOpts, PageDriver, getCallerPath, requireModule } from 'matman-core';
 
-import { getPluginAppMaterial, PluginAppMaterial } from 'matman-plugin-app';
+import { PluginAppMaterial } from 'matman-plugin-app';
 import { getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
 import { getLocalWhistleServer, PluginWhistle } from 'matman-plugin-whistle';
 import { getPipelineJsonDataFromEnv, IPipelineJsonData } from 'matman-plugin-test';
@@ -11,47 +11,63 @@ import { DeviceMaterial, getDeviceMaterial } from 'matman-plugin-puppeteer';
 
 import launchPuppeteer from './launch';
 
-interface ICaseModuleOpts {
-  filename: string;
+// interface ICaseModuleOpts {
+//   filename: string;
+//   userAction: (pageDriver: PageDriver) => PageDriver;
+//   webCrawler: string;
+//   materials?: {
+//     pluginAppMaterial?: boolean;
+//     pluginMockstarMaterial?: PluginMockstarMaterial;
+//     deviceInstance?: DeviceMaterial;
+//   };
+//   pageDriverOpts?: IPageDriverOpts;
+// }
+
+interface ICaseModuleMaterials {
   userAction: (pageDriver: PageDriver) => PageDriver;
   webCrawler: string;
-  materials?: {
-    pluginAppMaterial?: boolean;
-    pluginMockstarMaterial?: PluginMockstarMaterial;
-    deviceInstance?: DeviceMaterial;
-  };
-  pageDriverOpts?: IPageDriverOpts;
+
+  mockstar: PluginMockstarMaterial | null;
+  device: DeviceMaterial | null;
+  app: PluginAppMaterial | null;
+}
+interface IMaterialOpts {
+  userAction: (pageDriver: PageDriver) => PageDriver;
+  webCrawler: string;
+
+  mockstar?: PluginMockstarMaterial ;
+  device?: DeviceMaterial ;
+  app?: PluginAppMaterial ;
 }
 
 export default class CaseModule {
   public name: string;
   public filename: string;
-  public userAction: (pageDriver: PageDriver) => PageDriver;
-  public webCrawler: string;
+
   public pageDriverOpts: IPageDriverOpts;
 
   public pageDriver: PageDriver | null;
 
-  private readonly deviceInstance: DeviceMaterial | null;
-  private pluginAppMaterial: PluginAppMaterial | null;
-  private pluginMockstarMaterial: PluginMockstarMaterial | null;
+  public materials: ICaseModuleMaterials;
 
-  private readonly pluginAppMaterialFromOpts?: boolean;
-
-  public constructor(name: string, opts: ICaseModuleOpts) {
+  public constructor(name: string, materialOpts: IMaterialOpts, pageDriverOpts?: IPageDriverOpts) {
     this.name = name;
-    this.filename = opts.filename;
-    this.userAction = opts.userAction;
-    this.webCrawler = opts.webCrawler;
-    this.pageDriverOpts = this.getPageDriverOpts(opts.pageDriverOpts);
-    this.pluginAppMaterialFromOpts = opts.materials?.pluginAppMaterial;
+    this.filename = getCallerPath();
 
-    this.deviceInstance = getDeviceMaterial(opts.materials?.deviceInstance);
+    this.materials = {
+      userAction: materialOpts.userAction,
+      webCrawler: materialOpts.webCrawler,
+      device: getDeviceMaterial(materialOpts.device),
+      mockstar: getPluginMockstarMaterial(materialOpts.mockstar),
+      app: null,
+    };
 
-    this.pluginMockstarMaterial = getPluginMockstarMaterial(opts.materials?.pluginMockstarMaterial);
+
+    this.pageDriverOpts = this.getPageDriverOpts(pageDriverOpts);
+
 
     // 注意它比较特殊，配置项在 matman.config.js 中，所以需要在 run 方法执行时才设置
-    this.pluginAppMaterial = null;
+    // this.pluginAppMaterial = null;
 
     // 初始的时候 pageDriver 为 null，执行时再设置，避免浪费性能
     this.pageDriver = null;
@@ -66,7 +82,6 @@ export default class CaseModule {
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launchPuppeteer(this.getPageDriverOpts(pageDriverOpts));
-
     this.pageDriver = pageDriver;
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
@@ -82,18 +97,18 @@ export default class CaseModule {
     }
 
     // 设置浏览器设备型号
-    if (this.deviceInstance) {
-      await pageDriver.setDeviceConfig(this.deviceInstance);
+    if (this.materials.device) {
+      await pageDriver.setDeviceConfig(this.materials.device);
     }
 
     // 设置截屏
     await pageDriver.setScreenshotConfig(true);
 
     // 操作
-    await this.userAction(pageDriver);
+    await this.materials.userAction(pageDriver);
 
     // 获取结果
-    return pageDriver.evaluate(path.join(path.dirname(this.filename), this.webCrawler));
+    return pageDriver.evaluate(path.join(path.dirname(this.filename), this.materials.webCrawler));
   }
 
   private getPageDriverOpts(pageDriverOpts?: IPageDriverOpts): IPageDriverOpts {
@@ -103,14 +118,11 @@ export default class CaseModule {
   }
 
   private setPluginAppMaterial(pipelineJsonData: IPipelineJsonData | null) {
-    if (!this.pluginAppMaterialFromOpts || !pipelineJsonData) {
+    if (!pipelineJsonData) {
       return;
     }
 
-    this.pluginAppMaterial = getPluginAppMaterial(path.join(
-      pipelineJsonData.pluginApp?.materialDir,
-      pipelineJsonData.pluginApp?.activated,
-    ));
+    this.materials.app = requireModule(pipelineJsonData.extraInfo.pipelineMaterialFullPath).pluginApp.activatedMaterial;
   }
 
   private async setWhistleRuleBeforeRun(pipelineJsonData: IPipelineJsonData | null): Promise<void> {
@@ -119,12 +131,12 @@ export default class CaseModule {
     }
 
     // Plugin App 中的代理配置
-    const whistleRuleFromApp = this.pluginAppMaterial?.getWhistleRule(
+    const whistleRuleFromApp = this.materials.app?.getWhistleRule(
       new CacheData(pipelineJsonData.pluginApp?.cacheData?.data),
     );
 
     // Plugin Mockstar 中的代理配置
-    const whistleRuleFromMockstar = this.pluginMockstarMaterial?.getWhistleRule(
+    const whistleRuleFromMockstar = this.materials.mockstar?.getWhistleRule(
       new CacheData(pipelineJsonData.pluginMockstar?.cacheData?.data),
     );
 

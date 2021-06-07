@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Pipeline, IPageDriverOpts, MATMAN_CONFIG_FILE, searchFilePath } from 'matman-core';
+import { Pipeline, IPageDriverOpts } from 'matman-core';
 
 import { setPipelineJsonDataToEnv } from 'matman-plugin-test';
 
@@ -11,14 +11,11 @@ interface IDebugCaseModuleOpts {
 }
 
 export async function debugCaseModule(
+  pipeline: Pipeline,
   caseModule: CaseModule,
   pageDriverOpts?: IPageDriverOpts,
   debugOpts?: IDebugCaseModuleOpts,
 ) {
-  // 自动获取 matman.config.js 路径
-  const matmanConfigFilePath = searchFilePath(caseModule.filename, MATMAN_CONFIG_FILE);
-  const pipeline = new Pipeline(matmanConfigFilePath);
-
   if (!debugOpts?.doNotSetup) {
     // 测试地址 https://now.qq.com/index.html
     await pipeline.setup();

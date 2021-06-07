@@ -11,6 +11,7 @@ import MockstarConfig, {
 import { MATMAN_CONFIG_FILE, RUNNER_NAME } from './config';
 
 import {
+  requireModule,
   getAbsolutePath,
   findMatmanConfig,
   getFormattedMatmanConfig,
@@ -41,12 +42,14 @@ import Pipeline from './model/Pipeline';
 import PageDriver from './model/PageDriver';
 
 import launch from './launch';
+import { getCallerPath } from './launch/caller';
 
 export {
   MatmanConfig,
   MATMAN_CONFIG_FILE,
   RUNNER_NAME,
   launch,
+  requireModule,
   getAbsolutePath,
   searchFilePath,
   getFromStrOrFunc,
@@ -61,6 +64,7 @@ export {
   portIsOccupied,
   runByExec,
   runBySpawn,
+  getCallerPath,
   logger,
   CookieConfig,
   ICookieConfigOpts,

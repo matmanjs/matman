@@ -5,6 +5,7 @@ const globalAny: any = global;
 export interface IPipelineJsonData {
   extraInfo: {
     matmanRootPath: string;
+    pipelineMaterialFullPath: string;
   },
   pluginApp?: any;
   pluginWhistle?: any;
@@ -27,6 +28,7 @@ export function setPipelineJsonDataToEnv(pipelineFromParams?: Pipeline): string 
   const pipelineJsonData: IPipelineJsonData = {
     extraInfo: {
       matmanRootPath: pipeline.matmanConfig.matmanRootPath,
+      pipelineMaterialFullPath: pipeline.filename,
     },
   };
 
