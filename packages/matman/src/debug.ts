@@ -1,12 +1,11 @@
 import _ from 'lodash';
-import { E2ERunner, searchFilePath, MATMAN_CONFIG_FILE } from 'matman-core';
-import { IPageDriverOpts } from 'matman';
+import { E2ERunner, IPageDriverOpts, MATMAN_CONFIG_FILE, searchFilePath } from 'matman-core';
 
 import { setE2ERunnerJsonDataToEnv } from 'matman-plugin-test';
 
 import CaseModule from './CaseModule';
 
-interface IDebugCaseModuleOpts{
+interface IDebugCaseModuleOpts {
   doNotSetup?: boolean;
   showResultInConsole?: boolean;
 }

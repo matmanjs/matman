@@ -58,11 +58,11 @@ function getPageDriverOpts(opts?: IPageDriverOpts): IPageDriverOpts {
  * @param {IMatmanConfigOpts} matmanConfigOpts
  * @return {PageDriver}
  */
-export function launch(
+export default async function launch(
   browserRunner: IBrowserRunner,
   pageDriverOpts?: IPageDriverOpts,
   matmanConfigOpts?: IMatmanConfigOpts,
-): PageDriver {
+): Promise<PageDriver> {
   // 处理下原始传入的 pageDriverOpts，部分设置默认值
   const newPageDriverOpts = getPageDriverOpts(pageDriverOpts);
 

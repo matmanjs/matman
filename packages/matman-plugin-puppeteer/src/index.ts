@@ -1,12 +1,8 @@
 import PluginPuppeteer from './PluginPuppeteer';
-import CaseModule from './CaseModule';
-
-import DeviceMaterial from './DeviceMaterial';
-import { debugCaseModule } from './debug';
+import DeviceMaterial, { getDeviceMaterial } from './DeviceMaterial';
 
 export {
   PluginPuppeteer,
-  CaseModule,
   DeviceMaterial,
-  debugCaseModule,
+  getDeviceMaterial,
 };

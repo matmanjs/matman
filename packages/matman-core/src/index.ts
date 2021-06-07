@@ -24,7 +24,7 @@ import { killPort, findAvailablePort, portIsOccupied } from './util/port';
 import { runByExec, runBySpawn } from './util/run-cmd';
 
 import { IBrowserRunner } from './typings/browser-runner';
-import { IPageDriver } from './typings/page-driver';
+import { IPageDriver, IPageDriverOpts } from './typings/page-driver';
 import {
   IMatmanResult,
   IMatmanResultQueueItem,
@@ -38,11 +38,15 @@ import { IMaterialBase } from './typings/material';
 
 import CacheData from './model/CacheData';
 import E2ERunner from './model/E2ERunner';
+import PageDriver from './model/PageDriver';
+
+import launch from './launch';
 
 export {
   MatmanConfig,
   MATMAN_CONFIG_FILE,
   RUNNER_NAME,
+  launch,
   getAbsolutePath,
   searchFilePath,
   getFromStrOrFunc,
@@ -72,7 +76,9 @@ export {
   MatmanResultConfig,
   IResultOpts,
   IBrowserRunner,
+  PageDriver,
   IPageDriver,
+  IPageDriverOpts,
   IMatmanResult,
   IMatmanResultQueueItem,
   IMatmanResultQueueItemPuppeteerNetwork,

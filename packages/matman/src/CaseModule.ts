@@ -1,20 +1,19 @@
 import path from 'path';
 import _ from 'lodash';
 
-import { launch, PageDriverAsync, IPageDriverOpts } from 'matman';
-import { CacheData } from 'matman-core';
+import { CacheData, IPageDriverOpts, PageDriver } from 'matman-core';
 
-import { PluginAppMaterial, getPluginAppMaterial } from 'matman-plugin-app';
-import { PluginMockstarMaterial, getPluginMockstarMaterial } from 'matman-plugin-mockstar';
-import { PluginWhistle, getLocalWhistleServer } from 'matman-plugin-whistle';
+import { getPluginAppMaterial, PluginAppMaterial } from 'matman-plugin-app';
+import { getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
+import { getLocalWhistleServer, PluginWhistle } from 'matman-plugin-whistle';
 import { getE2ERunnerJsonDataFromEnv, IE2ERunnerJsonData } from 'matman-plugin-test';
+import { DeviceMaterial, getDeviceMaterial } from 'matman-plugin-puppeteer';
 
-import { BrowserRunner } from 'matman-runner-puppeteer';
-import DeviceMaterial, { getDeviceMaterial } from './DeviceMaterial';
+import launchPuppeteer from './launch';
 
 interface ICaseModuleOpts {
   filename: string;
-  userAction: (pageDriver: PageDriverAsync) => PageDriverAsync;
+  userAction: (pageDriver: PageDriver) => PageDriver;
   webCrawler: string;
   materials?: {
     pluginAppMaterial?: boolean;
@@ -27,11 +26,11 @@ interface ICaseModuleOpts {
 export default class CaseModule {
   public name: string;
   public filename: string;
-  public userAction: (pageDriver: PageDriverAsync) => PageDriverAsync;
+  public userAction: (pageDriver: PageDriver) => PageDriver;
   public webCrawler: string;
   public pageDriverOpts: IPageDriverOpts;
 
-  public pageDriver: PageDriverAsync | null;
+  public pageDriver: PageDriver | null;
 
   private readonly deviceInstance: DeviceMaterial | null;
   private pluginAppMaterial: PluginAppMaterial | null;
@@ -66,14 +65,17 @@ export default class CaseModule {
     this.setPluginAppMaterial(e2eRunnerJsonData);
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
-    const pageDriver = await launch(new BrowserRunner(), this.getPageDriverOpts(pageDriverOpts));
+    const pageDriver = await launchPuppeteer(this.getPageDriverOpts(pageDriverOpts));
 
     this.pageDriver = pageDriver;
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
     if (e2eRunnerJsonData?.pluginWhistle) {
+      // 获得 whistle 服务地址，例如 127.0.0.1:8899
+      const localWhistleServer = await getLocalWhistleServer(e2eRunnerJsonData.pluginWhistle.cacheData?.data?.port, true);
+
       // 设置走 whistle 代理
-      await pageDriver.useProxyServer(getLocalWhistleServer(e2eRunnerJsonData.pluginWhistle.cacheData?.data?.port));
+      await pageDriver.useProxyServer(localWhistleServer);
 
       // 设置代理规则
       await this.setWhistleRuleBeforeRun(e2eRunnerJsonData);

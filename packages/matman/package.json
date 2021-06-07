@@ -40,7 +40,13 @@
     "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
     "lodash": "^4.17.15",
-    "matman-core": "^6.0.20"
+    "matman-core": "^6.0.20",
+    "matman-plugin-app": "^6.0.20",
+    "matman-plugin-mockstar": "^6.0.20",
+    "matman-plugin-puppeteer": "^6.0.20",
+    "matman-plugin-test": "^6.0.20",
+    "matman-plugin-whistle": "^6.0.20",
+    "matman-runner-puppeteer": "^6.0.18"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
