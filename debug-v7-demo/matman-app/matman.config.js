@@ -8,6 +8,8 @@ const {
   PluginTest,
 } = require('../../packages/matman');
 
+// new pipeline 时可以传递一些值，初始化覆盖，适用于 run test 场景
+
 // FIXME: 如果不是同源测试方式，例如只是针对测试环境的测试，该怎么办呢？
 const workspacePath = path.resolve(__dirname, '../../test/data/project-react-h5');
 

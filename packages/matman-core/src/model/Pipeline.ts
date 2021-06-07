@@ -1,7 +1,7 @@
 import MatmanConfig from '../config/MatmanConfig';
 import { getFormattedMatmanConfig } from '../util';
 
-export default class E2ERunner {
+export default class Pipeline {
   public matmanConfig: MatmanConfig;
   public seqId: string;
 

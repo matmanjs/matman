@@ -1,7 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
 import { PluginBase } from 'matman-plugin-core';
-import { E2ERunner } from 'matman-core';
+import { Pipeline } from 'matman-core';
 
 import MockstarSDK, { IStartOpts } from './MockstarSDK';
 
@@ -33,24 +33,24 @@ export default class PluginMockstar extends PluginBase {
   /**
    * 初始化插件
    */
-  public initPlugin(e2eRunner: E2ERunner): void {
-    super.initPlugin(e2eRunner);
+  public initPlugin(pipeline: Pipeline): void {
+    super.initPlugin(pipeline);
 
     // 修改为绝对路径，方便后续处理
     this.materialDir = path.resolve(
-      e2eRunner.matmanConfig.matmanRootPath,
+      pipeline.matmanConfig.matmanRootPath,
       this.materialDir,
     );
-    this.mockerDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.mockerDir);
+    this.mockerDir = path.resolve(pipeline.matmanConfig.matmanRootPath, this.mockerDir);
   }
 
-  public async setup(e2eRunner: E2ERunner) {
-    await super.setup(e2eRunner);
+  public async setup(pipeline: Pipeline) {
+    await super.setup(pipeline);
 
     // 设置默认值
     this.startOpts = _.merge(
       {
-        rootPath: e2eRunner.matmanConfig.matmanRootPath,
+        rootPath: pipeline.matmanConfig.matmanRootPath,
         mockServerPath: this.mockerDir,
       },
       this.startOpts,
@@ -63,8 +63,8 @@ export default class PluginMockstar extends PluginBase {
     this.cacheData.setCacheItem('port', this.mockstarSDK.port);
   }
 
-  public async teardown(e2eRunner: E2ERunner) {
-    await super.teardown(e2eRunner);
+  public async teardown(pipeline: Pipeline) {
+    await super.teardown(pipeline);
 
     // 停止 mockstar
     await this.mockstarSDK.stop();

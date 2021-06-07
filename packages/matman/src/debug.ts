@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { E2ERunner, IPageDriverOpts, MATMAN_CONFIG_FILE, searchFilePath } from 'matman-core';
+import { Pipeline, IPageDriverOpts, MATMAN_CONFIG_FILE, searchFilePath } from 'matman-core';
 
-import { setE2ERunnerJsonDataToEnv } from 'matman-plugin-test';
+import { setPipelineJsonDataToEnv } from 'matman-plugin-test';
 
 import CaseModule from './CaseModule';
 
@@ -17,15 +17,15 @@ export async function debugCaseModule(
 ) {
   // 自动获取 matman.config.js 路径
   const matmanConfigFilePath = searchFilePath(caseModule.filename, MATMAN_CONFIG_FILE);
-  const e2eRunner = new E2ERunner(matmanConfigFilePath);
+  const pipeline = new Pipeline(matmanConfigFilePath);
 
   if (!debugOpts?.doNotSetup) {
     // 测试地址 https://now.qq.com/index.html
-    await e2eRunner.setup();
+    await pipeline.setup();
   }
 
   // 一定要设置变量
-  setE2ERunnerJsonDataToEnv(e2eRunner);
+  setPipelineJsonDataToEnv(pipeline);
 
   // await caseModule.handleDependencies();
   const result = await caseModule.run(_.merge({

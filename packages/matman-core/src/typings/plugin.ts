@@ -1,12 +1,12 @@
-import E2ERunner from '../model/E2ERunner';
+import Pipeline from '../model/Pipeline';
 
 export interface IPluginBase {
   name: string;
   seqId: string;
 
-  initPlugin(e2eRunner: E2ERunner): void;
-  setup(e2eRunner: E2ERunner): Promise<void>;
-  runTest(e2eRunner: E2ERunner): Promise<void> ;
-  teardown(e2eRunner: E2ERunner): Promise<void>;
+  initPlugin(pipeline: Pipeline): void;
+  setup(pipeline: Pipeline): Promise<void>;
+  runTest(pipeline: Pipeline): Promise<void> ;
+  teardown(pipeline: Pipeline): Promise<void>;
   setSeqId(seqId: string): void;
 }

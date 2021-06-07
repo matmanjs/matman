@@ -2,7 +2,7 @@ import { MaterialBase } from 'matman-plugin-core';
 import { util as cmdHubUtil } from 'cmd-hub';
 
 import { IPluginTestMaterial } from './types';
-import { setE2ERunnerJsonDataToEnv } from './utils';
+import { setPipelineJsonDataToEnv } from './utils';
 
 interface MochaInstanceOpts {
   cwd: string;
@@ -26,9 +26,9 @@ export default class PluginTestMochaMaterial extends MaterialBase implements IPl
   public async run(): Promise<void> {
     console.log('==run test===', this.cmd);
 
-    const e2eRunnerJsonDataStr = setE2ERunnerJsonDataToEnv();
-    if (!e2eRunnerJsonDataStr) {
-      throw new Error('Some wrong in setE2ERunnerJsonDataToEnv()!');
+    const pipelineJsonDataStr = setPipelineJsonDataToEnv();
+    if (!pipelineJsonDataStr) {
+      throw new Error('Some wrong in setPipelineJsonDataToEnv()!');
     }
 
     // 执行命令

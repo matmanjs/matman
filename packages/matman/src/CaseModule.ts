@@ -6,7 +6,7 @@ import { CacheData, IPageDriverOpts, PageDriver } from 'matman-core';
 import { getPluginAppMaterial, PluginAppMaterial } from 'matman-plugin-app';
 import { getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
 import { getLocalWhistleServer, PluginWhistle } from 'matman-plugin-whistle';
-import { getE2ERunnerJsonDataFromEnv, IE2ERunnerJsonData } from 'matman-plugin-test';
+import { getPipelineJsonDataFromEnv, IPipelineJsonData } from 'matman-plugin-test';
 import { DeviceMaterial, getDeviceMaterial } from 'matman-plugin-puppeteer';
 
 import launchPuppeteer from './launch';
@@ -59,10 +59,10 @@ export default class CaseModule {
 
   // 执行
   public async run(pageDriverOpts?: IPageDriverOpts) {
-    const e2eRunnerJsonData = getE2ERunnerJsonDataFromEnv();
+    const pipelineJsonData = getPipelineJsonDataFromEnv();
 
     // 设置 appMaterial
-    this.setPluginAppMaterial(e2eRunnerJsonData);
+    this.setPluginAppMaterial(pipelineJsonData);
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launchPuppeteer(this.getPageDriverOpts(pageDriverOpts));
@@ -70,15 +70,15 @@ export default class CaseModule {
     this.pageDriver = pageDriver;
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
-    if (e2eRunnerJsonData?.pluginWhistle) {
+    if (pipelineJsonData?.pluginWhistle) {
       // 获得 whistle 服务地址，例如 127.0.0.1:8899
-      const localWhistleServer = await getLocalWhistleServer(e2eRunnerJsonData.pluginWhistle.cacheData?.data?.port, true);
+      const localWhistleServer = await getLocalWhistleServer(pipelineJsonData.pluginWhistle.cacheData?.data?.port, true);
 
       // 设置走 whistle 代理
       await pageDriver.useProxyServer(localWhistleServer);
 
       // 设置代理规则
-      await this.setWhistleRuleBeforeRun(e2eRunnerJsonData);
+      await this.setWhistleRuleBeforeRun(pipelineJsonData);
     }
 
     // 设置浏览器设备型号
@@ -102,38 +102,38 @@ export default class CaseModule {
     }) as IPageDriverOpts;
   }
 
-  private setPluginAppMaterial(e2eRunnerJsonData: IE2ERunnerJsonData | null) {
-    if (!this.pluginAppMaterialFromOpts || !e2eRunnerJsonData) {
+  private setPluginAppMaterial(pipelineJsonData: IPipelineJsonData | null) {
+    if (!this.pluginAppMaterialFromOpts || !pipelineJsonData) {
       return;
     }
 
     this.pluginAppMaterial = getPluginAppMaterial(path.join(
-      e2eRunnerJsonData.pluginApp?.materialDir,
-      e2eRunnerJsonData.pluginApp?.activated,
+      pipelineJsonData.pluginApp?.materialDir,
+      pipelineJsonData.pluginApp?.activated,
     ));
   }
 
-  private async setWhistleRuleBeforeRun(e2eRunnerJsonData: IE2ERunnerJsonData | null): Promise<void> {
-    if (!e2eRunnerJsonData || !e2eRunnerJsonData.pluginWhistle) {
+  private async setWhistleRuleBeforeRun(pipelineJsonData: IPipelineJsonData | null): Promise<void> {
+    if (!pipelineJsonData || !pipelineJsonData.pluginWhistle) {
       return;
     }
 
     // Plugin App 中的代理配置
     const whistleRuleFromApp = this.pluginAppMaterial?.getWhistleRule(
-      new CacheData(e2eRunnerJsonData.pluginApp?.cacheData?.data),
+      new CacheData(pipelineJsonData.pluginApp?.cacheData?.data),
     );
 
     // Plugin Mockstar 中的代理配置
     const whistleRuleFromMockstar = this.pluginMockstarMaterial?.getWhistleRule(
-      new CacheData(e2eRunnerJsonData.pluginMockstar?.cacheData?.data),
+      new CacheData(pipelineJsonData.pluginMockstar?.cacheData?.data),
     );
 
     // 设置代理
     if (whistleRuleFromApp || whistleRuleFromMockstar) {
       // 这里是近似处理
-      const pluginWhistle = new PluginWhistle(e2eRunnerJsonData.pluginWhistle);
+      const pluginWhistle = new PluginWhistle(pipelineJsonData.pluginWhistle);
 
-      const cachePort = e2eRunnerJsonData.pluginWhistle.cacheData?.port;
+      const cachePort = pipelineJsonData.pluginWhistle.cacheData?.port;
       if (cachePort) {
         pluginWhistle.cacheData.setCacheItem('port', cachePort);
       }

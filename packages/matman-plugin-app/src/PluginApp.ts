@@ -1,6 +1,6 @@
 import path from 'path';
 import { PluginBase, getFileItemFromDir, IFSHandlerItem } from 'matman-plugin-core';
-import { E2ERunner } from 'matman-core';
+import { Pipeline } from 'matman-core';
 
 import { buildApp, IBuildAppCmd, IBuildAppOpts } from './utils';
 import PluginAppMaterial, { getPluginAppMaterial } from './PluginAppMaterial';
@@ -32,11 +32,11 @@ export default class PluginApp extends PluginBase {
   /**
    * 初始化插件
    */
-  public initPlugin(e2eRunner: E2ERunner): void {
-    super.initPlugin(e2eRunner);
+  public initPlugin(pipeline: Pipeline): void {
+    super.initPlugin(pipeline);
 
     // 修改为绝对路径，方便后续处理
-    this.materialDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.materialDir);
+    this.materialDir = path.resolve(pipeline.matmanConfig.matmanRootPath, this.materialDir);
   }
 
   /**
@@ -50,8 +50,8 @@ export default class PluginApp extends PluginBase {
     }
   }
 
-  public async setup(e2eRunner: E2ERunner): Promise<void> {
-    await super.setup(e2eRunner);
+  public async setup(pipeline: Pipeline): Promise<void> {
+    await super.setup(pipeline);
 
     // 获取当前激活的物料
     const activated = this.getActivatedMaterial();

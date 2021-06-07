@@ -5,7 +5,7 @@ module.exports = {
     mocha: true,
   },
   globals: {
-    matmanE2ERunner: true,
+    matmanPipeline: true,
   },
   extends: ['@tencent/eslint-config-tencent', '@tencent/eslint-config-tencent/ts'],
   overrides: [

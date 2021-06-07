@@ -37,7 +37,7 @@ import { IPluginBase } from './typings/plugin';
 import { IMaterialBase } from './typings/material';
 
 import CacheData from './model/CacheData';
-import E2ERunner from './model/E2ERunner';
+import Pipeline from './model/Pipeline';
 import PageDriver from './model/PageDriver';
 
 import launch from './launch';
@@ -89,5 +89,5 @@ export {
   IPluginBase,
   IMaterialBase,
   CacheData,
-  E2ERunner,
+  Pipeline,
 };

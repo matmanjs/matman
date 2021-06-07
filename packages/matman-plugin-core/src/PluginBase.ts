@@ -1,4 +1,4 @@
-import { CacheData, IPluginBase, E2ERunner } from 'matman-core';
+import { CacheData, IPluginBase, Pipeline } from 'matman-core';
 
 const globalAny: any = global;
 export default class PluginBase implements IPluginBase {
@@ -28,49 +28,49 @@ export default class PluginBase implements IPluginBase {
   /**
    * 初始化插件
    */
-  public initPlugin(e2eRunner: E2ERunner): void {
+  public initPlugin(pipeline: Pipeline): void {
     // 例如将相对路径修改为绝对路径等
     if (process.env.CONSOLE_E2E_RUNNER) {
-      console.log(e2eRunner);
+      console.log(pipeline);
     }
 
-    globalAny.matmanE2ERunner = e2eRunner;
+    globalAny.matmanPipeline = pipeline;
   }
 
   /**
    * 自动化测试之前执行
    */
-  public async setup(e2eRunner: E2ERunner): Promise<void> {
+  public async setup(pipeline: Pipeline): Promise<void> {
     // 例如 build 项目、启动代理、启动 mock server 等
     if (process.env.CONSOLE_E2E_RUNNER) {
-      console.log(e2eRunner);
+      console.log(pipeline);
     }
 
-    globalAny.matmanE2ERunner = e2eRunner;
+    globalAny.matmanPipeline = pipeline;
   }
 
   /**
    * 执行自动化测试
    */
-  public async runTest(e2eRunner: E2ERunner): Promise<void>  {
+  public async runTest(pipeline: Pipeline): Promise<void>  {
     // 例如 run test
     if (process.env.CONSOLE_E2E_RUNNER) {
-      console.log(e2eRunner);
+      console.log(pipeline);
     }
 
-    globalAny.matmanE2ERunner = e2eRunner;
+    globalAny.matmanPipeline = pipeline;
   }
 
   /**
    * 自动化测试之后执行
    */
-  public async teardown(e2eRunner: E2ERunner): Promise<void>  {
+  public async teardown(pipeline: Pipeline): Promise<void>  {
     // 例如清理工作、处理测试产物等
     if (process.env.CONSOLE_E2E_RUNNER) {
-      console.log(e2eRunner);
+      console.log(pipeline);
     }
 
-    globalAny.matmanE2ERunner = e2eRunner;
+    globalAny.matmanPipeline = pipeline;
   }
 
   public setSeqId(seqId: string): void  {

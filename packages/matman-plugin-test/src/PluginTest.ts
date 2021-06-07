@@ -1,6 +1,6 @@
 import path from 'path';
 import { PluginBase, getFileItemFromDir, IFSHandlerItem, requireModule } from 'matman-plugin-core';
-import { E2ERunner, logger } from 'matman-core';
+import { Pipeline, logger } from 'matman-core';
 
 import { IPluginTestMaterial } from './types';
 
@@ -26,15 +26,15 @@ export default class PluginTest extends PluginBase {
   /**
    * 初始化插件
    */
-  public initPlugin(e2eRunner: E2ERunner): void {
-    super.initPlugin(e2eRunner);
+  public initPlugin(pipeline: Pipeline): void {
+    super.initPlugin(pipeline);
 
     // 修改为绝对路径，方便后续处理
-    this.materialDir = path.resolve(e2eRunner.matmanConfig.matmanRootPath, this.materialDir);
+    this.materialDir = path.resolve(pipeline.matmanConfig.matmanRootPath, this.materialDir);
   }
 
-  public async runTest(e2eRunner: E2ERunner) {
-    await super.runTest(e2eRunner);
+  public async runTest(pipeline: Pipeline) {
+    await super.runTest(pipeline);
 
     logger.info('RunTest begin ...');
 
