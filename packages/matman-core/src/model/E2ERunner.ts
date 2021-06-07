@@ -1,12 +1,9 @@
-
-
 import MatmanConfig from '../config/MatmanConfig';
 import { getFormattedMatmanConfig } from '../util';
 
 export default class E2ERunner {
   public matmanConfig: MatmanConfig;
   public seqId: string;
-
 
   // private cacheData: StringObject<unknown>;
   // private readonly cacheProcessArr: ProcessCmd[];
@@ -30,7 +27,6 @@ export default class E2ERunner {
 
     this.initPlugin();
   }
-
 
   public async setup() {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -68,7 +64,6 @@ export default class E2ERunner {
     }
   }
 }
-
 
 /**
  * 通过字符串获得一个 base64 值

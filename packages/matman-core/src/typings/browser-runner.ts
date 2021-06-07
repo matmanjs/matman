@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import MatmanResult from '../model/MatmanResult';
-import { IPageDriver } from './pageDriver';
+import { IPageDriver } from './page-driver';
 
 /**
  * 执行器需要实现的方法

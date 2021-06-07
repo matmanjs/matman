@@ -21,15 +21,4 @@ export interface IMatmanConfigOpts {
   isDevBuild?: boolean;
 }
 
-export interface IPageDriverOpts {
-  caseModuleFilePath?: string;
-  tag?: string;
-  show?: boolean;
-  doNotCloseBrowser?: boolean;
-  useRecorder?: boolean;
-  delayBeforeRun?: number;
-  // 其他浏览器启动
-  executablePath?: string;
-}
-
 // export type CreatePageDriverOpts = PageDriverOpts & MatmanConfigType;

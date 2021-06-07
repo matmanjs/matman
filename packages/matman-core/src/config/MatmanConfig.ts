@@ -2,8 +2,37 @@ import fs from 'fs';
 import path from 'path';
 
 import { getAbsolutePath, searchFilePath } from '../util';
-import { IMatmanConfigOpts } from '../types';
-import { IPluginBase } from '../typings/PluginBase';
+import { IPluginBase } from '../typings/plugin';
+
+/**
+ * matman 的配置类型
+ * 同时为配置文件的结构, 当前对配置文件的解析只限制为 JS
+ *
+ * @member workspacePath  用于同源测试的项目源码的根目录，一般指 package.json 的目录
+ * @member outputPath  测试产物的输出目录
+ * @member matmanRootPath  matman 项目的根目录
+ * @member caseModulesPath 测试案例的根目录
+ * @member crawlerBuildPath 前端爬虫脚本构建之后的目录
+ * @member crawlerInjectJQuery 前端爬虫脚本中是否注入jQuery
+ * @member screenshotPath 屏幕截图保存的路径
+ * @member coveragePath 覆盖率文件保存的路径
+ * @member matmanResultPath MatmanResult 执行结果数据保存的路径
+ * @member isDevBuild 是否为开发模式
+ * @member plugins 插件列表
+ */
+export interface IMatmanConfigOpts {
+  workspacePath?: string;
+  outputPath?: string;
+  matmanRootPath?: string;
+  caseModulesPath?: string;
+  crawlerBuildPath?: string;
+  crawlerInjectJQuery?: boolean;
+  screenshotPath?: string;
+  coveragePath?: string;
+  matmanResultPath?: string;
+  isDevBuild?: boolean;
+  plugins?: IPluginBase[];
+}
 
 export default class MatmanConfig {
   // 用于同源测试的项目源码的根目录，一般指 package.json 的目录
@@ -49,10 +78,17 @@ export default class MatmanConfig {
     this.matmanRootPath = this.getFullPath('', matmanRootPath, true);
 
     // 用于同源测试的项目源码的根目录，一般指 package.json 的目录
-    this.workspacePath = this.getFullPath(searchFilePath(this.matmanRootPath, 'package.json'), opts.workspacePath, true);
+    this.workspacePath = this.getFullPath(
+      searchFilePath(this.matmanRootPath, 'package.json'),
+      opts.workspacePath,
+      true,
+    );
 
     // 测试产物的输出目录
-    this.outputPath = this.getFullPath(path.join(this.workspacePath, '.matman_output'), opts.outputPath);
+    this.outputPath = this.getFullPath(
+      path.join(this.workspacePath, '.matman_output'),
+      opts.outputPath,
+    );
 
     // 测试案例的根目录
     this.caseModulesPath = this.getFullPath('./src/case_modules', opts.caseModulesPath, true);
@@ -97,7 +133,7 @@ export default class MatmanConfig {
     }
   }
 
-  public getPlugin(pluginName: string): IPluginBase|null{
+  public getPlugin(pluginName: string): IPluginBase | null {
     if (!this.plugins || !this.plugins.length) {
       return null;
     }
@@ -114,11 +150,17 @@ export default class MatmanConfig {
     return null;
   }
 
-  private getFullPath(defaultValue: string, pathFromParam?: string, shouldCheckExists?: boolean): string {
+  private getFullPath(
+    defaultValue: string,
+    pathFromParam?: string,
+    shouldCheckExists?: boolean,
+  ): string {
     const pathResult = getAbsolutePath(pathFromParam || defaultValue, this.matmanRootPath);
 
     if (shouldCheckExists && !fs.existsSync(pathResult)) {
-      throw new Error(`Unknown path=${pathResult}, pathFromParam=${pathFromParam}, defaultValue=${defaultValue}`);
+      throw new Error(
+        `Unknown path=${pathResult}, pathFromParam=${pathFromParam}, defaultValue=${defaultValue}`,
+      );
     }
 
     return pathResult;

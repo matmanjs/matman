@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 
-import MatmanConfig from '../config/MatmanConfig';
+import MatmanConfig, { IMatmanConfigOpts } from '../config/MatmanConfig';
 import { MATMAN_CONFIG_FILE } from '../config';
-import { IMatmanConfigOpts } from '../types';
+
 import { requireSync } from './require-file';
 
 type ITargetFunc<P, T> = (...params: P[]) => T;
@@ -82,7 +82,6 @@ export function findMatmanConfig(
   // 获取处理之后的 MatmanConfig
   return getFormattedMatmanConfig(matmanConfigFilePath, matmanConfigOpts, basePath);
 }
-
 
 /**
  * 获得 matman.config.js 文件路径，并返回 matmanConfig 对象

@@ -2,26 +2,18 @@ import path from 'path';
 import fs from 'fs-extra';
 import puppeteer from 'puppeteer';
 
-import {
-  MatmanConfig,
-  IPageDriver,
-  DeviceConfig,
-  ScreenshotConfig,
-  CoverageConfig,
-  MatmanResultConfig,
-  IDeviceConfigOpts,
-  IScreenOpts,
-  ICoverageOpts,
-  IResultOpts,
-  IBrowserRunner,
-  CookieConfig,
-  ICookieConfigOpts,
-  MatmanResult,
-  MockstarConfig,
-  IMockstarQueryDataMap,
-} from 'matman-core';
+import MatmanConfig from '../config/MatmanConfig';
+import CookieConfig, { ICookieConfigOpts } from '../config/CookieConfig';
+import DeviceConfig, { IDeviceConfigOpts } from '../config/DeviceConfig';
+import ScreenshotConfig, { IScreenOpts } from '../config/ScreenshotConfig';
+import CoverageConfig, { ICoverageOpts } from '../config/CoverageConfig';
+import MatmanResultConfig, { IResultOpts } from '../config/MatmanResultConfig';
+import MockstarConfig, { IMockstarQueryDataMap } from '../config/MockstarConfig';
 
-import { IPageDriverOpts } from '../types';
+import MatmanResult from '../model/MatmanResult';
+
+import { IBrowserRunner } from '../typings/browser-runner';
+import { IPageDriverOpts, IPageDriver } from '../typings/page-driver';
 
 /**
  * 页面操作类，使用这个类可以实现对浏览器页面的控制
@@ -66,7 +58,11 @@ export default class PageDriverAsync implements IPageDriver {
    * @param {Boolean} [opts.useRecorder] 是否使用记录器
    * @param {Boolean} [opts.doNotCloseBrowser] 是否在执行完成之后不要关闭浏览器，默认为 false
    */
-  public constructor(browserRunner: IBrowserRunner, matmanConfig: MatmanConfig, opts: IPageDriverOpts) {
+  public constructor(
+    browserRunner: IBrowserRunner,
+    matmanConfig: MatmanConfig,
+    opts: IPageDriverOpts,
+  ) {
     this.browserRunner = browserRunner;
 
     this.matmanConfig = matmanConfig;
@@ -298,7 +294,10 @@ export default class PageDriverAsync implements IPageDriver {
    */
   public async evaluate(fn: string): Promise<MatmanResult | IPageDriver>;
   public async evaluate(fn: () => any, ...args: any[]): Promise<MatmanResult | IPageDriver>;
-  public async evaluate(fn: string | (() => any), ...args: any[]): Promise<MatmanResult | IPageDriver> {
+  public async evaluate(
+    fn: string | (() => any),
+    ...args: any[]
+  ): Promise<MatmanResult | IPageDriver> {
     this.evaluateFn = fn;
     this.evaluateFnArgs = args;
 
@@ -334,12 +333,12 @@ export default class PageDriverAsync implements IPageDriver {
     this.browserRunner?.setPageDriver(this);
 
     if (process.env.IS_IN_IDE) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         resolve(this);
       });
     }
 
-    return this.browserRunner?.getResult().then((matmanResult) => {
+    return this.browserRunner?.getResult().then(matmanResult => {
       // 保存数据快照
       if (this.matmanResultConfig) {
         this.matmanResultConfig.save(matmanResult);

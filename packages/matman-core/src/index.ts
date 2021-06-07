@@ -1,4 +1,4 @@
-import MatmanConfig from './config/MatmanConfig';
+import MatmanConfig, { IMatmanConfigOpts } from './config/MatmanConfig';
 import CookieConfig, { ICookieConfigOpts } from './config/CookieConfig';
 import DeviceConfig, { IDeviceConfigOpts } from './config/DeviceConfig';
 import ScreenshotConfig, { IScreenOpts } from './config/ScreenshotConfig';
@@ -10,30 +10,34 @@ import MockstarConfig, {
 } from './config/MockstarConfig';
 import { MATMAN_CONFIG_FILE, RUNNER_NAME } from './config';
 
-import { getAbsolutePath, findMatmanConfig, getFormattedMatmanConfig, searchFilePath, getFromStrOrFunc } from './util';
+import {
+  getAbsolutePath,
+  findMatmanConfig,
+  getFormattedMatmanConfig,
+  searchFilePath,
+  getFromStrOrFunc,
+} from './util';
 import { requireAsync, requireSync } from './util/require-file';
 import { isURLMatch } from './util/url';
 import { createLogger, logger } from './util/logger';
 import { killPort, findAvailablePort, portIsOccupied } from './util/port';
 import { runByExec, runBySpawn } from './util/run-cmd';
 
-import { IBrowserRunner } from './typings/browserRunner';
-import { IPageDriver } from './typings/pageDriver';
+import { IBrowserRunner } from './typings/browser-runner';
+import { IPageDriver } from './typings/page-driver';
 import {
   IMatmanResultQueueItem,
   IMatmanResultQueueItemPuppeteerNetwork,
   IMatmanResultQueueItemPuppeteerConsole,
   IMatmanResultQueueHandler,
   IResourceType,
-} from './typings/matmanResult';
-import { IPluginBase } from './typings/PluginBase';
-import { IMaterialBase } from './typings/MaterialBase';
+} from './typings/matman-result';
+import { IPluginBase } from './typings/plugin';
+import { IMaterialBase } from './typings/material';
 
 import MatmanResult from './model/MatmanResult';
 import CacheData from './model/CacheData';
 import E2ERunner from './model/E2ERunner';
-
-import { IMatmanConfigOpts } from './types';
 
 export {
   MatmanConfig,

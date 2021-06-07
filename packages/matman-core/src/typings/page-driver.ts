@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 
-import { IBrowserRunner } from './browserRunner';
+import { IBrowserRunner } from './browser-runner';
 import MatmanResult from '../model/MatmanResult';
 import MatmanConfig from '../config/MatmanConfig';
 import CookieConfig, { ICookieConfigOpts } from '../config/CookieConfig';
@@ -9,6 +9,17 @@ import ScreenshotConfig, { IScreenOpts } from '../config/ScreenshotConfig';
 import CoverageConfig, { ICoverageOpts } from '../config/CoverageConfig';
 import MatmanResultConfig, { IResultOpts } from '../config/MatmanResultConfig';
 import MockstarConfig, { IMockstarQueryDataMap } from '../config/MockstarConfig';
+
+export interface IPageDriverOpts {
+  caseModuleFilePath?: string;
+  tag?: string;
+  show?: boolean;
+  doNotCloseBrowser?: boolean;
+  useRecorder?: boolean;
+  delayBeforeRun?: number;
+  // 其他浏览器启动
+  executablePath?: string;
+}
 
 /**
  * PageDriver 需要实现的接口
@@ -160,9 +171,7 @@ export interface IPageDriver {
    * @param {Function} actionCall 执行函数，接受一个 puppeteer.Page 或者 puppeteer 对象，可以直接操作
    * @return {IPageDriver | Promise<void>}
    */
-  addRunAction(
-    actionCall: (n: puppeteer.Page) => Promise<void>,
-  ): IPageDriver | Promise<void>;
+  addRunAction(actionCall: (n: puppeteer.Page) => Promise<void>): IPageDriver | Promise<void>;
 
   /**
    * 执行爬虫脚本或者方法获得结果
