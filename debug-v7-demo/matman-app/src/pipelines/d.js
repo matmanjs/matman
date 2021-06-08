@@ -10,13 +10,10 @@ const pluginAppMaterial = require('../materials/app/prod');
 const pluginTestMaterial = require('../materials/test/all');
 
 module.exports = new Pipeline('测试生产环境版本', {
-  pluginApp: {
-    activatedMaterial: pluginAppMaterial,
-  },
-  pluginTest: {
-    activatedMaterial: pluginTestMaterial,
-  },
+  pluginAppCurMaterial: pluginAppMaterial,
+  pluginTestCurMaterial: pluginTestMaterial,
 });
 
 console.log('----');
 console.log(module.exports);
+

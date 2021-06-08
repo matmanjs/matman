@@ -1,10 +1,11 @@
 import MatmanConfig from '../config/MatmanConfig';
 import { findMatmanConfig } from '../util';
 import { getCallerPath } from '../launch/caller';
+import { IMaterialBase } from '../typings/material';
 
 export interface IPipelineOpts {
-  matmanConfigFilePath?: string;
-
+  pluginAppCurMaterial?: IMaterialBase;
+  pluginTestCurMaterial?: IMaterialBase;
 }
 export default class Pipeline {
   public name: string;
@@ -12,12 +13,15 @@ export default class Pipeline {
   public matmanConfig: MatmanConfig;
   public seqId: string;
 
+  public opts? : IPipelineOpts;
+
   // private cacheData: StringObject<unknown>;
   // private readonly cacheProcessArr: ProcessCmd[];
   // private readonly startTime: number;
 
-  public constructor(name: string, opts: IPipelineOpts) {
+  public constructor(name: string, opts?: IPipelineOpts) {
     this.name = name;
+    this.opts = opts;
 
     // 自动获取 new Pipeline 的那个文件
     this.filename = getCallerPath();
@@ -26,7 +30,7 @@ export default class Pipeline {
     const matmanConfig = findMatmanConfig(this.filename);
 
     if (!matmanConfig) {
-      throw new Error(`[Pipeline] Could not get MatmanConfig from ${opts.matmanConfigFilePath}`);
+      throw new Error(`[Pipeline] Could not get MatmanConfig from ${this.filename}`);
     }
 
     this.matmanConfig = matmanConfig;

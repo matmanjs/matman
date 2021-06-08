@@ -38,7 +38,7 @@ import { IPluginBase } from './typings/plugin';
 import { IMaterialBase } from './typings/material';
 
 import CacheData from './model/CacheData';
-import Pipeline from './model/Pipeline';
+import Pipeline, { IPipelineOpts } from './model/Pipeline';
 import PageDriver from './model/PageDriver';
 
 import launch from './launch';
@@ -94,4 +94,5 @@ export {
   IMaterialBase,
   CacheData,
   Pipeline,
+  IPipelineOpts,
 };
