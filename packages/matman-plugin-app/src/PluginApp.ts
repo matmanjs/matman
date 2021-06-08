@@ -7,7 +7,7 @@ import PluginAppMaterial, { getPluginAppMaterial } from './PluginAppMaterial';
 
 interface IPluginAppOpts {
   materialDir: string;
-  activated: string;
+  curMaterial: string;
 }
 
 export default class PluginApp extends PluginBase {
@@ -15,7 +15,7 @@ export default class PluginApp extends PluginBase {
    * 配置文件的目录
    */
   public materialDir: string;
-  public activated: string;
+  public curMaterial: PluginAppMaterial | null;
 
   /**
    * 业务工程项目的根目录
@@ -23,10 +23,10 @@ export default class PluginApp extends PluginBase {
   public cwd?: string;
 
   public constructor(opts: IPluginAppOpts) {
-    super('app');
+    super('app', __filename);
 
     this.materialDir = opts.materialDir;
-    this.activated = opts.activated;
+    this.curMaterial = null;
   }
 
   /**
@@ -34,6 +34,11 @@ export default class PluginApp extends PluginBase {
    */
   public initPlugin(pipeline: Pipeline): void {
     super.initPlugin(pipeline);
+
+    // 设置当前使用的物料
+    if (pipeline.opts?.pluginAppCurMaterial) {
+      this.curMaterial = pipeline.opts?.pluginAppCurMaterial as PluginAppMaterial;
+    }
 
     // 修改为绝对路径，方便后续处理
     this.materialDir = path.resolve(pipeline.matmanConfig.matmanRootPath, this.materialDir);
@@ -53,15 +58,14 @@ export default class PluginApp extends PluginBase {
   public async setup(pipeline: Pipeline): Promise<void> {
     await super.setup(pipeline);
 
-    // 获取当前激活的物料
-    const activated = this.getActivatedMaterial();
-    if (activated && typeof activated.setup === 'function') {
-      await activated.setup.call(activated, this);
+    // 如果定义了 setup 方法，则调用执行它
+    if (this.curMaterial && typeof this.curMaterial.setup === 'function') {
+      await this.curMaterial.setup.call(this.curMaterial, this);
     }
   }
 
   public getActivatedMaterial(): PluginAppMaterial | null {
-    return getPluginAppMaterial(path.join(this.materialDir, this.activated));
+    return this.curMaterial;
   }
 
   public getAllMaterial(): PluginAppMaterial [] {

@@ -17,7 +17,7 @@ export default class PluginTest extends PluginBase {
   public activated: string;
 
   public constructor(opts: IPluginTestOpts) {
-    super('test');
+    super('test', __filename);
 
     this.materialDir = opts.materialDir;
     this.activated = opts.activated;

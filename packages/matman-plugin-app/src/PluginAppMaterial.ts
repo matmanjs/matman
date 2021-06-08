@@ -26,7 +26,7 @@ export default class PluginAppMaterial extends MaterialBase {
   public getWhistleRulesCall?: (port?: number) => string | string[];
 
   public constructor(name: string, opts: DefinedInstanceOpts) {
-    super(name);
+    super(name, __filename);
 
     this.rootPath = opts.rootPath;
     this.setupCall = opts.setup;

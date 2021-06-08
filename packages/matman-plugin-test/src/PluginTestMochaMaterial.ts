@@ -16,7 +16,7 @@ export default class PluginTestMochaMaterial extends MaterialBase implements IPl
 
 
   public constructor(name: string, cmd: string, opts: MochaInstanceOpts) {
-    super(name);
+    super(name, __filename);
 
     this.cmd = cmd;
     this.cwd = opts.cwd;

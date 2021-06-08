@@ -1,4 +1,4 @@
-import { CacheData, IPluginBase, Pipeline } from 'matman-core';
+import { CacheData, IPluginBase, Pipeline, getCallerPath } from 'matman-core';
 
 const globalAny: any = global;
 export default class PluginBase implements IPluginBase {
@@ -17,12 +17,19 @@ export default class PluginBase implements IPluginBase {
    */
   public seqId: string;
 
-  public constructor(name: string) {
+  /**
+   * 文件路径名
+   */
+  public filename: string;
+
+  public constructor(name: string, implModuleFileFullPath: string) {
     this.name = name;
 
     this.cacheData = new CacheData;
 
     this.seqId = `${this.name}-${Math.random()}`;
+
+    this.filename = getCallerPath(implModuleFileFullPath);
   }
 
   /**

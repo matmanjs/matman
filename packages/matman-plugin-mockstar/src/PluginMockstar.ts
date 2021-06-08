@@ -19,7 +19,7 @@ export default class PluginMockstar extends PluginBase {
   private readonly mockstarSDK: MockstarSDK;
 
   public constructor(opts: IPluginMockstarOpts) {
-    super('mockstar');
+    super('mockstar', __filename);
 
     this.mockerDir = opts.mockerDir;
     this.materialDir = opts.materialDir;

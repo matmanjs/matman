@@ -14,7 +14,7 @@ export default class PluginWhistle extends PluginBase {
   private readonly whistleSDK: WhistleSDK;
 
   public constructor(opts?: IPluginWhistleOpts) {
-    super('whistle');
+    super('whistle', __filename);
 
     if (opts?.seqId) {
       this.seqId = opts.seqId;

@@ -40,7 +40,7 @@ export default class DeviceMaterial extends MaterialBase {
   };
 
   public constructor(name: string, opts: DeviceInstanceOpts) {
-    super(name);
+    super(name, __filename);
 
     this.userAgent = opts.userAgent;
 
