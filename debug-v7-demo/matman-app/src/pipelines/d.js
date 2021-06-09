@@ -7,11 +7,11 @@ const { Pipeline } = require('../../../../packages/matman-core');
 // pipeline start/bootstrap/clean
 
 const pluginAppMaterial = require('../materials/app/prod');
-const pluginTestMaterial = require('../materials/test/all');
+const pluginMochaMaterial = require('../materials/mocha/all');
 
 module.exports = new Pipeline('测试生产环境版本', {
   pluginAppCurMaterial: pluginAppMaterial,
-  pluginTestCurMaterial: pluginTestMaterial,
+  pluginMochaCurMaterial: pluginMochaMaterial,
 });
 
 console.log('----');
