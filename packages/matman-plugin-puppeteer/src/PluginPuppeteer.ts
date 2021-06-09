@@ -13,7 +13,7 @@ export default class PluginPuppeteer extends PluginBase {
   public screenshotConfig?: boolean;
 
   public constructor(opts: IPluginPuppeteerOpts) {
-    super('puppeteer', __filename);
+    super('puppeteer');
 
     this.deviceDefinedInstanceDir = opts.deviceDefinedInstanceDir;
     this.networkConditionDefinedInstanceDir = opts.networkConditionDefinedInstanceDir;

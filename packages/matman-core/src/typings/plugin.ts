@@ -2,7 +2,6 @@ import Pipeline from '../model/Pipeline';
 
 export interface IPluginBase {
   name: string;
-  filename: string;
   seqId: string;
 
   initPlugin(pipeline: Pipeline): void;
