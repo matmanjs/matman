@@ -6,7 +6,6 @@ import PluginMochaMaterial from './PluginMochaMaterial';
 
 interface IPluginMochaOpts {
   materialDir: string;
-  activated: string;
 }
 
 export default class PluginMocha extends PluginBase {
@@ -14,13 +13,13 @@ export default class PluginMocha extends PluginBase {
    * 配置文件的目录
    */
   public materialDir: string;
-  public activated: string;
+  public curMaterial: PluginMochaMaterial | null;
 
   public constructor(opts: IPluginMochaOpts) {
-    super('test');
+    super('mocha');
 
     this.materialDir = opts.materialDir;
-    this.activated = opts.activated;
+    this.curMaterial = null;
   }
 
   /**
@@ -28,6 +27,11 @@ export default class PluginMocha extends PluginBase {
    */
   public initPlugin(pipeline: Pipeline): void {
     super.initPlugin(pipeline);
+
+    // 设置当前使用的物料
+    if (pipeline.opts?.pluginMochaMaterial) {
+      this.curMaterial = pipeline.opts?.pluginMochaMaterial as PluginMochaMaterial;
+    }
 
     // 修改为绝对路径，方便后续处理
     this.materialDir = path.resolve(pipeline.matmanConfig.matmanRootPath, this.materialDir);
@@ -38,17 +42,16 @@ export default class PluginMocha extends PluginBase {
 
     logger.info('RunTest begin ...');
 
-    // 获取当前激活的物料
-    const activated = this.getActivatedMaterial();
-    if (activated && typeof activated.run === 'function') {
-      await activated.run.call(activated);
+    // 如果定义了 run 方法，则调用执行它
+    if (this.curMaterial && typeof this.curMaterial.run === 'function') {
+      await this.curMaterial.run.call(this.curMaterial);
     }
 
     logger.info('RunTest finished!');
   }
 
-  public getActivatedMaterial(): PluginMochaMaterial | null {
-    return getPluginMochaMaterial(path.join(this.materialDir, this.activated));
+  public getCurMaterial(): PluginMochaMaterial | null {
+    return this.curMaterial;
   }
 
   public getAllMaterial(): PluginMochaMaterial [] {

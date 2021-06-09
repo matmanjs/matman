@@ -122,7 +122,8 @@ export default class CaseModule {
       return;
     }
 
-    this.materials.app = requireModule(pipelineJsonData.extraInfo.pipelineMaterialFullPath).pluginApp.activatedMaterial;
+    // TODO 此处还需要优化
+    this.materials.app = requireModule(pipelineJsonData.extraInfo.pipelineMaterialFullPath).opts.pluginAppCurMaterial;
   }
 
   private async setWhistleRuleBeforeRun(pipelineJsonData: IPipelineJsonData | null): Promise<void> {

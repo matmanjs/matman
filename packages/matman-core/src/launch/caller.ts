@@ -54,7 +54,7 @@ export function getCallerPath(referFile?: string): string {
     }
 
     // 是否为 matman 组件内部自己模块间调用
-    const isMatmanSelf = item.indexOf('/matman-core/src/') > -1 || item.indexOf('/matman-core/lib/') > -1;
+    const isMatmanSelf = checkIfMatmanSelf(item);
     if (isMatmanSelf) {
       return false;
     }
@@ -102,12 +102,27 @@ export function getCallerPath(referFile?: string): string {
 
   if (referFile && fse.existsSync(referFile)) {
     const index = callStackFileArr.indexOf(referFile);
+    const callerFullPath = callStackFileArr[index + 1];
 
-    if (index < 0 || index >= callStackFileArr.length - 1) {
-      return referFile;
+    // 只有该调用模块路径存在时，才返回
+    if (callerFullPath && fse.existsSync(callerFullPath)) {
+      return callerFullPath;
     }
-    return callStackFileArr[index + 1];
   }
 
   return callStackFileArr[0];
+}
+
+export function checkIfMatmanSelf(fullPath: string): boolean {
+  if (!fullPath) {
+    return false;
+  }
+
+  // 校验的正则表达式，例如下面这些，都是算 matman 内部库
+  // /root/path/matman/packages/matman-core/lib/CaseModule.js
+  // /root/path/matman/packages/matman-core/src/CaseModule.js
+  // /root/path/node_modules/matman-core/lib/CaseModule.js
+  const reg = /(packages|node_modules)\/(matman.*)\/(lib|src)/i;
+
+  return reg.test(fullPath);
 }

@@ -64,7 +64,7 @@ export default class PluginApp extends PluginBase {
     }
   }
 
-  public getActivatedMaterial(): PluginAppMaterial | null {
+  public getCurMaterial(): PluginAppMaterial | null {
     return this.curMaterial;
   }
 
