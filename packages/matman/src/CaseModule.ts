@@ -6,7 +6,7 @@ import { CacheData, IPageDriverOpts, PageDriver, getCallerPath, requireModule } 
 import { PluginAppMaterial } from 'matman-plugin-app';
 import { getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
 import { getLocalWhistleServer, PluginWhistle } from 'matman-plugin-whistle';
-import { getPipelineJsonDataFromEnv, IPipelineJsonData } from 'matman-plugin-test';
+import { getPipelineJsonDataFromEnv, IPipelineJsonData } from 'matman-plugin-mocha';
 import { DeviceMaterial, getDeviceMaterial } from 'matman-plugin-puppeteer';
 
 import launchPuppeteer from './launch';

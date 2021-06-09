@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Pipeline, IPageDriverOpts } from 'matman-core';
 
-import { setPipelineJsonDataToEnv } from 'matman-plugin-test';
+import { setPipelineJsonDataToEnv } from 'matman-plugin-mocha';
 
 import CaseModule from './CaseModule';
 

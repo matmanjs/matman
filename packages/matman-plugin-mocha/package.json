@@ -1,7 +1,7 @@
 {
-  "name": "matman-plugin-test",
+  "name": "matman-plugin-mocha",
   "version": "6.0.20",
-  "description": "Matman plugin for test",
+  "description": "Matman plugin for test use mocha",
   "main": "lib/index.js",
   "scripts": {
     "prepublishOnly": "npm run build",
