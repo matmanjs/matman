@@ -1,7 +1,6 @@
 import { MaterialBase } from 'matman-plugin-core';
 import { util as cmdHubUtil } from 'cmd-hub';
 
-import { IPluginTestMaterial } from './types';
 import { setPipelineJsonDataToEnv } from './utils';
 
 interface MochaInstanceOpts {
@@ -9,7 +8,7 @@ interface MochaInstanceOpts {
   mochawesomeJsonFilePath?: string;
 }
 
-export default class PluginTestMochaMaterial extends MaterialBase implements IPluginTestMaterial {
+export default class PluginMochaMaterial extends MaterialBase {
   public cmd: string;
   public cwd: string;
   public mochawesomeJsonFilePath?: string;

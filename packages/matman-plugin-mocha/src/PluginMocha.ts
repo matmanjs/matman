@@ -2,21 +2,21 @@ import path from 'path';
 import { PluginBase, getFileItemFromDir, IFSHandlerItem, requireModule } from 'matman-plugin-core';
 import { Pipeline, logger } from 'matman-core';
 
-import { IPluginTestMaterial } from './types';
+import PluginMochaMaterial from './PluginMochaMaterial';
 
-interface IPluginTestOpts {
+interface IPluginMochaOpts {
   materialDir: string;
   activated: string;
 }
 
-export default class PluginTest extends PluginBase {
+export default class PluginMocha extends PluginBase {
   /**
    * 配置文件的目录
    */
   public materialDir: string;
   public activated: string;
 
-  public constructor(opts: IPluginTestOpts) {
+  public constructor(opts: IPluginMochaOpts) {
     super('test');
 
     this.materialDir = opts.materialDir;
@@ -47,17 +47,17 @@ export default class PluginTest extends PluginBase {
     logger.info('RunTest finished!');
   }
 
-  public getActivatedMaterial(): IPluginTestMaterial | null {
-    return getPluginTestMochaMaterial(path.join(this.materialDir, this.activated));
+  public getActivatedMaterial(): PluginMochaMaterial | null {
+    return getPluginMochaMaterial(path.join(this.materialDir, this.activated));
   }
 
-  public getAllMaterial(): IPluginTestMaterial [] {
+  public getAllMaterial(): PluginMochaMaterial [] {
     const all = getFileItemFromDir(this.materialDir);
 
-    const result: IPluginTestMaterial[] = [];
+    const result: PluginMochaMaterial[] = [];
 
     all.forEach((fileItem: IFSHandlerItem) => {
-      const item = getPluginTestMochaMaterial(path.join(this.materialDir, fileItem.relativePath));
+      const item = getPluginMochaMaterial(path.join(this.materialDir, fileItem.relativePath));
       if (item) {
         result.push(item);
       }
@@ -67,14 +67,14 @@ export default class PluginTest extends PluginBase {
   }
 }
 
-export function getPluginTestMochaMaterial(activatedFullPath: string): IPluginTestMaterial | null {
+export function getPluginMochaMaterial(activatedFullPath: string): PluginMochaMaterial | null {
   try {
     const requiredResult = requireModule(activatedFullPath);
     const result = (typeof requiredResult === 'function') ? requiredResult() : requiredResult;
 
-    return result as IPluginTestMaterial;
+    return result as PluginMochaMaterial;
   } catch (err) {
-    console.error('getPluginTestMochaMaterial catch err', activatedFullPath, err);
+    console.error('getPluginMochaMaterial catch err', activatedFullPath, err);
 
     return null;
   }

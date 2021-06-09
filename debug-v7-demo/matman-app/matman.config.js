@@ -5,7 +5,7 @@ const {
   PluginWhistle,
   PluginMockstar,
   PluginPuppeteer,
-  PluginTest,
+  PluginMocha,
 } = require('../../packages/matman');
 
 // new pipeline 时可以传递一些值，初始化覆盖，适用于 run test 场景
@@ -68,8 +68,8 @@ module.exports = {
       // TODO 本地 chrome 浏览器的目录地址
       options: {},
     }),
-    new PluginTest({
-      materialDir: './src/materials/test',
+    new PluginMocha({
+      materialDir: './src/materials/mocha',
       // activated: 'all.js',
     }),
   ],

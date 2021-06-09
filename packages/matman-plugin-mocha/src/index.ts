@@ -1,10 +1,10 @@
-import PluginTest from './PluginTest';
-import PluginTestMochaMaterial from './PluginTestMochaMaterial';
+import PluginMocha from './PluginMocha';
+import PluginMochaMaterial from './PluginMochaMaterial';
 import { setPipelineJsonDataToEnv, getPipelineJsonDataFromEnv, IPipelineJsonData } from './utils';
 
 export {
-  PluginTestMochaMaterial,
-  PluginTest,
+  PluginMochaMaterial,
+  PluginMocha,
   setPipelineJsonDataToEnv,
   getPipelineJsonDataFromEnv,
   IPipelineJsonData,

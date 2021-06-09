@@ -5,7 +5,7 @@ import { IMaterialBase } from '../typings/material';
 
 export interface IPipelineOpts {
   pluginAppCurMaterial?: IMaterialBase;
-  pluginTestCurMaterial?: IMaterialBase;
+  pluginMochaCurMaterial?: IMaterialBase;
 }
 export default class Pipeline {
   public name: string;

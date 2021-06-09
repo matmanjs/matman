@@ -39,12 +39,12 @@
   "dependencies": {
     "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "matman-core": "^6.0.20",
     "matman-plugin-app": "^6.0.20",
+    "matman-plugin-mocha": "^6.0.20",
     "matman-plugin-mockstar": "^6.0.20",
     "matman-plugin-puppeteer": "^6.0.20",
-    "matman-plugin-mocha": "^6.0.20",
     "matman-plugin-whistle": "^6.0.20",
     "matman-runner-puppeteer": "^6.0.18"
   },

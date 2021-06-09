@@ -21,12 +21,12 @@ async function debugCaseModule(
   if (!debugOpts?.doNotSetup) {
     // 测试地址 https://now.qq.com/index.html
     await pipeline.setup({
-      pluginApp: {
-        activated: 'prod.js',
-      },
-      pluginTest: {
-        activated: 'all.js',
-      },
+      // pluginApp: {
+      //   activated: 'prod.js',
+      // },
+      // pluginTest: {
+      //   activated: 'all.js',
+      // },
     });
   }
 
