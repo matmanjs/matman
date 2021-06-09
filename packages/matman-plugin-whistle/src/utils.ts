@@ -52,7 +52,7 @@ export function startWhistleDirect(): Promise<string | number> {
  * @return {Promise<string>}
  */
 export async function getLocalWhistleServer(
-  port: number,
+  port?: number,
   shouldUseStartedPort?: boolean,
 ): Promise<string> {
   // process.env.WHISTLE_PORT 该值拥有最高优先级，主要用于自动化测试场景

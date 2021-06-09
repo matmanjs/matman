@@ -1,12 +1,12 @@
 import path from 'path';
 import _ from 'lodash';
+import { WhistleRule } from 'whistle-sdk';
 
-import { CacheData, IPageDriverOpts, PageDriver, Pipeline, getCallerPath, requireModule } from 'matman-core';
+import { IPageDriverOpts, PageDriver, Pipeline, getCallerPath, setPipelineJsonDataToEnv, getPipelineFromEnv } from 'matman-core';
 
-import { PluginAppMaterial } from 'matman-plugin-app';
-import { getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
+import { PluginApp, PluginAppMaterial } from 'matman-plugin-app';
+import { PluginMockstar, getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
 import { getLocalWhistleServer, PluginWhistle } from 'matman-plugin-whistle';
-import { getPipelineJsonDataFromEnv, setPipelineJsonDataToEnv, IPipelineJsonData } from 'matman-plugin-mocha';
 import { DeviceMaterial, getDeviceMaterial } from 'matman-plugin-puppeteer';
 
 import launchPuppeteer from './launch';
@@ -80,26 +80,42 @@ export default class CaseModule {
 
   // 执行
   public async run(pageDriverOpts?: IPageDriverOpts) {
-    // TODO 获取 pipeline，
-    const pipelineJsonData = getPipelineJsonDataFromEnv();
+    // 获取 pipeline，
+    const pipeline = getPipelineFromEnv() as Pipeline;
+
+    if (!pipeline) {
+      return;
+    }
 
     // 设置 appMaterial
-    this.setPluginAppMaterial(pipelineJsonData);
+    if (pipeline.opts?.pluginAppCurMaterial) {
+      this.materials.app = pipeline.opts?.pluginAppCurMaterial as PluginAppMaterial;
+    }
+
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launchPuppeteer(this.getPageDriverOpts(pageDriverOpts));
     this.pageDriver = pageDriver;
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
-    if (pipelineJsonData?.pluginWhistle) {
+    const pluginWhistleInConfig = pipeline.matmanConfig.getPlugin('whistle');
+    if (pluginWhistleInConfig) {
+      const pluginWhistle = pluginWhistleInConfig as PluginWhistle;
+
+      let whistlePort;
+      const portInCache = pluginWhistle.cacheData.getCacheItem('port');
+      if (portInCache) {
+        whistlePort = parseInt(`${portInCache}`, 10);
+      }
+
       // 获得 whistle 服务地址，例如 127.0.0.1:8899
-      const proxyServer = await getLocalWhistleServer(pipelineJsonData.pluginWhistle.cacheData?.data?.port, true);
+      const proxyServer = await getLocalWhistleServer(whistlePort, true);
 
       // 设置走 whistle 代理
       await pageDriver.useProxyServer(proxyServer);
 
       // 设置代理规则
-      await this.setWhistleRuleBeforeRun(pipelineJsonData);
+      await this.setWhistleRuleBeforeRun(pipeline, pluginWhistle);
     }
 
     // 设置浏览器设备型号
@@ -149,47 +165,29 @@ export default class CaseModule {
     return result;
   }
 
-
   private getPageDriverOpts(pageDriverOpts?: IPageDriverOpts): IPageDriverOpts {
     return _.merge({}, this.pageDriverOpts, pageDriverOpts, {
       caseModuleFilePath: this.filename,
     }) as IPageDriverOpts;
   }
 
-  private setPluginAppMaterial(pipelineJsonData: IPipelineJsonData | null) {
-    if (!pipelineJsonData) {
-      return;
-    }
-
-    // TODO 此处还需要优化
-    this.materials.app = requireModule(pipelineJsonData.extraInfo.pipelineMaterialFullPath).opts.pluginAppCurMaterial;
-  }
-
-  private async setWhistleRuleBeforeRun(pipelineJsonData: IPipelineJsonData | null): Promise<void> {
-    if (!pipelineJsonData || !pipelineJsonData.pluginWhistle) {
-      return;
-    }
-
+  private async setWhistleRuleBeforeRun(pipeline: Pipeline, pluginWhistle: PluginWhistle): Promise<void> {
     // Plugin App 中的代理配置
-    const whistleRuleFromApp = this.materials.app?.getWhistleRule(
-      new CacheData(pipelineJsonData.pluginApp?.cacheData?.data),
-    );
+    const pluginApp = pipeline.matmanConfig.getPlugin('app');
+    let whistleRuleFromApp: (WhistleRule | null) = null;
+    if (pluginApp && this.materials.app) {
+      whistleRuleFromApp = this.materials.app.getWhistleRule((pluginApp as PluginApp).cacheData);
+    }
 
     // Plugin Mockstar 中的代理配置
-    const whistleRuleFromMockstar = this.materials.mockstar?.getWhistleRule(
-      new CacheData(pipelineJsonData.pluginMockstar?.cacheData?.data),
-    );
+    const pluginMockstar = pipeline.matmanConfig.getPlugin('mockstar');
+    let whistleRuleFromMockstar: (WhistleRule | null) = null;
+    if (pluginMockstar && this.materials.mockstar) {
+      whistleRuleFromMockstar = this.materials.mockstar.getWhistleRule((pluginMockstar as PluginMockstar).cacheData);
+    }
 
     // 设置代理
     if (whistleRuleFromApp || whistleRuleFromMockstar) {
-      // 这里是近似处理
-      const pluginWhistle = new PluginWhistle(pipelineJsonData.pluginWhistle);
-
-      const cachePort = pipelineJsonData.pluginWhistle.cacheData?.port;
-      if (cachePort) {
-        pluginWhistle.cacheData.setCacheItem('port', cachePort);
-      }
-
       // 为 Plugin Whistle 设置代理规则
       await pluginWhistle?.setRules({
         getWhistleRules: () => {

@@ -1,8 +1,9 @@
 import MatmanConfig from '../config/MatmanConfig';
-import { findMatmanConfig } from '../util';
+import { findMatmanConfig, requireModule } from '../util';
 import { getCallerPath } from '../launch/caller';
 import { IMaterialBase } from '../typings/material';
 
+const globalAny: any = global;
 export interface IPipelineOpts {
   pluginAppCurMaterial?: IMaterialBase;
   pluginMochaMaterial?: IMaterialBase;
@@ -118,4 +119,89 @@ export function getSeqId(dwtPath: string, isDev: boolean): string {
   // 尤其是有多个流程在同一个测试机中运行的时候，如果不做区分，则可能会有相互影响
   // 注意不要出现等号，否则whistle里面会有问题
   return isDev ? 'dev' : getBase64(dwtPath, 6).replace(/=/gi, 'd') + Date.now();
+}
+
+export interface IPipelineJsonData {
+  pipelineMaterialFullPath: string;
+  pluginConfigArr: any[];
+}
+
+export function setPipelineJsonDataToEnv(pipelineFromParams?: Pipeline): string {
+  let pipeline: Pipeline;
+
+  if (pipelineFromParams && pipelineFromParams instanceof Pipeline) {
+    // 如果传入的参数就是 pipeline，则直接使用它
+    pipeline = pipelineFromParams;
+  } else {
+    // 否则，优先去全局变量里面去找
+    const pipelineFromGlobal = getPipelineFromGlobal();
+
+    // 如果找不到 pipeline ，则直接返回
+    if (!pipelineFromGlobal) {
+      return '{}';
+    }
+
+    pipeline = pipelineFromGlobal;
+  }
+
+  const pipelineJsonData: IPipelineJsonData = {
+    pipelineMaterialFullPath: pipeline.filename,
+    pluginConfigArr: pipeline.matmanConfig.plugins,
+  };
+
+  const saveStr = JSON.stringify(pipelineJsonData);
+
+  process.env.MATMAN_PIPELINE_JSON_DATA_STR = JSON.stringify(pipelineJsonData);
+
+  return saveStr;
+}
+
+export function getPipelineJsonDataFromEnv(): IPipelineJsonData | null {
+  const pipelineJsonDataStr = process.env.MATMAN_PIPELINE_JSON_DATA_STR ;
+
+  if (!pipelineJsonDataStr) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(pipelineJsonDataStr) as IPipelineJsonData;
+  } catch (e) {
+    return null;
+  }
+}
+
+export function getPipelineFromGlobal(): Pipeline | null {
+  // 全局变量中不一定存在
+  if (!globalAny.matmanPipeline) {
+    return null;
+  }
+
+  return globalAny.matmanPipeline as Pipeline;
+}
+
+export function getPipelineFromEnv(): Pipeline | null {
+  // 优先去全局变量里面去找
+  const pipelineInGlobal = getPipelineFromGlobal();
+  if (pipelineInGlobal) {
+    return pipelineInGlobal;
+  }
+
+  // 如果全局变量里面没有，则需要从 env 中获得
+  const pipelineJsonData = getPipelineJsonDataFromEnv();
+  if (!pipelineJsonData) {
+    return null;
+  }
+
+  try {
+    // 引入 pipeline material 模块
+    const pipeline = requireModule(pipelineJsonData.pipelineMaterialFullPath) as Pipeline;
+
+    // 更新插件
+    pipeline.updatePlugin(pipelineJsonData.pluginConfigArr);
+
+    return pipeline;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }

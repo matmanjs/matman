@@ -38,7 +38,14 @@ import { IPluginBase } from './typings/plugin';
 import { IMaterialBase } from './typings/material';
 
 import CacheData from './model/CacheData';
-import Pipeline, { IPipelineOpts } from './model/Pipeline';
+import Pipeline, {
+  IPipelineOpts,
+  IPipelineJsonData,
+  getPipelineFromEnv,
+  getPipelineFromGlobal,
+  setPipelineJsonDataToEnv,
+  getPipelineJsonDataFromEnv,
+} from './model/Pipeline';
 import PageDriver from './model/PageDriver';
 
 import launch from './launch';
@@ -95,4 +102,9 @@ export {
   CacheData,
   Pipeline,
   IPipelineOpts,
+  IPipelineJsonData,
+  getPipelineFromEnv,
+  getPipelineFromGlobal,
+  setPipelineJsonDataToEnv,
+  getPipelineJsonDataFromEnv,
 };

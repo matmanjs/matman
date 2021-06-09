@@ -1,7 +1,7 @@
 import { MaterialBase } from 'matman-plugin-core';
+import { setPipelineJsonDataToEnv } from 'matman-core';
 import { util as cmdHubUtil } from 'cmd-hub';
 
-import { setPipelineJsonDataToEnv } from './utils';
 
 interface MochaInstanceOpts {
   cwd: string;
