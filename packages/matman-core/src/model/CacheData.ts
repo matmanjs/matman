@@ -27,6 +27,20 @@ export default class CacheData {
   }
 
   /**
+   * 设置缓存信息
+   */
+  public setCache(data: ICacheData): void {
+    if (!data) {
+      return;
+    }
+
+    // 依次设置值
+    Object.keys(data).forEach((key) => {
+      this.setCacheItem(key, data[key]);
+    });
+  }
+
+  /**
    * 获取所有的缓存信息
    */
   public getCache(): ICacheData {

@@ -14,6 +14,25 @@ module.exports = new Pipeline('测试生产环境版本', {
   pluginMochaCurMaterial: pluginMochaMaterial,
 });
 
-console.log('----');
-console.log(module.exports);
+console.log('--1--');
+console.log(JSON.stringify(module.exports,null,2));
+
+module.exports.setup()
+  .then(() => {
+    console.log('--2--');
+    console.log(JSON.stringify(module.exports,null,2));
+
+    // const p2 = new Pipeline('测试生产环境版本2', {
+    //   pluginAppCurMaterial: pluginAppMaterial,
+    //   pluginMochaCurMaterial: pluginMochaMaterial,
+    // });
+
+   const pluginConfigArr = JSON.parse(JSON.stringify(module.exports.matmanConfig.plugins))
+    console.log('--pluginConfigArr--',pluginConfigArr);
+
+    module.exports.updatePlugin(pluginConfigArr)
+
+    console.log('--3333--');
+    console.log(JSON.stringify(module.exports,null,2));
+  });
 

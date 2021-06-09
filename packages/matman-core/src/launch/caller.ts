@@ -40,7 +40,7 @@ export function getCallerPath(referFile?: string): string {
    '(/Users/helinjiang/gitproject/matman/tmp/test1.js:11:1)' ]
    * @type {RegExpMatchArray}
    */
-  let stackFileArr = stackStr.match(/\((.*)\)/gi) || [];
+  let stackFileArr = getStackFileArr(stackStr);
 
   let isFoundUserModule = false;
 
@@ -113,6 +113,20 @@ export function getCallerPath(referFile?: string): string {
   return callStackFileArr[0];
 }
 
+export function getStackFileArr(stackStr: string): string[] {
+  const matchResult = stackStr.match(/((\(\/)|\s\/)(.*)(\))?/gi);
+
+  if (!matchResult) {
+    return [];
+  }
+
+
+  // 必须都要加上括号，方便后续的统一处理
+  return matchResult.map(item => `(${item.replace(/\(/gi, '').replace(/\)/gi, '')
+    .trim()})`);
+}
+
+
 export function checkIfMatmanSelf(fullPath: string): boolean {
   if (!fullPath) {
     return false;
@@ -126,3 +140,5 @@ export function checkIfMatmanSelf(fullPath: string): boolean {
 
   return reg.test(fullPath);
 }
+
+

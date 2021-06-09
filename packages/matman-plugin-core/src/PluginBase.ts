@@ -38,6 +38,19 @@ export default class PluginBase implements IPluginBase {
   }
 
   /**
+   * 更新插件
+   */
+  public updatePlugin(pipeline: Pipeline, pluginConfigArr: any[]): void {
+    // 例如将相对路径修改为绝对路径等
+    if (process.env.CONSOLE_E2E_RUNNER) {
+      console.log(pipeline);
+      console.log(pluginConfigArr);
+    }
+
+    globalAny.matmanPipeline = pipeline;
+  }
+
+  /**
    * 自动化测试之前执行
    */
   public async setup(pipeline: Pipeline): Promise<void> {

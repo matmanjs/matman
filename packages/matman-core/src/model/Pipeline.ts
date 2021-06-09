@@ -72,12 +72,12 @@ export default class Pipeline {
     }
   }
 
-  public updatePlugin() {
+  public updatePlugin(pluginConfigArr: any[]) {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
       const plugin = this.matmanConfig.plugins[index];
 
-      plugin.updatePlugin.call(plugin, this);
+      plugin.updatePlugin.call(plugin, this, pluginConfigArr);
     }
   }
 
