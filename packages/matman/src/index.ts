@@ -6,7 +6,6 @@ import { DeviceMaterial, PluginPuppeteer } from 'matman-plugin-puppeteer';
 
 import launch from './launch';
 import CaseModule from './CaseModule';
-import { debugCaseModule } from './debug';
 
 export {
   PluginApp,
@@ -20,5 +19,4 @@ export {
   DeviceMaterial,
   launch,
   CaseModule,
-  debugCaseModule,
 };

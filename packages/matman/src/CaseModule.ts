@@ -1,12 +1,12 @@
 import path from 'path';
 import _ from 'lodash';
 
-import { CacheData, IPageDriverOpts, PageDriver, getCallerPath, requireModule } from 'matman-core';
+import { CacheData, IPageDriverOpts, PageDriver, Pipeline, getCallerPath, requireModule } from 'matman-core';
 
 import { PluginAppMaterial } from 'matman-plugin-app';
 import { getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
 import { getLocalWhistleServer, PluginWhistle } from 'matman-plugin-whistle';
-import { getPipelineJsonDataFromEnv, IPipelineJsonData } from 'matman-plugin-mocha';
+import { getPipelineJsonDataFromEnv, setPipelineJsonDataToEnv, IPipelineJsonData } from 'matman-plugin-mocha';
 import { DeviceMaterial, getDeviceMaterial } from 'matman-plugin-puppeteer';
 
 import launchPuppeteer from './launch';
@@ -38,6 +38,11 @@ interface IMaterialOpts {
   mockstar?: PluginMockstarMaterial ;
   device?: DeviceMaterial ;
   app?: PluginAppMaterial ;
+}
+
+interface IDebugCaseModuleOpts {
+  doNotSetup?: boolean;
+  showResultInConsole?: boolean;
 }
 
 export default class CaseModule {
@@ -75,6 +80,7 @@ export default class CaseModule {
 
   // 执行
   public async run(pageDriverOpts?: IPageDriverOpts) {
+    // TODO 获取 pipeline，
     const pipelineJsonData = getPipelineJsonDataFromEnv();
 
     // 设置 appMaterial
@@ -87,10 +93,10 @@ export default class CaseModule {
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
     if (pipelineJsonData?.pluginWhistle) {
       // 获得 whistle 服务地址，例如 127.0.0.1:8899
-      const localWhistleServer = await getLocalWhistleServer(pipelineJsonData.pluginWhistle.cacheData?.data?.port, true);
+      const proxyServer = await getLocalWhistleServer(pipelineJsonData.pluginWhistle.cacheData?.data?.port, true);
 
       // 设置走 whistle 代理
-      await pageDriver.useProxyServer(localWhistleServer);
+      await pageDriver.useProxyServer(proxyServer);
 
       // 设置代理规则
       await this.setWhistleRuleBeforeRun(pipelineJsonData);
@@ -110,6 +116,39 @@ export default class CaseModule {
     // 获取结果
     return pageDriver.evaluate(path.join(path.dirname(this.filename), this.materials.webCrawler));
   }
+
+  // 执行
+  public async debug(pipeline: Pipeline, pageDriverOpts?: IPageDriverOpts, debugOpts?: IDebugCaseModuleOpts) {
+    if (!debugOpts?.doNotSetup) {
+      await pipeline.setup();
+    }
+
+    // 一定要设置变量
+    setPipelineJsonDataToEnv(pipeline);
+
+    // 执行
+    const result = await this.run(_.merge({
+      show: true,
+      doNotCloseBrowser: false,
+    }, pageDriverOpts));
+
+    console.log('\n===========================');
+    console.log('');
+    console.log('The run result is in the follow file: ');
+    console.log('');
+    console.log(this.pageDriver?.matmanResultConfig?.path);
+    console.log('');
+    console.log('===========================\n');
+
+    if (debugOpts?.showResultInConsole) {
+      console.log(JSON.stringify(result, null, 2));
+    }
+
+    // TODO 关闭和清理
+
+    return result;
+  }
+
 
   private getPageDriverOpts(pageDriverOpts?: IPageDriverOpts): IPageDriverOpts {
     return _.merge({}, this.pageDriverOpts, pageDriverOpts, {

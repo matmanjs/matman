@@ -14,18 +14,19 @@ module.exports = new CaseModule('观测页面的基础UI信息', {
   useRecorder: true,
 });
 
-// (() => {
-//   const { debugCaseModule } = require('../../../../../packages/matman');
-//   const pipeline = require('../../pipelines/prod');
-//
-//   // 调试
-//   debugCaseModule(pipeline, module.exports, {
-//     doNotCloseBrowser: false,
-//   })
-//     .then(data => {
-//       console.log(JSON.stringify(data, null, 2));
-//     })
-//     .catch(err => {
-//       console.error(err);
-//     });
-// })();
+console.log(module.exports);
+
+(() => {
+  const pipeline = require('../../pipelines/d');
+
+  // 调试
+  module.exports.debug(pipeline, {
+    doNotCloseBrowser: false,
+  })
+    .then(data => {
+      console.log(JSON.stringify(data, null, 2));
+    })
+    .catch(err => {
+      console.error(err);
+    });
+})();
