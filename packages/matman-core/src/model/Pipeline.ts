@@ -72,7 +72,16 @@ export default class Pipeline {
     }
   }
 
-  private initPlugin() {
+  public updatePlugin() {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
+      const plugin = this.matmanConfig.plugins[index];
+
+      plugin.updatePlugin.call(plugin, this);
+    }
+  }
+
+  public initPlugin() {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
       const plugin = this.matmanConfig.plugins[index];
