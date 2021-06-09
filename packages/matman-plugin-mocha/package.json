@@ -49,6 +49,7 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "cmd-hub": "^0.1.0",
     "lodash": "^4.17.21",
     "matman-core": "^6.0.20",
     "matman-plugin-core": "^6.0.20"
