@@ -17,7 +17,7 @@ const _ = require('lodash');
 function getMaterialMap(matmanAppPath, materialDir) {
   // 相对于 matmanAppPath 的目录，例如  src/materials/app
   const pureRelativePath = path.relative(matmanAppPath, materialDir);
-  console.log('\npureRelativePath', pureRelativePath);
+  console.log('\npureRelativePath2', pureRelativePath);
 
   const result = [];
 
