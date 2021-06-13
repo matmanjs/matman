@@ -8,7 +8,7 @@ fsHandler.search.getAll(definedInstanceDir, { globs: ['**'] }).forEach(item => {
   console.log(item);
 
   if (item.isDirectory()) {
-    console.log('目录\n');
+    console.log('目录1\n');
   }
 });
 
