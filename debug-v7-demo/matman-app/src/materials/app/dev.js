@@ -4,7 +4,7 @@ const { PluginAppMaterial } = require('../../../../../packages/matman');
 // app 项目根目录
 const rootPath = path.resolve(__dirname, '../../../../../test/data/project-react-h5');
 
-module.exports = new PluginAppMaterial('构建本地开发版本', {
+module.exports = new PluginAppMaterial(__filename, {
   rootPath,
   setup: async pluginApp => {
     await pluginApp.build(port => `npx cross-env ENABLE_E2E_TEST=1 PORT=${port} npm start`, {

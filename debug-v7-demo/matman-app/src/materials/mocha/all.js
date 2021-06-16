@@ -8,6 +8,6 @@ const { PluginMochaMaterial } = require('../../../../../packages/matman');
 //   // mochawesomeJsonFilePath: path.join(e2eRunner.outputPath, './mochawesome/mochawesome.json'),
 // });
 
-module.exports = new PluginMochaMaterial('测试所有用例', 'npx mocha', {
+module.exports = new PluginMochaMaterial(__filename, 'npx mocha', {
   cwd: path.join(__dirname, '../../../../'),
 });

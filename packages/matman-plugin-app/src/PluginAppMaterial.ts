@@ -3,7 +3,7 @@ import { MaterialBase, requireModule } from 'matman-plugin-core';
 import { CacheData } from 'matman-core';
 import PluginApp from './PluginApp';
 
-interface DefinedInstanceOpts {
+interface PluginAppMaterialOpts {
   rootPath: string;
   setup?: (plugin: PluginApp) => Promise<void>;
   getWhistleRules?: (port?: number) => string | string[];
@@ -25,8 +25,8 @@ export default class PluginAppMaterial extends MaterialBase {
    */
   public getWhistleRulesCall?: (port?: number) => string | string[];
 
-  public constructor(name: string, opts: DefinedInstanceOpts) {
-    super(name, __filename);
+  public constructor(filename: string, opts: PluginAppMaterialOpts, name?: string) {
+    super(filename, name);
 
     this.rootPath = opts.rootPath;
     this.setupCall = opts.setup;

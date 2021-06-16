@@ -5,7 +5,7 @@ const mockstar = require('./materials/mock-services/basic');
 const userAction = require('./materials/user-actions/basic-check');
 
 module.exports = new CaseModule('观测页面的基础UI信息', {
-  // pluginAppMaterial: true,
+  filename: __filename,
   userAction,
   webCrawler: './materials/web-crawlers/get-page-info.js',
   mockstar,

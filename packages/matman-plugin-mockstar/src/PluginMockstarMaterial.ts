@@ -6,7 +6,7 @@ interface IQueryMap {
   [key: string]: string;
 }
 
-interface DefinedInstanceOpts {
+interface PluginMockstarMaterialOpts {
   queryMap: IQueryMap;
 }
 
@@ -21,8 +21,8 @@ export default class PluginMockstarMaterial extends MaterialBase {
    */
   public getWhistleRulesCall?: () => string | string[];
 
-  public constructor(name: string, opts: DefinedInstanceOpts) {
-    super(name, __filename);
+  public constructor(filename: string, opts: PluginMockstarMaterialOpts, name?: string) {
+    super(filename, name);
 
     this.queryMap = opts.queryMap;
   }

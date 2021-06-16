@@ -39,8 +39,8 @@ export default class DeviceMaterial extends MaterialBase {
     isLandscape: boolean;
   };
 
-  public constructor(name: string, opts: DeviceInstanceOpts) {
-    super(name, __filename);
+  public constructor(filename: string, opts: DeviceInstanceOpts, name?: string) {
+    super(filename, name);
 
     this.userAgent = opts.userAgent;
 

@@ -3,7 +3,7 @@ import { setPipelineJsonDataToEnv } from 'matman-core';
 import { util as cmdHubUtil } from 'cmd-hub';
 
 
-interface MochaInstanceOpts {
+interface PluginMochaMaterialOpts {
   cwd: string;
   mochawesomeJsonFilePath?: string;
 }
@@ -14,8 +14,8 @@ export default class PluginMochaMaterial extends MaterialBase {
   public mochawesomeJsonFilePath?: string;
 
 
-  public constructor(name: string, cmd: string, opts: MochaInstanceOpts) {
-    super(name, __filename);
+  public constructor(filename: string, cmd: string, opts: PluginMochaMaterialOpts, name?: string) {
+    super(filename, name);
 
     this.cmd = cmd;
     this.cwd = opts.cwd;
