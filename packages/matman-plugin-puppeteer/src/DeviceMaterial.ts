@@ -2,7 +2,7 @@ import { MaterialBase } from 'matman-plugin-core';
 import _ from 'lodash';
 import { getPuppeteerDefinedDevice, puppeteer } from 'matman-runner-puppeteer';
 
-type DeviceInstanceOpts = DeviceMaterial | {
+type DeviceMaterialOpts = DeviceMaterial | {
   userAgent: string;
   viewport?: {
     width?: number;
@@ -39,7 +39,7 @@ export default class DeviceMaterial extends MaterialBase {
     isLandscape: boolean;
   };
 
-  public constructor(filename: string, opts: DeviceInstanceOpts, name?: string) {
+  public constructor(filename: string, opts: DeviceMaterialOpts, name?: string) {
     super(filename, name);
 
     this.userAgent = opts.userAgent;

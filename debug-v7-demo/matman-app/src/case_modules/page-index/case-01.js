@@ -25,6 +25,8 @@ console.log(module.exports);
   })
     .then(data => {
       console.log(JSON.stringify(data, null, 2));
+      delete module.exports.pageDriver.browserRunner.script;
+      console.log(module.exports);
     })
     .catch(err => {
       console.error(err);
