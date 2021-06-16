@@ -14,7 +14,7 @@ export default class PluginWhistle extends PluginBase {
   private whistleSDK: WhistleSDK | null;
 
   public constructor(opts?: IPluginWhistleOpts) {
-    super('whistle');
+    super('PluginWhistle');
 
     this.whistleSDK = null;
 

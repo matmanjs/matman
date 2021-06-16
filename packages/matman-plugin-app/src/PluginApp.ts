@@ -23,7 +23,7 @@ export default class PluginApp extends PluginBase {
   public cwd?: string;
 
   public constructor(opts: IPluginAppOpts) {
-    super('app');
+    super('PluginApp');
 
     this.materialDir = opts.materialDir;
     this.curMaterial = null;

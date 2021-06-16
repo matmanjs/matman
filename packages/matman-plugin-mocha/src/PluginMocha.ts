@@ -16,7 +16,7 @@ export default class PluginMocha extends PluginBase {
   public curMaterial: PluginMochaMaterial | null;
 
   public constructor(opts: IPluginMochaOpts) {
-    super('mocha');
+    super('PluginMocha');
 
     this.materialDir = opts.materialDir;
     this.curMaterial = null;
