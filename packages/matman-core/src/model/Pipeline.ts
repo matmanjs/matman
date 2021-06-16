@@ -21,7 +21,7 @@ export default class Pipeline {
   // private readonly cacheProcessArr: ProcessCmd[];
   // private readonly startTime: number;
 
-  public constructor(filename: string, opts?: IPipelineOpts, name?: string) {
+  public constructor(filename: string, opts?: IPipelineOpts | string, name?: string) {
     this.filename = filename;
 
     // 必须保证 this.filename 为文件，否则后续逻辑可能会出错
@@ -29,8 +29,15 @@ export default class Pipeline {
       throw new Error(`${this.filename} is not file!`);
     }
 
-    this.opts = opts;
-    this.name = name || path.basename(this.filename);
+    // 兼容如果不传入 opts，直接传入 name 的情况
+    // 当 opts 为字符串时，就将其当做 name 处理
+    if (typeof opts === 'string') {
+      this.opts = {};
+      this.name = opts;
+    } else {
+      this.opts = opts;
+      this.name = name || path.basename(this.filename);
+    }
 
     // 查找并获取 matman.config.js 的内容
     const matmanConfig = findMatmanConfig(this.filename);
