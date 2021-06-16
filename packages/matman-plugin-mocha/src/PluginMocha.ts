@@ -29,8 +29,8 @@ export default class PluginMocha extends PluginBase {
     super.initPlugin(pipeline);
 
     // 设置当前使用的物料
-    if (pipeline.opts?.pluginMochaMaterial) {
-      this.curMaterial = pipeline.opts?.pluginMochaMaterial as PluginMochaMaterial;
+    if (pipeline.opts?.pluginMochaCurMaterial) {
+      this.curMaterial = pipeline.opts?.pluginMochaCurMaterial as PluginMochaMaterial;
     }
 
     // 修改为绝对路径，方便后续处理

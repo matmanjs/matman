@@ -7,7 +7,7 @@ import { IMaterialBase } from '../typings/material';
 const globalAny: any = global;
 export interface IPipelineOpts {
   pluginAppCurMaterial?: IMaterialBase;
-  pluginMochaMaterial?: IMaterialBase;
+  pluginMochaCurMaterial?: IMaterialBase;
 }
 export default class Pipeline {
   public name: string;
