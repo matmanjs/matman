@@ -1,6 +1,7 @@
+import fs from 'fs';
+import path from 'path';
 import MatmanConfig from '../config/MatmanConfig';
 import { findMatmanConfig, requireModule } from '../util';
-import { getCallerPath } from '../launch/caller';
 import { IMaterialBase } from '../typings/material';
 
 const globalAny: any = global;
@@ -20,12 +21,16 @@ export default class Pipeline {
   // private readonly cacheProcessArr: ProcessCmd[];
   // private readonly startTime: number;
 
-  public constructor(name: string, opts?: IPipelineOpts) {
-    this.name = name;
-    this.opts = opts;
+  public constructor(filename: string, opts?: IPipelineOpts, name?: string) {
+    this.filename = filename;
 
-    // 自动获取 new Pipeline 的那个文件
-    this.filename = getCallerPath();
+    // 必须保证 this.filename 为文件，否则后续逻辑可能会出错
+    if (!fs.statSync(this.filename).isFile()) {
+      throw new Error(`${this.filename} is not file!`);
+    }
+
+    this.opts = opts;
+    this.name = name || path.basename(this.filename);
 
     // 查找并获取 matman.config.js 的内容
     const matmanConfig = findMatmanConfig(this.filename);

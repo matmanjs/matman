@@ -9,7 +9,7 @@ const { Pipeline } = require('../../../../packages/matman-core');
 const pluginAppMaterial = require('../materials/app/prod');
 const pluginMochaMaterial = require('../materials/mocha/all');
 
-module.exports = new Pipeline('测试生产环境版本', {
+module.exports = new Pipeline(__filename, {
   pluginAppCurMaterial: pluginAppMaterial,
   pluginMochaCurMaterial: pluginMochaMaterial,
 });
