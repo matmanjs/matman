@@ -21,8 +21,6 @@ import {
 import { requireAsync, requireSync } from './util/require-file';
 import { isURLMatch } from './util/url';
 import { createLogger, logger } from './util/logger';
-import { killPort, findAvailablePort, portIsOccupied } from './util/port';
-import { runByExec, runBySpawn } from './util/run-cmd';
 
 import { IBrowserRunner } from './typings/browser-runner';
 import { IPageDriver, IPageDriverOpts } from './typings/page-driver';
@@ -66,11 +64,6 @@ export {
   requireSync,
   isURLMatch,
   createLogger,
-  killPort,
-  findAvailablePort,
-  portIsOccupied,
-  runByExec,
-  runBySpawn,
   getCallerPath,
   logger,
   CookieConfig,
