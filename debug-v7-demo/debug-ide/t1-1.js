@@ -8,5 +8,5 @@ const pluginMockstar = new PluginMockstar({
   port: 9440,
 });
 
-console.log(pluginMockstar.getActivatedMaterial());
-console.log(pluginMockstar.getAllMaterial());
+// console.log(pluginMockstar.getActivatedMaterial());
+console.log(pluginMockstar.getAllMaterial(path.join(__dirname,'../matman-app')));

@@ -1,6 +1,6 @@
 import path from 'path';
 import _ from 'lodash';
-import { PluginBase, getFileItemFromDir, IFSHandlerItem } from 'matman-plugin-core';
+import { PluginBase, findAllMaterialFileItems, IMaterialFileItem } from 'matman-plugin-core';
 import { Pipeline } from 'matman-core';
 
 import MockstarSDK, { IStartOpts } from './MockstarSDK';
@@ -38,10 +38,7 @@ export default class PluginMockstar extends PluginBase {
     super.initPlugin(pipeline);
 
     // 修改为绝对路径，方便后续处理
-    this.materialDir = path.resolve(
-      pipeline.matmanConfig.matmanRootPath,
-      this.materialDir,
-    );
+    this.materialDir = path.resolve(pipeline.matmanConfig.matmanRootPath, this.materialDir);
     this.mockerDir = path.resolve(pipeline.matmanConfig.matmanRootPath, this.mockerDir);
   }
 
@@ -71,13 +68,12 @@ export default class PluginMockstar extends PluginBase {
     await this.mockstarSDK.stop();
   }
 
-  public getAllMaterial(): PluginMockstarMaterial [] {
-    const all = getFileItemFromDir(this.materialDir);
-
+  public getAllMaterial(matmanRootPath: string): PluginMockstarMaterial [] {
     const result: PluginMockstarMaterial[] = [];
 
-    all.forEach((fileItem: IFSHandlerItem) => {
-      const item = getPluginMockstarMaterial(path.join(fileItem.basePath, fileItem.relativePath));
+    const all = findAllMaterialFileItems(matmanRootPath, this.materialDir);
+    all.forEach((materialFileItem: IMaterialFileItem) => {
+      const item = getPluginMockstarMaterial(materialFileItem.fullPath);
       if (item) {
         result.push(item);
       }
