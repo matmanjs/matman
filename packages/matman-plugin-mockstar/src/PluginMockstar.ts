@@ -1,9 +1,10 @@
 import path from 'path';
 import _ from 'lodash';
-import { PluginBase } from 'matman-plugin-core';
+import { PluginBase, getFileItemFromDir, IFSHandlerItem } from 'matman-plugin-core';
 import { Pipeline } from 'matman-core';
 
 import MockstarSDK, { IStartOpts } from './MockstarSDK';
+import PluginMockstarMaterial, { getPluginMockstarMaterial } from './PluginMockstarMaterial';
 
 interface IPluginMockstarOpts {
   mockerDir: string;
@@ -68,5 +69,20 @@ export default class PluginMockstar extends PluginBase {
 
     // 停止 mockstar
     await this.mockstarSDK.stop();
+  }
+
+  public getAllMaterial(): PluginMockstarMaterial [] {
+    const all = getFileItemFromDir(this.materialDir);
+
+    const result: PluginMockstarMaterial[] = [];
+
+    all.forEach((fileItem: IFSHandlerItem) => {
+      const item = getPluginMockstarMaterial(path.join(this.materialDir, fileItem.relativePath));
+      if (item) {
+        result.push(item);
+      }
+    });
+
+    return result;
   }
 }

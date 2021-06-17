@@ -1,4 +1,4 @@
-import { MaterialBase } from 'matman-plugin-core';
+import { MaterialBase, requireModule } from 'matman-plugin-core';
 import { CacheData } from 'matman-core';
 import { WhistleRule } from 'whistle-sdk';
 
@@ -10,8 +10,8 @@ interface PluginMockstarMaterialOpts {
   queryMap: IQueryMap;
 }
 
-type IGetDefinedInstanceCallFn = () => PluginMockstarMaterial;
-type IRequiredModule = PluginMockstarMaterial | IGetDefinedInstanceCallFn;
+type IGetMaterialCallFn = () => PluginMockstarMaterial;
+type IGetMaterialParam = PluginMockstarMaterial | IGetMaterialCallFn | string;
 
 export default class PluginMockstarMaterial extends MaterialBase {
   public queryMap: IQueryMap;
@@ -50,19 +50,33 @@ export default class PluginMockstarMaterial extends MaterialBase {
   }
 }
 
-export function getPluginMockstarMaterial(requiredModule?: IRequiredModule): PluginMockstarMaterial | null {
-  if (!requiredModule) {
+export function getPluginMockstarMaterial(param?: IGetMaterialParam): PluginMockstarMaterial | null {
+  if (!param) {
     return null;
   }
 
-  // 如果模块已经是 DefinedInstance，则直接返回
-  if (requiredModule instanceof PluginMockstarMaterial) {
-    return requiredModule;
+  // 如果是字符串，则意味着是模块路径
+  if (typeof param === 'string') {
+    try {
+      const requiredResult = requireModule(param);
+      const result = (typeof requiredResult === 'function') ? requiredResult() : requiredResult;
+
+      return result as PluginMockstarMaterial;
+    } catch (err) {
+      console.error('getPluginMockstarMaterial catch err', param, err);
+
+      return null;
+    }
   }
 
-  // 如果模块是函数
-  if (typeof requiredModule === 'function') {
-    return requiredModule();
+  // 如果已经是 PluginMockstarMaterial ，则直接返回
+  if (param instanceof PluginMockstarMaterial) {
+    return param;
+  }
+
+  // 如果是函数
+  if (typeof param === 'function') {
+    return param();
   }
 
   return null;

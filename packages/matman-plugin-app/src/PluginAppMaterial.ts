@@ -60,14 +60,14 @@ export default class PluginAppMaterial extends MaterialBase {
   }
 }
 
-export function getPluginAppMaterial(activatedFullPath: string): PluginAppMaterial | null {
+export function getPluginAppMaterial(materialFullPath: string): PluginAppMaterial | null {
   try {
-    const requiredResult = requireModule(activatedFullPath);
+    const requiredResult = requireModule(materialFullPath);
     const result = (typeof requiredResult === 'function') ? requiredResult() : requiredResult;
 
     return result as PluginAppMaterial;
   } catch (err) {
-    console.error('getPluginAppMaterial catch err', activatedFullPath, err);
+    console.error('getPluginAppMaterial catch err', materialFullPath, err);
 
     return null;
   }
