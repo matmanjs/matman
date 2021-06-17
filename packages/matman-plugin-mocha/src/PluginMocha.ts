@@ -1,5 +1,5 @@
 import path from 'path';
-import { PluginBase, getFileItemFromDir, IFSHandlerItem, requireModule } from 'matman-plugin-core';
+import { PluginBase, findAllMaterialFileItems, IMaterialFileItem, requireModule } from 'matman-plugin-core';
 import { Pipeline, logger } from 'matman-core';
 
 import PluginMochaMaterial from './PluginMochaMaterial';
@@ -54,14 +54,14 @@ export default class PluginMocha extends PluginBase {
     return this.curMaterial;
   }
 
-  public getAllMaterial(): PluginMochaMaterial [] {
-    const all = getFileItemFromDir(this.materialDir);
-
+  public getAllMaterial(matmanRootPath: string): PluginMochaMaterial [] {
     const result: PluginMochaMaterial[] = [];
 
-    all.forEach((fileItem: IFSHandlerItem) => {
-      const item = getPluginMochaMaterial(path.join(this.materialDir, fileItem.relativePath));
+    const all = findAllMaterialFileItems(matmanRootPath, this.materialDir);
+    all.forEach((materialFileItem: IMaterialFileItem) => {
+      const item = getPluginMochaMaterial(materialFileItem.fullPath);
       if (item) {
+        item.materialFileItem = materialFileItem;
         result.push(item);
       }
     });
