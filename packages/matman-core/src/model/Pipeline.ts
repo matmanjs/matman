@@ -15,7 +15,7 @@ interface IViewMaterialsFolder {
   type: 'folder';
   pluginName: string;
   children: IMaterialBase[];
-  curMaterial?: IMaterialBase;
+  curMaterial?: IMaterialBase | null;
 }
 
 interface IViewMaterialsGroup {
@@ -123,54 +123,55 @@ export default class Pipeline {
   public getViewMaterials(): IViewMaterials {
     const list: IViewMaterials = [];
 
-    // const { plugins = [], matmanRootPath } = this.matmanConfig;
+    const { plugins = [], matmanRootPath } = this.matmanConfig;
 
-    // plugins.forEach((plugin) => {
-    //   const pluginName = plugin.name;
-    //   console.log('\n===', pluginName);
+    plugins.forEach((plugin) => {
+      const pluginName = plugin.name;
+      // console.log('\n===', pluginName);
 
-    //   if (typeof plugin.getAllMaterial !== 'function') {
-    //     return;
-    //   }
+      const allMaterial = plugin.getAllMaterial(matmanRootPath);
+      // console.log(allMaterial);
+
+      const curMaterial = plugin.getCurMaterial();
+      // console.log(curMaterial);
+
+      allMaterial.forEach((item: IMaterialBase) => {
+        if (!item.materialFileItem) {
+          return;
+        }
+
+        // group
+        const groupDesc = item.materialFileItem.groupName;
+        let groupItem: IViewMaterialsGroup = list.filter(i => i.desc === groupDesc)[0];
+        if (!groupItem) {
+          groupItem = {
+            desc: groupDesc,
+            type: 'group',
+            children: [],
+          };
+
+          list.push(groupItem);
+        }
+
+        // folder
+        const folderDesc = item.materialFileItem.folderName;
+        let folderItem: IViewMaterialsFolder = groupItem.children.filter(i => i.desc === folderDesc)[0];
+        if (!folderItem) {
+          folderItem = {
+            desc: folderDesc,
+            type: 'folder',
+            pluginName,
+            children: [],
+            curMaterial,
+          };
 
 
-    //   const allMaterial = plugin.getAllMaterial(matmanRootPath);
-    //   console.log(allMaterial);
+          groupItem.children.push(folderItem);
+        }
 
-    //   allMaterial.forEach((item: IMaterialBase) => {
-    //   // group 名字
-    //     const groupDesc = item.materialFileItem.groupName;
-    //     let groupItem = list.filter(i => i.desc === groupDesc)[0];
-    //     if (!groupItem) {
-    //       groupItem = {};
-    //       list.push(groupItem);
-    //     }
-
-    //     groupItem.desc = groupDesc;
-    //     groupItem.type = 'group';
-    //     groupItem.children = groupItem.children || [];
-
-    //     const folderDesc = item.materialFileItem.folderName;
-    //     let folderItem = groupItem.children.filter(i => i.desc === folderDesc)[0];
-    //     if (!folderItem) {
-    //       folderItem = {};
-    //       groupItem.children.push(folderItem);
-    //     }
-
-    //     folderItem.desc = folderDesc;
-    //     folderItem.type = 'folder';
-    //     folderItem.pluginName = pluginName;
-    //     folderItem.children = folderItem.children || [];
-
-    //     folderItem.children.push(item);
-    //   });
-
-
-    // if (typeof plugin.getCurMaterial === 'function') {
-    //   const curMaterial = plugin.getCurMaterial();
-    //   console.log(curMaterial);
-    // }
-    // });
+        folderItem.children.push(item);
+      });
+    });
 
     return list;
   }
