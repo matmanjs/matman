@@ -8,7 +8,7 @@ for (let index = 0; index < pipeline.matmanConfig.plugins.length; index++) {
   console.log('\n', plugin.name);
 
   if (typeof plugin.getAllMaterial === 'function') {
-    console.log(plugin.getAllMaterial());
+    console.log(plugin.getAllMaterial(pipeline.matmanConfig.matmanRootPath));
   }
   if (typeof plugin.getCurMaterial === 'function') {
     console.log(plugin.getCurMaterial());

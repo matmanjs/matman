@@ -75,6 +75,7 @@ export default class PluginMockstar extends PluginBase {
     all.forEach((materialFileItem: IMaterialFileItem) => {
       const item = getPluginMockstarMaterial(materialFileItem.fullPath);
       if (item) {
+        item.materialFileItem = materialFileItem;
         result.push(item);
       }
     });

@@ -35,6 +35,7 @@ export interface IMaterialFileItem {
 export default class MaterialBase implements IMaterialBase {
   public name: string;
   public filename: string;
+  public materialFileItem?: IMaterialFileItem;
 
   public constructor(filename: string, name?: string) {
     this.filename = filename;
