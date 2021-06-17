@@ -77,7 +77,7 @@ export default class PluginMockstar extends PluginBase {
     const result: PluginMockstarMaterial[] = [];
 
     all.forEach((fileItem: IFSHandlerItem) => {
-      const item = getPluginMockstarMaterial(path.join(this.materialDir, fileItem.relativePath));
+      const item = getPluginMockstarMaterial(path.join(fileItem.basePath, fileItem.relativePath));
       if (item) {
         result.push(item);
       }
