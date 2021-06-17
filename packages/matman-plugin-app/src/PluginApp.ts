@@ -1,6 +1,6 @@
 import path from 'path';
-import { PluginBase, findAllMaterialFileItems, IMaterialFileItem } from 'matman-plugin-core';
-import { Pipeline } from 'matman-core';
+import { PluginBase, findAllMaterialFileItems } from 'matman-plugin-core';
+import { Pipeline, IMaterialFileItem } from 'matman-core';
 
 import { buildApp, IBuildAppCmd, IBuildAppOpts } from './utils';
 import PluginAppMaterial, { getPluginAppMaterial } from './PluginAppMaterial';

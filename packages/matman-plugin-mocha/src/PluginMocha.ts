@@ -1,6 +1,6 @@
 import path from 'path';
-import { PluginBase, findAllMaterialFileItems, IMaterialFileItem, requireModule } from 'matman-plugin-core';
-import { Pipeline, logger } from 'matman-core';
+import { PluginBase, findAllMaterialFileItems, requireModule } from 'matman-plugin-core';
+import { Pipeline, logger, IMaterialFileItem } from 'matman-core';
 
 import PluginMochaMaterial from './PluginMochaMaterial';
 

@@ -9,6 +9,23 @@ export interface IPipelineOpts {
   pluginAppCurMaterial?: IMaterialBase;
   pluginMochaCurMaterial?: IMaterialBase;
 }
+
+interface IViewMaterialsFolder {
+  desc: string;
+  type: 'folder';
+  pluginName: string;
+  children: IMaterialBase[];
+  curMaterial?: IMaterialBase;
+}
+
+interface IViewMaterialsGroup {
+  desc: string;
+  type: 'group';
+  children: IViewMaterialsFolder[];
+}
+
+export type IViewMaterials = IViewMaterialsGroup [];
+
 export default class Pipeline {
   public name: string;
   public filename: string;
@@ -101,6 +118,61 @@ export default class Pipeline {
 
       plugin.initPlugin.call(plugin, this);
     }
+  }
+
+  public getViewMaterials(): IViewMaterials {
+    const list: IViewMaterials = [];
+
+    // const { plugins = [], matmanRootPath } = this.matmanConfig;
+
+    // plugins.forEach((plugin) => {
+    //   const pluginName = plugin.name;
+    //   console.log('\n===', pluginName);
+
+    //   if (typeof plugin.getAllMaterial !== 'function') {
+    //     return;
+    //   }
+
+
+    //   const allMaterial = plugin.getAllMaterial(matmanRootPath);
+    //   console.log(allMaterial);
+
+    //   allMaterial.forEach((item: IMaterialBase) => {
+    //   // group 名字
+    //     const groupDesc = item.materialFileItem.groupName;
+    //     let groupItem = list.filter(i => i.desc === groupDesc)[0];
+    //     if (!groupItem) {
+    //       groupItem = {};
+    //       list.push(groupItem);
+    //     }
+
+    //     groupItem.desc = groupDesc;
+    //     groupItem.type = 'group';
+    //     groupItem.children = groupItem.children || [];
+
+    //     const folderDesc = item.materialFileItem.folderName;
+    //     let folderItem = groupItem.children.filter(i => i.desc === folderDesc)[0];
+    //     if (!folderItem) {
+    //       folderItem = {};
+    //       groupItem.children.push(folderItem);
+    //     }
+
+    //     folderItem.desc = folderDesc;
+    //     folderItem.type = 'folder';
+    //     folderItem.pluginName = pluginName;
+    //     folderItem.children = folderItem.children || [];
+
+    //     folderItem.children.push(item);
+    //   });
+
+
+    // if (typeof plugin.getCurMaterial === 'function') {
+    //   const curMaterial = plugin.getCurMaterial();
+    //   console.log(curMaterial);
+    // }
+    // });
+
+    return list;
   }
 }
 

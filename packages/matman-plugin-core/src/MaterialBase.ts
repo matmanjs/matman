@@ -2,35 +2,13 @@ import fs from 'fs';
 import path from 'path';
 
 import _ from 'lodash';
-import { IMaterialBase } from 'matman-core';
+import { IMaterialBase, IMaterialFileItem } from 'matman-core';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import fsHandler from 'fs-handler';
 
 import { IFSHandlerItem } from './utils';
-
-export interface IMaterialFileItem {
-  /**
-   * 完整路径
-   */
-  fullPath: string;
-
-  /**
-   * 所属分组名称，例如 src/materials
-   */
-  groupName: string;
-
-  /**
-   * 物料相对于 groupName 的文件夹名字，例如 puppeteer/device
-   */
-  folderName: string;
-
-  /**
-   * 文件名字，例如 prod.js
-   */
-  fileName: string;
-}
 
 export default class MaterialBase implements IMaterialBase {
   public name: string;
@@ -46,6 +24,10 @@ export default class MaterialBase implements IMaterialBase {
     }
 
     this.name = name || path.basename(this.filename);
+  }
+
+  updateMaterialFileItem(item: IMaterialFileItem): void{
+    this.materialFileItem = item;
   }
 }
 

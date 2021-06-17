@@ -1,5 +1,5 @@
 import PluginBase from './PluginBase';
-import MaterialBase, { findAllMaterialFileItems, IMaterialFileItem } from './MaterialBase';
+import MaterialBase, { findAllMaterialFileItems } from './MaterialBase';
 import { requireModule, getFileItemFromDir, IFSHandlerItem } from './utils';
 
 export {
@@ -9,5 +9,4 @@ export {
   requireModule,
   getFileItemFromDir,
   IFSHandlerItem,
-  IMaterialFileItem,
 };

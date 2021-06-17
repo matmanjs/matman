@@ -1,7 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
-import { PluginBase, findAllMaterialFileItems, IMaterialFileItem } from 'matman-plugin-core';
-import { Pipeline } from 'matman-core';
+import { PluginBase, findAllMaterialFileItems } from 'matman-plugin-core';
+import { Pipeline, IMaterialFileItem } from 'matman-core';
 
 import MockstarSDK, { IStartOpts } from './MockstarSDK';
 import PluginMockstarMaterial, { getPluginMockstarMaterial } from './PluginMockstarMaterial';

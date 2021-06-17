@@ -1,4 +1,4 @@
-import { CacheData, IPluginBase, Pipeline } from 'matman-core';
+import { CacheData, IPluginBase, Pipeline, IMaterialBase } from 'matman-core';
 
 const globalAny: any = global;
 export default class PluginBase implements IPluginBase {
@@ -88,5 +88,17 @@ export default class PluginBase implements IPluginBase {
 
   public setSeqId(seqId: string): void  {
     this.seqId = seqId;
+  }
+
+  public getCurMaterial(): IMaterialBase | null {
+    return null;
+  }
+
+  public getAllMaterial(matmanRootPath: string): IMaterialBase [] {
+    if (process.env.CONSOLE_E2E_RUNNER) {
+      console.log(matmanRootPath);
+    }
+
+    return [];
   }
 }

@@ -33,7 +33,7 @@ import {
   IResourceType,
 } from './typings/matman-result';
 import { IPluginBase } from './typings/plugin';
-import { IMaterialBase } from './typings/material';
+import { IMaterialBase, IMaterialFileItem } from './typings/material';
 
 import CacheData from './model/CacheData';
 import Pipeline, {
@@ -92,6 +92,7 @@ export {
   IMatmanConfigOpts,
   IPluginBase,
   IMaterialBase,
+  IMaterialFileItem,
   CacheData,
   Pipeline,
   IPipelineOpts,
