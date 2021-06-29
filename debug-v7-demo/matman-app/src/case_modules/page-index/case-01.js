@@ -4,15 +4,17 @@ const device = require('../../materials/puppeteer/device/iPhone6');
 const mockstar = require('./materials/mock-services/basic');
 const userAction = require('./materials/user-actions/basic-check');
 
-module.exports = new CaseModule('观测页面的基础UI信息', {
-  filename: __filename,
-  userAction,
-  webCrawler: './materials/web-crawlers/get-page-info.js',
-  mockstar,
-  device,
-}, {
-  useRecorder: true,
-});
+module.exports = new CaseModule(__filename, {
+  materials: {
+    userAction,
+    webCrawler: './materials/web-crawlers/get-page-info.js',
+    mockstar,
+    device,
+  },
+  pageDriverOpts: {
+    useRecorder: true,
+  },
+}, '观测页面的基础UI信息');
 
 console.log(module.exports);
 

@@ -1,8 +1,9 @@
+import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import { WhistleRule } from 'whistle-sdk';
 
-import { IPageDriverOpts, PageDriver, Pipeline, getCallerPath, setPipelineJsonDataToEnv, getPipelineFromEnv } from 'matman-core';
+import { IPageDriverOpts, PageDriver, Pipeline, setPipelineJsonDataToEnv, getPipelineFromEnv } from 'matman-core';
 
 import { PluginApp, PluginAppMaterial } from 'matman-plugin-app';
 import { PluginMockstar, getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
@@ -11,17 +12,20 @@ import { DeviceMaterial, getDeviceMaterial } from 'matman-plugin-puppeteer';
 
 import launchPuppeteer from './launch';
 
-// interface ICaseModuleOpts {
-//   filename: string;
-//   userAction: (pageDriver: PageDriver) => PageDriver;
-//   webCrawler: string;
-//   materials?: {
-//     pluginAppMaterial?: boolean;
-//     pluginMockstarMaterial?: PluginMockstarMaterial;
-//     deviceInstance?: DeviceMaterial;
-//   };
-//   pageDriverOpts?: IPageDriverOpts;
-// }
+interface ICaseModuleOpts {
+  materials: ICaseModuleMaterialsOpts;
+  pageDriverOpts?: IPageDriverOpts;
+}
+
+interface ICaseModuleMaterialsOpts {
+  userAction: (pageDriver: PageDriver) => PageDriver;
+  webCrawler: string;
+
+  mockstar?: PluginMockstarMaterial;
+  device?: DeviceMaterial;
+  app?: PluginAppMaterial;
+}
+
 
 interface ICaseModuleMaterials {
   userAction: (pageDriver: PageDriver) => PageDriver;
@@ -31,15 +35,6 @@ interface ICaseModuleMaterials {
   device: DeviceMaterial | null;
   app: PluginAppMaterial | null;
 }
-interface IMaterialOpts {
-  userAction: (pageDriver: PageDriver) => PageDriver;
-  webCrawler: string;
-
-  mockstar?: PluginMockstarMaterial ;
-  device?: DeviceMaterial ;
-  app?: PluginAppMaterial ;
-}
-
 interface IDebugCaseModuleOpts {
   doNotSetup?: boolean;
   showResultInConsole?: boolean;
@@ -49,26 +44,31 @@ export default class CaseModule {
   public name: string;
   public filename: string;
 
+  public materials: ICaseModuleMaterials;
   public pageDriverOpts: IPageDriverOpts;
 
   public pageDriver: PageDriver | null;
 
-  public materials: ICaseModuleMaterials;
+  public constructor(filename: string, opts: ICaseModuleOpts, name?: string) {
+    this.filename = filename;
 
-  public constructor(name: string, materialOpts: IMaterialOpts, pageDriverOpts?: IPageDriverOpts) {
-    this.name = name;
-    this.filename = getCallerPath();
+    // 必须保证 this.filename 为文件，否则后续逻辑可能会出错
+    if (!fs.statSync(this.filename).isFile()) {
+      throw new Error(`${this.filename} is not file!`);
+    }
+
+    this.name = name || path.basename(this.filename);
 
     this.materials = {
-      userAction: materialOpts.userAction,
-      webCrawler: materialOpts.webCrawler,
-      device: getDeviceMaterial(materialOpts.device),
-      mockstar: getPluginMockstarMaterial(materialOpts.mockstar),
+      userAction: opts.materials.userAction,
+      webCrawler: opts.materials.webCrawler,
+      device: getDeviceMaterial(opts.materials.device),
+      mockstar: getPluginMockstarMaterial(opts.materials.mockstar),
       app: null,
     };
 
 
-    this.pageDriverOpts = this.getPageDriverOpts(pageDriverOpts);
+    this.pageDriverOpts = this.getPageDriverOpts(opts.pageDriverOpts);
 
 
     // 注意它比较特殊，配置项在 matman.config.js 中，所以需要在 run 方法执行时才设置
