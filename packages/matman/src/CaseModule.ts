@@ -98,7 +98,7 @@ export default class CaseModule {
     this.pageDriver = pageDriver;
 
     // 走指定的代理服务，由代理服务配置请求加载本地项目，从而达到同源测试的目的
-    const pluginWhistleInConfig = pipeline.matmanConfig.getPlugin('whistle');
+    const pluginWhistleInConfig = pipeline.matmanConfig.getPlugin('PluginWhistle');
     if (pluginWhistleInConfig) {
       const pluginWhistle = pluginWhistleInConfig as PluginWhistle;
 
@@ -173,14 +173,14 @@ export default class CaseModule {
 
   private async setWhistleRuleBeforeRun(pipeline: Pipeline, pluginWhistle: PluginWhistle): Promise<void> {
     // Plugin App 中的代理配置
-    const pluginApp = pipeline.matmanConfig.getPlugin('app');
+    const pluginApp = pipeline.matmanConfig.getPlugin('PluginApp');
     let whistleRuleFromApp: (WhistleRule | null) = null;
     if (pluginApp && this.materials.app) {
       whistleRuleFromApp = this.materials.app.getWhistleRule((pluginApp as PluginApp).cacheData);
     }
 
     // Plugin Mockstar 中的代理配置
-    const pluginMockstar = pipeline.matmanConfig.getPlugin('mockstar');
+    const pluginMockstar = pipeline.matmanConfig.getPlugin('PluginMockstar');
     let whistleRuleFromMockstar: (WhistleRule | null) = null;
     if (pluginMockstar && this.materials.mockstar) {
       whistleRuleFromMockstar = this.materials.mockstar.getWhistleRule((pluginMockstar as PluginMockstar).cacheData);

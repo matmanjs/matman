@@ -24,6 +24,8 @@ console.log(module.exports);
   // 调试
   module.exports.debug(pipeline, {
     doNotCloseBrowser: false,
+  }, {
+    // doNotSetup: true,
   })
     .then(data => {
       console.log(JSON.stringify(data, null, 2));
