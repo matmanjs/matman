@@ -3,12 +3,12 @@ import path from 'path';
 import _ from 'lodash';
 import { WhistleRule } from 'whistle-sdk';
 
-import { IPageDriverOpts, PageDriver, Pipeline, setPipelineJsonDataToEnv, getPipelineFromEnv } from 'matman-core';
+import { getPipelineFromEnv, IPageDriverOpts, PageDriver, Pipeline, setPipelineJsonDataToEnv } from 'matman-core';
 
 import { PluginApp, PluginAppMaterial } from 'matman-plugin-app';
-import { PluginMockstar, getPluginMockstarMaterial, PluginMockstarMaterial } from 'matman-plugin-mockstar';
+import { getPluginMockstarMaterial, PluginMockstar, PluginMockstarMaterial } from 'matman-plugin-mockstar';
 import { getLocalWhistleServer, PluginWhistle } from 'matman-plugin-whistle';
-import { DeviceMaterial, getDeviceMaterial } from 'matman-plugin-puppeteer';
+import { getPluginPuppeteerDeviceMaterial, PluginPuppeteerDeviceMaterial } from 'matman-plugin-puppeteer';
 
 import launchPuppeteer from './launch';
 
@@ -22,19 +22,19 @@ interface ICaseModuleMaterialsOpts {
   webCrawler: string;
 
   mockstar?: PluginMockstarMaterial;
-  device?: DeviceMaterial;
+  device?: PluginPuppeteerDeviceMaterial;
   app?: PluginAppMaterial;
 }
-
 
 interface ICaseModuleMaterials {
   userAction: (pageDriver: PageDriver) => PageDriver;
   webCrawler: string;
 
   mockstar: PluginMockstarMaterial | null;
-  device: DeviceMaterial | null;
+  device: PluginPuppeteerDeviceMaterial | null;
   app: PluginAppMaterial | null;
 }
+
 interface IDebugCaseModuleOpts {
   doNotSetup?: boolean;
   showResultInConsole?: boolean;
@@ -62,14 +62,12 @@ export default class CaseModule {
     this.materials = {
       userAction: opts.materials.userAction,
       webCrawler: opts.materials.webCrawler,
-      device: getDeviceMaterial(opts.materials.device),
+      device: getPluginPuppeteerDeviceMaterial(opts.materials.device),
       mockstar: getPluginMockstarMaterial(opts.materials.mockstar),
       app: null,
     };
 
-
     this.pageDriverOpts = this.getPageDriverOpts(opts.pageDriverOpts);
-
 
     // 注意它比较特殊，配置项在 matman.config.js 中，所以需要在 run 方法执行时才设置
     // this.pluginAppMaterial = null;
@@ -91,7 +89,6 @@ export default class CaseModule {
     if (pipeline.opts?.pluginAppCurMaterial) {
       this.materials.app = pipeline.opts?.pluginAppCurMaterial as PluginAppMaterial;
     }
-
 
     // 创建 PageDriver，API 详见 https://matmanjs.github.io/matman/api/
     const pageDriver = await launchPuppeteer(this.getPageDriverOpts(pageDriverOpts));

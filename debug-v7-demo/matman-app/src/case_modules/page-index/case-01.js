@@ -18,6 +18,9 @@ module.exports = new CaseModule(__filename, {
 
 console.log(module.exports);
 
+// TODO ，将 web-crawlers 和 user-actions 也物料化
+// 完成这些改造之后，就可以编写自动化测试来确保功能的完善度了
+
 (() => {
   const pipeline = require('../../pipelines/d');
 

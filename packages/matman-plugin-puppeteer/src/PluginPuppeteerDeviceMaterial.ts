@@ -2,7 +2,7 @@ import { MaterialBase } from 'matman-plugin-core';
 import _ from 'lodash';
 import { getPuppeteerDefinedDevice, puppeteer } from 'matman-runner-puppeteer';
 
-type DeviceMaterialOpts = DeviceMaterial | {
+type PluginPuppeteerDeviceMaterialOpts = PluginPuppeteerDeviceMaterial | {
   userAgent: string;
   viewport?: {
     width?: number;
@@ -15,8 +15,8 @@ type DeviceMaterialOpts = DeviceMaterial | {
 };
 
 type ICloneCallFn = (deviceName: string) => puppeteer.devices.Device;
-type IGetDeviceInstanceCallFn = (clone: ICloneCallFn) => DeviceMaterial;
-type IRequiredModule = DeviceMaterial | IGetDeviceInstanceCallFn;
+type IGetDeviceInstanceCallFn = (clone: ICloneCallFn) => PluginPuppeteerDeviceMaterial;
+type IRequiredModule = PluginPuppeteerDeviceMaterial | IGetDeviceInstanceCallFn;
 
 // https://github.com/puppeteer/puppeteer/blob/v9.1.1/docs/api.md#puppeteerlaunchoptions
 const defaultViewport = {
@@ -28,7 +28,7 @@ const defaultViewport = {
   isLandscape: false,
 };
 
-export default class DeviceMaterial extends MaterialBase {
+export default class PluginPuppeteerDeviceMaterial extends MaterialBase {
   public userAgent: string;
   public viewport: {
     width: number;
@@ -39,7 +39,7 @@ export default class DeviceMaterial extends MaterialBase {
     isLandscape: boolean;
   };
 
-  public constructor(filename: string, opts: DeviceMaterialOpts, name?: string) {
+  public constructor(filename: string, opts: PluginPuppeteerDeviceMaterialOpts, name?: string) {
     super(filename, name);
 
     this.userAgent = opts.userAgent;
@@ -48,13 +48,14 @@ export default class DeviceMaterial extends MaterialBase {
   }
 }
 
-export function getDeviceMaterial(requiredModule?: IRequiredModule): DeviceMaterial | null {
+export function getPluginPuppeteerDeviceMaterial(requiredModule?: IRequiredModule):
+PluginPuppeteerDeviceMaterial | null {
   if (!requiredModule) {
     return null;
   }
 
   // 如果模块已经是 DeviceInstance，则直接返回
-  if (requiredModule instanceof DeviceMaterial) {
+  if (requiredModule instanceof PluginPuppeteerDeviceMaterial) {
     return requiredModule;
   }
 

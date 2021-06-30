@@ -1,8 +1,8 @@
 import PluginPuppeteer from './PluginPuppeteer';
-import DeviceMaterial, { getDeviceMaterial } from './DeviceMaterial';
+import PluginPuppeteerDeviceMaterial, { getPluginPuppeteerDeviceMaterial } from './PluginPuppeteerDeviceMaterial';
 
 export {
   PluginPuppeteer,
-  DeviceMaterial,
-  getDeviceMaterial,
+  PluginPuppeteerDeviceMaterial,
+  getPluginPuppeteerDeviceMaterial,
 };
