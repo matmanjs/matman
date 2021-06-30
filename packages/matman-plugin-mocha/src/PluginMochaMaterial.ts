@@ -15,7 +15,7 @@ export default class PluginMochaMaterial extends MaterialBase {
 
 
   public constructor(filename: string, cmd: string, opts: PluginMochaMaterialOpts, name?: string) {
-    super(filename, name);
+    super('PluginMochaMaterial', filename, name);
 
     this.cmd = cmd;
     this.cwd = opts.cwd;

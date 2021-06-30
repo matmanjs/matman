@@ -1,7 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
 import { PluginBase, findAllMaterialFileItems } from 'matman-plugin-core';
-import { Pipeline, IMaterialFileItem, IViewMaterials, IViewMaterialsGroup, IViewMaterialsFolder } from 'matman-core';
+import { Pipeline, IMaterialFileItem, IViewMaterials, IViewMaterialsGroup, IViewMaterialsFolder, ICurMaterial } from 'matman-core';
 
 import MockstarSDK, { IStartOpts } from './MockstarSDK';
 import PluginMockstarMaterial, { getPluginMockstarMaterial } from './PluginMockstarMaterial';
@@ -84,15 +84,13 @@ export default class PluginMockstar extends PluginBase {
   }
 
   public getViewMaterials(matmanRootPath: string): IViewMaterials {
+    return this.getViewMaterials2(this.id, this.getAllMaterial(matmanRootPath));
+  }
+
+  public getViewMaterials2(pluginName: string, allMaterial: PluginMockstarMaterial [], curMaterial?: ICurMaterial): IViewMaterials {
     const list: IViewMaterials = [];
-    const pluginName = this.name;
 
-    // 所有的物料列表
-    const allMaterial = this.getAllMaterial(matmanRootPath);
-    // console.log(allMaterial);
-
-    const curMaterial = this.getCurMaterial();
-    // console.log(curMaterial);
+    console.log('---curMaterial---', curMaterial);
 
     allMaterial.forEach((item: PluginMockstarMaterial) => {
       if (!item.materialFileItem) {
@@ -123,7 +121,7 @@ export default class PluginMockstar extends PluginBase {
           pluginName,
           materialName: '',
           children: [],
-          curMaterial,
+          curMaterial: null,
         };
 
 

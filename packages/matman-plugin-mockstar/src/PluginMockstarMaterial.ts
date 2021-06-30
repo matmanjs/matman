@@ -22,7 +22,7 @@ export default class PluginMockstarMaterial extends MaterialBase {
   public getWhistleRulesCall?: () => string | string[];
 
   public constructor(filename: string, opts: PluginMockstarMaterialOpts, name?: string) {
-    super(filename, name);
+    super('PluginMockstarMaterial', filename, name);
 
     this.queryMap = opts.queryMap;
   }

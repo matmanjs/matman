@@ -1,6 +1,6 @@
 import path from 'path';
 import { PluginBase, findAllMaterialFileItems, requireModule } from 'matman-plugin-core';
-import { Pipeline, logger, IMaterialFileItem } from 'matman-core';
+import { Pipeline, logger, IMaterialFileItem, ICurMaterial } from 'matman-core';
 
 import PluginMochaMaterial from './PluginMochaMaterial';
 
@@ -50,8 +50,14 @@ export default class PluginMocha extends PluginBase {
     logger.info('RunTest finished!');
   }
 
-  public getCurMaterial(): PluginMochaMaterial | null {
-    return this.curMaterial;
+  public getCurMaterial(): ICurMaterial {
+    const result: ICurMaterial = {};
+
+    if (this.curMaterial) {
+      result.PluginAppMaterial = this.curMaterial;
+    }
+
+    return result;
   }
 
   public getAllMaterial(matmanRootPath: string): PluginMochaMaterial [] {

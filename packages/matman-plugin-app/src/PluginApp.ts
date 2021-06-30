@@ -1,6 +1,6 @@
 import path from 'path';
 import { PluginBase, findAllMaterialFileItems } from 'matman-plugin-core';
-import { Pipeline, IMaterialFileItem } from 'matman-core';
+import { Pipeline, IMaterialFileItem, ICurMaterial } from 'matman-core';
 
 import { buildApp, IBuildAppCmd, IBuildAppOpts } from './utils';
 import PluginAppMaterial, { getPluginAppMaterial } from './PluginAppMaterial';
@@ -64,8 +64,14 @@ export default class PluginApp extends PluginBase {
     }
   }
 
-  public getCurMaterial(): PluginAppMaterial | null {
-    return this.curMaterial;
+  public getCurMaterial(): ICurMaterial {
+    const result: ICurMaterial = {};
+
+    if (this.curMaterial) {
+      result.PluginAppMaterial = this.curMaterial;
+    }
+
+    return result;
   }
 
   public getAllMaterial(matmanRootPath: string): PluginAppMaterial [] {

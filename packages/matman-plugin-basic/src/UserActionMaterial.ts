@@ -9,7 +9,7 @@ export default class UserActionMaterial extends MaterialBase {
   public runCall: IUserActionCall;
 
   public constructor(filename: string, runCall: IUserActionCall, name?: string) {
-    super(filename, name);
+    super('UserActionMaterial', filename, name);
 
     this.runCall = runCall;
   }

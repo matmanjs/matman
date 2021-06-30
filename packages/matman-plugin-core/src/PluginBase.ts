@@ -1,11 +1,11 @@
-import { CacheData, IPluginBase, Pipeline, IMaterialBase, IViewMaterials } from 'matman-core';
+import { CacheData, IPluginBase, Pipeline, ICurMaterial, IViewMaterials } from 'matman-core';
 
 const globalAny: any = global;
 export default class PluginBase implements IPluginBase {
   /**
-   * 插件名字
+   * 插件ID
    */
-  public name: string;
+  public id: string;
 
   /**
    * 缓存数据
@@ -17,12 +17,12 @@ export default class PluginBase implements IPluginBase {
    */
   public seqId: string;
 
-  public constructor(name: string) {
-    this.name = name;
+  public constructor(id: string) {
+    this.id = id;
 
     this.cacheData = new CacheData;
 
-    this.seqId = `${this.name}-${Math.random()}`;
+    this.seqId = `${this.id}-${Math.random()}`;
   }
 
   /**
@@ -90,8 +90,8 @@ export default class PluginBase implements IPluginBase {
     this.seqId = seqId;
   }
 
-  public getCurMaterial(): IMaterialBase | null {
-    return null;
+  public getCurMaterial(): ICurMaterial {
+    return {};
   }
 
   public getViewMaterials(matmanRootPath: string): IViewMaterials {

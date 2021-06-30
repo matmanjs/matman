@@ -32,7 +32,7 @@ import {
   IMatmanResultQueueHandler,
   IResourceType,
 } from './typings/matman-result';
-import { IPluginBase, IViewMaterials, IViewMaterialsFolder, IViewMaterialsGroup } from './typings/plugin';
+import { IPluginBase, IViewMaterials, IViewMaterialsFolder, IViewMaterialsGroup, ICurMaterial } from './typings/plugin';
 import { IMaterialBase, IMaterialFileItem } from './typings/material';
 import { IPipelineOpts } from './typings/pipeline';
 
@@ -101,6 +101,7 @@ export {
   IViewMaterials,
   IViewMaterialsFolder,
   IViewMaterialsGroup,
+  ICurMaterial,
   getPipelineFromEnv,
   getPipelineFromGlobal,
   setPipelineJsonDataToEnv,

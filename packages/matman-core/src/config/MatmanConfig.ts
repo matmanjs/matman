@@ -142,7 +142,7 @@ export default class MatmanConfig {
     for (let index = 0; index < this.plugins.length; index++) {
       const element = this.plugins[index] as IPluginBase;
 
-      if (element.name === pluginName) {
+      if (element.id === pluginName) {
         return element;
       }
     }
@@ -158,9 +158,7 @@ export default class MatmanConfig {
     const pathResult = getAbsolutePath(pathFromParam || defaultValue, this.matmanRootPath);
 
     if (shouldCheckExists && !fs.existsSync(pathResult)) {
-      throw new Error(
-        `Unknown path=${pathResult}, pathFromParam=${pathFromParam}, defaultValue=${defaultValue}`,
-      );
+      throw new Error(`Unknown path=${pathResult}, pathFromParam=${pathFromParam}, defaultValue=${defaultValue}`);
     }
 
     return pathResult;

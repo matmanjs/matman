@@ -1,6 +1,10 @@
 import Pipeline from '../model/Pipeline';
 import { IMaterialBase } from './material';
 
+export interface ICurMaterial {
+  [key: string]: IMaterialBase;
+}
+
 export interface IViewMaterialsFolder {
   desc: string;
   type: 'folder';
@@ -19,7 +23,7 @@ export interface IViewMaterialsGroup {
 export type IViewMaterials = IViewMaterialsGroup [];
 
 export interface IPluginBase {
-  name: string;
+  id: string;
   seqId: string;
 
   initPlugin(pipeline: Pipeline): void;
@@ -34,7 +38,7 @@ export interface IPluginBase {
 
   setSeqId(seqId: string): void;
 
-  getCurMaterial(): IMaterialBase | null;
+  getCurMaterial(): ICurMaterial;
 
   getViewMaterials(matmanRootPath: string): IViewMaterials;
 }

@@ -1,4 +1,5 @@
 export interface IMaterialBase {
+  id: string;
   name: string;
   filename: string;
   materialFileItem?: IMaterialFileItem;

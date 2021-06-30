@@ -11,11 +11,13 @@ import fsHandler from 'fs-handler';
 import { IFSHandlerItem } from './utils';
 
 export default class MaterialBase implements IMaterialBase {
+  public id: string;
   public name: string;
   public filename: string;
   public materialFileItem?: IMaterialFileItem;
 
-  public constructor(filename: string, name?: string) {
+  public constructor(id: string, filename: string, name?: string) {
+    this.id = id;
     this.filename = filename;
 
     // 必须保证 this.filename 为文件，否则后续逻辑可能会出错
@@ -30,7 +32,6 @@ export default class MaterialBase implements IMaterialBase {
     this.materialFileItem = item;
   }
 }
-
 
 export function findAllMaterialFileItems(matmanAppPath: string, materialDir: string): IMaterialFileItem[] {
   // 相对于 matmanAppPath 的目录，例如  src/materials/app

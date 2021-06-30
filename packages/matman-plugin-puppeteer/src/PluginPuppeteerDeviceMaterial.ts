@@ -40,7 +40,7 @@ export default class PluginPuppeteerDeviceMaterial extends MaterialBase {
   };
 
   public constructor(filename: string, opts: PluginPuppeteerDeviceMaterialOpts, name?: string) {
-    super(filename, name);
+    super('PluginPuppeteerDeviceMaterial', filename, name);
 
     this.userAgent = opts.userAgent;
 
