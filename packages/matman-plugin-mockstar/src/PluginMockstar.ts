@@ -1,7 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
 import { PluginBase, findAllMaterialFileItems } from 'matman-plugin-core';
-import { Pipeline, IMaterialFileItem, IViewMaterials, IViewMaterialsGroup, IViewMaterialsFolder, ICurMaterial } from 'matman-core';
+import { Pipeline, IMaterialFileItem, IViewMaterials } from 'matman-core';
 
 import MockstarSDK, { IStartOpts } from './MockstarSDK';
 import PluginMockstarMaterial, { getPluginMockstarMaterial } from './PluginMockstarMaterial';
@@ -84,53 +84,6 @@ export default class PluginMockstar extends PluginBase {
   }
 
   public getViewMaterials(matmanRootPath: string): IViewMaterials {
-    return this.getViewMaterials2(this.id, this.getAllMaterial(matmanRootPath));
-  }
-
-  public getViewMaterials2(pluginName: string, allMaterial: PluginMockstarMaterial [], curMaterial?: ICurMaterial): IViewMaterials {
-    const list: IViewMaterials = [];
-
-    console.log('---curMaterial---', curMaterial);
-
-    allMaterial.forEach((item: PluginMockstarMaterial) => {
-      if (!item.materialFileItem) {
-        return;
-      }
-
-      // group
-      const groupDesc = item.materialFileItem.groupName;
-      let groupItem: IViewMaterialsGroup = list.filter(i => i.desc === groupDesc)[0];
-      if (!groupItem) {
-        groupItem = {
-          desc: groupDesc,
-          type: 'group',
-          children: [],
-        };
-
-        list.push(groupItem);
-      }
-
-
-      // folder
-      const folderDesc = item.materialFileItem.folderName;
-      let folderItem: IViewMaterialsFolder = groupItem.children.filter(i => i.desc === folderDesc)[0];
-      if (!folderItem) {
-        folderItem = {
-          desc: folderDesc,
-          type: 'folder',
-          pluginName,
-          materialName: '',
-          children: [],
-          curMaterial: null,
-        };
-
-
-        groupItem.children.push(folderItem);
-      }
-
-      folderItem.children.push(item);
-    });
-
-    return list;
+    return this.getViewMaterialsFromAllMaterial(this.getAllMaterial(matmanRootPath), {});
   }
 }

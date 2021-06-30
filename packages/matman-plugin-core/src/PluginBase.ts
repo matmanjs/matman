@@ -1,4 +1,4 @@
-import { CacheData, IPluginBase, Pipeline, ICurMaterial, IViewMaterials } from 'matman-core';
+import { CacheData, IPluginBase, IMaterialBase, Pipeline, ICurMaterial, IViewMaterials, IViewMaterialsGroup, IViewMaterialsFolder } from 'matman-core';
 
 const globalAny: any = global;
 export default class PluginBase implements IPluginBase {
@@ -101,4 +101,57 @@ export default class PluginBase implements IPluginBase {
 
     return [];
   }
+
+  public getViewMaterialsFromAllMaterial(
+    allMaterial: IMaterialBase [],
+    curMaterial: ICurMaterial,
+  ): IViewMaterials {
+    const pluginName = this.id;
+
+    // 结果
+    const list: IViewMaterials = [];
+
+    // 遍历所有的物料
+    allMaterial.forEach((item: IMaterialBase) => {
+      if (!item.materialFileItem) {
+        return;
+      }
+
+      // group
+      const groupDesc = item.materialFileItem.groupName;
+      let groupItem: IViewMaterialsGroup = list.filter(i => i.desc === groupDesc)[0];
+      if (!groupItem) {
+        groupItem = {
+          desc: groupDesc,
+          type: 'group',
+          children: [],
+        };
+
+        list.push(groupItem);
+      }
+
+
+      // folder
+      const folderDesc = item.materialFileItem.folderName;
+      let folderItem: IViewMaterialsFolder = groupItem.children.filter(i => i.desc === folderDesc)[0];
+      if (!folderItem) {
+        folderItem = {
+          desc: folderDesc,
+          type: 'folder',
+          pluginName,
+          materialName: '',
+          children: [],
+          curMaterial,
+        };
+
+
+        groupItem.children.push(folderItem);
+      }
+
+      folderItem.children.push(item);
+    });
+
+    return list;
+  }
 }
+

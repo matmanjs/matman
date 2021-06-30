@@ -11,7 +11,7 @@ export interface IViewMaterialsFolder {
   pluginName: string;
   materialName: string;
   children: IMaterialBase[];
-  curMaterial?: IMaterialBase | null;
+  curMaterial: ICurMaterial;
 }
 
 export interface IViewMaterialsGroup {
