@@ -1,4 +1,6 @@
-module.exports = async pageDriver => {
+const { UserActionMaterial } = require('../../../../../../../packages/matman');
+
+module.exports = new UserActionMaterial(__filename, async pageDriver => {
   // 加载页面地址
   await pageDriver.setPageUrl('https://now.qq.com/index.html');
 
@@ -41,4 +43,4 @@ module.exports = async pageDriver => {
 
   // 获取结果
   return pageDriver;
-};
+});

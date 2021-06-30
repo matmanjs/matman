@@ -1,6 +1,7 @@
 const path = require('path');
 
 const {
+  PluginBasic,
   PluginApp,
   PluginWhistle,
   PluginMockstar,
@@ -47,6 +48,10 @@ module.exports = {
 
   // 插件列表
   plugins: [
+    new PluginBasic({
+      userActionMaterialDir: './src/case_modules/*/materials/user-actions',
+      webCrawlerMaterialDir: './src/case_modules/*/materials/web-crawlers',
+    }),
     new PluginApp({
       materialDir: './src/materials/app',
       // activated: 'prod.js',

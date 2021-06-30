@@ -32,7 +32,8 @@ export default class PluginBasic extends PluginBase {
     this.webCrawlerMaterialDir = path.resolve(pipeline.matmanConfig.matmanRootPath, this.webCrawlerMaterialDir);
   }
 
-  public getAllUserActionMaterial(matmanRootPath: string): UserActionMaterial [] {
+  // TODO 不仅是 UserActionMaterial，还有其他的
+  public getAllMaterial(matmanRootPath: string): UserActionMaterial [] {
     const result: UserActionMaterial[] = [];
 
     const all = findAllMaterialFileItems(matmanRootPath, this.userActionMaterialDir);

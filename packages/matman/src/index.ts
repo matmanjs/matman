@@ -3,7 +3,7 @@ import { PluginMockstar, PluginMockstarMaterial } from 'matman-plugin-mockstar';
 import { PluginWhistle } from 'matman-plugin-whistle';
 import { PluginMocha, PluginMochaMaterial } from 'matman-plugin-mocha';
 import { PluginPuppeteerDeviceMaterial, PluginPuppeteer } from 'matman-plugin-puppeteer';
-import { UserActionMaterial } from 'matman-plugin-basic';
+import { PluginBasic, UserActionMaterial } from 'matman-plugin-basic';
 
 import launch from './launch';
 import CaseModule from './CaseModule';
@@ -18,6 +18,7 @@ export {
   PluginMochaMaterial,
   PluginPuppeteer,
   PluginPuppeteerDeviceMaterial,
+  PluginBasic,
   UserActionMaterial,
   launch,
   CaseModule,
