@@ -32,12 +32,13 @@ import {
   IMatmanResultQueueHandler,
   IResourceType,
 } from './typings/matman-result';
-import { IPluginBase } from './typings/plugin';
+import { IPluginBase, IViewMaterials, IViewMaterialsFolder, IViewMaterialsGroup } from './typings/plugin';
 import { IMaterialBase, IMaterialFileItem } from './typings/material';
+import { IPipelineOpts } from './typings/pipeline';
+
 
 import CacheData from './model/CacheData';
 import Pipeline, {
-  IPipelineOpts,
   IPipelineJsonData,
   getPipelineFromEnv,
   getPipelineFromGlobal,
@@ -97,6 +98,9 @@ export {
   Pipeline,
   IPipelineOpts,
   IPipelineJsonData,
+  IViewMaterials,
+  IViewMaterialsFolder,
+  IViewMaterialsGroup,
   getPipelineFromEnv,
   getPipelineFromGlobal,
   setPipelineJsonDataToEnv,

@@ -1,4 +1,4 @@
-import { CacheData, IPluginBase, Pipeline, IMaterialBase } from 'matman-core';
+import { CacheData, IPluginBase, Pipeline, IMaterialBase, IViewMaterials } from 'matman-core';
 
 const globalAny: any = global;
 export default class PluginBase implements IPluginBase {
@@ -65,7 +65,7 @@ export default class PluginBase implements IPluginBase {
   /**
    * 执行自动化测试
    */
-  public async runTest(pipeline: Pipeline): Promise<void>  {
+  public async runTest(pipeline: Pipeline): Promise<void> {
     // 例如 run test
     if (process.env.CONSOLE_E2E_RUNNER) {
       console.log(pipeline);
@@ -77,7 +77,7 @@ export default class PluginBase implements IPluginBase {
   /**
    * 自动化测试之后执行
    */
-  public async teardown(pipeline: Pipeline): Promise<void>  {
+  public async teardown(pipeline: Pipeline): Promise<void> {
     // 例如清理工作、处理测试产物等
     if (process.env.CONSOLE_E2E_RUNNER) {
       console.log(pipeline);
@@ -94,7 +94,7 @@ export default class PluginBase implements IPluginBase {
     return null;
   }
 
-  public getAllMaterial(matmanRootPath: string): IMaterialBase [] {
+  public getViewMaterials(matmanRootPath: string): IViewMaterials {
     if (process.env.CONSOLE_E2E_RUNNER) {
       console.log(matmanRootPath);
     }

@@ -2,31 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import MatmanConfig from '../config/MatmanConfig';
 import { findMatmanConfig, requireModule } from '../util';
-import { IMaterialBase } from '../typings/material';
+
+import { IViewMaterials } from '../typings/plugin';
+import { IPipeline, IPipelineOpts } from '../typings/pipeline';
 
 const globalAny: any = global;
-export interface IPipelineOpts {
-  pluginAppCurMaterial?: IMaterialBase;
-  pluginMochaCurMaterial?: IMaterialBase;
-}
 
-interface IViewMaterialsFolder {
-  desc: string;
-  type: 'folder';
-  pluginName: string;
-  children: IMaterialBase[];
-  curMaterial?: IMaterialBase | null;
-}
-
-interface IViewMaterialsGroup {
-  desc: string;
-  type: 'group';
-  children: IViewMaterialsFolder[];
-}
-
-export type IViewMaterials = IViewMaterialsGroup [];
-
-export default class Pipeline {
+export default class Pipeline implements IPipeline {
   public name: string;
   public filename: string;
   public matmanConfig: MatmanConfig;
@@ -75,7 +57,7 @@ export default class Pipeline {
     this.initPlugin();
   }
 
-  public async setup() {
+  public async setup(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
       const plugin = this.matmanConfig.plugins[index];
@@ -84,7 +66,7 @@ export default class Pipeline {
     }
   }
 
-  public async runTest() {
+  public async runTest(): Promise<void>  {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
       const plugin = this.matmanConfig.plugins[index];
@@ -93,7 +75,7 @@ export default class Pipeline {
     }
   }
 
-  public async teardown() {
+  public async teardown(): Promise<void>  {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
       const plugin = this.matmanConfig.plugins[index];
@@ -102,7 +84,7 @@ export default class Pipeline {
     }
   }
 
-  public updatePlugin(pluginConfigArr: any[]) {
+  public updatePlugin(pluginConfigArr: any[]): void {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
       const plugin = this.matmanConfig.plugins[index];
@@ -111,7 +93,7 @@ export default class Pipeline {
     }
   }
 
-  public initPlugin() {
+  public initPlugin(): void {
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < this.matmanConfig.plugins.length; index++) {
       const plugin = this.matmanConfig.plugins[index];
@@ -121,56 +103,15 @@ export default class Pipeline {
   }
 
   public getViewMaterials(): IViewMaterials {
-    const list: IViewMaterials = [];
+    let list: IViewMaterials = [];
 
     const { plugins = [], matmanRootPath } = this.matmanConfig;
 
     plugins.forEach((plugin) => {
-      const pluginName = plugin.name;
-      // console.log('\n===', pluginName);
+      const pluginViewMaterials = plugin.getViewMaterials(matmanRootPath);
+      console.log(pluginViewMaterials);
 
-      const allMaterial = plugin.getAllMaterial(matmanRootPath);
-      // console.log(allMaterial);
-
-      const curMaterial = plugin.getCurMaterial();
-      // console.log(curMaterial);
-
-      allMaterial.forEach((item: IMaterialBase) => {
-        if (!item.materialFileItem) {
-          return;
-        }
-
-        // group
-        const groupDesc = item.materialFileItem.groupName;
-        let groupItem: IViewMaterialsGroup = list.filter(i => i.desc === groupDesc)[0];
-        if (!groupItem) {
-          groupItem = {
-            desc: groupDesc,
-            type: 'group',
-            children: [],
-          };
-
-          list.push(groupItem);
-        }
-
-        // folder
-        const folderDesc = item.materialFileItem.folderName;
-        let folderItem: IViewMaterialsFolder = groupItem.children.filter(i => i.desc === folderDesc)[0];
-        if (!folderItem) {
-          folderItem = {
-            desc: folderDesc,
-            type: 'folder',
-            pluginName,
-            children: [],
-            curMaterial,
-          };
-
-
-          groupItem.children.push(folderItem);
-        }
-
-        folderItem.children.push(item);
-      });
+      list = [...list, ...pluginViewMaterials];
     });
 
     return list;

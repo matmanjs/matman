@@ -1,7 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
 import { PluginBase, findAllMaterialFileItems } from 'matman-plugin-core';
-import { Pipeline, IMaterialFileItem } from 'matman-core';
+import { Pipeline, IMaterialFileItem, IViewMaterials, IViewMaterialsGroup, IViewMaterialsFolder } from 'matman-core';
 
 import MockstarSDK, { IStartOpts } from './MockstarSDK';
 import PluginMockstarMaterial, { getPluginMockstarMaterial } from './PluginMockstarMaterial';
@@ -81,5 +81,58 @@ export default class PluginMockstar extends PluginBase {
     });
 
     return result;
+  }
+
+  public getViewMaterials(matmanRootPath: string): IViewMaterials {
+    const list: IViewMaterials = [];
+    const pluginName = this.name;
+
+    // 所有的物料列表
+    const allMaterial = this.getAllMaterial(matmanRootPath);
+    // console.log(allMaterial);
+
+    const curMaterial = this.getCurMaterial();
+    // console.log(curMaterial);
+
+    allMaterial.forEach((item: PluginMockstarMaterial) => {
+      if (!item.materialFileItem) {
+        return;
+      }
+
+      // group
+      const groupDesc = item.materialFileItem.groupName;
+      let groupItem: IViewMaterialsGroup = list.filter(i => i.desc === groupDesc)[0];
+      if (!groupItem) {
+        groupItem = {
+          desc: groupDesc,
+          type: 'group',
+          children: [],
+        };
+
+        list.push(groupItem);
+      }
+
+
+      // folder
+      const folderDesc = item.materialFileItem.folderName;
+      let folderItem: IViewMaterialsFolder = groupItem.children.filter(i => i.desc === folderDesc)[0];
+      if (!folderItem) {
+        folderItem = {
+          desc: folderDesc,
+          type: 'folder',
+          pluginName,
+          materialName: '',
+          children: [],
+          curMaterial,
+        };
+
+
+        groupItem.children.push(folderItem);
+      }
+
+      folderItem.children.push(item);
+    });
+
+    return list;
   }
 }
