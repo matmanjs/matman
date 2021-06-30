@@ -1,7 +1,7 @@
 {
-  "name": "matman",
+  "name": "matman-plugin-basic",
   "version": "6.0.20",
-  "description": "Easy to write e2e test",
+  "description": "Matman plugin of basic",
   "main": "lib/index.js",
   "scripts": {
     "prepublishOnly": "npm run build",
@@ -36,31 +36,21 @@
     "url": "https://github.com/matmanjs/matman/issues"
   },
   "homepage": "https://github.com/matmanjs/matman#readme",
-  "dependencies": {
-    "fs-extra": "^9.0.0",
-    "glob": "^7.1.6",
-    "lodash": "^4.17.21",
-    "matman-core": "^6.0.20",
-    "matman-plugin-app": "^6.0.20",
-    "matman-plugin-basic": "^6.0.20",
-    "matman-plugin-mocha": "^6.0.20",
-    "matman-plugin-mockstar": "^6.0.20",
-    "matman-plugin-puppeteer": "^6.0.20",
-    "matman-plugin-whistle": "^6.0.20",
-    "matman-runner-puppeteer": "^6.0.18",
-    "whistle-sdk": "^0.2.0"
-  },
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/expect": "^24.3.0",
-    "@types/fs-extra": "^9.0.1",
-    "@types/lodash": "^4.14.155",
+    "@types/lodash": "^4.14.168",
     "@types/mocha": "^7.0.2",
-    "@types/puppeteer": "^3.0.0",
+    "@types/node": "^14.0.11",
     "chai": "^4.2.0",
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "matman-core": "^6.0.20",
+    "matman-plugin-core": "^6.0.20"
   }
 }
