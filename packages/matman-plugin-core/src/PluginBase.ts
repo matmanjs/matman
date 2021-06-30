@@ -106,7 +106,7 @@ export default class PluginBase implements IPluginBase {
     allMaterial: IMaterialBase [],
     curMaterial: ICurMaterial,
   ): IViewMaterials {
-    const pluginName = this.id;
+    const pluginId = this.id;
 
     // 结果
     const list: IViewMaterials = [];
@@ -138,8 +138,8 @@ export default class PluginBase implements IPluginBase {
         folderItem = {
           desc: folderDesc,
           type: 'folder',
-          pluginName,
-          materialName: '',
+          pluginId,
+          materialId: item.id,
           children: [],
           curMaterial,
         };

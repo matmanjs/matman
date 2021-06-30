@@ -8,8 +8,8 @@ export interface ICurMaterial {
 export interface IViewMaterialsFolder {
   desc: string;
   type: 'folder';
-  pluginName: string;
-  materialName: string;
+  pluginId: string;
+  materialId: string;
   children: IMaterialBase[];
   curMaterial: ICurMaterial;
 }
