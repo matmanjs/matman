@@ -38,7 +38,7 @@ jspm_packages
 
 # misc
 .DS_Store
-#.env
+.env
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -54,3 +54,4 @@ tmp/
 test/**/build
 
 docs-dist
+.history
